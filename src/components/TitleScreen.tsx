@@ -96,7 +96,7 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
         </div>
 
         <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto mb-6 leading-relaxed">
-          Mazmorras roguelite estructuradas por eventos narrativos, tomas de decisiones y combates por turnos con tu equipo personalizado.
+          ¡Conviértete en el mejor explorador del mundo!
         </p>
 
         {/* Start Game CTA */}
@@ -108,16 +108,10 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
           className="group px-8 py-3.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-amber-950 font-extrabold rounded-xl text-sm sm:text-base shadow-2xl transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer border border-amber-300"
         >
           <Play className="w-5 h-5 fill-amber-950" />
-          <span>Comenzar Aventura</span>
+          <span>Entrar al mundo Pokémon</span>
         </button>
       </div>
 
-      {/* Control-hint line */}
-      <div className="relative z-10 pb-6 text-center">
-        <p className="text-[11px] sm:text-xs text-slate-400 font-mono tracking-wide">
-          Espacio / Enter para iniciar · Drag & Drop para tu equipo · Clic / Táctil compatible
-        </p>
-      </div>
     </div>
   );
 };

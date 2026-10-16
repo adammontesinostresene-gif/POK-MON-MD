@@ -141,16 +141,6 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
           </button>
 
-          <button
-            onClick={() => {
-              soundManager.playSelect();
-              setActiveModal('DUNGEONS');
-            }}
-            className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-950 font-bold rounded-lg text-xs sm:text-sm shadow-md transition-all flex items-center gap-1.5 whitespace-nowrap"
-          >
-            <Compass className="w-4 h-4" />
-            <span>Explorar Mazmorra</span>
-          </button>
         </div>
       </header>
 
@@ -180,7 +170,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs uppercase font-bold tracking-widest text-amber-400">
-                  Aldea Pokémon · Base de Operaciones
+                  Aldea Pokémon
                 </span>
                 <span className="text-xs font-pixel px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-600/40">
                   Rango Bronce
@@ -193,7 +183,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   className="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0 filter drop-shadow-[0_2px_8px_rgba(245,158,11,0.5)]"
                 />
                 <h2 className="text-xl sm:text-3xl font-extrabold text-white tracking-tight">
-                  Equipo Rescate Rayo
+                  Equipo Rescate
                 </h2>
               </div>
               <p className="text-xs sm:text-sm text-slate-300 mt-1">
