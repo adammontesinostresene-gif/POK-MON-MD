@@ -1,14 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { soundManager } from '../utils/audio';
-import { Zap, Play } from 'lucide-react';
+import { Zap, Play, AlertTriangle } from 'lucide-react';
 import { PmdPortrait } from './PmdSprite';
 
 interface TitleScreenProps {
+  hasSave: boolean;
+  notice: string | null;
   onStartGame: () => void;
+  onNewGame: () => void;
 }
 
-export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
+export const TitleScreen: React.FC<TitleScreenProps> = ({ hasSave, notice, onStartGame, onNewGame }) => {
+  const [confirmNewGame, setConfirmNewGame] = useState<boolean>(false);
+
   useEffect(() => {
+    if (confirmNewGame) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Enter' || e.code === 'Space') {
         e.preventDefault();
@@ -18,7 +24,7 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onStartGame]);
+  }, [onStartGame, confirmNewGame]);
 
   return (
     <div className="relative w-full h-full bg-slate-950 text-white flex flex-col justify-between items-center p-4 sm:p-6 short:p-3 select-none overflow-hidden">
@@ -100,16 +106,64 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
         </p>
 
         {/* Start Game CTA */}
-        <button
-          onClick={() => {
-            soundManager.playSelect();
-            onStartGame();
-          }}
-          className="group px-8 py-3.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-amber-950 font-extrabold rounded-xl text-sm sm:text-base shadow-2xl transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer border border-amber-300"
-        >
-          <Play className="w-5 h-5 fill-amber-950" />
-          <span>Entrar al mundo Pokémon</span>
-        </button>
+        {notice && (
+          <p className="mb-3 max-w-sm text-xs text-red-300 bg-red-950/70 border border-red-700/60 rounded-lg px-3 py-2">
+            {notice}
+          </p>
+        )}
+
+        {confirmNewGame ? (
+          <div className="flex flex-col items-center gap-2 bg-slate-900/90 border border-red-500/60 rounded-xl p-3 max-w-sm">
+            <p className="text-xs sm:text-sm text-slate-200">
+              ¿Empezar una partida nueva? <span className="font-bold text-red-400">Se borrará tu progreso guardado.</span>
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setConfirmNewGame(false);
+                }}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold border border-slate-700 cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  onNewGame();
+                }}
+                className="px-3 py-1.5 bg-red-700 hover:bg-red-600 text-white rounded-lg text-xs font-bold cursor-pointer"
+              >
+                Borrar y empezar
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-2">
+            <button
+              onClick={() => {
+                soundManager.playSelect();
+                onStartGame();
+              }}
+              className="group px-8 py-3.5 short:py-2.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-amber-950 font-extrabold rounded-xl text-sm sm:text-base shadow-2xl transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer border border-amber-300"
+            >
+              <Play className="w-5 h-5 fill-amber-950" />
+              <span>{hasSave ? 'Continuar partida' : 'Entrar al mundo Pokémon'}</span>
+            </button>
+            {hasSave && (
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setConfirmNewGame(true);
+                }}
+                className="px-4 py-1.5 bg-red-700 hover:bg-red-600 text-white rounded-lg text-xs font-bold border-2 border-red-400 shadow-lg shadow-red-900/50 flex items-center gap-1.5 cursor-pointer transition-colors"
+              >
+                <AlertTriangle className="w-3.5 h-3.5" />
+                Nueva partida
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
     </div>

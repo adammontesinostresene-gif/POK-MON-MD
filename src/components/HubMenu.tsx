@@ -18,6 +18,8 @@ import {
   Heart,
   Zap,
   Award,
+  Landmark,
+  Warehouse,
 } from 'lucide-react';
 import { PmdPortrait } from './PmdSprite';
 import rescueBadgeImg from '../assets/images/pmd_rescue_team_badge.png';
@@ -26,33 +28,97 @@ interface HubMenuProps {
   team: Pokemon[];
   reserves: Pokemon[];
   gold: number;
+  bankGold: number;
   inventory: Item[];
+  storage: Item[];
   missions: RescueMission[];
   onSelectDungeon: (dungeon: Dungeon) => void;
   onOpenTeamManager: () => void;
   onOpenEvolution: () => void;
   onUpdateInventory: (items: Item[]) => void;
   onUpdateGold: (gold: number) => void;
+  onUpdateBank: (gold: number, bankGold: number) => void;
+  onUpdateStorage: (inventory: Item[], storage: Item[]) => void;
 }
 
 export const HubMenu: React.FC<HubMenuProps> = ({
   team,
   reserves,
   gold,
+  bankGold,
   inventory,
+  storage,
   missions,
   onSelectDungeon,
   onOpenTeamManager,
   onOpenEvolution,
   onUpdateInventory,
   onUpdateGold,
+  onUpdateBank,
+  onUpdateStorage,
 }) => {
   const [activeModal, setActiveModal] = useState<
-    'DUNGEONS' | 'BAG' | 'MISSIONS' | 'SHOP' | null
+    'DUNGEONS' | 'BAG' | 'MISSIONS' | 'SHOP' | 'BANK' | 'STORAGE' | null
   >(null);
   const [selectedDungeon, setSelectedDungeon] = useState<Dungeon>(DUNGEONS[0]);
   const [isMuted, setIsMuted] = useState<boolean>(soundManager.getMuted());
   const [shopFeedback, setShopFeedback] = useState<string | null>(null);
+  const [bankAmount, setBankAmount] = useState<string>('');
+  const [bankFeedback, setBankFeedback] = useState<string | null>(null);
+
+  const transferItem = (item: Item, quantity: number, toStorage: boolean) => {
+    const from = toStorage ? inventory : storage;
+    const to = toStorage ? storage : inventory;
+    const amount = Math.min(quantity, item.count);
+
+    const newFrom = from
+      .map((it) => (it.id === item.id ? { ...it, count: it.count - amount } : it))
+      .filter((it) => it.count > 0);
+    const existing = to.find((it) => it.name === item.name);
+    const newTo = existing
+      ? to.map((it) => (it === existing ? { ...it, count: it.count + amount } : it))
+      : [...to, { ...item, count: amount }];
+
+    soundManager.playDrop();
+    if (toStorage) {
+      onUpdateStorage(newFrom, newTo);
+    } else {
+      onUpdateStorage(newTo, newFrom);
+    }
+  };
+
+  const showBankFeedback = (msg: string) => {
+    setBankFeedback(msg);
+    setTimeout(() => setBankFeedback(null), 2000);
+  };
+
+  const handleBankTransfer = (mode: 'deposit' | 'withdraw', all = false) => {
+    const available = mode === 'deposit' ? gold : bankGold;
+    const amount = all ? available : Math.floor(Number(bankAmount));
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      soundManager.playHit();
+      showBankFeedback('Introduce una cantidad válida.');
+      return;
+    }
+    if (amount > available) {
+      soundManager.playHit();
+      showBankFeedback(
+        mode === 'deposit' ? '¡No llevas tantos Pokécuartos!' : '¡No tienes tanto dinero en el banco!'
+      );
+      return;
+    }
+
+    soundManager.playDrop();
+    if (mode === 'deposit') {
+      onUpdateBank(gold - amount, bankGold + amount);
+      showBankFeedback(`Depositaste ${amount} Pokécuartos.`);
+    } else {
+      onUpdateBank(gold + amount, bankGold - amount);
+      showBankFeedback(`Retiraste ${amount} Pokécuartos.`);
+    }
+    setBankAmount('');
+  };
 
   const toggleSound = () => {
     const muted = soundManager.toggleMute();
@@ -229,7 +295,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
         </div>
 
         {/* 5 Core Action Hub Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 short:grid-cols-5 gap-2 sm:gap-4 short:gap-2 min-h-0">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 short:grid-cols-7 gap-2 sm:gap-4 short:gap-2 min-h-0">
           {/* Card 1: Explorar Mazmorras */}
           <button
             onClick={() => {
@@ -266,13 +332,11 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-amber-500/20 border border-amber-400/80 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform">
                 <Users className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                Drag & Drop
-              </span>
+              <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-amber-400 transition-colors" />
             </div>
             <div>
               <h3 className="text-sm sm:text-base short:text-xs font-bold text-amber-300 group-hover:text-amber-200 transition-colors">
-                Modificar Equipo
+                Equipo
               </h3>
               <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
                 Organiza tus Pokémon en cajitas activas y de reserva mediante arrastrar y soltar.
@@ -297,9 +361,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   ¡{readyToEvolveCount} Listo!
                 </span>
               ) : (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 border border-violet-500/40">
-                  Evolución
-                </span>
+                <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-violet-400 transition-colors" />
               )}
             </div>
             <div>
@@ -344,7 +406,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               setActiveModal('SHOP');
             }}
-            className="col-span-2 lg:col-span-1 short:col-span-1 group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-purple-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-purple-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
               <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-purple-500/20 border border-purple-400/80 flex items-center justify-center text-purple-300 group-hover:scale-105 transition-transform">
@@ -358,6 +420,59 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               </h3>
               <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
                 Abastece provisiones esenciales para tus próximas expediciones.
+              </p>
+            </div>
+          </button>
+
+          {/* Card 6: PokéBanco */}
+          <button
+            onClick={() => {
+              soundManager.playSelect();
+              setBankAmount('');
+              setActiveModal('BANK');
+            }}
+            className="group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-cyan-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/80 flex items-center justify-center text-cyan-300 group-hover:scale-105 transition-transform">
+                <Landmark className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <span className="text-[10px] sm:text-xs font-mono font-bold text-cyan-300 tabular-nums">
+                {bankGold} 🪙
+              </span>
+            </div>
+            <div>
+              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+                PokéBanco
+              </h3>
+              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+                Guarda tus Pokécuartos a salvo antes de entrar en una mazmorra.
+              </p>
+            </div>
+          </button>
+
+          {/* Card 7: Almacén Kangaskhan */}
+          <button
+            onClick={() => {
+              soundManager.playSelect();
+              setActiveModal('STORAGE');
+            }}
+            className="col-span-2 lg:col-span-1 short:col-span-1 group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-orange-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-orange-500/20 border border-orange-400/80 flex items-center justify-center text-orange-300 group-hover:scale-105 transition-transform">
+                <Warehouse className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <span className="text-[10px] sm:text-xs font-mono font-bold text-orange-300 tabular-nums">
+                {storage.reduce((a, b) => a + b.count, 0)} obj.
+              </span>
+            </div>
+            <div>
+              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-orange-300 transition-colors">
+                Almacén Kangaskhan
+              </h3>
+              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+                Deja tus objetos a buen recaudo para no perderlos en las mazmorras.
               </p>
             </div>
           </button>
@@ -419,7 +534,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
                     <div className="pt-2 mt-2 sm:pt-3 sm:mt-3 border-t border-slate-700/60 flex items-center justify-between text-[11px] text-slate-300 font-mono">
                       <span>{dungeon.floorsCount} Pisos</span>
-                      <span className="text-amber-300">+{dungeon.rewards.gold} 🪙</span>
+                      <span className="text-red-300">Jefe final</span>
                     </div>
                   </button>
                 );
@@ -436,7 +551,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   {selectedDungeon.name} ({selectedDungeon.floorsCount} Pisos con Jefe)
                 </span>
                 <span className="text-xs text-emerald-400 block mt-1">
-                  Recompensa base: +{selectedDungeon.rewards.gold} Pokécuartos y experiencia garantizada
+                  Las recompensas se encuentran durante la exploración
                 </span>
               </div>
 
@@ -450,6 +565,180 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               >
                 <Play className="w-4 h-4 fill-amber-950" />
                 Iniciar Expedición
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: ALMACÉN KANGASKHAN */}
+      {activeModal === 'STORAGE' && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full max-h-full p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2 min-h-0">
+            <div className="shrink-0 flex items-center justify-between gap-3 border-b border-slate-800 pb-3 short:pb-2">
+              <div className="flex items-center gap-3 min-w-0">
+                <PmdPortrait pokedexId={115} emotion="Happy" size={40} showFrame={true} className="short:hidden" />
+                <div className="min-w-0">
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <Warehouse className="w-5 h-5 text-orange-400" />
+                    Almacén Kangaskhan
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    "¡Lo que dejes aquí estará a salvo! Lo que lleves en la mochila se pierde si caes o abandonas una mazmorra."
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveModal(null)}
+                className="text-slate-400 hover:text-white shrink-0"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 short:grid-cols-2 gap-3 min-h-0 flex-1">
+              {[
+                { title: 'Mochila', items: inventory, toStorage: true, accent: 'text-emerald-400', action: 'Guardar' },
+                { title: 'Almacén', items: storage, toStorage: false, accent: 'text-orange-400', action: 'Sacar' },
+              ].map((column) => (
+                <div key={column.title} className="flex flex-col gap-2 min-h-0 bg-slate-950/60 rounded-xl border border-slate-800 p-2 sm:p-3">
+                  <div className="shrink-0 flex items-center justify-between text-xs font-bold uppercase tracking-wider">
+                    <span className={column.accent}>{column.title}</span>
+                    <span className="text-slate-500 font-mono">
+                      {column.items.reduce((a, b) => a + b.count, 0)} obj.
+                    </span>
+                  </div>
+                  {column.items.length === 0 ? (
+                    <p className="text-xs text-slate-500 text-center py-4">Vacío</p>
+                  ) : (
+                    <div className="flex flex-col gap-1.5 min-h-0 overflow-y-auto pr-1">
+                      {column.items.map((item) => (
+                        <div
+                          key={item.id}
+                          className="p-2 bg-slate-800/80 border border-slate-700 rounded-lg flex items-center justify-between gap-2"
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="text-xl">{item.icon}</span>
+                            <div className="min-w-0">
+                              <span className="font-bold text-xs text-white block truncate">{item.name}</span>
+                              <span className="text-[10px] font-mono text-amber-400">x{item.count}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 shrink-0">
+                            <button
+                              onClick={() => transferItem(item, 1, column.toStorage)}
+                              className="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-white rounded text-[10px] font-bold transition-colors"
+                            >
+                              {column.action} 1
+                            </button>
+                            {item.count > 1 && (
+                              <button
+                                onClick={() => transferItem(item, item.count, column.toStorage)}
+                                className={`px-2 py-1 rounded text-[10px] font-bold text-white transition-colors ${
+                                  column.toStorage ? 'bg-orange-600 hover:bg-orange-500' : 'bg-emerald-600 hover:bg-emerald-500'
+                                }`}
+                              >
+                                Todo
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: POKÉBANCO */}
+      {activeModal === 'BANK' && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full max-h-full overflow-y-auto p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3 short:pb-2">
+              <div>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Landmark className="w-5 h-5 text-cyan-400" />
+                  PokéBanco
+                </h3>
+                <p className="text-xs text-slate-400">
+                  El dinero del banco está a salvo. El que lleves encima se pierde si caes o abandonas una mazmorra.
+                </p>
+              </div>
+              <button
+                onClick={() => setActiveModal(null)}
+                className="text-slate-400 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-3 short:p-2 bg-slate-800/80 border border-slate-700 rounded-xl">
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">
+                  En mano
+                </span>
+                <span className="font-mono font-bold text-amber-300 text-lg tabular-nums flex items-center gap-1.5">
+                  <Coins className="w-4 h-4" />
+                  {gold}
+                </span>
+              </div>
+              <div className="p-3 short:p-2 bg-cyan-950/40 border border-cyan-700/60 rounded-xl">
+                <span className="text-[10px] uppercase tracking-wider text-cyan-400 font-semibold block">
+                  En el banco
+                </span>
+                <span className="font-mono font-bold text-cyan-300 text-lg tabular-nums flex items-center gap-1.5">
+                  <Landmark className="w-4 h-4" />
+                  {bankGold}
+                </span>
+              </div>
+            </div>
+
+            {bankFeedback && (
+              <div className="p-2 bg-cyan-500/20 border border-cyan-500/40 rounded-lg text-cyan-200 text-xs text-center font-bold">
+                {bankFeedback}
+              </div>
+            )}
+
+            <input
+              type="number"
+              min={1}
+              step={1}
+              inputMode="numeric"
+              value={bankAmount}
+              onChange={(e) => setBankAmount(e.target.value)}
+              placeholder="Cantidad de Pokécuartos"
+              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 focus:border-cyan-400 rounded-lg text-sm font-mono text-white outline-none select-text"
+            />
+
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => handleBankTransfer('deposit')}
+                className="py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs sm:text-sm font-bold transition-colors shadow"
+              >
+                Depositar
+              </button>
+              <button
+                onClick={() => handleBankTransfer('withdraw')}
+                className="py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs sm:text-sm font-bold transition-colors shadow"
+              >
+                Retirar
+              </button>
+              <button
+                onClick={() => handleBankTransfer('deposit', true)}
+                disabled={gold <= 0}
+                className="py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-cyan-300 rounded-lg text-xs font-semibold border border-slate-700 transition-colors"
+              >
+                Depositar todo
+              </button>
+              <button
+                onClick={() => handleBankTransfer('withdraw', true)}
+                disabled={bankGold <= 0}
+                className="py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-amber-300 rounded-lg text-xs font-semibold border border-slate-700 transition-colors"
+              >
+                Retirar todo
               </button>
             </div>
           </div>

@@ -83,6 +83,7 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
     Volador: 0.5,
     Psíquico: 0.5,
     Bicho: 0.5,
+    Hada: 0.5,
     Fantasma: 0.0,
   },
   Volador: {
@@ -95,6 +96,7 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
   },
   Veneno: {
     Planta: 2.0,
+    Hada: 2.0,
     Veneno: 0.5,
     Tierra: 0.5,
     Roca: 0.5,
@@ -130,6 +132,7 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
     Volador: 0.5,
     Fantasma: 0.5,
     Acero: 0.5,
+    Hada: 0.5,
   },
   Fantasma: {
     Psíquico: 2.0,
@@ -140,6 +143,7 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
   Acero: {
     Hielo: 2.0,
     Roca: 2.0,
+    Hada: 2.0,
     Fuego: 0.5,
     Agua: 0.5,
     Eléctrico: 0.5,
@@ -165,14 +169,27 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
   Dragón: {
     Dragón: 2.0,
     Acero: 0.5,
+    Hada: 0.0,
   },
   Siniestro: {
     Psíquico: 2.0,
     Fantasma: 2.0,
     Lucha: 0.5,
     Siniestro: 0.5,
+    Hada: 0.5,
+  },
+  Hada: {
+    Lucha: 2.0,
+    Dragón: 2.0,
+    Siniestro: 2.0,
+    Fuego: 0.5,
+    Veneno: 0.5,
+    Acero: 0.5,
   },
 };
+
+// EXP needed to go from `level` to `level + 1` (quadratic curve: ~4 fights per level at any stage)
+export const getExpToNextLevel = (level: number): number => 20 + 4 * level * level;
 
 export const getTypeEffectiveness = (atkType: PokemonType, defTypes: PokemonType[]): number => {
   let mult = 1.0;
@@ -203,6 +220,7 @@ export const TYPE_COLORS: Record<PokemonType, { bg: string; text: string; border
   Psíquico: { bg: 'bg-pink-500', text: 'text-pink-950', border: 'border-pink-300' },
   Dragón: { bg: 'bg-violet-700', text: 'text-violet-100', border: 'border-violet-400' },
   Siniestro: { bg: 'bg-neutral-800', text: 'text-neutral-100', border: 'border-neutral-500' },
+  Hada: { bg: 'bg-pink-300', text: 'text-pink-950', border: 'border-pink-200' },
 };
 
 // Starter Hero Pikachu
@@ -660,7 +678,7 @@ export const DUNGEONS: Dungeon[] = [
     theme: 'forest',
     bgImage: '/src/assets/images/pmd_dungeon_forest_1792068605705.jpg',
     recommendedLevel: 2,
-    enemiesPool: ['caterpie', 'pidgey', 'weedle', 'oddish', 'bellsprout'],
+    enemiesPool: ['caterpie', 'pidgey', 'weedle', 'oddish', 'bellsprout', 'jigglypuff'],
     bossId: 'boss_butterfree',
     rewards: {
       gold: 350,
@@ -677,7 +695,7 @@ export const DUNGEONS: Dungeon[] = [
     theme: 'cave',
     bgImage: '/src/assets/images/pmd_dungeon_cave_1792068605494.jpg',
     recommendedLevel: 8,
-    enemiesPool: ['geodude', 'zubat', 'machop', 'magnemite', 'diglett'],
+    enemiesPool: ['geodude', 'zubat', 'machop', 'magnemite', 'diglett', 'clefairy'],
     bossId: 'boss_onix',
     rewards: {
       gold: 900,
@@ -776,6 +794,16 @@ export const MOVE_TYPE_DATABASE: Record<
   'Golpe Kárate': { type: 'Lucha', category: 'physical', power: 50, accuracy: 100, description: 'Golpe seco con la mano con alta probabilidad de crítico.' },
   'Confusión': { type: 'Psíquico', category: 'special', power: 50, accuracy: 100, description: 'Ataque mental que puede confundir.' },
   'Agilidad': { type: 'Psíquico', category: 'status', power: 0, accuracy: 100, description: 'Relaja el cuerpo y dobla la velocidad.' },
+
+  // Hada
+  'Viento Feérico': { type: 'Hada', category: 'special', power: 40, accuracy: 100, description: 'Desata un viento mágico de polvo de hadas.' },
+  'Beso Drenaje': { type: 'Hada', category: 'special', power: 50, accuracy: 100, description: 'Un beso que absorbe la energía del rival.' },
+  'Brillo Mágico': { type: 'Hada', category: 'special', power: 80, accuracy: 100, description: 'Emite un destello de luz deslumbrante.' },
+  'Fuerza Lunar': { type: 'Hada', category: 'special', power: 95, accuracy: 100, description: 'Invoca el poder de la luna contra el objetivo.' },
+  'Carantoña': { type: 'Hada', category: 'physical', power: 90, accuracy: 90, description: 'Juega con el rival de forma adorable pero contundente.' },
+  'Encanto': { type: 'Hada', category: 'status', power: 0, accuracy: 100, description: 'Mira al rival con ternura para reducir mucho su Ataque.' },
+  'Canto': { type: 'Normal', category: 'status', power: 0, accuracy: 55, description: 'Una dulce melodía que adormece al rival.' },
+  'Destructor': { type: 'Normal', category: 'physical', power: 40, accuracy: 100, description: 'Golpea con la palma de la mano.' },
 };
 
 /** Normalizes and safely retrieves move information from MOVE_TYPE_DATABASE */
@@ -922,10 +950,94 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
       spe: 38,
       moves: ['Tinieblas', 'Rayo Confuso'],
     },
+    jigglypuff: {
+      pokedexId: 39,
+      name: 'Jigglypuff',
+      types: ['Normal', 'Hada'],
+      hp: 48,
+      atk: 18,
+      def: 14,
+      spa: 20,
+      spd: 16,
+      spe: 14,
+      moves: ['Canto', 'Destructor', 'Viento Feérico'],
+    },
+    clefairy: {
+      pokedexId: 35,
+      name: 'Clefairy',
+      types: ['Hada'],
+      hp: 46,
+      atk: 20,
+      def: 22,
+      spa: 26,
+      spd: 28,
+      spe: 16,
+      moves: ['Beso Drenaje', 'Destructor', 'Encanto'],
+    },
+    magnemite: {
+      pokedexId: 81,
+      name: 'Magnemite',
+      types: ['Eléctrico', 'Acero'],
+      hp: 38,
+      atk: 18,
+      def: 30,
+      spa: 30,
+      spd: 22,
+      spe: 22,
+      moves: ['Impactrueno', 'Supersónico', 'Placaje'],
+    },
+    diglett: {
+      pokedexId: 50,
+      name: 'Diglett',
+      types: ['Tierra'],
+      hp: 30,
+      atk: 26,
+      def: 16,
+      spa: 16,
+      spd: 20,
+      spe: 38,
+      moves: ['Arañazo', 'Ataque Arena'],
+    },
+    graveler: {
+      pokedexId: 75,
+      name: 'Graveler',
+      types: ['Roca', 'Tierra'],
+      hp: 58,
+      atk: 38,
+      def: 46,
+      spa: 20,
+      spd: 22,
+      spe: 18,
+      moves: ['Lanzarrocas', 'Tumba Rocas', 'Fortaleza'],
+    },
+    fearow: {
+      pokedexId: 22,
+      name: 'Fearow',
+      types: ['Normal', 'Volador'],
+      hp: 52,
+      atk: 38,
+      def: 26,
+      spa: 24,
+      spd: 24,
+      spe: 40,
+      moves: ['Picotazo', 'Pico Taladro', 'Malicioso'],
+    },
+    raichu: {
+      pokedexId: 26,
+      name: 'Raichu',
+      types: ['Eléctrico'],
+      hp: 52,
+      atk: 36,
+      def: 24,
+      spa: 38,
+      spd: 30,
+      spe: 42,
+      moves: ['Chispazo', 'Ataque Rápido', 'Onda Trueno'],
+    },
     // Bosses
     boss_butterfree: {
       pokedexId: 12,
-      name: 'Butterfree Guardián (Jefe)',
+      name: 'Butterfree',
       types: ['Bicho', 'Volador'],
       hp: 85,
       atk: 25,
@@ -937,7 +1049,7 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
     },
     boss_onix: {
       pokedexId: 95,
-      name: 'Onix Titánico (Jefe)',
+      name: 'Onix',
       types: ['Roca', 'Tierra'],
       hp: 130,
       atk: 34,
@@ -949,7 +1061,7 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
     },
     boss_zapdos: {
       pokedexId: 145,
-      name: 'Zapdos Ancestral (Jefe Supremo)',
+      name: 'Zapdos',
       types: ['Eléctrico', 'Volador'],
       hp: 200,
       atk: 48,
@@ -1703,7 +1815,7 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
     },
   ],
 
-  // 133: Eevee -> Vaporeon (134), Jolteon (135), Flareon (136)
+  // 133: Eevee -> Vaporeon (134), Jolteon (135), Flareon (136), Sylveon (700)
   133: [
     {
       targetPokedexId: 134,
@@ -1765,6 +1877,26 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
         maxPp: 15,
         description: 'Mordisco envuelto en ardientes llamaradas.',
         statusEffect: 'burn',
+      },
+    },
+    {
+      targetPokedexId: 700,
+      targetName: 'Sylveon',
+      minLevel: 15,
+      statGains: { hp: 24, attack: 12, defense: 14, spAttack: 26, spDefense: 30, speed: 12 },
+      types: ['Hada'],
+      ability: 'Piel Feérica',
+      description: 'Envuelve a sus aliados con sus cintas sensoriales para calmar cualquier hostilidad.',
+      learnedMove: {
+        id: 'move_draining_kiss',
+        name: 'Beso Drenaje',
+        type: 'Hada',
+        category: 'special',
+        power: 50,
+        accuracy: 100,
+        pp: 10,
+        maxPp: 10,
+        description: 'Un beso que absorbe la energía del rival.',
       },
     },
   ],

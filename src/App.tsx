@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TitleScreen } from './components/TitleScreen';
 import { HubMenu } from './components/HubMenu';
 import { TeamManager } from './components/TeamManager';
@@ -19,10 +19,10 @@ import {
 import {
   createPikachuStarter,
   INITIAL_RESERVES,
-  DEFAULT_INVENTORY,
   INITIAL_MISSIONS,
 } from './data/pokemonData';
 import { soundManager } from './utils/audio';
+import { clearSave, loadGame, saveGame } from './utils/saveGame';
 import { Award, AlertTriangle, ArrowRight, RotateCcw } from 'lucide-react';
 
 const restorePokemon = (p: Pokemon): Pokemon => ({
@@ -37,12 +37,25 @@ export default function App() {
   // Screen state
   const [screen, setScreen] = useState<ViewScreen>('TITLE');
 
+  // Saved progress (localStorage), read once on startup
+  const [initialSave] = useState(() => loadGame());
+  const [hasSave, setHasSave] = useState<boolean>(initialSave !== null);
+  const abandonedExpedition = initialSave?.inDungeon ?? false;
+
   // Player state: starts with ONLY Pikachu in active team as requested!
-  const [activeTeam, setActiveTeam] = useState<Pokemon[]>([createPikachuStarter()]);
-  const [reserves, setReserves] = useState<Pokemon[]>(INITIAL_RESERVES);
-  const [gold, setGold] = useState<number>(600);
-  const [inventory, setInventory] = useState<Item[]>(DEFAULT_INVENTORY);
-  const [missions, setMissions] = useState<RescueMission[]>(INITIAL_MISSIONS);
+  const [activeTeam, setActiveTeam] = useState<Pokemon[]>(() =>
+    initialSave ? initialSave.activeTeam.map(restorePokemon) : [createPikachuStarter()]
+  );
+  const [reserves, setReserves] = useState<Pokemon[]>(initialSave?.reserves ?? INITIAL_RESERVES);
+  const [gold, setGold] = useState<number>(
+    initialSave && !abandonedExpedition ? initialSave.gold : 0
+  );
+  const [bankGold, setBankGold] = useState<number>(initialSave?.bankGold ?? 0);
+  const [inventory, setInventory] = useState<Item[]>(
+    initialSave && !abandonedExpedition ? initialSave.inventory : []
+  );
+  const [storage, setStorage] = useState<Item[]>(initialSave?.storage ?? []);
+  const [missions, setMissions] = useState<RescueMission[]>(initialSave?.missions ?? INITIAL_MISSIONS);
 
   // Active expedition
   const [currentDungeon, setCurrentDungeon] = useState<Dungeon | null>(null);
@@ -52,10 +65,40 @@ export default function App() {
     team: Pokemon[];
   } | null>(null);
 
+  // Auto-save whenever progress changes (not on the title screen, so a save is never overwritten before choosing)
+  useEffect(() => {
+    if (screen === 'TITLE') return;
+    saveGame({
+      version: 1,
+      activeTeam,
+      reserves,
+      gold,
+      bankGold,
+      inventory,
+      storage,
+      missions,
+      inDungeon: screen === 'DUNGEON_EXPLORE',
+    });
+    setHasSave(true);
+  }, [screen, activeTeam, reserves, gold, bankGold, inventory, storage, missions]);
+
   // Handlers
   const handleStartFromTitle = () => {
     soundManager.startBgm('hub');
     setScreen('HUB');
+  };
+
+  const handleNewGame = () => {
+    clearSave();
+    setActiveTeam([createPikachuStarter()]);
+    setReserves(INITIAL_RESERVES);
+    setGold(0);
+    setBankGold(0);
+    setInventory([]);
+    setStorage([]);
+    setMissions(INITIAL_MISSIONS);
+    setHasSave(false);
+    handleStartFromTitle();
   };
 
   const handleSelectDungeon = (dungeon: Dungeon) => {
@@ -97,7 +140,18 @@ export default function App() {
   return (
     <div className="w-full h-dvh overflow-hidden bg-slate-950 font-sans text-slate-100 flex flex-col">
       {/* 1. Title Screen */}
-      {screen === 'TITLE' && <TitleScreen onStartGame={handleStartFromTitle} />}
+      {screen === 'TITLE' && (
+        <TitleScreen
+          hasSave={hasSave}
+          notice={
+            abandonedExpedition
+              ? 'Abandonaste una expedición a medias: perdiste el dinero y los objetos que llevabas encima.'
+              : null
+          }
+          onStartGame={handleStartFromTitle}
+          onNewGame={handleNewGame}
+        />
+      )}
 
       {/* 2. Hub Menu */}
       {screen === 'HUB' && (
@@ -105,13 +159,23 @@ export default function App() {
           team={activeTeam}
           reserves={reserves}
           gold={gold}
+          bankGold={bankGold}
           inventory={inventory}
+          storage={storage}
           missions={missions}
           onSelectDungeon={handleSelectDungeon}
           onOpenTeamManager={() => setScreen('TEAM_MANAGEMENT')}
           onOpenEvolution={() => setScreen('EVOLUTION')}
           onUpdateInventory={(updated) => setInventory(updated)}
           onUpdateGold={(newGold) => setGold(newGold)}
+          onUpdateBank={(newGold, newBank) => {
+            setGold(newGold);
+            setBankGold(newBank);
+          }}
+          onUpdateStorage={(newInventory, newStorage) => {
+            setInventory(newInventory);
+            setStorage(newStorage);
+          }}
         />
       )}
 
@@ -178,22 +242,6 @@ export default function App() {
               <p className="text-xs text-slate-300 mt-2 leading-relaxed">
                 Tu equipo demostró gran valentía y destreza estratégica superando cada evento y derrotando al jefe final.
               </p>
-            </div>
-
-            {/* Reward Summary */}
-            <div className="bg-slate-800/80 rounded-xl p-4 border border-slate-700 text-left text-xs flex flex-col gap-2">
-              <div className="flex justify-between items-center text-slate-300">
-                <span>Recompensa de Mazmorra:</span>
-                <span className="font-mono font-bold text-amber-400">
-                  +{completedDungeonInfo?.goldEarned} Pokécuartos
-                </span>
-              </div>
-              <div className="flex justify-between items-center text-slate-300">
-                <span>Puntos de Rango de Rescate:</span>
-                <span className="font-mono font-bold text-emerald-400">
-                  +120 Puntos
-                </span>
-              </div>
             </div>
 
             <button

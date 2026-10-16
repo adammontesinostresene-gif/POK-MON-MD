@@ -15,7 +15,8 @@ export type PokemonType =
   | 'Fantasma'
   | 'Dragón'
   | 'Acero'
-  | 'Siniestro';
+  | 'Siniestro'
+  | 'Hada';
 
 export type MoveCategory = 'physical' | 'special' | 'status';
 

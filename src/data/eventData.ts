@@ -69,10 +69,9 @@ export const generateFloorEvent = (
     };
   }
 
-  // Pre-determined or semi-procedural mix of combat, decisions, and encounters
-  // For variety: floor 1 is usually welcoming combat or a path dilemma
+  // Every non-boss floor rolls a random event (repeated entries act as weights)
   const types: FloorEventType[] = ['combat', 'decision', 'combat', 'decision', 'chest', 'spring', 'monster_house'];
-  const eventType = types[(floorNumber * 3 + dungeon.name.length) % types.length];
+  const eventType = types[Math.floor(Math.random() * types.length)];
 
   let enemyLevel = dungeon.recommendedLevel + Math.floor((floorNumber - 1) / 2);
   if (dungeon.id === 'bosque_misterioso') {
@@ -186,7 +185,7 @@ export const generateFloorEvent = (
       },
     ];
 
-    const chosenDilemma = decisionTypes[(floorNumber - 1) % decisionTypes.length];
+    const chosenDilemma = decisionTypes[Math.floor(Math.random() * decisionTypes.length)];
     return {
       floorNumber,
       type: 'decision',

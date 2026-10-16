@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Pokemon, Move, Item, PokemonType } from '../types/game';
-import { TYPE_COLORS, getTypeEffectiveness } from '../data/pokemonData';
+import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel } from '../data/pokemonData';
 import { soundManager } from '../utils/audio';
 import {
   Shield,
@@ -38,6 +38,7 @@ interface TurnBasedCombatProps {
   ) => void;
   onDefeat: () => void;
   onFlee: () => void;
+  onEscapeDungeon: (team: Pokemon[], inventory: Item[]) => void;
   canFlee?: boolean;
   onUpdateInventory: (items: Item[]) => void;
 }
@@ -62,6 +63,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   onVictory,
   onDefeat,
   onFlee,
+  onEscapeDungeon,
   canFlee = true,
   onUpdateInventory,
 }) => {
@@ -504,13 +506,15 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     // Reward scales with the number and levels of all defeated enemies!
     const expReward = defeatedEnemies.reduce(
-      (sum, e) => sum + Math.round(e.level * 26 + Math.random() * 12),
+      (sum, e) => sum + Math.round(e.level * 10 + Math.random() * 5),
       0
     );
-    const goldReward = defeatedEnemies.reduce(
-      (sum, e) => sum + Math.round(e.level * 18 + Math.random() * 20),
-      0
-    );
+    // Loot roll: 50% nothing, otherwise either gold or an item (never both)
+    const lootRoll = Math.random();
+    const goldReward =
+      lootRoll < 0.25
+        ? defeatedEnemies.reduce((sum, e) => sum + Math.round(e.level * 18 + Math.random() * 20), 0)
+        : 0;
 
     // Level-up checks for surviving team members: strictly ONE notification message per Pokémon
     const leveledMap = new Map<string, { name: string; oldLevel: number; newLevel: number }>();
@@ -521,10 +525,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       let nextExp = member.nextExp;
       let stats = { ...member.stats };
 
-      while (exp >= nextExp) {
+      // At most one level per victory; surplus EXP is capped just below the next threshold
+      if (exp >= nextExp) {
         exp -= nextExp;
         level += 1;
-        nextExp = Math.round(nextExp * 1.35);
+        nextExp = getExpToNextLevel(level);
+        exp = Math.min(exp, nextExp - 1);
 
         // Boost stats upon leveling
         stats.maxHp += 4;
@@ -570,10 +576,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       };
     }
 
-    // Item drop (higher probability with larger squads)
     let droppedItem: Item | undefined = undefined;
-    const dropRate = Math.min(0.85, 0.40 + (defeatedEnemies.length - 1) * 0.15);
-    if (Math.random() < dropRate) {
+    if (lootRoll >= 0.25 && lootRoll < 0.5) {
       droppedItem = {
         id: `drop_oran_${Date.now()}`,
         name: 'Baya Aranja',
@@ -598,14 +602,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
   // Handle using an item from the bag on a team member
   const handleUseItemOnTarget = (item: Item, targetIdx: number) => {
-    if (item.effectType === 'escape' && !canFlee) {
-      soundManager.playHit();
-      addLog('⛔ ¡No puedes escapar de un jefe de mazmorra!');
-      setCombatMenu('MOVES_SELECT');
-      setSelectedBagItem(null);
-      return;
-    }
-
     soundManager.playSelect();
     const user = currentMember;
     const updatedInv = inventory
@@ -615,7 +611,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     const targetMember = { ...team[targetIdx], stats: { ...team[targetIdx].stats } };
 
-    if (item.effectType === 'heal_hp') {
+    if (!canFlee && item.category === 'orb') {
+      soundManager.playHit();
+      addLog(`🚫 ${user.name} usó ${item.name}... ¡pero no tuvo efecto contra el jefe!`);
+    } else if (item.effectType === 'heal_hp') {
       const healAmount = item.effectValue || 40;
       targetMember.stats.hp = Math.min(targetMember.stats.maxHp, targetMember.stats.hp + healAmount);
       soundManager.playHeal();
@@ -626,8 +625,11 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       addLog(`⭐ ¡${user.name} revivió a ${targetMember.name} con ${item.name}!`);
     } else if (item.effectType === 'escape') {
       soundManager.playSelect();
-      addLog(`🌀 ¡Usaste el Orbe Escape para abandonar el combate con seguridad!`);
-      setTimeout(() => onFlee(), 600);
+      addLog(`🌀 ¡${user.name} usó el Orbe Escape! El equipo sale de la mazmorra con todo su botín.`);
+      setIsProcessingTurn(true);
+      setCombatMenu('MOVES_SELECT');
+      setSelectedBagItem(null);
+      setTimeout(() => onEscapeDungeon(team, updatedInv), 900);
       return;
     } else {
       addLog(`🎒 ${user.name} usó ${item.name}.`);
@@ -1382,6 +1384,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     disabled={isProcessingTurn || item.count <= 0}
                     onClick={() => {
                       soundManager.playSelect();
+                      if (item.effectType === 'escape' || item.category === 'orb') {
+                        handleUseItemOnTarget(item, 0);
+                        return;
+                      }
                       setSelectedBagItem(item);
                       setCombatMenu('BAG_TARGET');
                     }}
@@ -1474,12 +1480,20 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                   +{victoryState.expGained} EXP c/u
                 </span>
               </div>
-              <div className="flex justify-between items-center text-slate-300">
-                <span>Pokécuartos obtenidos:</span>
-                <span className="font-mono font-bold text-amber-300">
-                  +{victoryState.goldGained} 🪙
-                </span>
-              </div>
+              {victoryState.goldGained > 0 && (
+                <div className="flex justify-between items-center text-slate-300">
+                  <span>Pokécuartos obtenidos:</span>
+                  <span className="font-mono font-bold text-amber-300">
+                    +{victoryState.goldGained} 🪙
+                  </span>
+                </div>
+              )}
+              {victoryState.goldGained === 0 && !victoryState.droppedItem && (
+                <div className="flex justify-between items-center text-slate-500 italic">
+                  <span>Botín:</span>
+                  <span>No encontraste nada</span>
+                </div>
+              )}
               {victoryState.droppedItem && (
                 <div className="flex justify-between items-center text-slate-300 pt-1 border-t border-slate-700/60">
                   <span>Objeto encontrado:</span>
@@ -1564,6 +1578,23 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     className="w-full py-2 px-3 bg-slate-800 hover:bg-slate-750 text-slate-200 font-semibold rounded-lg text-xs border border-slate-700 flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
                   >
                     <span>Enviar al Campamento de Reserva</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      soundManager.playSelect();
+                      onVictory(
+                        team,
+                        victoryState.expGained,
+                        victoryState.goldGained,
+                        victoryState.droppedItem,
+                        undefined,
+                        false
+                      );
+                    }}
+                    className="w-full py-2 px-3 bg-transparent hover:bg-red-950/60 text-red-300 font-semibold rounded-lg text-xs border border-red-800/70 flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                  >
+                    <span>Rechazar (no se une)</span>
                   </button>
                 </div>
               </div>

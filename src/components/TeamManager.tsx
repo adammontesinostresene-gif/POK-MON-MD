@@ -29,14 +29,25 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
   const [dragOverSlotIndex, setDragOverSlotIndex] = useState<number | null>(null);
   const [dragOverReserves, setDragOverReserves] = useState<boolean>(false);
 
-  // Click-to-move fallback (vital for mobile touchscreens)
-  const [selectedForMove, setSelectedForMove] = useState<{
-    id: string;
-    source: 'active' | 'reserves';
-  } | null>(null);
-
   const [notification, setNotification] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<'boxes' | 'details'>('boxes');
+  const [releaseCandidate, setReleaseCandidate] = useState<Pokemon | null>(null);
+
+  // The current leader can never be released, so the team always keeps one
+  const canRelease = (pokemon: Pokemon) => activeTeam[0]?.id !== pokemon.id;
+
+  const handleConfirmRelease = () => {
+    if (!releaseCandidate) return;
+    const newActive = activeTeam.filter((p) => p.id !== releaseCandidate.id);
+    const newReserves = reserves.filter((p) => p.id !== releaseCandidate.id);
+    soundManager.playDrop();
+    onUpdateTeam(newActive, newReserves);
+    showNotification(`${releaseCandidate.name} se ha despedido del equipo`);
+    if (inspectedPokemon?.id === releaseCandidate.id) {
+      setInspectedPokemon(newActive[0] || newReserves[0] || null);
+    }
+    setReleaseCandidate(null);
+  };
 
   const showNotification = (msg: string) => {
     setNotification(msg);
@@ -153,85 +164,18 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
     handleDragEnd();
   };
 
-  // Mobile Tap-To-Move handler
-  const handleCardClick = (pokemon: Pokemon, source: 'active' | 'reserves') => {
+  const handleCardClick = (pokemon: Pokemon) => {
     soundManager.playSelect();
     setInspectedPokemon(pokemon);
-
-    if (selectedForMove) {
-      if (selectedForMove.id === pokemon.id) {
-        // Deselect
-        setSelectedForMove(null);
-        return;
-      }
-
-      // Execute swap or move between the two cards
-      const sourceInfo = findPokemon(selectedForMove.id);
-      if (!sourceInfo) {
-        setSelectedForMove(null);
-        return;
-      }
-
-      const newActive = [...activeTeam];
-      const newReserves = [...reserves];
-
-      if (sourceInfo.source === 'active' && source === 'reserves') {
-        // Swap active with reserve
-        const actIdx = newActive.findIndex((p) => p.id === sourceInfo.pokemon.id);
-        const resIdx = newReserves.findIndex((p) => p.id === pokemon.id);
-        if (actIdx !== -1 && resIdx !== -1) {
-          const temp = newActive[actIdx];
-          newActive[actIdx] = newReserves[resIdx];
-          newReserves[resIdx] = temp;
-          soundManager.playDrop();
-          onUpdateTeam(newActive, newReserves);
-          showNotification(`Cambiado ${temp.name} por ${newActive[actIdx].name}`);
-        }
-      } else if (sourceInfo.source === 'reserves' && source === 'active') {
-        // Swap reserve with active
-        const resIdx = newReserves.findIndex((p) => p.id === sourceInfo.pokemon.id);
-        const actIdx = newActive.findIndex((p) => p.id === pokemon.id);
-        if (resIdx !== -1 && actIdx !== -1) {
-          const temp = newActive[actIdx];
-          newActive[actIdx] = newReserves[resIdx];
-          newReserves[resIdx] = temp;
-          soundManager.playDrop();
-          onUpdateTeam(newActive, newReserves);
-          showNotification(`Cambiado ${temp.name} por ${newActive[actIdx].name}`);
-        }
-      } else if (sourceInfo.source === 'active' && source === 'active') {
-        // Swap slots inside active
-        const idxA = newActive.findIndex((p) => p.id === sourceInfo.pokemon.id);
-        const idxB = newActive.findIndex((p) => p.id === pokemon.id);
-        if (idxA !== -1 && idxB !== -1) {
-          const temp = newActive[idxA];
-          newActive[idxA] = newActive[idxB];
-          newActive[idxB] = temp;
-          soundManager.playDrop();
-          onUpdateTeam(newActive, newReserves);
-          showNotification(`Posiciones intercambiadas`);
-        }
-      }
-
-      setSelectedForMove(null);
-    } else {
-      setSelectedForMove({ id: pokemon.id, source });
-    }
   };
 
-  const handleEmptySlotClick = (targetIndex: number) => {
-    if (selectedForMove && selectedForMove.source === 'reserves') {
-      const resIdx = reserves.findIndex((p) => p.id === selectedForMove.id);
-      if (resIdx !== -1) {
-        const newReserves = [...reserves];
-        const newActive = [...activeTeam];
-        const [moved] = newReserves.splice(resIdx, 1);
-        newActive.push(moved);
-        soundManager.playDrop();
-        onUpdateTeam(newActive, newReserves);
-        showNotification(`¡${moved.name} añadido al equipo!`);
-        setSelectedForMove(null);
-      }
+  const isReserveInspected =
+    !!inspectedPokemon && reserves.some((p) => p.id === inspectedPokemon.id);
+
+  // Tapping an empty slot places the currently highlighted reserve Pokémon there
+  const handleEmptySlotClick = () => {
+    if (inspectedPokemon && isReserveInspected) {
+      handleAddToActive(inspectedPokemon);
     }
   };
 
@@ -245,7 +189,6 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
     soundManager.playDrop();
     onUpdateTeam(newActive, newReserves);
     showNotification(`${pokemon.name} enviado al campamento`);
-    setSelectedForMove(null);
     if (inspectedPokemon?.id === pokemon.id) {
       setInspectedPokemon(newActive[0]);
     }
@@ -261,7 +204,6 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
     soundManager.playDrop();
     onUpdateTeam(newActive, newReserves);
     showNotification(`¡${pokemon.name} se une al equipo activo!`);
-    setSelectedForMove(null);
   };
 
   const handleSetLeader = (pokemon: Pokemon) => {
@@ -303,20 +245,6 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
             </p>
           </div>
         </div>
-
-        {selectedForMove && (
-          <div className="shrink-0 flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-300 text-[10px] sm:text-xs animate-pulse">
-            <ArrowUpDown className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Toca otra cajita para intercambiar</span>
-            <span className="sm:hidden">Intercambiar</span>
-            <button
-              onClick={() => setSelectedForMove(null)}
-              className="ml-1 text-slate-400 hover:text-white"
-            >
-              ✕
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Mobile tabs: boxes vs. inspector */}
@@ -372,7 +300,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
               {[0, 1, 2, 3].map((slotIdx) => {
                 const pokemon = activeTeam[slotIdx];
                 const isOver = dragOverSlotIndex === slotIdx;
-                const isSelected = selectedForMove?.id === pokemon?.id;
+                const isSelected = !!pokemon && inspectedPokemon?.id === pokemon.id;
                 const isDraggingThis = draggedPokemonId === pokemon?.id;
 
                 if (pokemon) {
@@ -391,7 +319,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                         e.preventDefault();
                         handleDropOnActiveSlot(slotIdx);
                       }}
-                      onClick={() => handleCardClick(pokemon, 'active')}
+                      onClick={() => handleCardClick(pokemon)}
                       className={`relative flex flex-col items-center justify-between p-1.5 sm:p-3 short:p-1.5 rounded-xl border-2 transition-all cursor-grab active:cursor-grabbing select-none ${
                         isSelected
                           ? 'border-amber-400 bg-amber-950/40 shadow-lg scale-102 ring-2 ring-amber-400/50'
@@ -494,12 +422,12 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       e.preventDefault();
                       handleDropOnActiveSlot(slotIdx);
                     }}
-                    onClick={() => handleEmptySlotClick(slotIdx)}
+                    onClick={handleEmptySlotClick}
                     className={`flex flex-col items-center justify-center p-1.5 sm:p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer min-h-24 sm:min-h-36 short:min-h-24 ${
                       isOver
                         ? 'border-sky-400 bg-sky-950/40 scale-102'
-                        : selectedForMove && selectedForMove.source === 'reserves'
-                        ? 'border-amber-400/80 bg-amber-950/20 animate-pulse'
+                        : isReserveInspected
+                        ? 'border-amber-400/80 bg-amber-950/20'
                         : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
                     }`}
                   >
@@ -510,7 +438,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       Cajita {slotIdx + 1}
                     </span>
                     <span className="hidden sm:block text-[10px] text-slate-500 text-center mt-1">
-                      {selectedForMove && selectedForMove.source === 'reserves'
+                      {isReserveInspected
                         ? 'Toca para colocar aquí'
                         : 'Arrastra un recluta'}
                     </span>
@@ -564,8 +492,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
             ) : (
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 short:grid-cols-4 gap-1.5 sm:gap-3 min-h-0 overflow-y-auto content-start pr-1">
                 {reserves.map((pokemon) => {
-                  const isSelected = selectedForMove?.id === pokemon.id;
-                  const isInspected = inspectedPokemon?.id === pokemon.id;
+                  const isSelected = inspectedPokemon?.id === pokemon.id;
                   const isDraggingThis = draggedPokemonId === pokemon.id;
 
                   return (
@@ -574,12 +501,10 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       draggable
                       onDragStart={(e) => handleDragStart(e, pokemon.id, 'reserves')}
                       onDragEnd={handleDragEnd}
-                      onClick={() => handleCardClick(pokemon, 'reserves')}
+                      onClick={() => handleCardClick(pokemon)}
                       className={`relative flex flex-col items-center p-1.5 sm:p-2.5 rounded-xl border transition-all cursor-grab active:cursor-grabbing select-none ${
                         isSelected
                           ? 'border-amber-400 bg-amber-950/40 shadow-lg scale-102 ring-2 ring-amber-400/50'
-                          : isInspected
-                          ? 'border-sky-500/80 bg-slate-800/90'
                           : 'border-slate-800 bg-slate-800/60 hover:border-slate-600 hover:bg-slate-800'
                       } ${isDraggingThis ? 'opacity-40' : 'opacity-100'}`}
                     >
@@ -815,6 +740,17 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       : 'Equipo Lleno (Máx 4)'}
                   </button>
                 )}
+                {canRelease(inspectedPokemon) && (
+                  <button
+                    onClick={() => {
+                      soundManager.playSelect();
+                      setReleaseCandidate(inspectedPokemon);
+                    }}
+                    className="w-full py-2 bg-transparent hover:bg-red-950/60 text-red-300 rounded-lg text-xs font-semibold transition-colors border border-red-800/70"
+                  >
+                    Despedir del equipo
+                  </button>
+                )}
               </div>
             </div>
           ) : (
@@ -827,6 +763,41 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
           )}
         </div>
       </div>
+
+      {/* RELEASE CONFIRMATION MODAL */}
+      {releaseCandidate && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-slate-900 border border-red-500/60 rounded-2xl max-w-sm w-full max-h-full overflow-y-auto p-4 sm:p-5 shadow-2xl flex flex-col gap-3 sm:gap-4">
+            <div className="flex items-center gap-3">
+              <PmdPortrait pokedexId={releaseCandidate.pokedexId} emotion="Pain" size={44} showFrame={true} />
+              <div className="min-w-0">
+                <h3 className="font-bold text-base text-white">¿Despedir a {releaseCandidate.name}?</h3>
+                <span className="text-xs text-slate-400 font-mono">Nv. {releaseCandidate.level}</span>
+              </div>
+            </div>
+            <p className="text-sm text-slate-300">
+              {releaseCandidate.name} abandonará el equipo <span className="font-bold text-red-400">para siempre</span>. Esta acción no se puede deshacer.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setReleaseCandidate(null);
+                }}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold border border-slate-700 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmRelease}
+                className="px-3 py-1.5 bg-red-700 hover:bg-red-600 text-white rounded-lg text-xs font-bold shadow transition-colors"
+              >
+                Despedir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

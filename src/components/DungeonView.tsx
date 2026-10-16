@@ -61,6 +61,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   const [inCombat, setInCombat] = useState<boolean>(false);
   const [eventResolved, setEventResolved] = useState<boolean>(false);
   const [resolutionMessage, setResolutionMessage] = useState<string | null>(null);
+  const [arrivalNotice, setArrivalNotice] = useState<string | null>(null);
 
   // In-Dungeon Bag Modal
   const [isBagOpen, setIsBagOpen] = useState<boolean>(false);
@@ -76,12 +77,13 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     };
   }, []);
 
-  const loadFloor = (floorNum: number) => {
+  const loadFloor = (floorNum: number, teamForEvent: Pokemon[] = team) => {
     soundManager.startBgm('dungeon');
-    const event = generateFloorEvent(dungeon, floorNum, team);
+    const event = generateFloorEvent(dungeon, floorNum, teamForEvent);
     setCurrentEvent(event);
     setEventResolved(false);
     setResolutionMessage(null);
+    setArrivalNotice(null);
     setInCombat(false);
 
     // Consume 6 belly per floor
@@ -270,25 +272,30 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
     setTeam(finalTeam);
     setReserves(finalReserves);
-    setGold((g) => g + goldGained);
-    if (droppedItem) {
-      setInventory((inv) => [...inv, droppedItem]);
+    const finalGold = gold + goldGained;
+    const finalInventory = droppedItem ? [...inventory, droppedItem] : inventory;
+    setGold(finalGold);
+    setInventory(finalInventory);
+
+    const loot = goldGained > 0 ? `+${goldGained} Pokécuartos` : droppedItem ? `una ${droppedItem.name}` : 'sin botín';
+    const victorySummary = `¡Victoria en el piso ${currentFloor}! ${loot}${
+      recruitedPokemon
+        ? addToActiveTeam && finalTeam.length <= 4
+          ? ` · ¡${recruitedPokemon.name} se unió a tu equipo activo!`
+          : ` · ¡${recruitedPokemon.name} se unió a tu campamento de reserva!`
+        : ''
+    }`;
+
+    // Winning a fight takes the team straight to the stairs
+    if (currentFloor >= dungeon.floorsCount) {
+      soundManager.playVictory();
+      onCompleteDungeon(finalTeam, finalReserves, finalInventory, finalGold);
+      return;
     }
 
-    setInCombat(false);
-    setEventResolved(true);
-    setResolutionMessage(
-      `¡Has superado el combate del piso ${currentFloor}! Obtuviste +${goldGained} Pokécuartos${
-        droppedItem ? ` y una ${droppedItem.name}` : ''
-      }${
-        recruitedPokemon
-          ? addToActiveTeam && finalTeam.length <= 4
-            ? ` y ¡${recruitedPokemon.name} se unió inmediatamente a tu equipo activo!`
-            : ` y ¡${recruitedPokemon.name} se unió a tu campamento de reserva!`
-          : ''
-      }.`
-    );
-    soundManager.startBgm('dungeon');
+    loadFloor(currentFloor + 1, finalTeam);
+    setCurrentFloor((f) => f + 1);
+    setArrivalNotice(victorySummary);
   };
 
   // Next Floor Progression
@@ -297,7 +304,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     if (currentFloor >= dungeon.floorsCount) {
       // Dungeon completed!
       soundManager.playVictory();
-      onCompleteDungeon(team, reserves, inventory, gold + dungeon.rewards.gold);
+      onCompleteDungeon(team, reserves, inventory, gold);
     } else {
       loadFloor(currentFloor + 1);
       setCurrentFloor((f) => f + 1);
@@ -311,6 +318,12 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       .map((it) => (it.id === item.id ? { ...it, count: it.count - 1 } : it))
       .filter((it) => it.count > 0);
     setInventory(updatedInv);
+
+    if (item.effectType === 'escape') {
+      setIsBagOpen(false);
+      onExitDungeon(team, updatedInv, gold);
+      return;
+    }
 
     if (item.effectType === 'restore_belly') {
       soundManager.playHeal();
@@ -350,7 +363,10 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
             inventory={inventory}
             bgImage={dungeon.bgImage}
             onVictory={handleCombatVictory}
-            onDefeat={() => onExitDungeon(team, inventory, Math.floor(gold / 2))}
+            onDefeat={() => onExitDungeon(team, [], 0)}
+            onEscapeDungeon={(combatTeam, remainingInventory) =>
+              onExitDungeon(combatTeam, remainingInventory, gold)
+            }
             canFlee={currentEvent.type !== 'boss'}
             onFlee={() => {
               setInCombat(false);
@@ -524,6 +540,11 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
               {/* Title & Narrative Description */}
               <div>
+                {arrivalNotice && (
+                  <p className="mb-1.5 mx-auto max-w-xl text-[11px] sm:text-xs font-semibold text-emerald-200 bg-emerald-950/80 border border-emerald-500/50 rounded-lg px-2.5 py-1">
+                    ✨ {arrivalNotice}
+                  </p>
+                )}
                 <h2 className="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight">
                   {currentEvent.title}
                 </h2>
@@ -722,7 +743,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                       key={item.id}
                       onClick={() => {
                         soundManager.playSelect();
-                        if (item.effectType === 'restore_belly') {
+                        if (item.effectType === 'restore_belly' || item.effectType === 'escape') {
                           handleUseItemOnTarget(item, 0);
                         } else {
                           setSelectedItemForUse(item);
@@ -762,11 +783,17 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
               ¿Retirarse a la aldea?
             </h3>
             <p className="text-sm text-slate-300">
-              Si abandonas la expedición ahora, <span className="font-bold text-red-400">perderás todo tu dinero</span>.
+              Si abandonas la expedición ahora, <span className="font-bold text-red-400">perderás todo el dinero que llevas y todos los objetos de la mochila</span>. El dinero guardado en el PokéBanco está a salvo.
             </p>
             <div className="flex items-center gap-2 bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-amber-300 font-mono font-bold text-sm">
               <Coins className="w-4 h-4" />
               <span>{gold} Pokécuartos</span>
+              <ArrowRight className="w-4 h-4 text-slate-500" />
+              <span className="text-red-400">0</span>
+            </div>
+            <div className="flex items-center gap-2 bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-emerald-300 font-mono font-bold text-sm">
+              <Backpack className="w-4 h-4" />
+              <span>{inventory.reduce((a, b) => a + b.count, 0)} objetos</span>
               <ArrowRight className="w-4 h-4 text-slate-500" />
               <span className="text-red-400">0</span>
             </div>
@@ -784,7 +811,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                 onClick={() => {
                   soundManager.playSelect();
                   setIsExitConfirmOpen(false);
-                  onExitDungeon(team, inventory, 0);
+                  onExitDungeon(team, [], 0);
                 }}
                 className="flex items-center gap-1 px-3 py-1.5 bg-red-700 hover:bg-red-600 text-white rounded-lg text-xs font-bold transition-colors shadow cursor-pointer"
               >
