@@ -672,14 +672,14 @@ export const DUNGEONS: Dungeon[] = [
   {
     id: 'bosque_misterioso',
     name: 'Bosque Místico',
-    description: 'Un espeso bosque cubierto de niebla esmeralda. Abundan los Pokémon tipo Planta, Bicho y Volador.',
+    description: 'Un espeso bosque cubierto de niebla esmeralda. Abundan los Pokémon tipo Normal, Bicho y Planta.',
     floorsCount: 5,
     difficulty: 'Fácil',
     theme: 'forest',
     bgImage: '/src/assets/images/pmd_dungeon_forest_1792068605705.jpg',
     recommendedLevel: 2,
-    enemiesPool: ['caterpie', 'pidgey', 'weedle', 'oddish', 'bellsprout', 'jigglypuff'],
-    bossId: 'boss_butterfree',
+    enemiesPool: ['rattata', 'caterpie', 'ledyba', 'kricketot', 'patrat', 'sunkern'],
+    bossId: 'boss_maschiff',
     rewards: {
       gold: 350,
       exp: 150,
@@ -764,6 +764,9 @@ export const MOVE_TYPE_DATABASE: Record<
   'Supersónico': { type: 'Normal', category: 'status', power: 0, accuracy: 80, description: 'Emite ondas sonoras desconcertantes.' },
   'Malicioso': { type: 'Normal', category: 'status', power: 0, accuracy: 100, description: 'Intimida al rival para bajar su Defensa.' },
   'Fortaleza': { type: 'Normal', category: 'status', power: 0, accuracy: 100, description: 'Aumenta la Defensa.' },
+  'Gruñido': { type: 'Normal', category: 'status', power: 0, accuracy: 100, description: 'Gruñe de forma adorable para bajar el Ataque del rival.' },
+  'Desarrollo': { type: 'Normal', category: 'status', power: 0, accuracy: 100, description: 'Hace crecer su cuerpo para aumentar su poder.' },
+  'Cara Susto': { type: 'Normal', category: 'status', power: 0, accuracy: 100, description: 'Pone una cara aterradora que reduce mucho la Velocidad.' },
 
   // Planta
   'Absorber': { type: 'Planta', category: 'special', power: 35, accuracy: 100, description: 'Drena energía vegetal del enemigo.' },
@@ -829,7 +832,86 @@ export const getMoveFromDb = (mName: string) => {
 
 // Enemy generator helper
 export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
-  const configs: Record<string, { pokedexId: number; name: string; types: PokemonType[]; hp: number; atk: number; def: number; spa: number; spd: number; spe: number; moves: string[] }> = {
+  const configs: Record<string, { pokedexId: number; name: string; types: PokemonType[]; hp: number; atk: number; def: number; spa: number; spd: number; spe: number; moves: string[]; recruitRate?: number }> = {
+    // Bosque Místico roster
+    rattata: {
+      pokedexId: 19,
+      name: 'Rattata',
+      types: ['Normal'],
+      hp: 30,
+      atk: 18,
+      def: 13,
+      spa: 10,
+      spd: 13,
+      spe: 26,
+      moves: ['Placaje', 'Ataque Rápido'],
+      recruitRate: 0.25,
+    },
+    ledyba: {
+      pokedexId: 165,
+      name: 'Ledyba',
+      types: ['Bicho', 'Volador'],
+      hp: 32,
+      atk: 12,
+      def: 14,
+      spa: 15,
+      spd: 22,
+      spe: 20,
+      moves: ['Placaje', 'Supersónico'],
+      recruitRate: 0.25,
+    },
+    kricketot: {
+      pokedexId: 401,
+      name: 'Kricketot',
+      types: ['Bicho'],
+      hp: 30,
+      atk: 12,
+      def: 18,
+      spa: 10,
+      spd: 18,
+      spe: 12,
+      moves: ['Placaje', 'Gruñido'],
+      recruitRate: 0.25,
+    },
+    patrat: {
+      pokedexId: 504,
+      name: 'Patrat',
+      types: ['Normal'],
+      hp: 34,
+      atk: 18,
+      def: 14,
+      spa: 12,
+      spd: 14,
+      spe: 18,
+      moves: ['Placaje', 'Malicioso', 'Mordisco'],
+      recruitRate: 0.25,
+    },
+    sunkern: {
+      pokedexId: 191,
+      name: 'Sunkern',
+      types: ['Planta'],
+      hp: 28,
+      atk: 12,
+      def: 13,
+      spa: 15,
+      spd: 13,
+      spe: 10,
+      moves: ['Absorber', 'Desarrollo'],
+      recruitRate: 0.25,
+    },
+    boss_maschiff: {
+      pokedexId: 942,
+      name: 'Maschiff',
+      types: ['Siniestro'],
+      hp: 75,
+      atk: 26,
+      def: 20,
+      spa: 14,
+      spd: 18,
+      spe: 22,
+      moves: ['Mordisco', 'Placaje', 'Malicioso', 'Cara Susto'],
+      recruitRate: 0.1,
+    },
     caterpie: {
       pokedexId: 10,
       name: 'Caterpie',
@@ -841,6 +923,7 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
       spd: 12,
       spe: 18,
       moves: ['Disparo Demora', 'Placaje'],
+      recruitRate: 0.25,
     },
     pidgey: {
       pokedexId: 16,
@@ -1105,6 +1188,7 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
     artworkUrl: getPokemonArtwork(c.pokedexId),
     iconUrl: getPokemonStaticSprite(c.pokedexId),
     description: 'Un Pokémon territorial que vigila las profundidades de la mazmorra.',
+    recruitRate: c.recruitRate,
     moves: c.moves.map((mName, idx) => {
       const dbMove = getMoveFromDb(mName);
       return {

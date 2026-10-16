@@ -280,7 +280,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
         {/* Left column: Drag and Drop Boxes */}
         <div className={`${mobileTab === 'boxes' ? 'flex' : 'hidden'} lg:flex lg:col-span-8 flex-col short:flex-row gap-2 sm:gap-3 min-h-0`}>
           {/* SECTION 1: Active Squad Boxes */}
-          <div className="shrink-0 short:w-2/5 bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 shadow-md">
+          <div className="pmd-window shrink-0 short:w-2/5 bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 shadow-md">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-amber-400 text-xs sm:text-sm tracking-wide uppercase">
@@ -459,7 +459,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
               e.preventDefault();
               handleDropOnReserves();
             }}
-            className={`bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border transition-all flex-1 min-h-0 flex flex-col ${
+            className={`pmd-window bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border transition-all flex-1 min-h-0 flex flex-col ${
               dragOverReserves
                 ? 'border-emerald-400 bg-emerald-950/30'
                 : 'border-slate-800'
@@ -562,7 +562,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
         </div>
 
         {/* Right column: Inspected Pokémon Details & Moves */}
-        <div className={`${mobileTab === 'details' ? 'flex' : 'hidden'} lg:flex lg:col-span-4 min-h-0 overflow-y-auto bg-slate-900/90 rounded-xl p-3 sm:p-4 short:p-2 border border-slate-800 flex-col justify-between`}>
+        <div className={`${mobileTab === 'details' ? 'flex' : 'hidden'} lg:flex lg:col-span-4 min-h-0 overflow-y-auto pmd-window bg-slate-900/90 rounded-xl p-3 sm:p-4 short:p-2 border border-slate-800 flex-col justify-between`}>
           {inspectedPokemon ? (
             <div className="flex flex-col gap-2.5 sm:gap-3 short:grid short:grid-cols-2 short:gap-2">
               {/* Header Profile */}
@@ -767,7 +767,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
       {/* RELEASE CONFIRMATION MODAL */}
       {releaseCandidate && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-red-500/60 rounded-2xl max-w-sm w-full max-h-full overflow-y-auto p-4 sm:p-5 shadow-2xl flex flex-col gap-3 sm:gap-4">
+          <div className="pmd-window pmd-danger bg-slate-900 border border-red-500/60 rounded-2xl max-w-sm w-full max-h-full overflow-y-auto p-4 sm:p-5 shadow-2xl flex flex-col gap-3 sm:gap-4">
             <div className="flex items-center gap-3">
               <PmdPortrait pokedexId={releaseCandidate.pokedexId} emotion="Pain" size={44} showFrame={true} />
               <div className="min-w-0">

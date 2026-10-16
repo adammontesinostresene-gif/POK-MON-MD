@@ -261,7 +261,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
         {/* LEFT COLUMN: Team & Reserves lists (8 cols) */}
         <div className={`${mobileTab === 'list' ? 'flex' : 'hidden'} lg:flex lg:col-span-7 flex-col gap-2 sm:gap-3 min-h-0`}>
           {/* SECTION 1: Active Squad */}
-          <div className="shrink-0 bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 shadow-md">
+          <div className="pmd-window shrink-0 bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 shadow-md">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-amber-400 text-xs sm:text-sm tracking-wide uppercase">
@@ -355,7 +355,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
           </div>
 
           {/* SECTION 2: Reserves (Campamento de Amigos) */}
-          <div className="bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 flex-1 min-h-0 flex flex-col shadow-md">
+          <div className="pmd-window bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 flex-1 min-h-0 flex flex-col shadow-md">
             <div className="shrink-0 flex items-center justify-between gap-2 mb-2">
               <div className="flex items-center gap-2 min-w-0">
                 <span className="font-semibold text-emerald-400 text-xs sm:text-sm tracking-wide uppercase truncate">
@@ -472,7 +472,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
         </div>
 
         {/* RIGHT COLUMN: Interactive Evolution Altar & Inspector (5 cols) */}
-        <div className={`${mobileTab === 'altar' ? 'flex' : 'hidden'} lg:flex lg:col-span-5 min-h-0 overflow-y-auto bg-slate-900/90 rounded-xl p-3 sm:p-4 short:p-2 border border-slate-800 flex-col justify-between shadow-xl`}>
+        <div className={`${mobileTab === 'altar' ? 'flex' : 'hidden'} lg:flex lg:col-span-5 min-h-0 overflow-y-auto pmd-window bg-slate-900/90 rounded-xl p-3 sm:p-4 short:p-2 border border-slate-800 flex-col justify-between shadow-xl`}>
           {inspectedPokemon ? (
             <div className="flex flex-col gap-2.5 sm:gap-3 short:grid short:grid-cols-2 short:gap-2">
               {/* Altar Header */}
@@ -796,7 +796,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
       {/* ========================================================= */}
       {evolvingState && (
         <div className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border-2 border-amber-400 rounded-3xl max-w-lg w-full max-h-full overflow-y-auto p-4 sm:p-8 short:p-3 text-center flex flex-col items-center gap-3 sm:gap-6 short:gap-2 shadow-2xl relative animate-in zoom-in-95 duration-300">
+          <div className="pmd-window pmd-gold bg-slate-900 border-2 border-amber-400 rounded-3xl max-w-lg w-full max-h-full overflow-y-auto p-4 sm:p-8 short:p-3 text-center flex flex-col items-center gap-3 sm:gap-6 short:gap-2 shadow-2xl relative animate-in zoom-in-95 duration-300">
             {/* Ambient Background Aura */}
             <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-amber-500/20 pointer-events-none" />
 

@@ -1,5 +1,5 @@
 import { FloorEvent, FloorEventType, Dungeon, Pokemon } from '../types/game';
-import { createWildEnemy, EXTRA_RECRUITS } from './pokemonData';
+import { createWildEnemy, EXTRA_RECRUITS, getPmdPortraitUrl } from './pokemonData';
 
 /**
  * Determines enemy squad size (1, 2, 3, or 4) with exact requested probabilities:
@@ -54,7 +54,7 @@ export const generateFloorEvent = (
 ): FloorEvent => {
   // If it's the final floor, trigger the climatic Boss Event
   if (floorNumber >= dungeon.floorsCount) {
-    const bossLevel = dungeon.id === 'bosque_misterioso' ? 6 : dungeon.recommendedLevel + 3;
+    const bossLevel = dungeon.id === 'bosque_misterioso' ? 5 : dungeon.recommendedLevel + 3;
     const boss = createWildEnemy(dungeon.bossId, bossLevel);
     boss.id = `boss_${boss.id}_${Date.now()}`;
     return {
@@ -160,6 +160,8 @@ export const generateFloorEvent = (
       },
       {
         id: 'kecleon_bazaar',
+        speaker: 'Kecleon',
+        portrait: getPmdPortraitUrl(352),
         title: `Piso ${floorNumber}: El Puesto Ambulante de Kecleon`,
         description: `¡Qué fortuna! El mercader Kecleon ha desplegado su alfombra de objetos en esta sala segura. Te saluda con una amplia sonrisa.`,
         choices: [
@@ -185,13 +187,16 @@ export const generateFloorEvent = (
       },
     ];
 
-    const chosenDilemma = decisionTypes[Math.floor(Math.random() * decisionTypes.length)];
+    const chosenDilemma: { title: string; description: string; choices: typeof decisionTypes[number]['choices']; speaker?: string; portrait?: string } =
+      decisionTypes[Math.floor(Math.random() * decisionTypes.length)];
     return {
       floorNumber,
       type: 'decision',
       title: chosenDilemma.title,
       description: chosenDilemma.description,
       choices: chosenDilemma.choices,
+      dialogueSpeaker: chosenDilemma.speaker,
+      speakerPortrait: chosenDilemma.portrait,
     };
   }
 

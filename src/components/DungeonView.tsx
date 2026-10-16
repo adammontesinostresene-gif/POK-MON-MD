@@ -384,7 +384,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   return (
     <div className="w-full h-full bg-slate-950 text-slate-100 flex flex-col p-2 sm:p-3 md:p-4 short:p-1.5 max-w-5xl mx-auto overflow-hidden box-border">
       {/* Top Exploration HUD Bar */}
-      <div className="bg-slate-900/90 rounded-xl p-2 sm:p-2.5 border border-slate-800 shadow-lg mb-2 backdrop-blur-md shrink-0">
+      <div className="pmd-window bg-slate-900/90 rounded-xl p-2 sm:p-2.5 border border-slate-800 shadow-lg mb-2 backdrop-blur-md shrink-0">
         <div className="flex flex-wrap items-center justify-between gap-2">
           {/* Dungeon Name & Floor Indicator */}
           <div className="flex items-center gap-2 sm:gap-3">
@@ -641,7 +641,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         </div>
 
         {/* Bottom Progression Bar: Stairs to Next Floor */}
-        <div className="relative z-10 px-3 py-2 sm:py-2.5 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between shrink-0">
+        <div className="pmd-window relative z-10 px-3 py-2 sm:py-2.5 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between shrink-0">
           <div className="text-[11px] sm:text-xs text-slate-400">
             {eventResolved ? (
               <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
@@ -671,7 +671,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       {/* IN-DUNGEON BAG MODAL */}
       {isBagOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full max-h-full p-4 sm:p-5 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4">
+          <div className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full max-h-full p-4 sm:p-5 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4">
             <div className="shrink-0 flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="font-bold text-base text-white flex items-center gap-2">
                 <Backpack className="w-4 h-4 text-amber-400" />
@@ -777,7 +777,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       {/* EXIT CONFIRMATION MODAL */}
       {isExitConfirmOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-red-500/60 rounded-2xl max-w-md w-full p-5 shadow-2xl flex flex-col gap-4">
+          <div className="pmd-window pmd-danger bg-slate-900 border border-red-500/60 rounded-2xl max-w-md w-full p-5 shadow-2xl flex flex-col gap-4">
             <h3 className="font-bold text-base text-white flex items-center gap-2 border-b border-slate-800 pb-3">
               <ShieldAlert className="w-4 h-4 text-red-400" />
               ¿Retirarse a la aldea?

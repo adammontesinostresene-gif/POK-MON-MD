@@ -216,7 +216,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       {/* Main Hub Showcase Content */}
       <main className="relative z-10 flex-1 min-h-0 flex flex-col justify-center gap-3 sm:gap-6 short:gap-2 max-w-6xl w-full mx-auto p-3 sm:p-6 short:p-2">
         {/* Rescue Team Hero Strip */}
-        <div className="shrink-0 bg-slate-900/85 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 shadow-2xl flex flex-col md:flex-row short:flex-row items-center justify-between gap-3 sm:gap-6 short:gap-3">
+        <div className="pmd-window shrink-0 bg-slate-900/85 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 shadow-2xl flex flex-col md:flex-row short:flex-row items-center justify-between gap-3 sm:gap-6 short:gap-3">
           <div className="flex items-center gap-3 sm:gap-6 short:gap-3 w-full md:w-auto short:w-auto">
             {/* Perfectly squared PMD Leader Portrait Window */}
             <div className="w-16 h-16 sm:w-24 sm:h-24 short:w-12 short:h-12 aspect-square rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-amber-400/90 shadow-2xl relative flex items-center justify-center overflow-hidden shrink-0 ring-4 ring-amber-500/15">
@@ -237,7 +237,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             </div>
 
             <div className="min-w-0">
-              <div className="flex items-center gap-2 short:hidden">
+              <div className="hidden sm:flex items-center gap-2 short:hidden">
                 <span className="text-[10px] sm:text-xs uppercase font-bold tracking-widest text-amber-400">
                   Aldea Pokémon
                 </span>
@@ -263,7 +263,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
           </div>
 
           {/* Quick Active Squad Preview */}
-          <div className="flex items-center gap-2 bg-slate-950/70 p-2 sm:p-3 short:p-1.5 rounded-xl border border-slate-800">
+          <div className="hidden sm:flex short:flex items-center gap-2 bg-slate-950/70 p-2 sm:p-3 short:p-1.5 rounded-xl border border-slate-800">
             <div className="flex items-center gap-1.5 sm:gap-2">
               {team.map((member, i) => (
                 <div
@@ -295,14 +295,14 @@ export const HubMenu: React.FC<HubMenuProps> = ({
         </div>
 
         {/* 5 Core Action Hub Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 short:grid-cols-7 gap-2 sm:gap-4 short:gap-2 min-h-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 short:grid-cols-4 gap-2 sm:gap-4 short:gap-2 min-h-0">
           {/* Card 1: Explorar Mazmorras */}
           <button
             onClick={() => {
               soundManager.playSelect();
               setActiveModal('DUNGEONS');
             }}
-            className="group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-sky-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-sky-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
               <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-sky-500/20 border border-sky-400/80 flex items-center justify-center text-sky-300 group-hover:scale-105 transition-transform">
@@ -326,7 +326,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               onOpenTeamManager();
             }}
-            className="group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border-2 border-amber-500/70 hover:border-amber-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border-2 border-amber-500/70 hover:border-amber-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
               <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-amber-500/20 border border-amber-400/80 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform">
@@ -335,7 +335,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-amber-400 transition-colors" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-amber-300 group-hover:text-amber-200 transition-colors">
+              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-amber-300 transition-colors">
                 Equipo
               </h3>
               <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
@@ -350,7 +350,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               onOpenEvolution();
             }}
-            className="group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border-2 border-violet-500/70 hover:border-violet-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border-2 border-violet-500/70 hover:border-violet-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
               <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-violet-500/20 border border-violet-400/80 flex items-center justify-center text-violet-300 group-hover:scale-105 transition-transform">
@@ -365,7 +365,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               )}
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-violet-300 group-hover:text-violet-200 transition-colors">
+              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-violet-300 transition-colors">
                 Manantial Evolución
               </h3>
               <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
@@ -380,7 +380,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               setActiveModal('BAG');
             }}
-            className="group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-emerald-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-emerald-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
               <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/80 flex items-center justify-center text-emerald-300 group-hover:scale-105 transition-transform">
@@ -406,11 +406,11 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               setActiveModal('SHOP');
             }}
-            className="group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-purple-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-purple-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-purple-500/20 border border-purple-400/80 flex items-center justify-center text-purple-300 group-hover:scale-105 transition-transform">
-                <Store className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-purple-500/20 border border-purple-400/80 flex items-center justify-center text-purple-300 group-hover:scale-105 transition-transform overflow-hidden">
+                <PmdPortrait pokedexId={352} emotion="Normal" className="w-full h-full" />
               </div>
               <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-purple-400 transition-colors" />
             </div>
@@ -431,11 +431,11 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               setBankAmount('');
               setActiveModal('BANK');
             }}
-            className="group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-cyan-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-cyan-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/80 flex items-center justify-center text-cyan-300 group-hover:scale-105 transition-transform">
-                <Landmark className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/80 flex items-center justify-center text-cyan-300 group-hover:scale-105 transition-transform overflow-hidden">
+                <PmdPortrait pokedexId={999} emotion="Normal" className="w-full h-full" />
               </div>
               <span className="text-[10px] sm:text-xs font-mono font-bold text-cyan-300 tabular-nums">
                 {bankGold} 🪙
@@ -457,11 +457,11 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               setActiveModal('STORAGE');
             }}
-            className="col-span-2 lg:col-span-1 short:col-span-1 group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-orange-400 transition-all text-left flex flex-col justify-between gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="col-span-2 md:col-span-1 short:col-span-1 pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-orange-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-orange-500/20 border border-orange-400/80 flex items-center justify-center text-orange-300 group-hover:scale-105 transition-transform">
-                <Warehouse className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-orange-500/20 border border-orange-400/80 flex items-center justify-center text-orange-300 group-hover:scale-105 transition-transform overflow-hidden">
+                <PmdPortrait pokedexId={115} emotion="Normal" className="w-full h-full" />
               </div>
               <span className="text-[10px] sm:text-xs font-mono font-bold text-orange-300 tabular-nums">
                 {storage.reduce((a, b) => a + b.count, 0)} obj.
@@ -487,7 +487,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       {/* MODAL: DUNGEON SELECTOR */}
       {activeModal === 'DUNGEONS' && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-full overflow-y-auto p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2 animate-in fade-in zoom-in duration-200">
+          <div className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-full overflow-y-auto p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2 animate-in fade-in zoom-in duration-200">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2 sm:pb-3">
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
@@ -534,7 +534,6 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
                     <div className="pt-2 mt-2 sm:pt-3 sm:mt-3 border-t border-slate-700/60 flex items-center justify-between text-[11px] text-slate-300 font-mono">
                       <span>{dungeon.floorsCount} Pisos</span>
-                      <span className="text-red-300">Jefe final</span>
                     </div>
                   </button>
                 );
@@ -574,7 +573,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       {/* MODAL: ALMACÉN KANGASKHAN */}
       {activeModal === 'STORAGE' && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full max-h-full p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2 min-h-0">
+          <div className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full max-h-full p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2 min-h-0">
             <div className="shrink-0 flex items-center justify-between gap-3 border-b border-slate-800 pb-3 short:pb-2">
               <div className="flex items-center gap-3 min-w-0">
                 <PmdPortrait pokedexId={115} emotion="Happy" size={40} showFrame={true} className="short:hidden" />
@@ -656,7 +655,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       {/* MODAL: POKÉBANCO */}
       {activeModal === 'BANK' && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full max-h-full overflow-y-auto p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2">
+          <div className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full max-h-full overflow-y-auto p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3 short:pb-2">
               <div>
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -748,7 +747,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       {/* MODAL: MOCHILA / INVENTORY */}
       {activeModal === 'BAG' && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full max-h-full p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4">
+          <div className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full max-h-full p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
                 <Backpack className="w-5 h-5 text-emerald-400" />
@@ -792,7 +791,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       {/* MODAL: BAZAR KECLEON */}
       {activeModal === 'SHOP' && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full max-h-full overflow-y-auto p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2">
+          <div className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full max-h-full overflow-y-auto p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4 short:gap-2">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">

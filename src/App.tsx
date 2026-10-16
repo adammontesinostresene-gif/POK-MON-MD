@@ -227,7 +227,7 @@ export default function App() {
       {/* 5. Dungeon Victory Modal Screen */}
       {screen === 'VICTORY' && (
         <div className="h-full flex items-center justify-center p-3 sm:p-4 bg-slate-950/90 relative">
-          <div className="bg-slate-900 border-2 border-amber-400 rounded-3xl max-w-md w-full max-h-full p-4 sm:p-8 short:p-4 text-center flex flex-col gap-3 sm:gap-5 short:gap-2 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="pmd-window pmd-gold bg-slate-900 border-2 border-amber-400 rounded-3xl max-w-md w-full max-h-full p-4 sm:p-8 short:p-4 text-center flex flex-col gap-3 sm:gap-5 short:gap-2 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="short:hidden w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center mx-auto text-amber-300 shadow-lg">
               <Award className="w-10 h-10" />
             </div>
@@ -262,7 +262,7 @@ export default function App() {
       {/* 6. Game Over / Defeat Modal Screen */}
       {screen === 'GAME_OVER' && (
         <div className="h-full flex items-center justify-center p-3 sm:p-4 bg-slate-950/90 relative">
-          <div className="bg-slate-900 border-2 border-red-500 rounded-3xl max-w-md w-full max-h-full p-4 sm:p-8 short:p-4 text-center flex flex-col gap-3 sm:gap-5 short:gap-2 shadow-2xl">
+          <div className="pmd-window pmd-danger bg-slate-900 border-2 border-red-500 rounded-3xl max-w-md w-full max-h-full p-4 sm:p-8 short:p-4 text-center flex flex-col gap-3 sm:gap-5 short:gap-2 shadow-2xl">
             <div className="short:hidden w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-red-500/20 border-2 border-red-400 flex items-center justify-center mx-auto text-red-400 shadow-lg">
               <AlertTriangle className="w-10 h-10" />
             </div>

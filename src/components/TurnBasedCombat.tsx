@@ -22,6 +22,9 @@ import {
 } from 'lucide-react';
 import { PmdSprite, PmdPortrait } from './PmdSprite';
 
+// Global damage tuning for all attacks (player and enemies)
+const DAMAGE_MULTIPLIER = 1.35;
+
 interface TurnBasedCombatProps {
   playerTeam: Pokemon[];
   enemy?: Pokemon;
@@ -187,7 +190,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       stab *
       effectiveness *
       critMult *
-      variance;
+      variance *
+      DAMAGE_MULTIPLIER;
 
     return {
       damage: Math.max(1, Math.round(baseDmg)),
@@ -560,11 +564,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     setTeam(updatedTeam);
 
-    // High recruitment chance (~65%) for one of the defeated enemies
+    // Pick one defeated enemy; it joins based on its own species recruit rate
     let potentialRecruit: Pokemon | undefined = undefined;
-    const shouldRecruit = Math.random() < 0.65;
-    if (shouldRecruit && defeatedEnemies.length > 0) {
-      const recruitCandidate = defeatedEnemies[Math.floor(Math.random() * defeatedEnemies.length)];
+    const recruitCandidate =
+      defeatedEnemies.length > 0
+        ? defeatedEnemies[Math.floor(Math.random() * defeatedEnemies.length)]
+        : undefined;
+    if (recruitCandidate && Math.random() < (recruitCandidate.recruitRate ?? 0.65)) {
       potentialRecruit = {
         ...recruitCandidate,
         id: `${recruitCandidate.name.toLowerCase()}_recruit_${Date.now()}`,
@@ -999,10 +1005,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       </div>
 
       {/* BOTTOM CONTROLS & MOVE SELECTION PANEL */}
-      <div className="relative z-20 bg-slate-900/98 border-t border-sky-500/70 p-2 sm:p-2.5 short:p-1.5 shadow-2xl flex flex-col gap-1.5 short:gap-1 shrink-0">
+      <div className="pmd-window relative z-20 bg-slate-900/98 border-t border-sky-500/70 p-2 sm:p-2.5 short:p-1.5 shadow-2xl flex flex-col gap-1.5 short:gap-1 shrink-0">
         {/* Battle log overlay while the round resolves (keeps the panel height stable) */}
         {isProcessingTurn && (
-          <div className="absolute inset-0 z-30 bg-slate-900 p-2 sm:p-2.5 short:p-1.5 flex flex-col">
+          <div className="absolute inset-0 z-30 bg-[#1c3478] rounded-[10px] p-2 sm:p-2.5 short:p-1.5 flex flex-col">
             <div className="flex-1 min-h-0 bg-slate-950 rounded-lg border border-slate-800 shadow-inner px-2.5 py-1.5 flex flex-col justify-end gap-0.5 overflow-hidden">
               {battleLogs.map((log, i) => {
                 const isLatest = i === battleLogs.length - 1;
@@ -1458,7 +1464,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       {/* VICTORY & RECRUITMENT MODAL (PMD SPRITE REPOSITORY PORTRAITS) */}
       {victoryState && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border-2 border-amber-400 rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl text-center flex flex-col gap-3.5 animate-in fade-in zoom-in duration-200 max-h-[92vh] overflow-y-auto">
+          <div className="pmd-window pmd-gold bg-slate-900 border-2 border-amber-400 rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl text-center flex flex-col gap-3.5 animate-in fade-in zoom-in duration-200 max-h-[92vh] overflow-y-auto">
             <div className="w-14 h-14 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center mx-auto text-amber-300">
               <Award className="w-8 h-8" />
             </div>

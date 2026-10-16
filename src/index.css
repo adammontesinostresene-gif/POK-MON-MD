@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Pixel-style game font for the whole UI (numbers included) */
+@theme {
+  --font-sans: 'VT323', system-ui, sans-serif;
+  --font-mono: 'VT323', ui-monospace, monospace;
+}
+
 /* Landscape phones and short windows */
 @custom-variant short (@media (max-height: 560px));
 @custom-variant tall (@media (min-height: 760px));
@@ -13,7 +19,9 @@
   }
 
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'VT323', system-ui, -apple-system, sans-serif;
+    /* VT323 has a small x-height; scale glyphs up so small UI text stays legible */
+    font-size-adjust: 0.55;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
@@ -43,6 +51,63 @@
   background: linear-gradient(180deg, #33240e 0%, #1c1305 100%);
   border: 3px solid #fbbf24;
   box-shadow: 0 0 0 2px #b45309, 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* PMD menu window: blue gradient panel with a light double frame.
+   Unlayered on purpose so it wins over Tailwind's bg/border/rounded utilities. */
+.pmd-window {
+  background: linear-gradient(180deg, #2b4ea3 0%, #1c3478 45%, #12224f 100%);
+  border: 2px solid #f1f5f9;
+  border-radius: 10px;
+  box-shadow:
+    0 0 0 2px #142a66,
+    0 0 0 4px rgba(147, 197, 253, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 10px 24px rgba(0, 0, 0, 0.55);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.55);
+}
+
+.pmd-window.pmd-gold {
+  border-color: #fde68a;
+  box-shadow:
+    0 0 0 2px #7c4a03,
+    0 0 0 4px rgba(251, 191, 36, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 10px 24px rgba(0, 0, 0, 0.55);
+}
+
+.pmd-window.pmd-danger {
+  border-color: #fecaca;
+  box-shadow:
+    0 0 0 2px #7f1d1d,
+    0 0 0 4px rgba(248, 113, 113, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 10px 24px rgba(0, 0, 0, 0.55);
+}
+
+/* Inner slots inside a window become translucent navy instead of grey */
+.pmd-window :is([class*='bg-slate-800'], [class*='bg-slate-950']) {
+  background-color: rgba(6, 14, 42, 0.5);
+  border-color: rgba(148, 197, 255, 0.28);
+}
+
+/* Selectable windows (menu entries) */
+.pmd-window-btn {
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.pmd-window-btn:hover {
+  filter: brightness(1.18);
+}
+
+/* Readable light text on the blue windows (accent colours like amber/emerald are kept) */
+.pmd-window,
+.pmd-window :is([class*='text-slate-2'], [class*='text-slate-3'], [class*='text-slate-4']) {
+  color: #f8fafc;
+}
+
+.pmd-window [class*='text-slate-5'] {
+  color: #c7d7f5;
 }
 
 .pmd-button {
