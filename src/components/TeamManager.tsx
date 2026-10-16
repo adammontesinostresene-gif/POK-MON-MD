@@ -36,6 +36,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
   } | null>(null);
 
   const [notification, setNotification] = useState<string | null>(null);
+  const [mobileTab, setMobileTab] = useState<'boxes' | 'details'>('boxes');
 
   const showNotification = (msg: string) => {
     setNotification(msg);
@@ -277,35 +278,37 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
   };
 
   return (
-    <div className="w-full min-h-screen bg-slate-950 text-slate-100 flex flex-col p-3 sm:p-6 max-w-7xl mx-auto">
+    <div className="w-full h-full overflow-hidden bg-slate-950 text-slate-100 flex flex-col p-2 sm:p-4 short:p-2 max-w-7xl mx-auto">
       {/* Header bar */}
-      <div className="flex items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4">
-        <div className="flex items-center gap-3">
+      <div className="shrink-0 flex items-center justify-between gap-2 sm:gap-4 border-b border-slate-800 pb-2 sm:pb-3 mb-2 sm:mb-3 short:pb-1.5 short:mb-1.5">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             onClick={() => {
               soundManager.playSelect();
               onBack();
             }}
-            className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-medium transition-colors border border-slate-700"
+            className="shrink-0 flex items-center gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs sm:text-sm font-medium transition-colors border border-slate-700"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Volver a la Aldea</span>
+            <span className="hidden sm:inline">Volver a la Aldea</span>
+            <span className="sm:hidden">Aldea</span>
           </button>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-              <Zap className="w-5 h-5 text-amber-400" />
-              Gestión de Equipo de Rescate
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-2xl short:text-base font-bold tracking-tight text-white flex items-center gap-2 truncate">
+              <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 shrink-0" />
+              <span className="truncate">Gestión de Equipo<span className="hidden sm:inline"> de Rescate</span></span>
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="hidden md:block short:hidden text-xs text-slate-400">
               Arrastra o toca las cajitas para organizar a tus aventureros (Máximo 4 miembros)
             </p>
           </div>
         </div>
 
         {selectedForMove && (
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-300 text-xs animate-pulse">
+          <div className="shrink-0 flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-300 text-[10px] sm:text-xs animate-pulse">
             <ArrowUpDown className="w-3.5 h-3.5" />
-            <span>Toca otra cajita para intercambiar</span>
+            <span className="hidden sm:inline">Toca otra cajita para intercambiar</span>
+            <span className="sm:hidden">Intercambiar</span>
             <button
               onClick={() => setSelectedForMove(null)}
               className="ml-1 text-slate-400 hover:text-white"
@@ -314,6 +317,26 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
             </button>
           </div>
         )}
+      </div>
+
+      {/* Mobile tabs: boxes vs. inspector */}
+      <div className="lg:hidden shrink-0 grid grid-cols-2 gap-1 p-1 mb-2 bg-slate-900 rounded-lg border border-slate-800 text-xs font-bold">
+        <button
+          onClick={() => setMobileTab('boxes')}
+          className={`py-1.5 rounded transition-colors ${
+            mobileTab === 'boxes' ? 'bg-amber-500 text-amber-950' : 'text-slate-400'
+          }`}
+        >
+          Cajitas
+        </button>
+        <button
+          onClick={() => setMobileTab('details')}
+          className={`py-1.5 rounded transition-colors truncate px-1 ${
+            mobileTab === 'details' ? 'bg-sky-500 text-sky-950' : 'text-slate-400'
+          }`}
+        >
+          Ficha{inspectedPokemon ? `: ${inspectedPokemon.name}` : ''}
+        </button>
       </div>
 
       {/* Floating notification */}
@@ -325,15 +348,15 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
       )}
 
       {/* Main Grid: Active Team & Reserves on Left, Detail Inspector on Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-4 flex-1 min-h-0">
         {/* Left column: Drag and Drop Boxes */}
-        <div className="lg:col-span-8 flex flex-col gap-6">
+        <div className={`${mobileTab === 'boxes' ? 'flex' : 'hidden'} lg:flex lg:col-span-8 flex-col short:flex-row gap-2 sm:gap-3 min-h-0`}>
           {/* SECTION 1: Active Squad Boxes */}
-          <div className="bg-slate-900/90 rounded-xl p-4 sm:p-5 border border-slate-800 shadow-md">
-            <div className="flex items-center justify-between mb-3">
+          <div className="shrink-0 short:w-2/5 bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 shadow-md">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-amber-400 text-sm tracking-wide uppercase">
-                  Equipo Activo para Mazmorras
+                <span className="font-semibold text-amber-400 text-xs sm:text-sm tracking-wide uppercase">
+                  Equipo Activo<span className="hidden sm:inline"> para Mazmorras</span>
                 </span>
                 <span className="text-xs text-slate-400">
                   ({activeTeam.length}/4 Pokémon)
@@ -345,7 +368,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
             </div>
 
             {/* 4 Active Slots */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-4 gap-1.5 sm:gap-3">
               {[0, 1, 2, 3].map((slotIdx) => {
                 const pokemon = activeTeam[slotIdx];
                 const isOver = dragOverSlotIndex === slotIdx;
@@ -369,7 +392,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                         handleDropOnActiveSlot(slotIdx);
                       }}
                       onClick={() => handleCardClick(pokemon, 'active')}
-                      className={`relative flex flex-col items-center justify-between p-3 rounded-xl border-2 transition-all cursor-grab active:cursor-grabbing select-none ${
+                      className={`relative flex flex-col items-center justify-between p-1.5 sm:p-3 short:p-1.5 rounded-xl border-2 transition-all cursor-grab active:cursor-grabbing select-none ${
                         isSelected
                           ? 'border-amber-400 bg-amber-950/40 shadow-lg scale-102 ring-2 ring-amber-400/50'
                           : isOver
@@ -378,37 +401,37 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       } ${isDraggingThis ? 'opacity-40' : 'opacity-100'}`}
                     >
                       {/* Badge Leader / Slot number */}
-                      <div className="w-full flex items-center justify-between mb-1">
+                      <div className="w-full flex items-center justify-between gap-0.5 mb-1">
                         <span
-                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          className={`text-[8px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded truncate ${
                             slotIdx === 0
                               ? 'bg-amber-500 text-amber-950 font-bold'
                               : 'bg-slate-700 text-slate-300'
                           }`}
                         >
-                          {slotIdx === 0 ? 'LÍDER' : `Puesto ${slotIdx + 1}`}
+                          {slotIdx === 0 ? 'LÍDER' : `#${slotIdx + 1}`}
                         </span>
-                        <span className="text-[11px] font-mono font-medium text-slate-400">
+                        <span className="text-[9px] sm:text-[11px] font-mono font-medium text-slate-400">
                           Nv.{pokemon.level}
                         </span>
                       </div>
 
                       {/* Portrait Avatar from PMD Repository */}
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center my-1 relative">
+                      <div className="w-10 h-10 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center my-0.5 sm:my-1 relative">
                         <PmdPortrait
                           pokedexId={pokemon.pokedexId}
                           emotion="Normal"
-                          size={52}
+                          className="w-full h-full"
                           showFrame={true}
                         />
                       </div>
 
                       {/* Name & Type */}
-                      <span className="text-sm font-bold text-white text-center truncate w-full">
+                      <span className="text-[10px] sm:text-sm font-bold text-white text-center truncate w-full">
                         {pokemon.name}
                       </span>
 
-                      <div className="flex gap-1 mt-1">
+                      <div className="hidden sm:flex short:hidden gap-1 mt-1">
                         {pokemon.types.map((type) => {
                           const col = TYPE_COLORS[type];
                           return (
@@ -423,8 +446,8 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       </div>
 
                       {/* HP Bar Mini */}
-                      <div className="w-full mt-2">
-                        <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
+                      <div className="w-full mt-1 sm:mt-2">
+                        <div className="hidden sm:flex justify-between text-[10px] text-slate-400 mb-0.5">
                           <span>PS</span>
                           <span className="font-mono tabular-nums">
                             {pokemon.stats.hp}/{pokemon.stats.maxHp}
@@ -472,7 +495,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       handleDropOnActiveSlot(slotIdx);
                     }}
                     onClick={() => handleEmptySlotClick(slotIdx)}
-                    className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer min-h-[160px] ${
+                    className={`flex flex-col items-center justify-center p-1.5 sm:p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer min-h-24 sm:min-h-36 short:min-h-24 ${
                       isOver
                         ? 'border-sky-400 bg-sky-950/40 scale-102'
                         : selectedForMove && selectedForMove.source === 'reserves'
@@ -480,13 +503,13 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                         : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
                     }`}
                   >
-                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 mb-2">
+                    <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 mb-1 sm:mb-2">
                       +
                     </div>
-                    <span className="text-xs font-medium text-slate-400 text-center">
+                    <span className="text-[10px] sm:text-xs font-medium text-slate-400 text-center">
                       Cajita {slotIdx + 1}
                     </span>
-                    <span className="text-[10px] text-slate-500 text-center mt-1">
+                    <span className="hidden sm:block text-[10px] text-slate-500 text-center mt-1">
                       {selectedForMove && selectedForMove.source === 'reserves'
                         ? 'Toca para colocar aquí'
                         : 'Arrastra un recluta'}
@@ -508,19 +531,19 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
               e.preventDefault();
               handleDropOnReserves();
             }}
-            className={`bg-slate-900/90 rounded-xl p-4 sm:p-5 border transition-all flex-1 ${
+            className={`bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border transition-all flex-1 min-h-0 flex flex-col ${
               dragOverReserves
                 ? 'border-emerald-400 bg-emerald-950/30'
                 : 'border-slate-800'
             }`}
           >
-            <div className="flex items-center justify-between mb-3">
+            <div className="shrink-0 flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-emerald-400 text-sm tracking-wide uppercase">
-                  Campamento de Reclutas (Reserva)
+                <span className="font-semibold text-emerald-400 text-xs sm:text-sm tracking-wide uppercase">
+                  <span className="hidden sm:inline">Campamento de </span>Reclutas<span className="hidden sm:inline"> (Reserva)</span>
                 </span>
-                <span className="text-xs text-slate-400">
-                  ({reserves.length} compañeros disponibles)
+                <span className="text-[10px] sm:text-xs text-slate-400">
+                  ({reserves.length}<span className="hidden sm:inline"> compañeros disponibles</span>)
                 </span>
               </div>
               <span className="text-xs text-slate-400 hidden sm:inline">
@@ -529,7 +552,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
             </div>
 
             {reserves.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-8 text-center border border-dashed border-slate-800 rounded-lg">
+              <div className="flex flex-col items-center justify-center p-4 sm:p-8 text-center border border-dashed border-slate-800 rounded-lg">
                 <UserCheck className="w-8 h-8 text-slate-600 mb-2" />
                 <p className="text-sm text-slate-400">
                   Todos tus compañeros están en el equipo activo.
@@ -539,7 +562,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[360px] overflow-y-auto pr-1">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 short:grid-cols-4 gap-1.5 sm:gap-3 min-h-0 overflow-y-auto content-start pr-1">
                 {reserves.map((pokemon) => {
                   const isSelected = selectedForMove?.id === pokemon.id;
                   const isInspected = inspectedPokemon?.id === pokemon.id;
@@ -552,7 +575,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       onDragStart={(e) => handleDragStart(e, pokemon.id, 'reserves')}
                       onDragEnd={handleDragEnd}
                       onClick={() => handleCardClick(pokemon, 'reserves')}
-                      className={`relative flex flex-col items-center p-3 rounded-xl border transition-all cursor-grab active:cursor-grabbing select-none ${
+                      className={`relative flex flex-col items-center p-1.5 sm:p-2.5 rounded-xl border transition-all cursor-grab active:cursor-grabbing select-none ${
                         isSelected
                           ? 'border-amber-400 bg-amber-950/40 shadow-lg scale-102 ring-2 ring-amber-400/50'
                           : isInspected
@@ -560,25 +583,25 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                           : 'border-slate-800 bg-slate-800/60 hover:border-slate-600 hover:bg-slate-800'
                       } ${isDraggingThis ? 'opacity-40' : 'opacity-100'}`}
                     >
-                      <div className="w-full flex justify-between items-center text-[10px] text-slate-400 mb-1">
-                        <span>Reserva</span>
+                      <div className="w-full flex justify-between items-center text-[9px] sm:text-[10px] text-slate-400 mb-1">
+                        <span className="hidden sm:inline">Reserva</span>
                         <span className="font-mono">Nv.{pokemon.level}</span>
                       </div>
 
-                      <div className="w-14 h-14 flex items-center justify-center my-1">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center my-0.5">
                         <PmdPortrait
                           pokedexId={pokemon.pokedexId}
                           emotion="Normal"
-                          size={40}
+                          className="w-full h-full"
                           showFrame={true}
                         />
                       </div>
 
-                      <span className="text-xs font-bold text-white text-center truncate w-full">
+                      <span className="text-[10px] sm:text-xs font-bold text-white text-center truncate w-full">
                         {pokemon.name}
                       </span>
 
-                      <div className="flex gap-1 mt-1">
+                      <div className="hidden sm:flex gap-1 mt-1">
                         {pokemon.types.map((type) => {
                           const col = TYPE_COLORS[type];
                           return (
@@ -600,9 +623,9 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                             e.stopPropagation();
                             handleAddToActive(pokemon);
                           }}
-                          className="mt-2 w-full py-1 text-[10px] font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded transition-colors"
+                          className="mt-1 sm:mt-2 w-full py-1 text-[9px] sm:text-[10px] font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded transition-colors"
                         >
-                          + Añadir al Equipo
+                          + Añadir<span className="hidden sm:inline"> al Equipo</span>
                         </button>
                       )}
                     </div>
@@ -614,16 +637,16 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
         </div>
 
         {/* Right column: Inspected Pokémon Details & Moves */}
-        <div className="lg:col-span-4 bg-slate-900/90 rounded-xl p-4 sm:p-5 border border-slate-800 flex flex-col justify-between">
+        <div className={`${mobileTab === 'details' ? 'flex' : 'hidden'} lg:flex lg:col-span-4 min-h-0 overflow-y-auto bg-slate-900/90 rounded-xl p-3 sm:p-4 short:p-2 border border-slate-800 flex-col justify-between`}>
           {inspectedPokemon ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2.5 sm:gap-3 short:grid short:grid-cols-2 short:gap-2">
               {/* Header Profile */}
-              <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <div className="w-20 h-20 bg-slate-800 rounded-xl p-2 flex items-center justify-center border border-slate-700 relative overflow-hidden">
+              <div className="flex items-center gap-3 border-b border-slate-800 pb-2 sm:pb-3">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 short:w-12 short:h-12 shrink-0 bg-slate-800 rounded-xl p-1.5 flex items-center justify-center border border-slate-700 relative overflow-hidden">
                   <PmdPortrait
                     pokedexId={inspectedPokemon.pokedexId}
                     emotion="Normal"
-                    size={56}
+                    className="w-full h-full"
                     showFrame
                   />
                 </div>
@@ -657,10 +680,10 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
 
               {/* Stats Overview */}
               <div>
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">
                   Estadísticas Base
                 </span>
-                <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="grid grid-cols-2 short:grid-cols-3 gap-1.5 text-xs">
                   <div className="flex justify-between items-center bg-slate-800/80 px-2.5 py-1.5 rounded border border-slate-700/50">
                     <span className="text-slate-400 flex items-center gap-1">
                       <Heart className="w-3 h-3 text-red-400" /> PS
@@ -713,11 +736,11 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
               </div>
 
               {/* 4 Moves Set */}
-              <div>
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">
+              <div className="short:col-span-2">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">
                   Movimientos (4 Ataques)
                 </span>
-                <div className="flex flex-col gap-1.5">
+                <div className="grid grid-cols-1 short:grid-cols-2 gap-1.5">
                   {inspectedPokemon.moves.map((move) => {
                     const col = TYPE_COLORS[move.type];
                     return (
@@ -749,7 +772,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                           </span>
                           <span className="capitalize text-slate-400">{move.category}</span>
                         </div>
-                        <p className="text-[10px] text-slate-400 italic line-clamp-1">
+                        <p className="hidden tall:block text-[10px] text-slate-400 italic line-clamp-1">
                           {move.description}
                         </p>
                       </div>
@@ -759,7 +782,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
               </div>
 
               {/* Actions for this pokemon */}
-              <div className="pt-2 flex flex-col gap-2">
+              <div className="pt-1 flex flex-col short:flex-row short:col-span-2 gap-2">
                 {activeTeam.some((p) => p.id === inspectedPokemon.id) ? (
                   <>
                     {activeTeam[0].id !== inspectedPokemon.id && (

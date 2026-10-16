@@ -25,6 +25,14 @@ import {
 import { soundManager } from './utils/audio';
 import { Award, AlertTriangle, ArrowRight, RotateCcw } from 'lucide-react';
 
+const restorePokemon = (p: Pokemon): Pokemon => ({
+  ...p,
+  stats: { ...p.stats, hp: p.stats.maxHp },
+  moves: p.moves.map((m) => ({ ...m, pp: m.maxPp })),
+  status: 'none',
+  statusTurns: 0,
+});
+
 export default function App() {
   // Screen state
   const [screen, setScreen] = useState<ViewScreen>('TITLE');
@@ -61,8 +69,8 @@ export default function App() {
     updatedInventory: Item[],
     finalGold: number
   ) => {
-    setActiveTeam(updatedTeam);
-    setReserves(updatedReserves);
+    setActiveTeam(updatedTeam.map(restorePokemon));
+    setReserves(updatedReserves.map(restorePokemon));
     setInventory(updatedInventory);
     setGold(finalGold);
     setCompletedDungeonInfo({
@@ -78,7 +86,8 @@ export default function App() {
     updatedInventory: Item[],
     finalGold: number
   ) => {
-    setActiveTeam(updatedTeam);
+    setActiveTeam(updatedTeam.map(restorePokemon));
+    setReserves((prev) => prev.map(restorePokemon));
     setInventory(updatedInventory);
     setGold(finalGold);
     soundManager.startBgm('hub');
@@ -86,11 +95,7 @@ export default function App() {
   };
 
   return (
-    <div
-      className={`w-full bg-slate-950 font-sans text-slate-100 flex flex-col ${
-        screen === 'DUNGEON_EXPLORE' ? 'h-screen max-h-screen overflow-hidden' : 'min-h-screen'
-      }`}
-    >
+    <div className="w-full h-dvh overflow-hidden bg-slate-950 font-sans text-slate-100 flex flex-col">
       {/* 1. Title Screen */}
       {screen === 'TITLE' && <TitleScreen onStartGame={handleStartFromTitle} />}
 
@@ -157,9 +162,9 @@ export default function App() {
 
       {/* 5. Dungeon Victory Modal Screen */}
       {screen === 'VICTORY' && (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950/90 relative">
-          <div className="bg-slate-900 border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-8 text-center flex flex-col gap-5 shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="w-20 h-20 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center mx-auto text-amber-300 shadow-lg">
+        <div className="h-full flex items-center justify-center p-3 sm:p-4 bg-slate-950/90 relative">
+          <div className="bg-slate-900 border-2 border-amber-400 rounded-3xl max-w-md w-full max-h-full p-4 sm:p-8 short:p-4 text-center flex flex-col gap-3 sm:gap-5 short:gap-2 shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="short:hidden w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center mx-auto text-amber-300 shadow-lg">
               <Award className="w-10 h-10" />
             </div>
 
@@ -208,9 +213,9 @@ export default function App() {
 
       {/* 6. Game Over / Defeat Modal Screen */}
       {screen === 'GAME_OVER' && (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950/90 relative">
-          <div className="bg-slate-900 border-2 border-red-500 rounded-3xl max-w-md w-full p-6 sm:p-8 text-center flex flex-col gap-5 shadow-2xl">
-            <div className="w-20 h-20 rounded-2xl bg-red-500/20 border-2 border-red-400 flex items-center justify-center mx-auto text-red-400 shadow-lg">
+        <div className="h-full flex items-center justify-center p-3 sm:p-4 bg-slate-950/90 relative">
+          <div className="bg-slate-900 border-2 border-red-500 rounded-3xl max-w-md w-full max-h-full p-4 sm:p-8 short:p-4 text-center flex flex-col gap-3 sm:gap-5 short:gap-2 shadow-2xl">
+            <div className="short:hidden w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-red-500/20 border-2 border-red-400 flex items-center justify-center mx-auto text-red-400 shadow-lg">
               <AlertTriangle className="w-10 h-10" />
             </div>
 

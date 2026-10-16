@@ -21,7 +21,7 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
   }, [onStartGame]);
 
   return (
-    <div className="relative w-full min-h-screen bg-slate-950 text-white flex flex-col justify-between items-center p-6 select-none overflow-hidden">
+    <div className="relative w-full h-full bg-slate-950 text-white flex flex-col justify-between items-center p-4 sm:p-6 short:p-3 select-none overflow-hidden">
       {/* Background with subtle zoom animation */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-1000 scale-105 animate-pulse"
@@ -33,7 +33,7 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/40" />
 
       {/* Top Tagline */}
-      <div className="relative z-10 pt-8 text-center">
+      <div className="relative z-10 pt-4 sm:pt-8 short:pt-0 text-center">
         <span className="font-pixel text-[10px] sm:text-xs text-amber-300 tracking-widest uppercase bg-slate-900/80 px-3 py-1 rounded-full border border-amber-500/30">
           Expedición de Rescate Pokémon
         </span>
@@ -42,12 +42,12 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
       {/* Centerpiece Hero Lockup & Bespoke Title SVG */}
       <div className="relative z-10 flex flex-col items-center max-w-xl text-center px-4 my-auto">
         {/* Pikachu Hero Centerpiece from PMD Sprite Repository */}
-        <div className="w-28 h-28 sm:w-36 sm:h-36 mb-4 relative flex items-center justify-center animate-bounce duration-1000">
+        <div className="w-28 h-28 sm:w-36 sm:h-36 short:w-20 short:h-20 mb-4 short:mb-1 relative flex items-center justify-center animate-bounce duration-1000">
           <PmdPortrait pokedexId={25} size={88} emotion="Joyous" showFrame={true} />
         </div>
 
         {/* Bespoke inline SVG Title Lockup */}
-        <div className="w-full max-w-lg mb-2">
+        <div className="w-full max-w-lg short:max-w-xs mb-2 short:mb-1">
           <svg viewBox="0 0 500 110" className="w-full h-auto drop-shadow-xl">
             <defs>
               <linearGradient id="titleGold" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -95,7 +95,7 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ onStartGame }) => {
           </svg>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto mb-6 leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto mb-6 short:mb-3 leading-relaxed">
           ¡Conviértete en el mejor explorador del mundo!
         </p>
 

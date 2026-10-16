@@ -1,6 +1,17 @@
 @import "tailwindcss";
 
+/* Landscape phones and short windows */
+@custom-variant short (@media (max-height: 560px));
+@custom-variant tall (@media (min-height: 760px));
+
 @layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     user-select: none;

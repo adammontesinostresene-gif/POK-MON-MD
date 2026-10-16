@@ -64,6 +64,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
   // In-Dungeon Bag Modal
   const [isBagOpen, setIsBagOpen] = useState<boolean>(false);
+  const [isExitConfirmOpen, setIsExitConfirmOpen] = useState<boolean>(false);
   const [selectedItemForUse, setSelectedItemForUse] = useState<Item | null>(null);
 
   // Initialize first floor
@@ -340,7 +341,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   // If in combat, render TurnBasedCombat view
   if (inCombat && (currentEvent?.enemies?.length || currentEvent?.enemy)) {
     return (
-      <div className="w-full h-screen max-h-screen bg-slate-950 p-1 sm:p-2 md:p-3 flex flex-col items-center justify-center overflow-hidden box-border">
+      <div className="w-full h-full bg-slate-950 p-1 sm:p-2 md:p-3 flex flex-col items-center justify-center overflow-hidden box-border">
         <div className="w-full max-w-4xl h-full max-h-full flex-1 flex flex-col min-h-0">
           <TurnBasedCombat
             playerTeam={team}
@@ -350,6 +351,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
             bgImage={dungeon.bgImage}
             onVictory={handleCombatVictory}
             onDefeat={() => onExitDungeon(team, inventory, Math.floor(gold / 2))}
+            canFlee={currentEvent.type !== 'boss'}
             onFlee={() => {
               setInCombat(false);
               setEventResolved(true);
@@ -364,7 +366,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   }
 
   return (
-    <div className="w-full h-screen max-h-screen bg-slate-950 text-slate-100 flex flex-col p-2 sm:p-3 md:p-4 max-w-5xl mx-auto overflow-hidden box-border">
+    <div className="w-full h-full bg-slate-950 text-slate-100 flex flex-col p-2 sm:p-3 md:p-4 short:p-1.5 max-w-5xl mx-auto overflow-hidden box-border">
       {/* Top Exploration HUD Bar */}
       <div className="bg-slate-900/90 rounded-xl p-2 sm:p-2.5 border border-slate-800 shadow-lg mb-2 backdrop-blur-md shrink-0">
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -430,15 +432,14 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
             {/* Retreat / Escape */}
             <button
               onClick={() => {
-                if (window.confirm('¿Seguro que deseas retirarte de la mazmorra hacia la aldea?')) {
-                  soundManager.playSelect();
-                  onExitDungeon(team, inventory, gold);
-                }
+                soundManager.playSelect();
+                setIsExitConfirmOpen(true);
               }}
               title="Salir de la Mazmorra"
-              className="p-1 sm:p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-lg border border-slate-700 transition-colors cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-1 bg-red-700 hover:bg-red-600 text-white rounded-lg text-xs font-bold transition-colors shadow cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
+              <span>Aldea</span>
             </button>
           </div>
         </div>
@@ -648,9 +649,9 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
       {/* IN-DUNGEON BAG MODAL */}
       {isBagOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-5 shadow-2xl flex flex-col gap-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full max-h-full p-4 sm:p-5 short:p-3 shadow-2xl flex flex-col gap-3 sm:gap-4">
+            <div className="shrink-0 flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="font-bold text-base text-white flex items-center gap-2">
                 <Backpack className="w-4 h-4 text-amber-400" />
                 Mochila de Expedición
@@ -710,7 +711,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col gap-2 max-h-72 overflow-y-auto">
+              <div className="flex flex-col gap-2 min-h-0 overflow-y-auto">
                 {inventory.length === 0 ? (
                   <p className="text-xs text-slate-500 text-center py-6">
                     No tienes objetos en la mochila.
@@ -748,6 +749,49 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                 )}
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* EXIT CONFIRMATION MODAL */}
+      {isExitConfirmOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-red-500/60 rounded-2xl max-w-md w-full p-5 shadow-2xl flex flex-col gap-4">
+            <h3 className="font-bold text-base text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+              <ShieldAlert className="w-4 h-4 text-red-400" />
+              ¿Retirarse a la aldea?
+            </h3>
+            <p className="text-sm text-slate-300">
+              Si abandonas la expedición ahora, <span className="font-bold text-red-400">perderás todo tu dinero</span>.
+            </p>
+            <div className="flex items-center gap-2 bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-amber-300 font-mono font-bold text-sm">
+              <Coins className="w-4 h-4" />
+              <span>{gold} Pokécuartos</span>
+              <ArrowRight className="w-4 h-4 text-slate-500" />
+              <span className="text-red-400">0</span>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setIsExitConfirmOpen(false);
+                }}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold border border-slate-700 transition-colors cursor-pointer"
+              >
+                Seguir explorando
+              </button>
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setIsExitConfirmOpen(false);
+                  onExitDungeon(team, inventory, 0);
+                }}
+                className="flex items-center gap-1 px-3 py-1.5 bg-red-700 hover:bg-red-600 text-white rounded-lg text-xs font-bold transition-colors shadow cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                Salir a la aldea
+              </button>
+            </div>
           </div>
         </div>
       )}

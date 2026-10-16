@@ -59,6 +59,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
 
   // Notification feedback
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [mobileTab, setMobileTab] = useState<'list' | 'altar'>('list');
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -186,44 +187,65 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
   });
 
   return (
-    <div className="w-full min-h-screen bg-slate-950 text-slate-100 flex flex-col p-3 sm:p-6 max-w-7xl mx-auto">
+    <div className="w-full h-full overflow-hidden bg-slate-950 text-slate-100 flex flex-col p-2 sm:p-4 short:p-2 max-w-7xl mx-auto">
       {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4">
-        <div className="flex items-center gap-3">
+      <div className="shrink-0 flex items-center justify-between gap-2 sm:gap-4 border-b border-slate-800 pb-2 sm:pb-3 mb-2 sm:mb-3 short:pb-1.5 short:mb-1.5">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             onClick={() => {
               soundManager.playSelect();
               onBack();
             }}
-            className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-medium transition-colors border border-slate-700 shrink-0"
+            className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs sm:text-sm font-medium transition-colors border border-slate-700 shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Volver a la Aldea</span>
+            <span className="hidden sm:inline">Volver a la Aldea</span>
+            <span className="sm:hidden">Aldea</span>
           </button>
 
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-amber-400" />
-              Manantial de la Evolución
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-2xl short:text-base font-bold tracking-tight text-white flex items-center gap-2">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 shrink-0" />
+              <span className="truncate"><span className="hidden sm:inline">Manantial de la </span>Evolución</span>
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="hidden md:block short:hidden text-xs text-slate-400">
               Despierta el poder latente de tus compañeros en la fuente luminosa
             </p>
           </div>
         </div>
 
         {readyCount > 0 ? (
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 text-xs font-bold shadow animate-pulse">
+          <div className="shrink-0 flex items-center gap-1.5 px-2 sm:px-3.5 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 text-[10px] sm:text-xs font-bold shadow animate-pulse">
             <Sparkles className="w-4 h-4 text-emerald-400" />
             <span>
-              {readyCount} {readyCount === 1 ? 'Pokémon listo' : 'Pokémon listos'} para evolucionar
+              {readyCount}<span className="hidden sm:inline"> {readyCount === 1 ? 'Pokémon listo' : 'Pokémon listos'} para evolucionar</span>
             </span>
           </div>
         ) : (
-          <div className="text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+          <div className="hidden md:block short:hidden text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
             Sube de nivel a tus Pokémon en mazmorras para desbloquear su evolución
           </div>
         )}
+      </div>
+
+      {/* Mobile tabs: list vs. altar */}
+      <div className="lg:hidden shrink-0 grid grid-cols-2 gap-1 p-1 mb-2 bg-slate-900 rounded-lg border border-slate-800 text-xs font-bold">
+        <button
+          onClick={() => setMobileTab('list')}
+          className={`py-1.5 rounded transition-colors ${
+            mobileTab === 'list' ? 'bg-amber-500 text-amber-950' : 'text-slate-400'
+          }`}
+        >
+          Pokémon
+        </button>
+        <button
+          onClick={() => setMobileTab('altar')}
+          className={`py-1.5 rounded transition-colors truncate px-1 ${
+            mobileTab === 'altar' ? 'bg-emerald-500 text-emerald-950' : 'text-slate-400'
+          }`}
+        >
+          Ritual{inspectedPokemon ? `: ${inspectedPokemon.name}` : ''}
+        </button>
       </div>
 
       {/* Toast Notification */}
@@ -235,27 +257,27 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
       )}
 
       {/* Main Grid: Left Column (Squad & Reserves) | Right Column (Evolution Altar) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-4 flex-1 min-h-0">
         {/* LEFT COLUMN: Team & Reserves lists (8 cols) */}
-        <div className="lg:col-span-7 xl:col-span-7 flex flex-col gap-6">
+        <div className={`${mobileTab === 'list' ? 'flex' : 'hidden'} lg:flex lg:col-span-7 flex-col gap-2 sm:gap-3 min-h-0`}>
           {/* SECTION 1: Active Squad */}
-          <div className="bg-slate-900/90 rounded-xl p-4 sm:p-5 border border-slate-800 shadow-md">
-            <div className="flex items-center justify-between mb-3">
+          <div className="shrink-0 bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 shadow-md">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-amber-400 text-sm tracking-wide uppercase">
+                <span className="font-semibold text-amber-400 text-xs sm:text-sm tracking-wide uppercase">
                   Equipo Activo
                 </span>
-                <span className="text-xs text-slate-400">
-                  ({activeTeam.length} aventureros)
+                <span className="text-[10px] sm:text-xs text-slate-400">
+                  ({activeTeam.length}<span className="hidden sm:inline"> aventureros</span>)
                 </span>
               </div>
-              <span className="text-xs text-slate-500">
+              <span className="hidden xl:inline text-xs text-slate-500">
                 Toca cualquier Pokémon para inspeccionar su evolución
               </span>
             </div>
 
             {/* Active Pokémon Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 short:grid-cols-4 gap-1.5 sm:gap-3">
               {activeTeam.map((pokemon, idx) => {
                 const isSelected = pokemon.id === inspectedPokemon?.id;
                 const info = canPokemonEvolve(pokemon);
@@ -268,31 +290,33 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                       setSelectedId(pokemon.id);
                       setSelectedBranchIndex(0);
                     }}
-                    className={`relative p-3 rounded-xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
+                    className={`relative p-1.5 sm:p-2.5 short:p-1.5 rounded-xl border text-left flex items-center gap-2 sm:gap-3 transition-all cursor-pointer min-w-0 ${
                       isSelected
                         ? 'border-amber-400 bg-amber-950/30 ring-2 ring-amber-400/50 shadow-lg'
                         : 'border-slate-800 bg-slate-800/70 hover:border-slate-600 hover:bg-slate-800'
                     }`}
                   >
                     {/* PMD Repository Portrait */}
-                    <PmdPortrait
-                      pokedexId={pokemon.pokedexId}
-                      emotion={info.canEvolve ? 'Joyous' : 'Normal'}
-                      size={44}
-                      showFrame={true}
-                    />
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-9 short:h-9 shrink-0">
+                      <PmdPortrait
+                        pokedexId={pokemon.pokedexId}
+                        emotion={info.canEvolve ? 'Joyous' : 'Normal'}
+                        className="w-full h-full"
+                        showFrame={true}
+                      />
+                    </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-sm text-white truncate">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-bold text-xs sm:text-sm text-white truncate">
                           {pokemon.name}
                         </span>
-                        <span className="text-xs font-mono font-bold text-amber-400">
+                        <span className="text-[10px] sm:text-xs font-mono font-bold text-amber-400 shrink-0">
                           Nv. {pokemon.level}
                         </span>
                       </div>
 
-                      <div className="flex gap-1 my-1">
+                      <div className="hidden sm:flex short:hidden gap-1 my-1">
                         {pokemon.types.map((type) => {
                           const col = TYPE_COLORS[type];
                           return (
@@ -307,19 +331,19 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                       </div>
 
                       {/* Evolution Status Tag */}
-                      <div className="mt-1">
+                      <div className="mt-0.5 sm:mt-1 truncate">
                         {info.canEvolve ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-300 bg-emerald-950/70 border border-emerald-500/50 px-2 py-0.5 rounded-md">
+                          <span className="inline-flex items-center gap-1 text-[9px] sm:text-[11px] font-bold text-emerald-300 bg-emerald-950/70 border border-emerald-500/50 px-1.5 sm:px-2 py-0.5 rounded-md">
                             <Sparkles className="w-3 h-3 text-emerald-400 animate-spin" />
-                            ¡Listo para evolucionar!
+                            ¡Listo<span className="hidden sm:inline"> para evolucionar</span>!
                           </span>
                         ) : info.hasEvolutions ? (
-                          <span className="text-[11px] text-slate-400 font-mono">
-                            Req. Nv. {info.minLevelRequired} (Faltan {info.levelDeficit})
+                          <span className="text-[9px] sm:text-[11px] text-slate-400 font-mono">
+                            Req. Nv. {info.minLevelRequired}<span className="hidden sm:inline"> (Faltan {info.levelDeficit})</span>
                           </span>
                         ) : (
-                          <span className="text-[11px] text-slate-500 italic">
-                            ⭐ Forma final alcanzada
+                          <span className="text-[9px] sm:text-[11px] text-slate-500 italic">
+                            ⭐ Forma final<span className="hidden sm:inline"> alcanzada</span>
                           </span>
                         )}
                       </div>
@@ -331,32 +355,32 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
           </div>
 
           {/* SECTION 2: Reserves (Campamento de Amigos) */}
-          <div className="bg-slate-900/90 rounded-xl p-4 sm:p-5 border border-slate-800 flex-1 flex flex-col shadow-md">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-emerald-400 text-sm tracking-wide uppercase">
-                  Campamento de Reclutas (Reserva)
+          <div className="bg-slate-900/90 rounded-xl p-2 sm:p-4 short:p-2 border border-slate-800 flex-1 min-h-0 flex flex-col shadow-md">
+            <div className="shrink-0 flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="font-semibold text-emerald-400 text-xs sm:text-sm tracking-wide uppercase truncate">
+                  <span className="hidden sm:inline">Campamento de </span>Reclutas
                 </span>
-                <span className="text-xs text-slate-400">
-                  ({reserves.length} compañeros)
+                <span className="text-[10px] sm:text-xs text-slate-400">
+                  ({reserves.length})
                 </span>
               </div>
 
               {/* Segmented Filter Controls */}
-              <div className="flex items-center gap-1 p-1 bg-slate-950/80 rounded-lg border border-slate-800 text-xs self-start sm:self-auto">
+              <div className="shrink-0 flex items-center gap-1 p-0.5 sm:p-1 bg-slate-950/80 rounded-lg border border-slate-800 text-[10px] sm:text-xs">
                 <button
                   onClick={() => setFilterMode('all')}
-                  className={`px-2.5 py-1 rounded font-medium transition-colors ${
+                  className={`px-1.5 sm:px-2.5 py-1 rounded font-medium transition-colors ${
                     filterMode === 'all'
                       ? 'bg-slate-800 text-white font-bold'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  Todos ({reserves.length})
+                  Todos
                 </button>
                 <button
                   onClick={() => setFilterMode('ready')}
-                  className={`px-2.5 py-1 rounded font-medium transition-colors ${
+                  className={`px-1.5 sm:px-2.5 py-1 rounded font-medium transition-colors ${
                     filterMode === 'ready'
                       ? 'bg-emerald-900/70 text-emerald-300 font-bold'
                       : 'text-slate-400 hover:text-white'
@@ -366,7 +390,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                 </button>
                 <button
                   onClick={() => setFilterMode('pending')}
-                  className={`px-2.5 py-1 rounded font-medium transition-colors ${
+                  className={`px-1.5 sm:px-2.5 py-1 rounded font-medium transition-colors ${
                     filterMode === 'pending'
                       ? 'bg-amber-900/70 text-amber-300 font-bold'
                       : 'text-slate-400 hover:text-white'
@@ -378,14 +402,14 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
             </div>
 
             {filteredReserves.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-8 text-center border border-dashed border-slate-800 rounded-lg my-auto">
+              <div className="flex flex-col items-center justify-center p-4 sm:p-8 text-center border border-dashed border-slate-800 rounded-lg my-auto">
                 <Info className="w-7 h-7 text-slate-600 mb-2" />
                 <p className="text-xs text-slate-400">
                   No hay compañeros en esta categoría de reserva.
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[360px] overflow-y-auto pr-1">
+              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 short:grid-cols-5 gap-1.5 sm:gap-2.5 min-h-0 overflow-y-auto content-start pr-1">
                 {filteredReserves.map((pokemon) => {
                   const isSelected = pokemon.id === inspectedPokemon?.id;
                   const info = canPokemonEvolve(pokemon);
@@ -398,30 +422,32 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                         setSelectedId(pokemon.id);
                         setSelectedBranchIndex(0);
                       }}
-                      className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
+                      className={`p-1.5 sm:p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer min-w-0 ${
                         isSelected
                           ? 'border-amber-400 bg-amber-950/30 ring-2 ring-amber-400/50 shadow'
                           : 'border-slate-800 bg-slate-800/60 hover:border-slate-600 hover:bg-slate-800'
                       }`}
                     >
-                      <div className="flex items-center gap-2.5 mb-2">
-                        <PmdPortrait
-                          pokedexId={pokemon.pokedexId}
-                          emotion={info.canEvolve ? 'Joyous' : 'Normal'}
-                          size={36}
-                          showFrame={true}
-                        />
+                      <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 shrink-0">
+                          <PmdPortrait
+                            pokedexId={pokemon.pokedexId}
+                            emotion={info.canEvolve ? 'Joyous' : 'Normal'}
+                            className="w-full h-full"
+                            showFrame={true}
+                          />
+                        </div>
                         <div className="min-w-0 flex-1">
-                          <span className="font-bold text-xs text-white truncate block">
+                          <span className="font-bold text-[10px] sm:text-xs text-white truncate block">
                             {pokemon.name}
                           </span>
-                          <span className="text-[11px] font-mono text-amber-400">
+                          <span className="text-[9px] sm:text-[11px] font-mono text-amber-400">
                             Nv. {pokemon.level}
                           </span>
                         </div>
                       </div>
 
-                      <div className="mt-1 pt-1.5 border-t border-slate-800">
+                      <div className="pt-1 border-t border-slate-800 truncate">
                         {info.canEvolve ? (
                           <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
                             <Sparkles className="w-3 h-3" />
@@ -446,11 +472,11 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
         </div>
 
         {/* RIGHT COLUMN: Interactive Evolution Altar & Inspector (5 cols) */}
-        <div className="lg:col-span-5 xl:col-span-5 bg-slate-900/90 rounded-xl p-4 sm:p-5 border border-slate-800 flex flex-col justify-between shadow-xl">
+        <div className={`${mobileTab === 'altar' ? 'flex' : 'hidden'} lg:flex lg:col-span-5 min-h-0 overflow-y-auto bg-slate-900/90 rounded-xl p-3 sm:p-4 short:p-2 border border-slate-800 flex-col justify-between shadow-xl`}>
           {inspectedPokemon ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2.5 sm:gap-3 short:grid short:grid-cols-2 short:gap-2">
               {/* Altar Header */}
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-400/60 flex items-center justify-center text-amber-300">
                     <Sparkles className="w-4 h-4" />
@@ -459,7 +485,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                     <h3 className="font-bold text-sm text-white">
                       Ritual de Transformación
                     </h3>
-                    <span className="text-[11px] text-slate-400">
+                    <span className="short:hidden text-[11px] text-slate-400">
                       Manantial de la Luz Mística
                     </span>
                   </div>
@@ -499,14 +525,14 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
               )}
 
               {/* Side-by-Side Before & After Preview */}
-              <div className="bg-slate-950/70 p-4 rounded-xl border border-slate-800 flex items-center justify-between gap-3">
+              <div className="bg-slate-950/70 p-2.5 sm:p-3 short:p-1.5 rounded-xl border border-slate-800 flex items-center justify-between gap-3">
                 {/* Current Stage */}
                 <div className="flex flex-col items-center text-center w-5/12">
-                  <div className="relative mb-2">
+                  <div className="relative mb-2 short:mb-0.5">
                     <PmdPortrait
                       pokedexId={inspectedPokemon.pokedexId}
                       emotion="Normal"
-                      size={54}
+                      size={44}
                       showFrame={true}
                     />
                   </div>
@@ -516,7 +542,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                   <span className="text-[11px] font-mono text-amber-400 font-bold">
                     Nivel {inspectedPokemon.level}
                   </span>
-                  <div className="flex gap-1 mt-1 flex-wrap justify-center">
+                  <div className="flex gap-1 mt-1 flex-wrap justify-center short:hidden">
                     {inspectedPokemon.types.map((t) => (
                       <span
                         key={t}
@@ -548,11 +574,11 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                 <div className="flex flex-col items-center text-center w-5/12">
                   {activeOption ? (
                     <>
-                      <div className="relative mb-2">
+                      <div className="relative mb-2 short:mb-0.5">
                         <PmdPortrait
                           pokedexId={activeOption.targetPokedexId}
                           emotion="Joyous"
-                          size={54}
+                          size={44}
                           showFrame={true}
                           className={
                             evolutionInfo.canEvolve
@@ -567,7 +593,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                       <span className="text-[11px] font-mono text-slate-400">
                         Req. Nv. {activeOption.minLevel}
                       </span>
-                      <div className="flex gap-1 mt-1 flex-wrap justify-center">
+                      <div className="flex gap-1 mt-1 flex-wrap justify-center short:hidden">
                         {activeOption.types.map((t) => (
                           <span
                             key={t}
@@ -595,7 +621,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
               {/* Requirement Inspection Box */}
               {activeOption ? (
                 <div
-                  className={`rounded-xl p-3.5 border transition-all ${
+                  className={`rounded-xl p-2.5 sm:p-3 short:p-2 border transition-all ${
                     evolutionInfo.canEvolve
                       ? 'bg-emerald-950/30 border-emerald-500/60'
                       : 'bg-slate-950/80 border-slate-800'
@@ -639,7 +665,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                     />
                   </div>
 
-                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                  <p className="hidden tall:block text-[11px] text-slate-300 leading-relaxed">
                     {evolutionInfo.canEvolve ? (
                       <span className="text-emerald-300 font-medium">
                         ✨ {inspectedPokemon.name} ha alcanzado la madurez necesaria. Presiona el botón para dar paso a {activeOption.targetName}.
@@ -659,7 +685,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                   <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">
                     Mejora de Estadísticas al Evolucionar
                   </span>
-                  <div className="grid grid-cols-3 gap-1.5 text-[11px] font-mono">
+                  <div className="grid grid-cols-3 gap-1.5 text-[11px] font-mono short:[&>div]:py-1">
                     <div className="bg-slate-950/80 p-2 rounded border border-slate-800 flex justify-between items-center">
                       <span className="text-slate-400 flex items-center gap-1">
                         <Heart className="w-3 h-3 text-red-400" /> PS
@@ -717,7 +743,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                       {activeOption.learnedMove.name}
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-400">
+                  <p className="hidden tall:block text-[10px] text-slate-400">
                     Tipo: {activeOption.learnedMove.type} · Potencia:{' '}
                     {activeOption.learnedMove.power} · Precisión:{' '}
                     {activeOption.learnedMove.accuracy}%
@@ -726,11 +752,11 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
               )}
 
               {/* Main Evolution Button */}
-              <div className="pt-2">
+              <div className="pt-1">
                 {evolutionInfo.canEvolve && activeOption ? (
                   <button
                     onClick={handleInitiateEvolution}
-                    className="w-full py-3.5 bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold rounded-xl text-sm shadow-xl flex items-center justify-center gap-2 transform active:scale-95 transition-all border border-emerald-400"
+                    className="w-full py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold rounded-xl text-sm shadow-xl flex items-center justify-center gap-2 transform active:scale-95 transition-all border border-emerald-400"
                   >
                     <Sparkles className="w-5 h-5 text-amber-300" />
                     <span>¡Evolucionar a {activeOption.targetName}!</span>
@@ -738,7 +764,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                 ) : activeOption ? (
                   <button
                     disabled
-                    className="w-full py-3.5 bg-slate-800/80 border border-slate-700/80 text-slate-500 font-bold rounded-xl text-xs flex items-center justify-center gap-2 cursor-not-allowed"
+                    className="w-full py-2.5 sm:py-3 bg-slate-800/80 border border-slate-700/80 text-slate-500 font-bold rounded-xl text-xs flex items-center justify-center gap-2 cursor-not-allowed"
                   >
                     <span>
                       🔒 No cumple requisitos (Nivel {activeOption.minLevel} requerido)
@@ -747,7 +773,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                 ) : (
                   <button
                     disabled
-                    className="w-full py-3.5 bg-slate-800/50 border border-slate-800 text-slate-500 font-medium rounded-xl text-xs flex items-center justify-center gap-2 cursor-not-allowed"
+                    className="w-full py-2.5 sm:py-3 bg-slate-800/50 border border-slate-800 text-slate-500 font-medium rounded-xl text-xs flex items-center justify-center gap-2 cursor-not-allowed"
                   >
                     <span>⭐ Este Pokémon no tiene más evoluciones</span>
                   </button>
@@ -769,8 +795,8 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
       {/* EVOLUTION CEREMONY MODAL (Luminous Spring Transformation) */}
       {/* ========================================================= */}
       {evolvingState && (
-        <div className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 sm:p-8 text-center flex flex-col items-center gap-6 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-slate-900 border-2 border-amber-400 rounded-3xl max-w-lg w-full max-h-full overflow-y-auto p-4 sm:p-8 short:p-3 text-center flex flex-col items-center gap-3 sm:gap-6 short:gap-2 shadow-2xl relative animate-in zoom-in-95 duration-300">
             {/* Ambient Background Aura */}
             <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-amber-500/20 pointer-events-none" />
 
@@ -781,7 +807,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                   ? 'Ritual Luminoso en Curso'
                   : '¡Evolución Exitosa!'}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
+              <h2 className="text-xl sm:text-3xl short:text-lg font-black text-white mt-1">
                 {evolvingState.stage === 'illuminating'
                   ? `¿Qué? ¡${evolvingState.prevPokemon.name} está brillando!`
                   : `¡${evolvingState.prevPokemon.name} evolucionó a ${evolvingState.evolvedPokemon.name}!`}
@@ -789,7 +815,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
             </div>
 
             {/* Transforming Portrait Animation */}
-            <div className="relative my-2 flex items-center justify-center">
+            <div className="relative my-2 short:my-0 flex items-center justify-center">
               {evolvingState.stage === 'illuminating' ? (
                 <div className="relative animate-pulse">
                   <div className="absolute -inset-4 bg-amber-400/40 rounded-full blur-xl animate-ping" />
@@ -824,11 +850,11 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
 
             {/* Post-evolution Boost Summary */}
             {evolvingState.stage === 'transformed' && (
-              <div className="w-full bg-slate-950/80 rounded-2xl p-4 border border-slate-800 text-left flex flex-col gap-3">
+              <div className="w-full bg-slate-950/80 rounded-2xl p-3 sm:p-4 short:p-2 border border-slate-800 text-left flex flex-col gap-2 sm:gap-3">
                 <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
                   Ganancias de Características:
                 </span>
-                <div className="grid grid-cols-3 gap-2 text-xs font-mono">
+                <div className="grid grid-cols-2 sm:grid-cols-3 short:grid-cols-6 gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-mono">
                   <div className="bg-slate-900 p-2 rounded border border-slate-800 flex justify-between items-center">
                     <span className="text-slate-400">PS Máx:</span>
                     <span className="text-emerald-400 font-bold">

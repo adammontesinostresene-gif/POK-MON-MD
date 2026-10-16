@@ -38,6 +38,7 @@ interface TurnBasedCombatProps {
   ) => void;
   onDefeat: () => void;
   onFlee: () => void;
+  canFlee?: boolean;
   onUpdateInventory: (items: Item[]) => void;
 }
 
@@ -61,6 +62,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   onVictory,
   onDefeat,
   onFlee,
+  canFlee = true,
   onUpdateInventory,
 }) => {
   // Normalize initial enemies: accept array of 1 to 4 enemies, or single enemy
@@ -103,6 +105,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
   // Item usage state
   const [selectedBagItem, setSelectedBagItem] = useState<Item | null>(null);
+  // Members who spent this round's action on an item (member.id -> item name)
+  const [itemUsers, setItemUsers] = useState<Record<string, string>>({});
 
   // Turn execution states & feedback
   const [isProcessingTurn, setIsProcessingTurn] = useState<boolean>(false);
@@ -156,7 +160,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   const currentMember = aliveMembers[selectingMemberIndex] || aliveMembers[0];
 
   const addLog = (msg: string) => {
-    setBattleLogs((prev) => [...prev.slice(-4), msg]);
+    setBattleLogs((prev) => [...prev.slice(-7), msg]);
     soundManager.playTextBlip();
   };
 
@@ -241,12 +245,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   // Execute the combat round: All fighters act in order of SPEED (with priority taken into account)
   const executeSimultaneousRound = async (
     confirmedMoves: Record<string, Move>,
-    confirmedTargets: Record<string, string>
+    confirmedTargets: Record<string, string>,
+    teamOverride?: Pokemon[]
   ) => {
     if (isProcessingTurn) return;
     setIsProcessingTurn(true);
 
-    let currentTeam = [...team];
+    let currentTeam = [...(teamOverride ?? team)];
     let currentEnemies = [...enemies];
 
     // Deduct PP for all chosen moves across team
@@ -323,7 +328,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     });
 
     setCurrentExecutionQueue(actionQueue);
-    addLog(`¡Comienza el turno! Orden de velocidad: ${actionQueue.map((a) => `${a.actorName} (${a.speed})`).join(' > ')}`);
+    addLog('¡Comienza el turno!');
     await new Promise((r) => setTimeout(r, 450));
 
     // 4. EXECUTE ACTIONS IN SPEED ORDER
@@ -370,7 +375,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
         const targetEnemyIdx = currentEnemies.findIndex((e) => e.id === targetEnemy.id);
 
-        addLog(`⚡ ${member.name} (Vel ${member.stats.speed}) usa ${action.move.name} contra ${targetEnemy.name}!`);
+        addLog(`⚡ ${member.name} usa ${action.move.name} contra ${targetEnemy.name}!`);
 
         if (action.move.type === 'Eléctrico') {
           soundManager.playElectricShock();
@@ -431,7 +436,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         const targetMember = currentAlive[Math.floor(Math.random() * currentAlive.length)];
         const targetIdx = currentTeam.findIndex((m) => m.id === targetMember.id);
 
-        addLog(`💥 ¡${enemyActor.name} (Vel ${enemyActor.stats.speed}) ataca a ${targetMember.name} con ${action.move.name}!`);
+        addLog(`💥 ¡${enemyActor.name} ataca a ${targetMember.name} con ${action.move.name}!`);
 
         setAttackingEnemyId(enemyActor.id);
         await new Promise((r) => setTimeout(r, 220));
@@ -478,6 +483,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     setCurrentActingActorId(null);
     setCurrentExecutionQueue([]);
     setChosenMoves({});
+    setItemUsers({});
     setMemberTargetMap({});
     setPendingMoveChoice(null);
     setSelectingMemberIndex(0);
@@ -592,28 +598,39 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
   // Handle using an item from the bag on a team member
   const handleUseItemOnTarget = (item: Item, targetIdx: number) => {
+    if (item.effectType === 'escape' && !canFlee) {
+      soundManager.playHit();
+      addLog('⛔ ¡No puedes escapar de un jefe de mazmorra!');
+      setCombatMenu('MOVES_SELECT');
+      setSelectedBagItem(null);
+      return;
+    }
+
     soundManager.playSelect();
+    const user = currentMember;
     const updatedInv = inventory
       .map((it) => (it.id === item.id ? { ...it, count: it.count - 1 } : it))
       .filter((it) => it.count > 0);
     onUpdateInventory(updatedInv);
 
-    const targetMember = { ...team[targetIdx] };
+    const targetMember = { ...team[targetIdx], stats: { ...team[targetIdx].stats } };
 
     if (item.effectType === 'heal_hp') {
       const healAmount = item.effectValue || 40;
       targetMember.stats.hp = Math.min(targetMember.stats.maxHp, targetMember.stats.hp + healAmount);
       soundManager.playHeal();
-      addLog(`✨ ¡Usaste ${item.name} en ${targetMember.name}! Recuperó ${healAmount} PS.`);
+      addLog(`✨ ¡${user.name} usó ${item.name} en ${targetMember.name}! Recuperó ${healAmount} PS.`);
     } else if (item.effectType === 'revive') {
       targetMember.stats.hp = Math.round(targetMember.stats.maxHp * 0.6);
       soundManager.playLevelUp();
-      addLog(`⭐ ¡${targetMember.name} fue revivido con la Semilla Revivir!`);
+      addLog(`⭐ ¡${user.name} revivió a ${targetMember.name} con ${item.name}!`);
     } else if (item.effectType === 'escape') {
       soundManager.playSelect();
       addLog(`🌀 ¡Usaste el Orbe Escape para abandonar el combate con seguridad!`);
       setTimeout(() => onFlee(), 600);
       return;
+    } else {
+      addLog(`🎒 ${user.name} usó ${item.name}.`);
     }
 
     const updatedTeam = [...team];
@@ -622,6 +639,20 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     setCombatMenu('MOVES_SELECT');
     setSelectedBagItem(null);
+    setPendingMoveChoice(null);
+
+    // The item replaces this member's action for the round
+    const { [user.id]: _discarded, ...remainingMoves } = chosenMoves;
+    setChosenMoves(remainingMoves);
+    setItemUsers((prev) => ({ ...prev, [user.id]: item.name }));
+
+    const updatedAlive = updatedTeam.filter((m) => m.stats.hp > 0);
+    const userPos = updatedAlive.findIndex((m) => m.id === user.id);
+    if (userPos !== -1 && userPos < updatedAlive.length - 1) {
+      setSelectingMemberIndex(userPos + 1);
+    } else {
+      executeSimultaneousRound(remainingMoves, memberTargetMap, updatedTeam);
+    }
   };
 
   return (
@@ -633,41 +664,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       />
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-900/65" />
 
-      {/* TOP COMBAT BAR: Speed Order & Enemy Squad Status */}
+      {/* TOP COMBAT BAR: Phase indicator & Enemy Squad Status */}
       <div className="relative z-10 px-2 sm:px-3 py-1.5 bg-slate-900/95 border-b border-slate-800 flex items-center justify-between gap-2 shadow-md shrink-0">
-        {/* Speed Order Ribbon: Shows real-time turn sequence */}
-        <div className="flex items-center gap-1.5 overflow-x-auto min-w-0 py-0.5 scrollbar-none">
-          <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-          <span className="text-[10px] font-semibold text-slate-400 shrink-0 hidden md:inline">
-            Orden:
+        <div className="flex items-center gap-1.5 min-w-0 text-[10px] sm:text-xs font-bold text-amber-300">
+          <Swords className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">
+            {isProcessingTurn ? '¡Turno en curso!' : 'Elige las acciones del equipo'}
           </span>
-          <div className="flex items-center gap-1 flex-nowrap">
-            {[...team.filter((m) => m.stats.hp > 0), ...enemies.filter((e) => e.stats.hp > 0)]
-              .sort((a, b) => b.stats.speed - a.stats.speed)
-              .map((fighter, i) => {
-                const isCurrentActing = currentActingActorId === fighter.id;
-                const isEnemy = enemies.some((e) => e.id === fighter.id);
-                return (
-                  <span
-                    key={fighter.id}
-                    className={`font-mono text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold flex items-center gap-1 whitespace-nowrap transition-all ${
-                      isCurrentActing
-                        ? 'ring-2 ring-amber-400 bg-amber-500 text-slate-950 scale-105'
-                        : isEnemy
-                        ? 'bg-red-950/80 text-red-300 border border-red-500/50'
-                        : i === 0
-                        ? 'bg-amber-950/80 text-amber-300 border border-amber-400/50'
-                        : 'bg-slate-800 text-sky-300 border border-slate-700'
-                    }`}
-                  >
-                    <span>{i + 1}º</span>
-                    <span className="truncate max-w-[55px] sm:max-w-none">
-                      {fighter.name} ({fighter.stats.speed})
-                    </span>
-                  </span>
-                );
-              })}
-          </div>
         </div>
 
         {/* Enemy Team Summary: Single Boss/Enemy OR Squad Pills */}
@@ -681,9 +684,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 </span>
                 <span className="text-[9px] font-mono font-bold text-amber-400 bg-amber-950/70 px-1 rounded border border-amber-500/40">
                   Nv.{enemies[0].level}
-                </span>
-                <span className="text-[9px] font-mono text-slate-400 hidden sm:inline">
-                  Vel: {enemies[0].stats.speed}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 mt-0.5">
@@ -706,7 +706,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             </div>
           </div>
         ) : (
-          <div className="flex items-center gap-1 shrink-0 overflow-x-auto py-0.5 max-w-[50%] scrollbar-none">
+          <div className="flex items-center gap-1 shrink min-w-0 overflow-x-auto py-0.5 scrollbar-none">
             {enemies.map((enemyMember) => {
               const isAlive = enemyMember.stats.hp > 0;
               const isTarget = isAlive && (selectedTargetEnemyId === enemyMember.id || aliveEnemies.length === 1);
@@ -770,13 +770,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             const isCurrentSelecting =
               combatMenu === 'MOVES_SELECT' &&
               aliveMembers[selectingMemberIndex]?.id === member.id;
-            const hasChosen = Boolean(chosenMoves[member.id]);
+            const hasChosen = Boolean(chosenMoves[member.id] || itemUsers[member.id]);
 
             return (
               <div
                 key={member.id}
                 onClick={() => {
-                  if (isAlive && !isProcessingTurn && combatMenu === 'MOVES_SELECT') {
+                  if (isAlive && !isProcessingTurn && combatMenu === 'MOVES_SELECT' && !itemUsers[member.id]) {
                     const targetIdx = aliveMembers.findIndex((m) => m.id === member.id);
                     if (targetIdx !== -1) setSelectingMemberIndex(targetIdx);
                   }
@@ -808,13 +808,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       : 'bg-slate-900/90 border-slate-700'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-[8px] sm:text-[9px] font-mono font-bold text-white">
+                  <div className="flex items-center justify-between gap-1 text-[8px] sm:text-[9px] font-mono font-bold text-white">
                     <span className="truncate max-w-[42px]">{member.name}</span>
-                    <span className="text-emerald-400 tabular-nums">
-                      {member.stats.hp}/{member.stats.maxHp}
-                    </span>
+                    <span className="text-amber-400">Nv.{member.level}</span>
                   </div>
-                  <div className="w-full bg-slate-800 h-1 rounded-full overflow-hidden mt-0.5">
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <div className="flex-1 bg-slate-800 h-1 rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all ${
                         member.stats.hp / member.stats.maxHp < 0.25
@@ -825,12 +824,16 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                         width: `${Math.max(0, (member.stats.hp / member.stats.maxHp) * 100)}%`,
                       }}
                     />
+                    </div>
+                    <span className="text-[7px] sm:text-[8px] font-mono font-bold text-emerald-400 tabular-nums">
+                      {member.stats.hp}/{member.stats.maxHp}
+                    </span>
                   </div>
                 </div>
 
                 {/* Portrait from PMD Sprite Repository */}
                 <div
-                  className={`w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center relative transition-transform duration-200 ${
+                  className={`w-12 h-12 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center relative transition-transform duration-200 ${
                     isAttacking ? 'translate-x-3 scale-105' : ''
                   } ${isHit ? 'animate-bounce brightness-150' : ''}`}
                 >
@@ -845,7 +848,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                         ? 'Pain'
                         : 'Normal'
                     }
-                    size={46}
+                    className="w-full h-full"
                     showFrame={true}
                   />
 
@@ -862,10 +865,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     </span>
                   )}
                 </div>
-
-                <span className="text-[8px] sm:text-[9px] text-slate-400 font-mono mt-0.5">
-                  Vel: <strong className="text-white">{member.stats.speed}</strong>
-                </span>
 
                 {/* Planned target indicator badge */}
                 {hasChosen && memberTargetMap[member.id] && (
@@ -966,7 +965,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
                 {/* Enemy Field Portrait (PMD Repository) */}
                 <div
-                  className={`w-13 h-13 sm:w-16 sm:h-16 flex items-center justify-center rounded-xl p-0.5 border-2 transition-all ${
+                  className={`w-13 h-13 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center rounded-xl p-0.5 border-2 transition-all ${
                     pendingMoveChoice && isAlive
                       ? 'border-red-400 ring-2 ring-red-400/90 bg-red-950/60 shadow-lg'
                       : isTargeted
@@ -987,15 +986,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                         ? 'Pain'
                         : 'Normal'
                     }
-                    size={enemies.length > 2 ? 44 : 52}
+                    className="w-full h-full"
                     showFrame={false}
                   />
                 </div>
-
-                {/* Velocity Indicator */}
-                <span className="text-[8px] sm:text-[9px] text-slate-400 font-mono mt-0.5">
-                  Vel: <strong className="text-amber-300">{enemyMember.stats.speed}</strong>
-                </span>
               </div>
             );
           })}
@@ -1003,9 +997,30 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       </div>
 
       {/* BOTTOM CONTROLS & MOVE SELECTION PANEL */}
-      <div className="relative z-20 bg-slate-900/98 border-t border-sky-500/70 p-2 sm:p-2.5 shadow-2xl flex flex-col gap-1.5 shrink-0">
+      <div className="relative z-20 bg-slate-900/98 border-t border-sky-500/70 p-2 sm:p-2.5 short:p-1.5 shadow-2xl flex flex-col gap-1.5 short:gap-1 shrink-0">
+        {/* Battle log overlay while the round resolves (keeps the panel height stable) */}
+        {isProcessingTurn && (
+          <div className="absolute inset-0 z-30 bg-slate-900 p-2 sm:p-2.5 short:p-1.5 flex flex-col">
+            <div className="flex-1 min-h-0 bg-slate-950 rounded-lg border border-slate-800 shadow-inner px-2.5 py-1.5 flex flex-col justify-end gap-0.5 overflow-hidden">
+              {battleLogs.map((log, i) => {
+                const isLatest = i === battleLogs.length - 1;
+                return (
+                  <p
+                    key={`${i}_${log}`}
+                    className={`text-[11px] sm:text-xs font-mono leading-snug ${
+                      isLatest ? 'text-sky-200 font-bold' : 'text-slate-500'
+                    }`}
+                  >
+                    {log}
+                  </p>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Battle Dialogue Ticker */}
-        <div className="bg-slate-950 rounded-lg px-2.5 py-1 border border-slate-800 min-h-[26px] sm:min-h-[30px] flex items-center shadow-inner shrink-0">
+        <div className="bg-slate-950 rounded-lg px-2.5 py-1 short:py-0.5 border border-slate-800 min-h-[26px] sm:min-h-[30px] short:min-h-0 flex items-center shadow-inner shrink-0">
           <p className="text-[11px] sm:text-xs text-sky-200 font-mono tracking-tight leading-normal truncate">
             {battleLogs[battleLogs.length - 1]}
           </p>
@@ -1013,9 +1028,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
         {/* 1. PER-MEMBER MOVE SELECTION (DEFAULT ACTIVE FLOW) */}
         {combatMenu === 'MOVES_SELECT' && currentMember && (
-          <div className="flex flex-col gap-1.5 w-full">
+          <div className="flex flex-col gap-1.5 short:gap-1 w-full">
             {/* Header: Team Stepper & Active Member Details */}
-            <div className="bg-slate-950/80 rounded-lg p-1.5 border border-slate-800 flex items-center justify-between gap-1.5 shrink-0">
+            <div className="bg-slate-950/80 rounded-lg p-1.5 short:p-1 border border-slate-800 flex items-center justify-between gap-1.5 shrink-0">
               {/* Stepper info */}
               <div className="flex items-center gap-2 min-w-0">
                 <PmdPortrait pokedexId={currentMember.pokedexId} size={24} showFrame={true} />
@@ -1038,7 +1053,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     </span>
                     <span>·</span>
                     <span>
-                      Vel: <strong className="text-amber-300">{currentMember.stats.speed}</strong>
+                      Nv. <strong className="text-amber-300">{currentMember.level}</strong>
                     </span>
                   </div>
                 </div>
@@ -1048,16 +1063,17 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               <div className="flex items-center gap-1 overflow-x-auto py-0.5 shrink-0">
                 {aliveMembers.map((m, idx) => {
                   const isSelected = idx === selectingMemberIndex;
-                  const chosen = chosenMoves[m.id];
+                  const chosen = chosenMoves[m.id] || itemUsers[m.id];
                   return (
                     <button
                       key={m.id}
+                      disabled={Boolean(itemUsers[m.id])}
                       onClick={() => {
                         soundManager.playSelect();
                         setSelectingMemberIndex(idx);
                         setPendingMoveChoice(null);
                       }}
-                      className={`px-1.5 py-0.5 rounded text-[9px] font-mono flex items-center gap-1 border transition-all cursor-pointer ${
+                      className={`px-1.5 py-0.5 rounded text-[9px] font-mono flex items-center gap-1 border transition-all cursor-pointer disabled:cursor-not-allowed ${
                         isSelected
                           ? 'bg-amber-500 text-slate-950 font-bold border-amber-300 ring-1 ring-amber-300'
                           : chosen
@@ -1071,7 +1087,11 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
                       )}
                       <span>{m.name}</span>
-                      {chosen && memberTargetMap[m.id] && (
+                      {itemUsers[m.id] ? (
+                        <span className="text-[8px] opacity-80 hidden sm:inline">
+                          🎒 {itemUsers[m.id]}
+                        </span>
+                      ) : chosen && memberTargetMap[m.id] && (
                         <span className="text-[8px] opacity-80 hidden sm:inline">
                           ➔ {enemies.find((e) => e.id === memberTargetMap[m.id])?.name || ''}
                         </span>
@@ -1182,7 +1202,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       key={move.id}
                       disabled={isProcessingTurn || isOutOfPp}
                       onClick={() => handleSelectMemberMove(currentMember, move)}
-                      className={`p-1.5 sm:p-2 rounded-lg border text-left flex flex-col justify-between transition-all min-h-[44px] sm:min-h-[48px] cursor-pointer active:scale-98 ${
+                      className={`p-1.5 sm:p-2 short:p-1 rounded-lg border text-left flex flex-col justify-between transition-all min-h-[44px] sm:min-h-[48px] short:min-h-0 cursor-pointer active:scale-98 ${
                         isSelectedForThisMember
                           ? 'bg-amber-950/90 border-amber-400 ring-2 ring-amber-400/60 shadow-lg'
                           : isOutOfPp
@@ -1212,7 +1232,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       </div>
 
                       {/* Bottom Row: Power / Category / Priority Tag */}
-                      <div className="flex items-center justify-between text-[9px] text-slate-400 mt-0.5">
+                      <div className="short:hidden flex items-center justify-between text-[9px] text-slate-400 mt-0.5">
                         <div className="flex items-center gap-1">
                           <span>Pot: {move.power > 0 ? move.power : '—'}</span>
                           <span>·</span>
@@ -1234,10 +1254,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             )}
 
             {/* Bottom Actions: Previous member / Mochila / Huir */}
-            <div className="flex items-center justify-between gap-1.5 pt-1 border-t border-slate-800 shrink-0">
+            <div className="flex items-center justify-between gap-1.5 pt-1 short:pt-0.5 border-t border-slate-800 shrink-0">
               {selectingMemberIndex > 0 ? (
                 <button
-                  disabled={isProcessingTurn}
+                  disabled={isProcessingTurn || Boolean(itemUsers[aliveMembers[selectingMemberIndex - 1]?.id])}
                   onClick={() => {
                     soundManager.playSelect();
                     setSelectingMemberIndex(selectingMemberIndex - 1);
@@ -1274,16 +1294,18 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                   <span>Mochila ({inventory.reduce((a, b) => a + b.count, 0)})</span>
                 </button>
 
-                <button
-                  disabled={isProcessingTurn}
-                  onClick={() => {
-                    soundManager.playSelect();
-                    onFlee();
-                  }}
-                  className="py-1.5 px-3 bg-slate-750 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs font-semibold cursor-pointer transition-colors"
-                >
-                  <span>Huir</span>
-                </button>
+                {canFlee && (
+                  <button
+                    disabled={isProcessingTurn}
+                    onClick={() => {
+                      soundManager.playSelect();
+                      onFlee();
+                    }}
+                    className="py-1.5 px-3 bg-slate-750 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                  >
+                    <span>Huir</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -1291,7 +1313,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
         {/* 2. MAIN SUB-MENU (TACTICAL OPTIONS) */}
         {combatMenu === 'MAIN_MENU' && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+          <div className={`grid grid-cols-1 ${canFlee ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-1.5`}>
             <button
               disabled={isProcessingTurn}
               onClick={() => {
@@ -1316,17 +1338,19 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               <span>Mochila ({inventory.reduce((a, b) => a + b.count, 0)})</span>
             </button>
 
-            <button
-              disabled={isProcessingTurn}
-              onClick={() => {
-                soundManager.playSelect();
-                onFlee();
-              }}
-              className="py-2 sm:py-2.5 px-3 bg-slate-750 hover:bg-slate-700 disabled:opacity-50 text-slate-200 font-bold rounded-xl text-xs sm:text-sm shadow transition-colors flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4 text-slate-400" />
-              <span>Huir del Combate</span>
-            </button>
+            {canFlee && (
+              <button
+                disabled={isProcessingTurn}
+                onClick={() => {
+                  soundManager.playSelect();
+                  onFlee();
+                }}
+                className="py-2 sm:py-2.5 px-3 bg-slate-750 hover:bg-slate-700 disabled:opacity-50 text-slate-200 font-bold rounded-xl text-xs sm:text-sm shadow transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4 text-slate-400" />
+                <span>Huir del Combate</span>
+              </button>
+            )}
           </div>
         )}
 
@@ -1336,7 +1360,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
                 <Backpack className="w-3.5 h-3.5 text-amber-400" />
-                Selecciona un objeto para usar en combate:
+                {currentMember ? `${currentMember.name} usa un objeto (gasta su turno):` : 'Selecciona un objeto para usar en combate:'}
               </span>
               <button
                 onClick={() => setCombatMenu('MOVES_SELECT')}
