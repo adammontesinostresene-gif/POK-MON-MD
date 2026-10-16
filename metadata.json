@@ -1,0 +1,6 @@
+{
+  "name": "Pokémon Mundo Misterioso: Expedición Eventos",
+  "description": "Juego de rol y mazmorras por eventos y combates por turnos al estilo Pokémon Mundo Misterioso. Gestiona tu equipo mediante drag-and-drop y supera desafíos piso a piso.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

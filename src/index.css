@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    background-color: #0f172a;
+    color: #f8fafc;
+    overflow-x: hidden;
+  }
+}
+
+/* PMD Classic retro font style for titles and dialogue */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+}
+
+.font-retro {
+  font-family: 'Silkscreen', cursive;
+}
+
+/* PMD dialogue box aesthetic */
+.pmd-box {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 3px solid #38bdf8;
+  box-shadow: 0 0 0 2px #0369a1, 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.pmd-box-gold {
+  background: linear-gradient(180deg, #33240e 0%, #1c1305 100%);
+  border: 3px solid #fbbf24;
+  box-shadow: 0 0 0 2px #b45309, 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.pmd-button {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  border: 2px solid #93c5fd;
+  box-shadow: 0 4px 0 #1e3a8a;
+  transition: all 0.1s ease;
+}
+
+.pmd-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.pmd-button:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #1e3a8a;
+}
+
+/* Custom scrollbar for game menus */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: #38bdf8;
+  border-radius: 3px;
+}
