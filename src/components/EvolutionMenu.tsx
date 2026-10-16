@@ -3,6 +3,10 @@ import { Pokemon, PokemonType } from '../types/game';
 import {
   TYPE_COLORS,
   canPokemonEvolve,
+  learnLevelUpMoves,
+  isEvolutionOptionAvailable,
+  getEvolutionStatGains,
+  applyOfficialStats,
   evolvePokemon,
   EvolutionOption,
   getEvolutionOptions,
@@ -28,14 +32,18 @@ import {
 interface EvolutionMenuProps {
   activeTeam: Pokemon[];
   reserves: Pokemon[];
+  availableItems: string[];
   onUpdateTeam: (newActive: Pokemon[], newReserves: Pokemon[]) => void;
+  onConsumeItem: (itemName: string) => void;
   onBack: () => void;
 }
 
 export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
   activeTeam,
   reserves,
+  availableItems,
   onUpdateTeam,
+  onConsumeItem,
   onBack,
 }) => {
   // Currently inspected Pokémon
@@ -76,22 +84,35 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
 
   // Evolution eligibility analysis for inspected Pokemon
   const evolutionInfo = inspectedPokemon
-    ? canPokemonEvolve(inspectedPokemon)
+    ? canPokemonEvolve(inspectedPokemon, availableItems)
     : {
         hasEvolutions: false,
         canEvolve: false,
         options: [] as EvolutionOption[],
         minLevelRequired: 0,
         levelDeficit: 0,
+        requiredItems: [] as string[],
       };
 
   // Selected branch option
   const activeOption: EvolutionOption | undefined =
     evolutionInfo.options[selectedBranchIndex] || evolutionInfo.options[0];
 
+  // Readiness of the selected branch (each branch can need a different stone)
+  const optionReady =
+    !!inspectedPokemon && !!activeOption && isEvolutionOptionAvailable(inspectedPokemon, activeOption, availableItems);
+  const hasRequiredItem = !!activeOption?.requiredItem && availableItems.includes(activeOption.requiredItem);
+
+  const previewGains =
+    inspectedPokemon && activeOption ? getEvolutionStatGains(inspectedPokemon, activeOption) : null;
+  const ceremonyGains = evolvingState
+    ? getEvolutionStatGains(evolvingState.prevPokemon, evolvingState.chosenOption)
+    : null;
+  const formatGain = (value: number) => (value >= 0 ? `+${value}` : `${value}`);
+
   // Count how many are ready across all members
   const readyCount = [...activeTeam, ...reserves].filter(
-    (p) => canPokemonEvolve(p).canEvolve
+    (p) => canPokemonEvolve(p, availableItems).canEvolve
   ).length;
 
   // Handle Level Up (Training candy / test helper)
@@ -99,20 +120,25 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
     if (!inspectedPokemon) return;
     soundManager.playLevelUp();
 
-    const updatedPokemon: Pokemon = {
-      ...inspectedPokemon,
-      level: inspectedPokemon.level + 1,
-      stats: {
-        ...inspectedPokemon.stats,
-        maxHp: inspectedPokemon.stats.maxHp + 3,
-        hp: inspectedPokemon.stats.hp + 3,
-        attack: inspectedPokemon.stats.attack + 2,
-        defense: inspectedPokemon.stats.defense + 2,
-        spAttack: inspectedPokemon.stats.spAttack + 2,
-        spDefense: inspectedPokemon.stats.spDefense + 2,
-        speed: inspectedPokemon.stats.speed + 1,
-      },
-    };
+    const leveled = { ...inspectedPokemon, level: inspectedPokemon.level + 1 };
+    const official = applyOfficialStats(leveled);
+    const statUpdated: Pokemon =
+      official !== leveled
+        ? official
+        : {
+            ...leveled,
+            stats: {
+              ...inspectedPokemon.stats,
+              maxHp: inspectedPokemon.stats.maxHp + 3,
+              hp: inspectedPokemon.stats.hp + 3,
+              attack: inspectedPokemon.stats.attack + 2,
+              defense: inspectedPokemon.stats.defense + 2,
+              spAttack: inspectedPokemon.stats.spAttack + 2,
+              spDefense: inspectedPokemon.stats.spDefense + 2,
+              speed: inspectedPokemon.stats.speed + 1,
+            },
+          };
+    const { pokemon: updatedPokemon, learned, pending } = learnLevelUpMoves(statUpdated);
 
     const isInActive = activeTeam.some((p) => p.id === inspectedPokemon.id);
     if (isInActive) {
@@ -127,14 +153,25 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
       onUpdateTeam(activeTeam, newReserves);
     }
 
-    showToast(`¡${inspectedPokemon.name} subió al Nivel ${updatedPokemon.level}!`);
+    showToast(
+      `¡${inspectedPokemon.name} subió al Nivel ${updatedPokemon.level}!${
+        learned.length > 0 ? ` Aprendió ${learned.join(', ')}.` : ''
+      }${
+        pending.length > 0
+          ? ` Puede equipar ${pending.map((m) => m.name).join(', ')} desde Equipo.`
+          : ''
+      }`
+    );
   };
 
   // Trigger Evolution Ceremony
   const handleInitiateEvolution = () => {
-    if (!inspectedPokemon || !activeOption || !evolutionInfo.canEvolve) return;
+    if (!inspectedPokemon || !activeOption || !optionReady) return;
 
     soundManager.playEvolution();
+    if (activeOption.requiredItem) {
+      onConsumeItem(activeOption.requiredItem);
+    }
 
     const evolved = evolvePokemon(inspectedPokemon, activeOption);
 
@@ -180,7 +217,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
 
   // Filtered reserves list
   const filteredReserves = reserves.filter((p) => {
-    const info = canPokemonEvolve(p);
+    const info = canPokemonEvolve(p, availableItems);
     if (filterMode === 'ready') return info.canEvolve;
     if (filterMode === 'pending') return info.hasEvolutions && !info.canEvolve;
     return true;
@@ -280,7 +317,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
             <div className="grid grid-cols-2 short:grid-cols-4 gap-1.5 sm:gap-3">
               {activeTeam.map((pokemon, idx) => {
                 const isSelected = pokemon.id === inspectedPokemon?.id;
-                const info = canPokemonEvolve(pokemon);
+                const info = canPokemonEvolve(pokemon, availableItems);
 
                 return (
                   <button
@@ -339,7 +376,13 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                           </span>
                         ) : info.hasEvolutions ? (
                           <span className="text-[9px] sm:text-[11px] text-slate-400 font-mono">
-                            Req. Nv. {info.minLevelRequired}<span className="hidden sm:inline"> (Faltan {info.levelDeficit})</span>
+                            {info.minLevelRequired > 0 ? (
+                              <>
+                                Req. Nv. {info.minLevelRequired}<span className="hidden sm:inline"> (Faltan {info.levelDeficit})</span>
+                              </>
+                            ) : (
+                              <>Req. {info.requiredItems.join(' / ')}</>
+                            )}
                           </span>
                         ) : (
                           <span className="text-[9px] sm:text-[11px] text-slate-500 italic">
@@ -412,7 +455,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
               <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 short:grid-cols-5 gap-1.5 sm:gap-2.5 min-h-0 overflow-y-auto content-start pr-1">
                 {filteredReserves.map((pokemon) => {
                   const isSelected = pokemon.id === inspectedPokemon?.id;
-                  const info = canPokemonEvolve(pokemon);
+                  const info = canPokemonEvolve(pokemon, availableItems);
 
                   return (
                     <button
@@ -455,7 +498,9 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                           </span>
                         ) : info.hasEvolutions ? (
                           <span className="text-[10px] text-slate-400 font-mono">
-                            Req: Nv. {info.minLevelRequired}
+                            {info.minLevelRequired > 0
+                              ? `Req: Nv. ${info.minLevelRequired}`
+                              : `Req: ${info.requiredItems.join(' / ')}`}
                           </span>
                         ) : (
                           <span className="text-[10px] text-slate-500 italic">
@@ -558,7 +603,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                 <div className="flex flex-col items-center justify-center w-2/12">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-                      evolutionInfo.canEvolve
+                      optionReady
                         ? 'bg-amber-500 text-amber-950 shadow-lg animate-pulse'
                         : 'bg-slate-800 text-slate-600'
                     }`}
@@ -581,7 +626,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                           size={44}
                           showFrame={true}
                           className={
-                            evolutionInfo.canEvolve
+                            optionReady
                               ? 'ring-2 ring-emerald-400 ring-offset-2 ring-offset-slate-900 shadow-xl'
                               : 'opacity-70'
                           }
@@ -591,7 +636,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                         {activeOption.targetName}
                       </span>
                       <span className="text-[11px] font-mono text-slate-400">
-                        Req. Nv. {activeOption.minLevel}
+                        {activeOption.requiredItem ? activeOption.requiredItem : `Req. Nv. ${activeOption.minLevel}`}
                       </span>
                       <div className="flex gap-1 mt-1 flex-wrap justify-center short:hidden">
                         {activeOption.types.map((t) => (
@@ -622,20 +667,20 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
               {activeOption ? (
                 <div
                   className={`rounded-xl p-2.5 sm:p-3 short:p-2 border transition-all ${
-                    evolutionInfo.canEvolve
+                    optionReady
                       ? 'bg-emerald-950/30 border-emerald-500/60'
                       : 'bg-slate-950/80 border-slate-800'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      {evolutionInfo.canEvolve ? (
+                      {optionReady ? (
                         <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                       ) : (
                         <XCircle className="w-4 h-4 text-amber-400" />
                       )}
                       <span className="font-bold text-xs text-white">
-                        {evolutionInfo.canEvolve
+                        {optionReady
                           ? '¡Requisitos Cumplidos!'
                           : 'Requisitos de Evolución'}
                       </span>
@@ -643,36 +688,44 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
 
                     <span
                       className={`text-xs font-mono font-bold ${
-                        evolutionInfo.canEvolve ? 'text-emerald-400' : 'text-amber-400'
+                        optionReady ? 'text-emerald-400' : 'text-amber-400'
                       }`}
                     >
-                      Nv. {inspectedPokemon.level} / {activeOption.minLevel}
+                      {activeOption.requiredItem
+                        ? `${activeOption.requiredItem} ${hasRequiredItem ? '✔' : '✘'}`
+                        : `Nv. ${inspectedPokemon.level} / ${activeOption.minLevel}`}
                     </span>
                   </div>
 
-                  {/* Level progress bar */}
-                  <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-2">
-                    <div
-                      className={`h-full transition-all duration-300 ${
-                        evolutionInfo.canEvolve ? 'bg-emerald-500' : 'bg-amber-500'
-                      }`}
-                      style={{
-                        width: `${Math.min(
-                          100,
-                          (inspectedPokemon.level / activeOption.minLevel) * 100
-                        )}%`,
-                      }}
-                    />
-                  </div>
+                  {/* Level progress bar (level-based branches only) */}
+                  {!activeOption.requiredItem && (
+                    <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-2">
+                      <div
+                        className={`h-full transition-all duration-300 ${
+                          optionReady ? 'bg-emerald-500' : 'bg-amber-500'
+                        }`}
+                        style={{
+                          width: `${Math.min(
+                            100,
+                            (inspectedPokemon.level / activeOption.minLevel) * 100
+                          )}%`,
+                        }}
+                      />
+                    </div>
+                  )}
 
                   <p className="hidden tall:block text-[11px] text-slate-300 leading-relaxed">
-                    {evolutionInfo.canEvolve ? (
+                    {optionReady ? (
                       <span className="text-emerald-300 font-medium">
-                        ✨ {inspectedPokemon.name} ha alcanzado la madurez necesaria. Presiona el botón para dar paso a {activeOption.targetName}.
+                        ✨ {inspectedPokemon.name} está listo. Presiona el botón para dar paso a {activeOption.targetName}.
+                      </span>
+                    ) : activeOption.requiredItem ? (
+                      <span className="text-slate-400">
+                        ⚠️ Necesitas una <strong className="text-amber-300">{activeOption.requiredItem}</strong> en la mochila o en el almacén. Se gastará al evolucionar.
                       </span>
                     ) : (
                       <span className="text-slate-400">
-                        ⚠️ Faltan <strong className="text-amber-300">{evolutionInfo.levelDeficit} niveles</strong>. Puedes ganar experiencia derrotando enemigos en mazmorras o usar el botón de entrenamiento rápido.
+                        ⚠️ Faltan <strong className="text-amber-300">{Math.max(0, activeOption.minLevel - inspectedPokemon.level)} niveles</strong>. Puedes ganar experiencia derrotando enemigos en mazmorras o usar el botón de entrenamiento rápido.
                       </span>
                     )}
                   </p>
@@ -691,7 +744,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                         <Heart className="w-3 h-3 text-red-400" /> PS
                       </span>
                       <span className="font-bold text-emerald-400">
-                        +{activeOption.statGains.hp}
+                        {formatGain(previewGains!.hp)}
                       </span>
                     </div>
                     <div className="bg-slate-950/80 p-2 rounded border border-slate-800 flex justify-between items-center">
@@ -699,7 +752,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                         <Sword className="w-3 h-3 text-amber-400" /> Atq
                       </span>
                       <span className="font-bold text-emerald-400">
-                        +{activeOption.statGains.attack}
+                        {formatGain(previewGains!.attack)}
                       </span>
                     </div>
                     <div className="bg-slate-950/80 p-2 rounded border border-slate-800 flex justify-between items-center">
@@ -707,19 +760,19 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                         <Shield className="w-3 h-3 text-blue-400" /> Def
                       </span>
                       <span className="font-bold text-emerald-400">
-                        +{activeOption.statGains.defense}
+                        {formatGain(previewGains!.defense)}
                       </span>
                     </div>
                     <div className="bg-slate-950/80 p-2 rounded border border-slate-800 flex justify-between items-center">
                       <span className="text-slate-400">At.Esp</span>
                       <span className="font-bold text-emerald-400">
-                        +{activeOption.statGains.spAttack}
+                        {formatGain(previewGains!.spAttack)}
                       </span>
                     </div>
                     <div className="bg-slate-950/80 p-2 rounded border border-slate-800 flex justify-between items-center">
                       <span className="text-slate-400">Def.Esp</span>
                       <span className="font-bold text-emerald-400">
-                        +{activeOption.statGains.spDefense}
+                        {formatGain(previewGains!.spDefense)}
                       </span>
                     </div>
                     <div className="bg-slate-950/80 p-2 rounded border border-slate-800 flex justify-between items-center">
@@ -727,33 +780,16 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                         <Zap className="w-3 h-3 text-yellow-400" /> Vel
                       </span>
                       <span className="font-bold text-emerald-400">
-                        +{activeOption.statGains.speed}
+                        {formatGain(previewGains!.speed)}
                       </span>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* New Move Unlock Preview */}
-              {activeOption?.learnedMove && (
-                <div className="p-2.5 rounded-lg bg-amber-950/20 border border-amber-500/30 text-xs">
-                  <div className="flex items-center justify-between text-amber-300 font-bold mb-0.5">
-                    <span>Nuevo Movimiento Desbloqueable:</span>
-                    <span className="font-normal text-slate-300">
-                      {activeOption.learnedMove.name}
-                    </span>
-                  </div>
-                  <p className="hidden tall:block text-[10px] text-slate-400">
-                    Tipo: {activeOption.learnedMove.type} · Potencia:{' '}
-                    {activeOption.learnedMove.power} · Precisión:{' '}
-                    {activeOption.learnedMove.accuracy}%
-                  </p>
-                </div>
-              )}
-
               {/* Main Evolution Button */}
               <div className="pt-1">
-                {evolutionInfo.canEvolve && activeOption ? (
+                {optionReady && activeOption ? (
                   <button
                     onClick={handleInitiateEvolution}
                     className="w-full py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold rounded-xl text-sm shadow-xl flex items-center justify-center gap-2 transform active:scale-95 transition-all border border-emerald-400"
@@ -767,7 +803,9 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                     className="w-full py-2.5 sm:py-3 bg-slate-800/80 border border-slate-700/80 text-slate-500 font-bold rounded-xl text-xs flex items-center justify-center gap-2 cursor-not-allowed"
                   >
                     <span>
-                      🔒 No cumple requisitos (Nivel {activeOption.minLevel} requerido)
+                      🔒 {activeOption.requiredItem
+                        ? `Necesitas ${activeOption.requiredItem}`
+                        : `No cumple requisitos (Nivel ${activeOption.minLevel} requerido)`}
                     </span>
                   </button>
                 ) : (
@@ -858,50 +896,40 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                   <div className="bg-slate-900 p-2 rounded border border-slate-800 flex justify-between items-center">
                     <span className="text-slate-400">PS Máx:</span>
                     <span className="text-emerald-400 font-bold">
-                      +{evolvingState.chosenOption.statGains.hp}
+                      {formatGain(ceremonyGains!.hp)}
                     </span>
                   </div>
                   <div className="bg-slate-900 p-2 rounded border border-slate-800 flex justify-between items-center">
                     <span className="text-slate-400">Ataque:</span>
                     <span className="text-emerald-400 font-bold">
-                      +{evolvingState.chosenOption.statGains.attack}
+                      {formatGain(ceremonyGains!.attack)}
                     </span>
                   </div>
                   <div className="bg-slate-900 p-2 rounded border border-slate-800 flex justify-between items-center">
                     <span className="text-slate-400">Defensa:</span>
                     <span className="text-emerald-400 font-bold">
-                      +{evolvingState.chosenOption.statGains.defense}
+                      {formatGain(ceremonyGains!.defense)}
                     </span>
                   </div>
                   <div className="bg-slate-900 p-2 rounded border border-slate-800 flex justify-between items-center">
                     <span className="text-slate-400">At.Esp:</span>
                     <span className="text-emerald-400 font-bold">
-                      +{evolvingState.chosenOption.statGains.spAttack}
+                      {formatGain(ceremonyGains!.spAttack)}
                     </span>
                   </div>
                   <div className="bg-slate-900 p-2 rounded border border-slate-800 flex justify-between items-center">
                     <span className="text-slate-400">Def.Esp:</span>
                     <span className="text-emerald-400 font-bold">
-                      +{evolvingState.chosenOption.statGains.spDefense}
+                      {formatGain(ceremonyGains!.spDefense)}
                     </span>
                   </div>
                   <div className="bg-slate-900 p-2 rounded border border-slate-800 flex justify-between items-center">
                     <span className="text-slate-400">Vel:</span>
                     <span className="text-emerald-400 font-bold">
-                      +{evolvingState.chosenOption.statGains.speed}
+                      {formatGain(ceremonyGains!.speed)}
                     </span>
                   </div>
                 </div>
-
-                {evolvingState.chosenOption.learnedMove && (
-                  <div className="pt-2 border-t border-slate-800 text-xs text-emerald-300 flex items-center justify-between">
-                    <span>Nuevo Movimiento Aprendido:</span>
-                    <strong className="text-white">
-                      {evolvingState.chosenOption.learnedMove.name} (
-                      {evolvingState.chosenOption.learnedMove.type})
-                    </strong>
-                  </div>
-                )}
               </div>
             )}
 

@@ -46,15 +46,15 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ hasSave, notice, onSta
       </div>
 
       {/* Centerpiece Hero Lockup & Bespoke Title SVG */}
-      <div className="relative z-10 flex flex-col items-center max-w-xl text-center px-4 my-auto">
+      <div className="relative z-10 flex flex-col items-center w-full max-w-4xl text-center px-4 my-auto">
         {/* Pikachu Hero Centerpiece from PMD Sprite Repository */}
         <div className="w-28 h-28 sm:w-36 sm:h-36 short:w-20 short:h-20 mb-4 short:mb-1 relative flex items-center justify-center animate-bounce duration-1000">
           <PmdPortrait pokedexId={25} size={88} emotion="Joyous" showFrame={true} />
         </div>
 
         {/* Bespoke inline SVG Title Lockup */}
-        <div className="w-full max-w-lg short:max-w-xs mb-2 short:mb-1">
-          <svg viewBox="0 0 500 110" className="w-full h-auto drop-shadow-xl">
+        <div className="w-full max-w-4xl short:max-w-2xl mb-2 short:mb-1">
+          <svg viewBox="45 8 410 94" className="w-full h-auto drop-shadow-xl">
             <defs>
               <linearGradient id="titleGold" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#fef08a" />
@@ -75,9 +75,9 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ hasSave, notice, onSta
               fill="url(#titleGold)"
               stroke="#451a03"
               strokeWidth="4"
-              fontWeight="900"
+              fontWeight="700"
               fontSize="44"
-              fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+              fontFamily="'Fredoka', system-ui, sans-serif"
               letterSpacing="2"
             >
               POKÉMON
@@ -91,9 +91,9 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ hasSave, notice, onSta
               fill="url(#subCyan)"
               stroke="#082f49"
               strokeWidth="3"
-              fontWeight="800"
+              fontWeight="700"
               fontSize="26"
-              fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+              fontFamily="'Fredoka', system-ui, sans-serif"
               letterSpacing="3"
             >
               MUNDO MISTERIOSO

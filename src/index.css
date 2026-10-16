@@ -53,6 +53,39 @@
   box-shadow: 0 0 0 2px #b45309, 0 8px 20px rgba(0, 0, 0, 0.6);
 }
 
+/* Dream background of the personality test (same layers as nrosa01.github.io/pmd-quiz-online) */
+.pmd-dream-back,
+.pmd-dream-front {
+  background-repeat: repeat-x;
+  background-size: cover;
+  image-rendering: pixelated;
+}
+
+.pmd-dream-back {
+  background-image: url('https://nrosa01.github.io/pmd-quiz-online/img/others/dreambackloop.png');
+  animation: pmd-dream-scroll-right 360s linear infinite, pmd-dream-hue 10s linear infinite;
+}
+
+.pmd-dream-front {
+  background-image: url('https://nrosa01.github.io/pmd-quiz-online/img/others/dreamfrontloop.png');
+  animation: pmd-dream-scroll-left 360s linear infinite, pmd-dream-hue 10s linear infinite;
+}
+
+@keyframes pmd-dream-scroll-right {
+  from { background-position: 0% 0; }
+  to { background-position: 100% 0; }
+}
+
+@keyframes pmd-dream-scroll-left {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
+
+@keyframes pmd-dream-hue {
+  from { filter: brightness(0.75) hue-rotate(0deg); }
+  to { filter: brightness(0.75) hue-rotate(360deg); }
+}
+
 /* PMD menu window: blue gradient panel with a light double frame.
    Unlayered on purpose so it wins over Tailwind's bg/border/rounded utilities. */
 .pmd-window {

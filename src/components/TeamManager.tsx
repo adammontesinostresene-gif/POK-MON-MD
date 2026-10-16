@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Pokemon, PokemonType } from '../types/game';
-import { TYPE_COLORS } from '../data/pokemonData';
+import { Move, Pokemon, PokemonType } from '../types/game';
+import { TYPE_COLORS, getMovePool, rememberMoves } from '../data/pokemonData';
 import { soundManager } from '../utils/audio';
 import { Shield, Zap, Sparkles, Heart, Sword, ArrowLeft, ArrowUpDown, Info, Check, UserCheck } from 'lucide-react';
 import { PmdSprite, PmdPortrait } from './PmdSprite';
@@ -32,6 +32,50 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
   const [notification, setNotification] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<'boxes' | 'details'>('boxes');
   const [releaseCandidate, setReleaseCandidate] = useState<Pokemon | null>(null);
+
+  // Move organizer (drag & drop on desktop, tap-to-select on touch screens)
+  const [moveDrag, setMoveDrag] = useState<{ from: 'pool' | 'slot'; name: string } | null>(null);
+  const [selectedPoolMove, setSelectedPoolMove] = useState<string | null>(null);
+
+  const updateInspectedMoves = (moves: Move[]) => {
+    if (!inspectedPokemon) return;
+    const updated = rememberMoves({ ...inspectedPokemon, moves }, moves);
+    onUpdateTeam(
+      activeTeam.map((p) => (p.id === updated.id ? updated : p)),
+      reserves.map((p) => (p.id === updated.id ? updated : p))
+    );
+    setInspectedPokemon(updated);
+    setSelectedPoolMove(null);
+    soundManager.playDrop();
+  };
+
+  const equipMove = (name: string, slotIdx: number) => {
+    if (!inspectedPokemon) return;
+    const moves = [...inspectedPokemon.moves];
+    const currentIdx = moves.findIndex((m) => m.name === name);
+    if (currentIdx !== -1) {
+      // Already equipped: reorder by swapping slots
+      if (slotIdx >= moves.length || currentIdx === slotIdx) return;
+      [moves[currentIdx], moves[slotIdx]] = [moves[slotIdx], moves[currentIdx]];
+      updateInspectedMoves(moves);
+      return;
+    }
+    const move = getMovePool(inspectedPokemon).find((m) => m.name === name);
+    if (!move) return;
+    const fresh = { ...move, pp: move.maxPp };
+    if (slotIdx >= moves.length) moves.push(fresh);
+    else moves[slotIdx] = fresh;
+    updateInspectedMoves(moves);
+  };
+
+  const unequipMove = (name: string) => {
+    if (!inspectedPokemon) return;
+    if (inspectedPokemon.moves.length <= 1) {
+      showNotification('¡Debe conservar al menos un movimiento!');
+      return;
+    }
+    updateInspectedMoves(inspectedPokemon.moves.filter((m) => m.name !== name));
+  };
 
   // The current leader can never be released, so the team always keeps one
   const canRelease = (pokemon: Pokemon) => activeTeam[0]?.id !== pokemon.id;
@@ -660,30 +704,75 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                 </div>
               </div>
 
-              {/* 4 Moves Set */}
-              <div className="short:col-span-2">
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">
-                  Movimientos (4 Ataques)
+              {/* Equipped moves (4 slots) + lifetime move pool */}
+              <div className="short:col-span-2 flex flex-col gap-1.5">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                  Movimientos equipados ({inspectedPokemon.moves.length}/4)
                 </span>
                 <div className="grid grid-cols-1 short:grid-cols-2 gap-1.5">
-                  {inspectedPokemon.moves.map((move) => {
+                  {[0, 1, 2, 3].map((slotIdx) => {
+                    const move = inspectedPokemon.moves[slotIdx];
+                    const dropHandlers = {
+                      onDragOver: (e: React.DragEvent) => e.preventDefault(),
+                      onDrop: (e: React.DragEvent) => {
+                        e.preventDefault();
+                        if (moveDrag) equipMove(moveDrag.name, slotIdx);
+                        setMoveDrag(null);
+                      },
+                    };
+                    if (!move) {
+                      return (
+                        <div
+                          key={`empty_move_${slotIdx}`}
+                          {...dropHandlers}
+                          onClick={() => selectedPoolMove && equipMove(selectedPoolMove, slotIdx)}
+                          className={`rounded p-2 border border-dashed text-[10px] text-center transition-colors ${
+                            selectedPoolMove ? 'border-amber-400 text-amber-300 cursor-pointer' : 'border-slate-700 text-slate-500'
+                          }`}
+                        >
+                          Hueco libre · arrastra o toca un movimiento aprendido
+                        </div>
+                      );
+                    }
                     const col = TYPE_COLORS[move.type];
                     return (
                       <div
                         key={move.id}
-                        className="bg-slate-800/90 rounded p-2 border border-slate-700 flex flex-col gap-0.5"
+                        draggable
+                        onDragStart={() => setMoveDrag({ from: 'slot', name: move.name })}
+                        onDragEnd={() => setMoveDrag(null)}
+                        {...dropHandlers}
+                        onClick={() => selectedPoolMove && equipMove(selectedPoolMove, slotIdx)}
+                        className={`relative bg-slate-800/90 rounded p-2 border flex flex-col gap-0.5 cursor-grab active:cursor-grabbing transition-colors ${
+                          selectedPoolMove ? 'border-amber-400/80' : 'border-slate-700'
+                        }`}
                       >
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="font-bold text-white flex items-center gap-1.5">
+                        <div className="flex items-center justify-between text-xs gap-1">
+                          <span className="font-bold text-white flex items-center gap-1.5 min-w-0">
                             <span
-                              className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${col.bg} ${col.text}`}
+                              className={`text-[9px] px-1.5 py-0.2 rounded font-semibold shrink-0 ${col.bg} ${col.text}`}
                             >
                               {move.type}
                             </span>
-                            {move.name}
+                            <span className="truncate">{move.name}</span>
                           </span>
-                          <span className="text-slate-400 font-mono text-[11px] tabular-nums">
-                            PP {move.pp}/{move.maxPp}
+                          <span className="flex items-center gap-1.5 shrink-0">
+                            <span className="text-slate-400 font-mono text-[11px] tabular-nums">
+                              PP {move.pp}/{move.maxPp}
+                            </span>
+                            {inspectedPokemon.moves.length > 1 && (
+                              <button
+                                type="button"
+                                title="Quitar movimiento"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  unequipMove(move.name);
+                                }}
+                                className="w-4 h-4 rounded-full bg-red-700 hover:bg-red-600 text-white text-[9px] leading-none flex items-center justify-center"
+                              >
+                                ✕
+                              </button>
+                            )}
                           </span>
                         </div>
                         <div className="flex items-center justify-between text-[10px] text-slate-400 mt-0.5">
@@ -704,6 +793,66 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                     );
                   })}
                 </div>
+
+                {(() => {
+                  const pool = getMovePool(inspectedPokemon).filter(
+                    (m) => !inspectedPokemon.moves.some((e) => e.name === m.name)
+                  );
+                  return (
+                    <div
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (moveDrag?.from === 'slot') unequipMove(moveDrag.name);
+                        setMoveDrag(null);
+                      }}
+                      className={`rounded-lg border border-dashed p-1.5 transition-colors ${
+                        moveDrag?.from === 'slot' ? 'border-red-400 bg-red-950/30' : 'border-slate-700'
+                      }`}
+                    >
+                      <span className="text-[10px] text-slate-400 block mb-1">
+                        Movimientos aprendidos · arrastra a un hueco o tócalos y luego toca el que quieres sustituir
+                      </span>
+                      {pool.length === 0 ? (
+                        <span className="text-[10px] text-slate-500 italic">No hay más movimientos disponibles.</span>
+                      ) : (
+                        <div className="flex flex-wrap gap-1">
+                          {pool.map((move) => {
+                            const col = TYPE_COLORS[move.type];
+                            const isSelected = selectedPoolMove === move.name;
+                            return (
+                              <button
+                                type="button"
+                                key={move.id}
+                                draggable
+                                onDragStart={() => setMoveDrag({ from: 'pool', name: move.name })}
+                                onDragEnd={() => setMoveDrag(null)}
+                                onClick={() => {
+                                  soundManager.playSelect();
+                                  if (inspectedPokemon.moves.length < 4) {
+                                    equipMove(move.name, inspectedPokemon.moves.length);
+                                  } else {
+                                    setSelectedPoolMove(isSelected ? null : move.name);
+                                  }
+                                }}
+                                title={move.description}
+                                className={`flex items-center gap-1 px-1.5 py-0.5 rounded border text-[10px] cursor-grab active:cursor-grabbing transition-colors ${
+                                  isSelected
+                                    ? 'border-amber-400 bg-amber-950/60 text-amber-200'
+                                    : 'border-slate-600 bg-slate-800/80 text-slate-200 hover:border-slate-400'
+                                }`}
+                              >
+                                <span className={`w-2 h-2 rounded-full ${col.bg}`} />
+                                <span>{move.name}</span>
+                                <span className="text-slate-400">{move.power > 0 ? move.power : 'E'}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Actions for this pokemon */}

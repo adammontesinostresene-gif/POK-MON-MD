@@ -61,7 +61,6 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   const [inCombat, setInCombat] = useState<boolean>(false);
   const [eventResolved, setEventResolved] = useState<boolean>(false);
   const [resolutionMessage, setResolutionMessage] = useState<string | null>(null);
-  const [arrivalNotice, setArrivalNotice] = useState<string | null>(null);
 
   // In-Dungeon Bag Modal
   const [isBagOpen, setIsBagOpen] = useState<boolean>(false);
@@ -83,7 +82,6 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     setCurrentEvent(event);
     setEventResolved(false);
     setResolutionMessage(null);
-    setArrivalNotice(null);
     setInCombat(false);
 
     // Consume 6 belly per floor
@@ -277,15 +275,6 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     setGold(finalGold);
     setInventory(finalInventory);
 
-    const loot = goldGained > 0 ? `+${goldGained} Pokécuartos` : droppedItem ? `una ${droppedItem.name}` : 'sin botín';
-    const victorySummary = `¡Victoria en el piso ${currentFloor}! ${loot}${
-      recruitedPokemon
-        ? addToActiveTeam && finalTeam.length <= 4
-          ? ` · ¡${recruitedPokemon.name} se unió a tu equipo activo!`
-          : ` · ¡${recruitedPokemon.name} se unió a tu campamento de reserva!`
-        : ''
-    }`;
-
     // Winning a fight takes the team straight to the stairs
     if (currentFloor >= dungeon.floorsCount) {
       soundManager.playVictory();
@@ -295,7 +284,6 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
     loadFloor(currentFloor + 1, finalTeam);
     setCurrentFloor((f) => f + 1);
-    setArrivalNotice(victorySummary);
   };
 
   // Next Floor Progression
@@ -540,11 +528,6 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
               {/* Title & Narrative Description */}
               <div>
-                {arrivalNotice && (
-                  <p className="mb-1.5 mx-auto max-w-xl text-[11px] sm:text-xs font-semibold text-emerald-200 bg-emerald-950/80 border border-emerald-500/50 rounded-lg px-2.5 py-1">
-                    ✨ {arrivalNotice}
-                  </p>
-                )}
                 <h2 className="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight">
                   {currentEvent.title}
                 </h2>

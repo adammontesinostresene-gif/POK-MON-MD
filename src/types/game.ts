@@ -20,6 +20,13 @@ export type PokemonType =
 
 export type MoveCategory = 'physical' | 'special' | 'status';
 
+export type BattleStat = 'attack' | 'defense' | 'spAttack' | 'spDefense' | 'speed' | 'accuracy' | 'evasion';
+
+export interface StatChange {
+  stat: BattleStat;
+  stages: number;
+}
+
 export interface Move {
   id: string;
   name: string;
@@ -31,8 +38,13 @@ export interface Move {
   maxPp: number;
   description: string;
   target?: 'enemy' | 'self' | 'all_enemies';
-  statusEffect?: 'paralysis' | 'burn' | 'sleep' | 'poison' | 'attack_boost' | 'defense_boost';
+  statusEffect?: 'paralysis' | 'burn' | 'sleep' | 'poison' | 'freeze' | 'attack_boost' | 'defense_boost';
+  statusChance?: number; // % chance to inflict statusEffect, 100 = always
   healPercent?: number;
+  // Battle-only stat stage changes (reset after each floor battle)
+  statChanges?: StatChange[];
+  statTarget?: 'self' | 'target';
+  statChance?: number; // % chance for damaging moves, 100 = always
 }
 
 export interface PokemonStats {
@@ -45,7 +57,7 @@ export interface PokemonStats {
   speed: number;
 }
 
-export type StatusAilment = 'none' | 'paralysis' | 'burn' | 'sleep' | 'poison';
+export type StatusAilment = 'none' | 'paralysis' | 'burn' | 'sleep' | 'poison' | 'freeze';
 
 export interface Pokemon {
   id: string;
@@ -64,6 +76,10 @@ export interface Pokemon {
   artworkUrl: string;
   iconUrl: string;
   description: string;
+  // Chance (0-1) that this wild Pokémon asks to join after being defeated
+  recruitRate?: number;
+  // Every move learned during its life (kept across evolutions), equippable from the team screen
+  learnedMoves?: Move[];
 }
 
 export type ItemCategory = 'food' | 'healing' | 'seed' | 'orb' | 'special';
@@ -90,6 +106,8 @@ export interface Dungeon {
   recommendedLevel: number;
   enemiesPool: string[]; // Pokemon IDs or templates
   bossId: string;
+  bossLevel?: number; // defaults to recommendedLevel + 3
+  bossCount?: number; // how many copies of the boss appear (default 1)
   rewards: {
     gold: number;
     exp: number;
@@ -151,6 +169,7 @@ export interface RescueMission {
 
 export type ViewScreen =
   | 'TITLE'
+  | 'PERSONALITY_QUIZ'
   | 'HUB'
   | 'DUNGEON_EXPLORE'
   | 'COMBAT'

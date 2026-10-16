@@ -9,6 +9,7 @@ import { HubMenu } from './components/HubMenu';
 import { TeamManager } from './components/TeamManager';
 import { EvolutionMenu } from './components/EvolutionMenu';
 import { DungeonView } from './components/DungeonView';
+import { PersonalityQuiz } from './components/PersonalityQuiz';
 import {
   Pokemon,
   Dungeon,
@@ -17,21 +18,26 @@ import {
   ViewScreen,
 } from './types/game';
 import {
-  createPikachuStarter,
-  INITIAL_RESERVES,
+  createStarter,
+  applyOfficialMoves,
+  calculateStats,
   INITIAL_MISSIONS,
 } from './data/pokemonData';
 import { soundManager } from './utils/audio';
 import { clearSave, loadGame, saveGame } from './utils/saveGame';
 import { Award, AlertTriangle, ArrowRight, RotateCcw } from 'lucide-react';
 
-const restorePokemon = (p: Pokemon): Pokemon => ({
-  ...p,
-  stats: { ...p.stats, hp: p.stats.maxHp },
-  moves: p.moves.map((m) => ({ ...m, pp: m.maxPp })),
-  status: 'none',
-  statusTurns: 0,
-});
+const restorePokemon = (p: Pokemon): Pokemon => {
+  // Recomputing from official bases also migrates saves made with the old hand-tuned stats
+  const stats = calculateStats(p.pokedexId, p.level) ?? p.stats;
+  return {
+    ...p,
+    stats: { ...stats, hp: stats.maxHp },
+    moves: p.moves.map((m) => ({ ...m, pp: m.maxPp })),
+    status: 'none',
+    statusTurns: 0,
+  };
+};
 
 export default function App() {
   // Screen state
@@ -41,12 +47,16 @@ export default function App() {
   const [initialSave] = useState(() => loadGame());
   const [hasSave, setHasSave] = useState<boolean>(initialSave !== null);
   const abandonedExpedition = initialSave?.inDungeon ?? false;
+  const loadSaved = (p: Pokemon) =>
+    restorePokemon(initialSave?.version === 1 ? applyOfficialMoves(p) : p);
 
-  // Player state: starts with ONLY Pikachu in active team as requested!
+  // New games start empty: the personality test picks the single starter
   const [activeTeam, setActiveTeam] = useState<Pokemon[]>(() =>
-    initialSave ? initialSave.activeTeam.map(restorePokemon) : [createPikachuStarter()]
+    initialSave ? initialSave.activeTeam.map(loadSaved) : []
   );
-  const [reserves, setReserves] = useState<Pokemon[]>(initialSave?.reserves ?? INITIAL_RESERVES);
+  const [reserves, setReserves] = useState<Pokemon[]>(() =>
+    initialSave ? initialSave.reserves.map(loadSaved) : []
+  );
   const [gold, setGold] = useState<number>(
     initialSave && !abandonedExpedition ? initialSave.gold : 0
   );
@@ -67,9 +77,9 @@ export default function App() {
 
   // Auto-save whenever progress changes (not on the title screen, so a save is never overwritten before choosing)
   useEffect(() => {
-    if (screen === 'TITLE') return;
+    if (screen === 'TITLE' || screen === 'PERSONALITY_QUIZ') return;
     saveGame({
-      version: 1,
+      version: 2,
       activeTeam,
       reserves,
       gold,
@@ -85,20 +95,27 @@ export default function App() {
   // Handlers
   const handleStartFromTitle = () => {
     soundManager.startBgm('hub');
-    setScreen('HUB');
+    setScreen(activeTeam.length > 0 ? 'HUB' : 'PERSONALITY_QUIZ');
   };
 
   const handleNewGame = () => {
     clearSave();
-    setActiveTeam([createPikachuStarter()]);
-    setReserves(INITIAL_RESERVES);
+    setActiveTeam([]);
+    setReserves([]);
     setGold(0);
     setBankGold(0);
     setInventory([]);
     setStorage([]);
     setMissions(INITIAL_MISSIONS);
     setHasSave(false);
-    handleStartFromTitle();
+    soundManager.startBgm('hub');
+    setScreen('PERSONALITY_QUIZ');
+  };
+
+  const handleQuizComplete = (pokedexId: number) => {
+    setActiveTeam([createStarter(pokedexId)]);
+    setReserves([]);
+    setScreen('HUB');
   };
 
   const handleSelectDungeon = (dungeon: Dungeon) => {
@@ -153,6 +170,9 @@ export default function App() {
         />
       )}
 
+      {/* 1b. Personality test that picks the starter */}
+      {screen === 'PERSONALITY_QUIZ' && <PersonalityQuiz onComplete={handleQuizComplete} />}
+
       {/* 2. Hub Menu */}
       {screen === 'HUB' && (
         <HubMenu
@@ -200,9 +220,27 @@ export default function App() {
         <EvolutionMenu
           activeTeam={activeTeam}
           reserves={reserves}
+          availableItems={[...inventory, ...storage].filter((it) => it.count > 0).map((it) => it.name)}
           onUpdateTeam={(newActive, newReserves) => {
             setActiveTeam(newActive);
             setReserves(newReserves);
+          }}
+          onConsumeItem={(itemName) => {
+            // Spend from the bag first, then from Kangaskhan's storage
+            const consumeFrom = (items: Item[]) => {
+              const idx = items.findIndex((it) => it.name === itemName && it.count > 0);
+              if (idx === -1) return null;
+              return items
+                .map((it, i) => (i === idx ? { ...it, count: it.count - 1 } : it))
+                .filter((it) => it.count > 0);
+            };
+            const newInventory = consumeFrom(inventory);
+            if (newInventory) {
+              setInventory(newInventory);
+              return;
+            }
+            const newStorage = consumeFrom(storage);
+            if (newStorage) setStorage(newStorage);
           }}
           onBack={() => {
             soundManager.startBgm('hub');

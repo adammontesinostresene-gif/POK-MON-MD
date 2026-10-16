@@ -1,4 +1,6 @@
-import { Pokemon, PokemonType, Dungeon, Item, RescueMission, Move } from '../types/game';
+import { Pokemon, PokemonType, PokemonStats, Dungeon, Item, RescueMission, Move } from '../types/game';
+import { LEARNSETS, LEARNSET_MOVES } from './learnsets';
+import { SPECIES_DATA } from './speciesData';
 
 // PMD Sprite Repository (SpriteCollab / PMDCollab)
 export const formatDex4Digits = (pokedexId: number): string => {
@@ -223,8 +225,286 @@ export const TYPE_COLORS: Record<PokemonType, { bg: string; text: string; border
   Hada: { bg: 'bg-pink-300', text: 'text-pink-950', border: 'border-pink-200' },
 };
 
+// Official base stats per species: [PS, Ataque, Defensa, At. Esp., Def. Esp., Velocidad]
+const BASE_STATS: Record<number, [number, number, number, number, number, number]> = {
+  1: [45, 49, 49, 65, 65, 45], // Bulbasaur
+  2: [60, 62, 63, 80, 80, 60], // Ivysaur
+  3: [80, 82, 83, 100, 100, 80], // Venusaur
+  4: [39, 52, 43, 60, 50, 65], // Charmander
+  5: [58, 64, 58, 80, 65, 80], // Charmeleon
+  6: [78, 84, 78, 109, 85, 100], // Charizard
+  7: [44, 48, 65, 50, 64, 43], // Squirtle
+  8: [59, 63, 80, 65, 80, 58], // Wartortle
+  9: [79, 83, 100, 85, 105, 78], // Blastoise
+  10: [45, 30, 35, 20, 20, 45], // Caterpie
+  11: [50, 20, 55, 25, 25, 30], // Metapod
+  12: [60, 45, 50, 90, 80, 70], // Butterfree
+  13: [40, 35, 30, 20, 20, 50], // Weedle
+  14: [45, 25, 50, 25, 25, 35], // Kakuna
+  15: [65, 90, 40, 45, 80, 75], // Beedrill
+  16: [40, 45, 40, 35, 35, 56], // Pidgey
+  17: [63, 60, 55, 50, 50, 71], // Pidgeotto
+  18: [83, 80, 75, 70, 70, 101], // Pidgeot
+  19: [30, 56, 35, 25, 35, 72], // Rattata
+  22: [65, 90, 65, 61, 61, 100], // Fearow
+  25: [35, 55, 40, 50, 50, 90], // Pikachu
+  26: [60, 90, 55, 90, 80, 110], // Raichu
+  35: [70, 45, 48, 60, 65, 35], // Clefairy
+  39: [115, 45, 20, 45, 25, 20], // Jigglypuff
+  41: [40, 45, 35, 30, 40, 55], // Zubat
+  42: [75, 80, 70, 65, 75, 90], // Golbat
+  43: [45, 50, 55, 75, 65, 30], // Oddish
+  44: [60, 65, 70, 85, 75, 40], // Gloom
+  45: [75, 80, 85, 110, 90, 50], // Vileplume
+  50: [10, 55, 25, 35, 45, 95], // Diglett
+  66: [70, 80, 50, 35, 35, 35], // Machop
+  67: [80, 100, 70, 50, 60, 45], // Machoke
+  68: [90, 130, 80, 65, 85, 55], // Machamp
+  69: [50, 75, 35, 70, 30, 40], // Bellsprout
+  70: [65, 90, 50, 85, 45, 55], // Weepinbell
+  71: [80, 105, 65, 100, 70, 70], // Victreebel
+  74: [40, 80, 100, 30, 30, 20], // Geodude
+  75: [55, 95, 115, 45, 45, 35], // Graveler
+  76: [80, 120, 130, 55, 65, 45], // Golem
+  81: [25, 35, 70, 95, 55, 45], // Magnemite
+  92: [30, 35, 30, 100, 35, 80], // Gastly
+  93: [45, 50, 45, 115, 55, 95], // Haunter
+  94: [60, 65, 60, 130, 75, 110], // Gengar
+  95: [35, 45, 160, 30, 45, 70], // Onix
+  125: [65, 83, 57, 95, 85, 105], // Electabuzz
+  133: [55, 55, 50, 45, 65, 55], // Eevee
+  134: [130, 65, 60, 110, 95, 65], // Vaporeon
+  135: [65, 65, 60, 110, 95, 130], // Jolteon
+  136: [65, 130, 60, 95, 110, 65], // Flareon
+  145: [90, 90, 85, 125, 90, 100], // Zapdos
+  155: [39, 52, 43, 60, 50, 65], // Cyndaquil
+  156: [58, 64, 58, 80, 65, 80], // Quilava
+  157: [78, 84, 78, 109, 85, 100], // Typhlosion
+  165: [40, 20, 30, 40, 80, 55], // Ledyba
+  169: [85, 90, 80, 70, 80, 130], // Crobat
+  191: [30, 30, 30, 30, 30, 30], // Sunkern
+  401: [37, 25, 41, 25, 41, 25], // Kricketot
+  504: [45, 55, 39, 35, 39, 42], // Patrat
+  700: [95, 65, 65, 110, 130, 60], // Sylveon
+  942: [60, 78, 60, 40, 51, 51], // Maschiff
+  20: [55, 81, 60, 50, 70, 97], // Raticate
+  166: [55, 35, 50, 55, 110, 85], // Ledian
+  402: [77, 85, 51, 55, 51, 65], // Kricketune
+  505: [60, 85, 69, 60, 69, 77], // Watchog
+  192: [75, 75, 55, 105, 85, 30], // Sunflora
+  36: [95, 70, 73, 95, 90, 60], // Clefable
+  40: [140, 70, 45, 85, 50, 45], // Wigglytuff
+  82: [50, 60, 95, 120, 70, 70], // Magneton
+  462: [70, 70, 115, 130, 90, 60], // Magnezone
+  51: [35, 100, 50, 50, 70, 120], // Dugtrio
+  152: [45, 49, 65, 49, 65, 45], // Chikorita
+  158: [50, 65, 64, 44, 48, 43], // Totodile
+  252: [40, 45, 35, 65, 55, 70], // Treecko
+  255: [45, 60, 40, 70, 50, 45], // Torchic
+  258: [50, 70, 50, 50, 50, 40], // Mudkip
+  387: [55, 68, 64, 45, 55, 31], // Turtwig
+  390: [44, 58, 44, 58, 44, 61], // Chimchar
+  393: [53, 51, 53, 61, 56, 40], // Piplup
+  495: [45, 45, 55, 45, 55, 63], // Snivy
+  498: [65, 63, 45, 45, 45, 45], // Tepig
+  501: [55, 55, 45, 63, 45, 45], // Oshawott
+  650: [56, 61, 65, 48, 45, 38], // Chespin
+  653: [40, 45, 40, 62, 60, 60], // Fennekin
+  656: [41, 56, 40, 62, 44, 71], // Froakie
+  722: [68, 55, 55, 50, 50, 42], // Rowlet
+  725: [45, 65, 40, 60, 40, 70], // Litten
+  728: [50, 54, 54, 66, 56, 40], // Popplio
+  810: [50, 65, 50, 40, 40, 65], // Grookey
+  813: [50, 71, 40, 40, 40, 69], // Scorbunny
+  816: [50, 40, 40, 70, 40, 70], // Sobble
+  906: [40, 61, 54, 45, 45, 65], // Sprigatito
+  909: [67, 45, 59, 63, 40, 36], // Fuecoco
+  912: [55, 65, 45, 50, 45, 50], // Quaxly
+};
+
+/** Main-series stat formula without IVs/EVs/natures. Null if the species has no base stats. */
+export const calculateStats = (pokedexId: number, level: number): PokemonStats | null => {
+  const base = SPECIES_DATA[pokedexId]?.baseStats ?? BASE_STATS[pokedexId];
+  if (!base) return null;
+  const [hp, atk, def, spa, spd, spe] = base;
+  const other = (b: number) => Math.floor((2 * b * level) / 100) + 5;
+  const maxHp = Math.floor((2 * hp * level) / 100) + level + 10;
+  return {
+    hp: maxHp,
+    maxHp,
+    attack: other(atk),
+    defense: other(def),
+    spAttack: other(spa),
+    spDefense: other(spd),
+    speed: other(spe),
+  };
+};
+
+/** Recomputes stats from official bases, keeping the same amount of HP lost. */
+export const applyOfficialStats = (pokemon: Pokemon): Pokemon => {
+  const stats = calculateStats(pokemon.pokedexId, pokemon.level);
+  if (!stats) return pokemon;
+  const missingHp = Math.max(0, pokemon.stats.maxHp - pokemon.stats.hp);
+  const hp = pokemon.stats.hp <= 0 ? 0 : Math.max(1, stats.maxHp - missingHp);
+  return { ...pokemon, stats: { ...stats, hp } };
+};
+
+const cloneMove = (slug: string): Move => ({ ...LEARNSET_MOVES[slug] });
+
+/**
+ * Official moveset for a species at a level: the 4 most recently learned level-up moves,
+ * preferring damaging moves on ties and always keeping at least one damaging move.
+ * Null if the species has no learnset.
+ */
+export const getMovesForLevel = (pokedexId: number, level: number): Move[] | null => {
+  const learnset = LEARNSETS[pokedexId];
+  if (!learnset || learnset.length === 0) return null;
+
+  const known = learnset.filter((e) => e.level <= level);
+  const slugs = [...new Set(known.map((e) => e.move))];
+  const lastLevel = (slug: string) => Math.max(...known.filter((e) => e.move === slug).map((e) => e.level));
+  const ranked = slugs.sort((a, b) => {
+    const byLevel = lastLevel(b) - lastLevel(a);
+    if (byLevel !== 0) return byLevel;
+    return (LEARNSET_MOVES[b].power > 0 ? 1 : 0) - (LEARNSET_MOVES[a].power > 0 ? 1 : 0);
+  });
+
+  const picked = ranked.slice(0, 4);
+  if (!picked.some((s) => LEARNSET_MOVES[s].power > 0)) {
+    const strongest = ranked
+      .filter((s) => LEARNSET_MOVES[s].power > 0)
+      .sort((a, b) => LEARNSET_MOVES[b].power - LEARNSET_MOVES[a].power)[0];
+    if (strongest) picked[Math.min(picked.length, 3)] = strongest;
+  }
+
+  return picked.reverse().map(cloneMove);
+};
+
+const uniqueByName = (moves: Move[]): Move[] => {
+  const seen = new Set<string>();
+  return moves.filter((m) => (seen.has(m.name) ? false : (seen.add(m.name), true)));
+};
+
+/** Adds moves to the Pokémon's lifetime move history (kept across evolutions). */
+export const rememberMoves = (pokemon: Pokemon, moves: Move[]): Pokemon => ({
+  ...pokemon,
+  learnedMoves: uniqueByName([...(pokemon.learnedMoves ?? pokemon.moves), ...moves]).map((m) => ({
+    ...m,
+    pp: m.maxPp,
+  })),
+});
+
+/** Replaces a Pokémon's moves with its official moveset for its current level. */
+export const applyOfficialMoves = (pokemon: Pokemon): Pokemon => {
+  const moves = getMovesForLevel(pokemon.pokedexId, pokemon.level);
+  return moves ? { ...pokemon, moves, learnedMoves: moves.map((m) => ({ ...m })) } : pokemon;
+};
+
+/**
+ * Every move this Pokémon can equip: all moves learned in its life plus the level-up moves
+ * its current species knows up to its level (like the Move Reminder).
+ */
+export const getMovePool = (pokemon: Pokemon): Move[] => {
+  const speciesMoves = (LEARNSETS[pokemon.pokedexId] ?? [])
+    .filter((e) => e.level <= pokemon.level)
+    .map((e) => cloneMove(e.move));
+  return uniqueByName([...pokemon.moves, ...(pokemon.learnedMoves ?? []), ...speciesMoves]);
+};
+
+/**
+ * Learns the official level-up moves for the current level into free slots.
+ * Moves that don't fit (4 already known) are returned as `pending` so the player can choose.
+ */
+export const learnLevelUpMoves = (
+  pokemon: Pokemon
+): { pokemon: Pokemon; learned: string[]; pending: Move[] } => {
+  const learnset = LEARNSETS[pokemon.pokedexId] ?? [];
+  const moves = [...pokemon.moves];
+  const newlyLearned: Move[] = [];
+  const pending: Move[] = [];
+  for (const entry of learnset.filter((e) => e.level === pokemon.level && e.level > 0)) {
+    const move = cloneMove(entry.move);
+    if (moves.some((m) => m.name === move.name)) continue;
+    if (moves.length < 4) {
+      moves.push(move);
+      newlyLearned.push(move);
+    } else {
+      pending.push(move);
+    }
+  }
+  return {
+    pokemon: rememberMoves({ ...pokemon, moves }, newlyLearned),
+    learned: newlyLearned.map((m) => m.name),
+    pending,
+  };
+};
+
+/** Swaps an equipped move for a newly learned one and records it in the move history. */
+export const replaceMove = (pokemon: Pokemon, oldMoveName: string, newMove: Move): Pokemon =>
+  rememberMoves(
+    { ...pokemon, moves: pokemon.moves.map((m) => (m.name === oldMoveName ? { ...newMove } : m)) },
+    [newMove]
+  );
+
+/** Every possible starter from the personality test (Gen 1-9 starters + Pikachu and Eevee). */
+export const STARTERS: { pokedexId: number; name: string; types: PokemonType[]; ability: string; description: string }[] = [
+  { pokedexId: 1, name: 'Bulbasaur', types: ['Planta', 'Veneno'], ability: 'Espesura', description: 'Lleva una semilla en el lomo que crece con él. Tranquilo y digno de confianza.' },
+  { pokedexId: 4, name: 'Charmander', types: ['Fuego'], ability: 'Mar Llamas', description: 'La llama de su cola refleja su estado de ánimo. Valiente y apasionado.' },
+  { pokedexId: 7, name: 'Squirtle', types: ['Agua'], ability: 'Torrente', description: 'Se refugia en su caparazón y contraataca con chorros de agua. Travieso y leal.' },
+  { pokedexId: 25, name: 'Pikachu', types: ['Eléctrico'], ability: 'Elec. Estática', description: 'Sus mejillas acumulan electricidad. Alegre y lleno de energía.' },
+  { pokedexId: 133, name: 'Eevee', types: ['Normal'], ability: 'Adaptable', description: 'Su código genético inestable le permite adaptarse a todo. Curioso y versátil.' },
+  { pokedexId: 152, name: 'Chikorita', types: ['Planta'], ability: 'Espesura', description: 'Desprende un dulce aroma de la hoja de su cabeza. Amable y cariñoso.' },
+  { pokedexId: 155, name: 'Cyndaquil', types: ['Fuego'], ability: 'Mar Llamas', description: 'Tímido, pero las llamas de su lomo arden con fuerza cuando se enfada.' },
+  { pokedexId: 158, name: 'Totodile', types: ['Agua'], ability: 'Torrente', description: 'Muerde todo lo que se mueve con sus potentes mandíbulas. Juguetón e impulsivo.' },
+  { pokedexId: 252, name: 'Treecko', types: ['Planta'], ability: 'Espesura', description: 'Sereno y seguro de sí mismo. Nunca pierde la calma.' },
+  { pokedexId: 255, name: 'Torchic', types: ['Fuego'], ability: 'Mar Llamas', description: 'Lleva una llama en su interior que lo mantiene cálido. Cariñoso y entusiasta.' },
+  { pokedexId: 258, name: 'Mudkip', types: ['Agua'], ability: 'Torrente', description: 'Su aleta percibe todo lo que le rodea. Tranquilo y muy perceptivo.' },
+  { pokedexId: 387, name: 'Turtwig', types: ['Planta'], ability: 'Espesura', description: 'Su caparazón es de tierra endurecida. Paciente y constante.' },
+  { pokedexId: 390, name: 'Chimchar', types: ['Fuego'], ability: 'Mar Llamas', description: 'Ágil y travieso, trepa por los riscos con facilidad.' },
+  { pokedexId: 393, name: 'Piplup', types: ['Agua'], ability: 'Torrente', description: 'Muy orgulloso, odia aceptar ayuda de los demás.' },
+  { pokedexId: 495, name: 'Snivy', types: ['Planta'], ability: 'Espesura', description: 'Elegante y astuto, siempre mantiene la compostura.' },
+  { pokedexId: 498, name: 'Tepig', types: ['Fuego'], ability: 'Mar Llamas', description: 'Expulsa fuego por el hocico. Glotón y de buen corazón.' },
+  { pokedexId: 501, name: 'Oshawott', types: ['Agua'], ability: 'Torrente', description: 'Usa su vieira para luchar. Valiente aunque algo despistado.' },
+  { pokedexId: 650, name: 'Chespin', types: ['Planta'], ability: 'Espesura', description: 'Curioso por naturaleza; endurece sus púas para protegerse.' },
+  { pokedexId: 653, name: 'Fennekin', types: ['Fuego'], ability: 'Mar Llamas', description: 'Intuitivo y reflexivo, mordisquea ramitas para cargar energía.' },
+  { pokedexId: 656, name: 'Froakie', types: ['Agua'], ability: 'Torrente', description: 'Despreocupado pero siempre alerta. Se protege con burbujas.' },
+  { pokedexId: 722, name: 'Rowlet', types: ['Planta', 'Volador'], ability: 'Espesura', description: 'Vuela en silencio y ataca por sorpresa. Tranquilo y dormilón.' },
+  { pokedexId: 725, name: 'Litten', types: ['Fuego'], ability: 'Mar Llamas', description: 'Solitario e independiente, no muestra sus sentimientos.' },
+  { pokedexId: 728, name: 'Popplio', types: ['Agua'], ability: 'Torrente', description: 'Trabajador y artista, crea globos de agua con su nariz.' },
+  { pokedexId: 810, name: 'Grookey', types: ['Planta'], ability: 'Espesura', description: 'Travieso y lleno de curiosidad, toca su ramita sin parar.' },
+  { pokedexId: 813, name: 'Scorbunny', types: ['Fuego'], ability: 'Mar Llamas', description: 'Siempre corriendo de un lado a otro. Activo y competitivo.' },
+  { pokedexId: 816, name: 'Sobble', types: ['Agua'], ability: 'Torrente', description: 'Muy sensible y tímido; se vuelve invisible al tocar el agua.' },
+  { pokedexId: 906, name: 'Sprigatito', types: ['Planta'], ability: 'Espesura', description: 'Caprichoso y coqueto, le encanta que le presten atención.' },
+  { pokedexId: 909, name: 'Fuecoco', types: ['Fuego'], ability: 'Mar Llamas', description: 'Despreocupado y tranquilo, va a su propio ritmo.' },
+  { pokedexId: 912, name: 'Quaxly', types: ['Agua'], ability: 'Torrente', description: 'Ordenado y serio, cuida mucho su aspecto.' },
+];
+
+export const createStarter = (pokedexId: number): Pokemon => {
+  const species = STARTERS.find((s) => s.pokedexId === pokedexId) ?? STARTERS[0];
+  const level = 5;
+  const stats = calculateStats(species.pokedexId, level)!;
+  return applyOfficialMoves({
+    id: `${species.name.toLowerCase()}_hero`,
+    pokedexId: species.pokedexId,
+    name: species.name,
+    level,
+    exp: 0,
+    nextExp: getExpToNextLevel(level),
+    types: species.types,
+    stats,
+    moves: [],
+    status: 'none',
+    statusTurns: 0,
+    ability: species.ability,
+    spriteUrl: getPokemonSprite(species.pokedexId),
+    artworkUrl: getPokemonArtwork(species.pokedexId),
+    iconUrl: getPokemonStaticSprite(species.pokedexId),
+    description: species.description,
+  });
+};
+
 // Starter Hero Pikachu
-export const createPikachuStarter = (): Pokemon => ({
+export const createPikachuStarter = (): Pokemon => applyOfficialMoves(applyOfficialStats({
   id: 'pikachu_hero',
   pokedexId: 25,
   name: 'Pikachu',
@@ -296,10 +576,10 @@ export const createPikachuStarter = (): Pokemon => ({
       description: 'Golpea fuertemente al rival con su endurecida cola.',
     },
   ],
-});
+}));
 
 // Initial Reserve Pokemons for the user to try Drag and Drop team modifications
-export const INITIAL_RESERVES: Pokemon[] = [
+const RESERVE_TEMPLATES: Pokemon[] = [
   {
     id: 'charmander_recruit',
     pokedexId: 4,
@@ -519,9 +799,10 @@ export const INITIAL_RESERVES: Pokemon[] = [
     ],
   },
 ];
+export const INITIAL_RESERVES: Pokemon[] = RESERVE_TEMPLATES.map((p) => applyOfficialMoves(applyOfficialStats(p)));
 
 // Potential Recruits that can appear or join during events
-export const EXTRA_RECRUITS: Pokemon[] = [
+const RECRUIT_TEMPLATES: Pokemon[] = [
   {
     id: 'eevee_wild',
     pokedexId: 133,
@@ -666,20 +947,23 @@ export const EXTRA_RECRUITS: Pokemon[] = [
     ],
   },
 ];
+export const EXTRA_RECRUITS: Pokemon[] = RECRUIT_TEMPLATES.map((p) => applyOfficialMoves(applyOfficialStats(p)));
 
 // Dungeon Templates
 export const DUNGEONS: Dungeon[] = [
   {
     id: 'bosque_misterioso',
-    name: 'Bosque Místico',
-    description: 'Un espeso bosque cubierto de niebla esmeralda. Abundan los Pokémon tipo Normal, Bicho y Planta.',
+    name: 'Bosquejo Tutorial',
+    description: 'Un bosque tranquilo e inofensivo, ideal para dar tus primeros pasos. Abundan los Pokémon tipo Normal, Bicho y Planta.',
     floorsCount: 5,
     difficulty: 'Fácil',
     theme: 'forest',
     bgImage: '/src/assets/images/pmd_dungeon_forest_1792068605705.jpg',
     recommendedLevel: 2,
     enemiesPool: ['rattata', 'caterpie', 'ledyba', 'kricketot', 'patrat', 'sunkern'],
-    bossId: 'boss_maschiff',
+    bossId: 'rattata',
+    bossLevel: 3,
+    bossCount: 3,
     rewards: {
       gold: 350,
       exp: 150,
@@ -833,7 +1117,7 @@ export const getMoveFromDb = (mName: string) => {
 // Enemy generator helper
 export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
   const configs: Record<string, { pokedexId: number; name: string; types: PokemonType[]; hp: number; atk: number; def: number; spa: number; spd: number; spe: number; moves: string[]; recruitRate?: number }> = {
-    // Bosque Místico roster
+    // Bosquejo Tutorial roster
     rattata: {
       pokedexId: 19,
       name: 'Rattata',
@@ -898,19 +1182,6 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
       spe: 10,
       moves: ['Absorber', 'Desarrollo'],
       recruitRate: 0.25,
-    },
-    boss_maschiff: {
-      pokedexId: 942,
-      name: 'Maschiff',
-      types: ['Siniestro'],
-      hp: 75,
-      atk: 26,
-      def: 20,
-      spa: 14,
-      spd: 18,
-      spe: 22,
-      moves: ['Mordisco', 'Placaje', 'Malicioso', 'Cara Susto'],
-      recruitRate: 0.1,
     },
     caterpie: {
       pokedexId: 10,
@@ -1157,12 +1428,17 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
   };
 
   const c = configs[enemyType] || configs.caterpie;
-  const scaledHp = Math.round(c.hp * (1 + (level - 5) * 0.1));
-  const scaledAtk = Math.round(c.atk * (1 + (level - 5) * 0.08));
-  const scaledDef = Math.round(c.def * (1 + (level - 5) * 0.08));
-  const scaledSpa = Math.round(c.spa * (1 + (level - 5) * 0.08));
-  const scaledSpd = Math.round(c.spd * (1 + (level - 5) * 0.08));
-  const scaledSpe = Math.round(c.spe * (1 + (level - 5) * 0.08));
+  // Legacy hand-tuned values only for species without official base stats
+  const legacy = (value: number, growth: number) => Math.round(value * (1 + (level - 5) * growth));
+  const stats: PokemonStats = calculateStats(c.pokedexId, level) ?? {
+    hp: legacy(c.hp, 0.1),
+    maxHp: legacy(c.hp, 0.1),
+    attack: legacy(c.atk, 0.08),
+    defense: legacy(c.def, 0.08),
+    spAttack: legacy(c.spa, 0.08),
+    spDefense: legacy(c.spd, 0.08),
+    speed: legacy(c.spe, 0.08),
+  };
 
   return {
     id: `enemy_${enemyType}_${Date.now()}_${Math.random()}`,
@@ -1172,15 +1448,7 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
     exp: 0,
     nextExp: 50,
     types: c.types,
-    stats: {
-      hp: scaledHp,
-      maxHp: scaledHp,
-      attack: scaledAtk,
-      defense: scaledDef,
-      spAttack: scaledSpa,
-      spDefense: scaledSpd,
-      speed: scaledSpe,
-    },
+    stats,
     ability: 'Presión',
     status: 'none',
     statusTurns: 0,
@@ -1189,7 +1457,7 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
     iconUrl: getPokemonStaticSprite(c.pokedexId),
     description: 'Un Pokémon territorial que vigila las profundidades de la mazmorra.',
     recruitRate: c.recruitRate,
-    moves: c.moves.map((mName, idx) => {
+    moves: getMovesForLevel(c.pokedexId, level) ?? c.moves.map((mName, idx) => {
       const dbMove = getMoveFromDb(mName);
       return {
         id: `enemy_move_${idx}_${mName.toLowerCase().replace(/\s+/g, '_')}`,
@@ -1311,7 +1579,10 @@ export interface EvolutionOption {
   targetPokedexId: number;
   targetName: string;
   minLevel: number;
-  statGains: {
+  // Evolution stone needed (consumed on evolving); level is irrelevant when set
+  requiredItem?: string;
+  // Hand-tuned gains, only used for species without official base stats
+  statGains?: {
     hp: number;
     attack: number;
     defense: number;
@@ -1325,7 +1596,8 @@ export interface EvolutionOption {
   learnedMove?: Move;
 }
 
-export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
+// Hand-written entries (custom texts and level choices); they take precedence over the generated data
+const MANUAL_EVOLUTIONS: Record<number, EvolutionOption[]> = {
   // 1: Bulbasaur -> 2: Ivysaur -> 3: Venusaur
   1: [
     {
@@ -1611,7 +1883,8 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
     {
       targetPokedexId: 26,
       targetName: 'Raichu',
-      minLevel: 16,
+      minLevel: 1,
+      requiredItem: 'Piedra Trueno',
       statGains: { hp: 18, attack: 16, defense: 10, spAttack: 20, spDefense: 12, speed: 18 },
       types: ['Eléctrico'],
       ability: 'Elec. Estática',
@@ -1707,7 +1980,8 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
     {
       targetPokedexId: 45,
       targetName: 'Vileplume',
-      minLevel: 32,
+      minLevel: 1,
+      requiredItem: 'Piedra Hoja',
       statGains: { hp: 20, attack: 16, defense: 18, spAttack: 24, spDefense: 18, speed: 10 },
       types: ['Planta', 'Veneno'],
       ability: 'Efecto Espora',
@@ -1788,7 +2062,8 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
     {
       targetPokedexId: 71,
       targetName: 'Victreebel',
-      minLevel: 32,
+      minLevel: 1,
+      requiredItem: 'Piedra Hoja',
       statGains: { hp: 20, attack: 22, defense: 15, spAttack: 22, spDefense: 14, speed: 14 },
       types: ['Planta', 'Veneno'],
       ability: 'Clorofila',
@@ -1899,12 +2174,245 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
     },
   ],
 
+  // 19: Rattata -> 20: Raticate
+  19: [
+    {
+      targetPokedexId: 20,
+      targetName: 'Raticate',
+      minLevel: 20,
+      types: ['Normal'],
+      ability: 'Agallas',
+      description: 'Sus colmillos crecen sin parar y puede roer cualquier cosa, incluso el cemento.',
+      learnedMove: {
+        id: 'move_hyper_fang',
+        name: 'Hipercolmillo',
+        type: 'Normal',
+        category: 'physical',
+        power: 80,
+        accuracy: 90,
+        pp: 15,
+        maxPp: 15,
+        description: 'Muerde con unos colmillos afiladísimos.',
+      },
+    },
+  ],
+
+  // 165: Ledyba -> 166: Ledian
+  165: [
+    {
+      targetPokedexId: 166,
+      targetName: 'Ledian',
+      minLevel: 18,
+      types: ['Bicho', 'Volador'],
+      ability: 'Madrugar',
+      description: 'Vuela de noche esparciendo un polvo brillante que le sirve de luz.',
+      learnedMove: {
+        id: 'move_comet_punch',
+        name: 'Puño Cometa',
+        type: 'Normal',
+        category: 'physical',
+        power: 54,
+        accuracy: 85,
+        pp: 15,
+        maxPp: 15,
+        description: 'Lanza una ráfaga de puñetazos veloces.',
+      },
+    },
+  ],
+
+  // 401: Kricketot -> 402: Kricketune
+  401: [
+    {
+      targetPokedexId: 402,
+      targetName: 'Kricketune',
+      minLevel: 10,
+      types: ['Bicho'],
+      ability: 'Mudar',
+      description: 'Cruza sus brazos afilados como un violinista para crear melodías.',
+      learnedMove: {
+        id: 'move_fury_cutter',
+        name: 'Corte Furia',
+        type: 'Bicho',
+        category: 'physical',
+        power: 40,
+        accuracy: 95,
+        pp: 20,
+        maxPp: 20,
+        description: 'Tajos cada vez más fuertes con sus guadañas.',
+      },
+    },
+  ],
+
+  // 504: Patrat -> 505: Watchog
+  504: [
+    {
+      targetPokedexId: 505,
+      targetName: 'Watchog',
+      minLevel: 20,
+      types: ['Normal'],
+      ability: 'Iluminación',
+      description: 'Hace brillar su cuerpo para intimidar a los intrusos que vigila.',
+      learnedMove: {
+        id: 'move_crunch_watchog',
+        name: 'Triturar',
+        type: 'Siniestro',
+        category: 'physical',
+        power: 80,
+        accuracy: 100,
+        pp: 15,
+        maxPp: 15,
+        description: 'Tritura al rival con sus afilados colmillos.',
+      },
+    },
+  ],
+
+  // 191: Sunkern -> 192: Sunflora (Piedra Solar en los juegos; aquí por nivel)
+  191: [
+    {
+      targetPokedexId: 192,
+      targetName: 'Sunflora',
+      minLevel: 1,
+      requiredItem: 'Piedra Solar',
+      types: ['Planta'],
+      ability: 'Clorofila',
+      description: 'Convierte la luz del sol en energía y se mueve con energía bajo el calor.',
+      learnedMove: {
+        id: 'move_razor_leaf_sunflora',
+        name: 'Hoja Afilada',
+        type: 'Planta',
+        category: 'physical',
+        power: 55,
+        accuracy: 95,
+        pp: 25,
+        maxPp: 25,
+        description: 'Lanza hojas cortantes como cuchillas.',
+      },
+    },
+  ],
+
+  // 35: Clefairy -> 36: Clefable (Piedra Lunar en los juegos; aquí por nivel)
+  35: [
+    {
+      targetPokedexId: 36,
+      targetName: 'Clefable',
+      minLevel: 1,
+      requiredItem: 'Piedra Lunar',
+      types: ['Hada'],
+      ability: 'Gran Encanto',
+      description: 'Un Pokémon de leyenda que rara vez se deja ver; dicen que vive en las montañas.',
+      learnedMove: {
+        id: 'move_moonblast',
+        name: 'Fuerza Lunar',
+        type: 'Hada',
+        category: 'special',
+        power: 95,
+        accuracy: 100,
+        pp: 15,
+        maxPp: 15,
+        description: 'Invoca el poder de la luna contra el objetivo.',
+      },
+    },
+  ],
+
+  // 39: Jigglypuff -> 40: Wigglytuff (Piedra Lunar en los juegos; aquí por nivel)
+  39: [
+    {
+      targetPokedexId: 40,
+      targetName: 'Wigglytuff',
+      minLevel: 1,
+      requiredItem: 'Piedra Lunar',
+      types: ['Normal', 'Hada'],
+      ability: 'Gran Encanto',
+      description: 'Su pelaje es tan suave que quien lo toca no quiere soltarlo.',
+      learnedMove: {
+        id: 'move_dazzling_gleam',
+        name: 'Brillo Mágico',
+        type: 'Hada',
+        category: 'special',
+        power: 80,
+        accuracy: 100,
+        pp: 10,
+        maxPp: 10,
+        description: 'Emite un destello de luz deslumbrante.',
+      },
+    },
+  ],
+
+  // 81: Magnemite -> 82: Magneton -> 462: Magnezone
+  81: [
+    {
+      targetPokedexId: 82,
+      targetName: 'Magneton',
+      minLevel: 30,
+      types: ['Eléctrico', 'Acero'],
+      ability: 'Robustez',
+      description: 'Tres Magnemite unidos que emiten fuertes ondas de radio.',
+      learnedMove: {
+        id: 'move_spark_magneton',
+        name: 'Chispazo',
+        type: 'Eléctrico',
+        category: 'special',
+        power: 80,
+        accuracy: 100,
+        pp: 15,
+        maxPp: 15,
+        description: 'Una descarga eléctrica radial.',
+      },
+    },
+  ],
+  82: [
+    {
+      targetPokedexId: 462,
+      targetName: 'Magnezone',
+      minLevel: 1,
+      requiredItem: 'Piedra Trueno',
+      types: ['Eléctrico', 'Acero'],
+      ability: 'Imán',
+      description: 'Un campo magnético especial lo transformó; emite ondas misteriosas.',
+      learnedMove: {
+        id: 'move_flash_cannon',
+        name: 'Foco Resplandor',
+        type: 'Acero',
+        category: 'special',
+        power: 80,
+        accuracy: 100,
+        pp: 10,
+        maxPp: 10,
+        description: 'Libera toda la luz acumulada en un disparo metálico.',
+      },
+    },
+  ],
+
+  // 50: Diglett -> 51: Dugtrio
+  50: [
+    {
+      targetPokedexId: 51,
+      targetName: 'Dugtrio',
+      minLevel: 26,
+      types: ['Tierra'],
+      ability: 'Velo Arena',
+      description: 'Trillizos que excavan a gran velocidad hasta 100 km bajo tierra.',
+      learnedMove: {
+        id: 'move_dig_dugtrio',
+        name: 'Excavar',
+        type: 'Tierra',
+        category: 'physical',
+        power: 80,
+        accuracy: 100,
+        pp: 10,
+        maxPp: 10,
+        description: 'Se oculta bajo tierra y ataca desde abajo.',
+      },
+    },
+  ],
+
   // 133: Eevee -> Vaporeon (134), Jolteon (135), Flareon (136), Sylveon (700)
   133: [
     {
       targetPokedexId: 134,
       targetName: 'Vaporeon',
-      minLevel: 15,
+      minLevel: 1,
+      requiredItem: 'Piedra Agua',
       statGains: { hp: 35, attack: 14, defense: 14, spAttack: 24, spDefense: 22, speed: 14 },
       types: ['Agua'],
       ability: 'Absorbe Agua',
@@ -1924,7 +2432,8 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
     {
       targetPokedexId: 135,
       targetName: 'Jolteon',
-      minLevel: 15,
+      minLevel: 1,
+      requiredItem: 'Piedra Trueno',
       statGains: { hp: 16, attack: 14, defense: 12, spAttack: 24, spDefense: 20, speed: 30 },
       types: ['Eléctrico'],
       ability: 'Absorbe Elec',
@@ -1945,7 +2454,8 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
     {
       targetPokedexId: 136,
       targetName: 'Flareon',
-      minLevel: 15,
+      minLevel: 1,
+      requiredItem: 'Piedra Fuego',
       statGains: { hp: 18, attack: 28, defense: 14, spAttack: 20, spDefense: 22, speed: 14 },
       types: ['Fuego'],
       ability: 'Agallas',
@@ -2032,6 +2542,35 @@ export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = {
   ],
 };
 
+/** Every evolution in the game: official families from PokéAPI, with manual entries replacing matching targets. */
+export const EVOLUTION_REGISTRY: Record<number, EvolutionOption[]> = (() => {
+  const registry: Record<number, EvolutionOption[]> = {};
+  for (const [id, data] of Object.entries(SPECIES_DATA)) {
+    const options = data.evolutions.flatMap((evo): EvolutionOption[] => {
+      const target = SPECIES_DATA[evo.targetId];
+      if (!target) return [];
+      return [{
+        targetPokedexId: evo.targetId,
+        targetName: target.name,
+        minLevel: evo.minLevel,
+        requiredItem: evo.requiredItem,
+        types: target.types,
+        ability: target.ability,
+        description: target.description || `${target.name}, Pokémon de tipo ${target.types.join(' y ')}.`,
+      }];
+    });
+    if (options.length > 0) registry[Number(id)] = options;
+  }
+  for (const [id, manual] of Object.entries(MANUAL_EVOLUTIONS)) {
+    const generated = registry[Number(id)] ?? [];
+    registry[Number(id)] = [
+      ...generated.filter((g) => !manual.some((m) => m.targetPokedexId === g.targetPokedexId)),
+      ...manual,
+    ];
+  }
+  return registry;
+})();
+
 /**
  * Returns available evolution options for a Pokémon. Empty array if final form.
  */
@@ -2039,17 +2578,28 @@ export const getEvolutionOptions = (pokedexId: number): EvolutionOption[] => {
   return EVOLUTION_REGISTRY[pokedexId] || [];
 };
 
+/** Whether a single evolution branch is possible right now (level + stone if needed). */
+export const isEvolutionOptionAvailable = (
+  pokemon: Pokemon,
+  option: EvolutionOption,
+  availableItems: string[] = []
+): boolean =>
+  pokemon.level >= option.minLevel &&
+  (!option.requiredItem || availableItems.includes(option.requiredItem));
+
 /**
  * Checks whether a given Pokemon meets the requirements to evolve
  */
 export const canPokemonEvolve = (
-  pokemon: Pokemon
+  pokemon: Pokemon,
+  availableItems: string[] = []
 ): {
   hasEvolutions: boolean;
   canEvolve: boolean;
   options: EvolutionOption[];
   minLevelRequired: number;
   levelDeficit: number;
+  requiredItems: string[];
 } => {
   const options = getEvolutionOptions(pokemon.pokedexId);
   if (options.length === 0) {
@@ -2059,12 +2609,15 @@ export const canPokemonEvolve = (
       options: [],
       minLevelRequired: 0,
       levelDeficit: 0,
+      requiredItems: [],
     };
   }
 
-  const minLevelRequired = options[0].minLevel;
-  const canEvolve = pokemon.level >= minLevelRequired;
+  const levelOptions = options.filter((o) => !o.requiredItem);
+  const minLevelRequired = levelOptions.length > 0 ? Math.min(...levelOptions.map((o) => o.minLevel)) : 0;
+  const canEvolve = options.some((o) => isEvolutionOptionAvailable(pokemon, o, availableItems));
   const levelDeficit = Math.max(0, minLevelRequired - pokemon.level);
+  const requiredItems = [...new Set(options.flatMap((o) => (o.requiredItem ? [o.requiredItem] : [])))];
 
   return {
     hasEvolutions: true,
@@ -2072,35 +2625,47 @@ export const canPokemonEvolve = (
     options,
     minLevelRequired,
     levelDeficit,
+    requiredItems,
   };
 };
 
 /**
- * Executes the evolution transformation, updating stats, types, moves, and metadata
+ * Stat change an evolution would cause right now (official bases at the current level),
+ * falling back to the hand-written gains for species without base stats.
+ */
+export const getEvolutionStatGains = (
+  pokemon: Pokemon,
+  option: EvolutionOption
+): NonNullable<EvolutionOption['statGains']> => {
+  const current = calculateStats(pokemon.pokedexId, pokemon.level);
+  const evolved = calculateStats(option.targetPokedexId, pokemon.level);
+  if (!current || !evolved) {
+    return option.statGains ?? { hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0 };
+  }
+  return {
+    hp: evolved.maxHp - current.maxHp,
+    attack: evolved.attack - current.attack,
+    defense: evolved.defense - current.defense,
+    spAttack: evolved.spAttack - current.spAttack,
+    spDefense: evolved.spDefense - current.spDefense,
+    speed: evolved.speed - current.speed,
+  };
+};
+
+/**
+ * Executes the evolution transformation, updating stats, types and metadata.
+ * Moves are kept; the move history carries over so pre-evolution moves stay equippable.
  */
 export const evolvePokemon = (
   pokemon: Pokemon,
   chosenOption: EvolutionOption
 ): Pokemon => {
-  const newMaxHp = pokemon.stats.maxHp + chosenOption.statGains.hp;
-  const newHp = Math.min(newMaxHp, pokemon.stats.hp + chosenOption.statGains.hp);
-
-  // Updated moves: add or replace if learnedMove exists
-  let newMoves = [...pokemon.moves];
-  if (chosenOption.learnedMove) {
-    const alreadyHas = newMoves.some((m) => m.name === chosenOption.learnedMove!.name);
-    if (!alreadyHas) {
-      if (newMoves.length < 4) {
-        newMoves.push(chosenOption.learnedMove);
-      } else {
-        // Replace last move
-        newMoves[newMoves.length - 1] = chosenOption.learnedMove;
-      }
-    }
-  }
+  const gains = getEvolutionStatGains(pokemon, chosenOption);
+  const newMaxHp = pokemon.stats.maxHp + gains.hp;
+  const newHp = Math.min(newMaxHp, pokemon.stats.hp + gains.hp);
 
   return {
-    ...pokemon,
+    ...rememberMoves(pokemon, pokemon.moves),
     pokedexId: chosenOption.targetPokedexId,
     name: chosenOption.targetName,
     types: chosenOption.types,
@@ -2112,12 +2677,11 @@ export const evolvePokemon = (
     stats: {
       hp: newHp,
       maxHp: newMaxHp,
-      attack: pokemon.stats.attack + chosenOption.statGains.attack,
-      defense: pokemon.stats.defense + chosenOption.statGains.defense,
-      spAttack: pokemon.stats.spAttack + chosenOption.statGains.spAttack,
-      spDefense: pokemon.stats.spDefense + chosenOption.statGains.spDefense,
-      speed: pokemon.stats.speed + chosenOption.statGains.speed,
+      attack: pokemon.stats.attack + gains.attack,
+      defense: pokemon.stats.defense + gains.defense,
+      spAttack: pokemon.stats.spAttack + gains.spAttack,
+      spDefense: pokemon.stats.spDefense + gains.spDefense,
+      speed: pokemon.stats.speed + gains.speed,
     },
-    moves: newMoves,
   };
 };

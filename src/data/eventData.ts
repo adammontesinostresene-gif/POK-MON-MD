@@ -54,16 +54,27 @@ export const generateFloorEvent = (
 ): FloorEvent => {
   // If it's the final floor, trigger the climatic Boss Event
   if (floorNumber >= dungeon.floorsCount) {
-    const bossLevel = dungeon.id === 'bosque_misterioso' ? 5 : dungeon.recommendedLevel + 3;
-    const boss = createWildEnemy(dungeon.bossId, bossLevel);
-    boss.id = `boss_${boss.id}_${Date.now()}`;
+    const bossLevel = dungeon.bossLevel ?? dungeon.recommendedLevel + 3;
+    const bossCount = dungeon.bossCount ?? 1;
+    const bosses = Array.from({ length: bossCount }, (_, i) => {
+      const boss = createWildEnemy(dungeon.bossId, bossLevel);
+      boss.id = `boss_${i}_${boss.id}`;
+      return boss;
+    });
+    const boss = bosses[0];
     return {
       floorNumber,
       type: 'boss',
-      title: `¡Piso Final: Encuentro con ${boss.name}!`,
-      description: `Una imponente presencia estremece las paredes del piso ${floorNumber}. ¡Es el soberano de esta mazmorra!`,
+      title:
+        bossCount > 1
+          ? `¡Piso Final: ${bossCount} ${boss.name} bloquean la salida!`
+          : `¡Piso Final: Encuentro con ${boss.name}!`,
+      description:
+        bossCount > 1
+          ? `Una manada de ${bossCount} ${boss.name} defiende el último piso. ¡Es la prueba final de esta mazmorra!`
+          : `Una imponente presencia estremece las paredes del piso ${floorNumber}. ¡Es el soberano de esta mazmorra!`,
       enemy: boss,
-      enemies: [boss],
+      enemies: bosses,
       dialogueSpeaker: boss.name,
       speakerPortrait: boss.artworkUrl,
     };

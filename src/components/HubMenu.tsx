@@ -164,7 +164,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
   const leader = team[0] || reserves[0];
   const readyToEvolveCount = [...team, ...reserves].filter(
-    (p) => canPokemonEvolve(p).canEvolve
+    (p) => canPokemonEvolve(p, [...inventory, ...storage].map((it) => it.name)).canEvolve
   ).length;
 
   return (
@@ -315,7 +315,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                 Explorar Mazmorra
               </h3>
               <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
-                Elige tu destino: Bosque Místico, Cueva Resonante o Pico Tempestad.
+                Elige tu destino: Bosquejo Tutorial, Cueva Resonante o Pico Tempestad.
               </p>
             </div>
           </button>

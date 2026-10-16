@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Pokemon, Move, Item, PokemonType } from '../types/game';
-import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel } from '../data/pokemonData';
+import React, { useState, useEffect, useRef } from 'react';
+import { Pokemon, Move, Item, PokemonType, BattleStat, StatChange, StatusAilment } from '../types/game';
+import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel, applyOfficialStats, learnLevelUpMoves, replaceMove } from '../data/pokemonData';
+import { LEARNSET_MOVES } from '../data/learnsets';
 import { soundManager } from '../utils/audio';
 import {
   Shield,
@@ -24,6 +25,80 @@ import { PmdSprite, PmdPortrait } from './PmdSprite';
 
 // Global damage tuning for all attacks (player and enemies)
 const DAMAGE_MULTIPLIER = 1.35;
+
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+const OFFICIAL_MOVES_BY_ID = new Map(Object.values(LEARNSET_MOVES).map((m) => [m.id, m]));
+
+// Official effect data (also covers moves stored in older saves) or the legacy boost flags
+const withEffects = (move: Move): Move => {
+  const official = OFFICIAL_MOVES_BY_ID.get(move.id);
+  if (official) {
+    return {
+      ...move,
+      target: official.target,
+      healPercent: official.healPercent,
+      statChanges: official.statChanges,
+      statTarget: official.statTarget,
+      statChance: official.statChance,
+      statusEffect: official.statusEffect,
+      statusChance: official.statusChance,
+    };
+  }
+  if (move.statusEffect === 'attack_boost' || move.statusEffect === 'defense_boost') {
+    return {
+      ...move,
+      target: move.power > 0 ? move.target : 'self',
+      statChanges: [{ stat: move.statusEffect === 'attack_boost' ? 'attack' : 'defense', stages: 1 }],
+      statTarget: 'self',
+      statChance: 100,
+    };
+  }
+  return move;
+};
+
+const STAT_LABELS: Record<BattleStat, { name: string; short: string; article: 'El' | 'La' }> = {
+  attack: { name: 'Ataque', short: 'Atq', article: 'El' },
+  defense: { name: 'Defensa', short: 'Def', article: 'La' },
+  spAttack: { name: 'Ataque Especial', short: 'AtE', article: 'El' },
+  spDefense: { name: 'Defensa Especial', short: 'DfE', article: 'La' },
+  speed: { name: 'Velocidad', short: 'Vel', article: 'La' },
+  accuracy: { name: 'Precisión', short: 'Pre', article: 'La' },
+  evasion: { name: 'Evasión', short: 'Eva', article: 'La' },
+};
+
+// Official stage multipliers (stages range from -6 to +6)
+const stageMultiplier = (stage: number) => (stage >= 0 ? (2 + stage) / 2 : 2 / (2 - stage));
+const accuracyMultiplier = (stage: number) => (stage >= 0 ? (3 + stage) / 3 : 3 / (3 - stage));
+
+type StageMap = Record<string, Partial<Record<BattleStat, number>>>;
+
+type Ailment = Exclude<StatusAilment, 'none'>;
+type AilmentMap = Record<string, { status: Ailment; turns: number }>;
+
+const AILMENT_LABELS: Record<Ailment, { short: string; className: string; inflicted: string }> = {
+  paralysis: { short: 'PAR', className: 'bg-yellow-500 text-yellow-950', inflicted: 'está paralizado. ¡Quizás no pueda moverse!' },
+  burn: { short: 'QUE', className: 'bg-orange-600 text-white', inflicted: 'se ha quemado.' },
+  poison: { short: 'ENV', className: 'bg-purple-600 text-white', inflicted: 'ha sido envenenado.' },
+  sleep: { short: 'DOR', className: 'bg-slate-500 text-white', inflicted: 'se ha dormido.' },
+  freeze: { short: 'CON', className: 'bg-cyan-400 text-cyan-950', inflicted: 'ha sido congelado.' },
+};
+
+const getMoveAilment = (move: Move): Ailment | undefined =>
+  move.statusEffect && move.statusEffect in AILMENT_LABELS ? (move.statusEffect as Ailment) : undefined;
+
+const isImmuneToAilment = (p: Pokemon, ailment: Ailment) =>
+  (ailment === 'paralysis' && p.types.includes('Eléctrico')) ||
+  (ailment === 'burn' && p.types.includes('Fuego')) ||
+  (ailment === 'poison' && (p.types.includes('Veneno') || p.types.includes('Acero'))) ||
+  (ailment === 'freeze' && p.types.includes('Hielo'));
+
+// A level-up move that didn't fit because the Pokémon already knows 4
+interface PendingLearn {
+  memberId: string;
+  memberName: string;
+  move: Move;
+}
 
 interface TurnBasedCombatProps {
   playerTeam: Pokemon[];
@@ -150,7 +225,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     goldGained: number;
     droppedItem?: Item;
     recruitedPokemon?: Pokemon;
-    leveledUpPokemon?: { name: string; oldLevel: number; newLevel: number }[];
+    leveledUpPokemon?: { name: string; oldLevel: number; newLevel: number; learned: string[] }[];
+    pendingLearns: PendingLearn[];
   } | null>(null);
 
   // Play battle music on mount
@@ -161,12 +237,149 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     };
   }, []);
 
+  // Stat stages live only inside this battle (the component remounts for every floor fight)
+  const stagesRef = useRef<StageMap>({});
+  const [statStages, setStatStages] = useState<StageMap>({});
+  const ailmentsRef = useRef<AilmentMap>({});
+  const [ailments, setAilments] = useState<AilmentMap>({});
+
+  const setAilment = (id: string, value: AilmentMap[string] | null) => {
+    const next = { ...ailmentsRef.current };
+    if (value) next[id] = value;
+    else delete next[id];
+    ailmentsRef.current = next;
+    setAilments(next);
+  };
+
   // Safe reference to the current selecting member
   const currentMember = aliveMembers[selectingMemberIndex] || aliveMembers[0];
 
   const addLog = (msg: string) => {
     setBattleLogs((prev) => [...prev.slice(-7), msg]);
     soundManager.playTextBlip();
+  };
+
+  const getStage = (id: string, stat: BattleStat) => stagesRef.current[id]?.[stat] ?? 0;
+
+  const effectiveStat = (p: Pokemon, stat: 'attack' | 'defense' | 'spAttack' | 'spDefense' | 'speed') =>
+    p.stats[stat] *
+    stageMultiplier(getStage(p.id, stat)) *
+    (stat === 'speed' && ailmentsRef.current[p.id]?.status === 'paralysis' ? 0.5 : 1);
+
+  // Returns true when the target ends up with the new ailment
+  const applyAilment = async (target: Pokemon, ailment: Ailment, announceFailure: boolean) => {
+    if (ailmentsRef.current[target.id] || isImmuneToAilment(target, ailment)) {
+      if (announceFailure) {
+        addLog(
+          ailmentsRef.current[target.id]
+            ? `¡Pero no afectó a ${target.name}! Ya sufre un problema de estado.`
+            : `No afecta a ${target.name}...`
+        );
+        await wait(450);
+      }
+      return false;
+    }
+    setAilment(target.id, { status: ailment, turns: ailment === 'sleep' ? 1 + Math.floor(Math.random() * 3) : 0 });
+    addLog(`¡${target.name} ${AILMENT_LABELS[ailment].inflicted}`);
+    setFloatingDamage({ targetId: target.id, text: AILMENT_LABELS[ailment].short, type: 'status' });
+    soundManager.playHit();
+    await wait(550);
+    setFloatingDamage(null);
+    return true;
+  };
+
+  // Sleep, freeze and paralysis can stop the actor before using its move
+  const checkCanAct = async (actor: Pokemon) => {
+    const current = ailmentsRef.current[actor.id];
+    if (!current) return true;
+    if (current.status === 'sleep') {
+      if (current.turns > 0) {
+        setAilment(actor.id, { status: 'sleep', turns: current.turns - 1 });
+        addLog(`💤 ${actor.name} está profundamente dormido.`);
+        await wait(550);
+        return false;
+      }
+      setAilment(actor.id, null);
+      addLog(`¡${actor.name} se despertó!`);
+      await wait(400);
+      return true;
+    }
+    if (current.status === 'freeze') {
+      if (Math.random() < 0.2) {
+        setAilment(actor.id, null);
+        addLog(`¡${actor.name} se ha descongelado!`);
+        await wait(400);
+        return true;
+      }
+      addLog(`🧊 ${actor.name} está congelado.`);
+      await wait(550);
+      return false;
+    }
+    if (current.status === 'paralysis' && Math.random() < 0.25) {
+      addLog(`⚡ ¡${actor.name} está paralizado! No se puede mover.`);
+      await wait(550);
+      return false;
+    }
+    return true;
+  };
+
+  const moveHits = (attacker: Pokemon, defender: Pokemon, move: Move) => {
+    const stage = Math.max(-6, Math.min(6, getStage(attacker.id, 'accuracy') - getStage(defender.id, 'evasion')));
+    return Math.random() * 100 < move.accuracy * accuracyMultiplier(stage);
+  };
+
+  const applyStatChanges = async (target: Pokemon, changes: StatChange[]) => {
+    for (const change of changes) {
+      const label = STAT_LABELS[change.stat];
+      const current = getStage(target.id, change.stat);
+      const next = Math.max(-6, Math.min(6, current + change.stages));
+      const rising = change.stages > 0;
+      if (next === current) {
+        addLog(`¡${label.article} ${label.name} de ${target.name} no puede ${rising ? 'subir' : 'bajar'} más!`);
+      } else {
+        stagesRef.current = {
+          ...stagesRef.current,
+          [target.id]: { ...stagesRef.current[target.id], [change.stat]: next },
+        };
+        setStatStages(stagesRef.current);
+        const amount = Math.abs(next - current);
+        const intensity = amount >= 3 ? ' muchísimo' : amount === 2 ? ' mucho' : '';
+        addLog(`¡${label.article} ${label.name} de ${target.name} ${rising ? 'subió' : 'bajó'}${intensity}!`);
+        setFloatingDamage({ targetId: target.id, text: `${label.short} ${rising ? '↑' : '↓'}`, type: 'status' });
+        if (rising) soundManager.playHeal();
+        else soundManager.playHit();
+      }
+      await wait(500);
+    }
+    setFloatingDamage(null);
+  };
+
+  const renderStages = (id: string) => {
+    const stages = Object.entries(statStages[id] ?? {}).filter(([, v]) => v);
+    const ailment = ailments[id]?.status;
+    if (stages.length === 0 && !ailment) return null;
+    return (
+      <div className="flex flex-wrap justify-center gap-0.5 mt-0.5">
+        {ailment && (
+          <span
+            className={`text-[7px] sm:text-[8px] font-mono font-bold px-0.5 rounded leading-tight ${AILMENT_LABELS[ailment].className}`}
+          >
+            {AILMENT_LABELS[ailment].short}
+          </span>
+        )}
+        {stages.map(([stat, v]) => (
+          <span
+            key={stat}
+            className={`text-[7px] sm:text-[8px] font-mono font-bold px-0.5 rounded leading-tight ${
+              v! > 0 ? 'bg-emerald-700/90 text-emerald-100' : 'bg-red-800/90 text-red-100'
+            }`}
+          >
+            {STAT_LABELS[stat as BattleStat].short}
+            {v! > 0 ? `+${v}` : v}
+          </span>
+        ))}
+      </div>
+    );
   };
 
   // Helper for damage calculation
@@ -176,20 +389,22 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     }
 
     const isPhysical = move.category === 'physical';
-    const atkStat = isPhysical ? attacker.stats.attack : attacker.stats.spAttack;
-    const defStat = isPhysical ? defender.stats.defense : defender.stats.spDefense;
+    const atkStat = effectiveStat(attacker, isPhysical ? 'attack' : 'spAttack');
+    const defStat = effectiveStat(defender, isPhysical ? 'defense' : 'spDefense');
 
     const effectiveness = getTypeEffectiveness(move.type, defender.types);
     const stab = attacker.types.includes(move.type) ? 1.5 : 1.0;
     const variance = 0.85 + Math.random() * 0.15;
     const isCrit = Math.random() < 0.08;
     const critMult = isCrit ? 1.5 : 1.0;
+    const burnMult = isPhysical && ailmentsRef.current[attacker.id]?.status === 'burn' ? 0.5 : 1.0;
 
     const baseDmg =
       ((2 * attacker.level / 5 + 2) * move.power * (atkStat / Math.max(1, defStat)) / 50 + 2) *
       stab *
       effectiveness *
       critMult *
+      burnMult *
       variance *
       DAMAGE_MULTIPLIER;
 
@@ -204,9 +419,14 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   const handleSelectMemberMove = (member: Pokemon, move: Move) => {
     soundManager.playSelect();
 
-    // If move is a self-buff or self-heal, immediately target self
-    if (move.healPercent) {
+    // Self-buffs / self-heals target the user; area moves need no target
+    const fx = withEffects(move);
+    if (fx.healPercent || fx.target === 'self') {
       handleConfirmMemberAction(member, move, member.id);
+      return;
+    }
+    if (fx.target === 'all_enemies') {
+      handleConfirmMemberAction(member, move, aliveEnemies[0]?.id || '');
       return;
     }
 
@@ -287,7 +507,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           actorName: member.name,
           isPlayerTeam: true,
           memberIndex: i,
-          speed: member.stats.speed,
+          speed: effectiveStat(member, 'speed'),
           priority: move.name === 'Ataque Rápido' ? 1 : 0,
           move,
           targetId: assignedTarget,
@@ -317,7 +537,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           actorName: enemyActor.name,
           isPlayerTeam: false,
           memberIndex: j,
-          speed: enemyActor.stats.speed,
+          speed: effectiveStat(enemyActor, 'speed'),
           priority: randomEnemyMove.name === 'Ataque Rápido' ? 1 : 0,
           move: randomEnemyMove,
           targetId: 'player_target',
@@ -354,21 +574,28 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           continue;
         }
 
-        // Self-heal move
-        if (action.move.healPercent) {
-          addLog(`✨ ${member.name} usa ${action.move.name}!`);
-          soundManager.playHeal();
+        const move = withEffects(action.move);
+        const ailment = getMoveAilment(move);
+        if (!(await checkCanAct(member))) continue;
+
+        // Self-targeted move: healing and/or own stat changes
+        if (move.target === 'self' || move.healPercent) {
+          addLog(`✨ ${member.name} usa ${move.name}!`);
           setAttackingMemberId(member.id);
-          await new Promise((r) => setTimeout(r, 220));
+          await wait(220);
           setAttackingMemberId(null);
 
-          const healAmount = Math.round((member.stats.maxHp * action.move.healPercent) / 100);
-          member.stats.hp = Math.min(member.stats.maxHp, member.stats.hp + healAmount);
-          currentTeam[action.memberIndex!] = { ...member };
-          setTeam([...currentTeam]);
-          setFloatingDamage({ targetId: member.id, text: `+${healAmount} PS`, type: 'heal' });
-          await new Promise((r) => setTimeout(r, 550));
-          setFloatingDamage(null);
+          if (move.healPercent) {
+            soundManager.playHeal();
+            const healAmount = Math.round((member.stats.maxHp * move.healPercent) / 100);
+            member.stats.hp = Math.min(member.stats.maxHp, member.stats.hp + healAmount);
+            currentTeam[action.memberIndex!] = { ...member };
+            setTeam([...currentTeam]);
+            setFloatingDamage({ targetId: member.id, text: `+${healAmount} PS`, type: 'heal' });
+            await wait(550);
+            setFloatingDamage(null);
+          }
+          if (move.statChanges) await applyStatChanges(member, move.statChanges);
           continue;
         }
 
@@ -380,53 +607,113 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         if (!targetEnemy) break; // All enemies down
 
         const targetEnemyIdx = currentEnemies.findIndex((e) => e.id === targetEnemy.id);
+        const isAreaMove = move.target === 'all_enemies';
+        const isFieldStatus = move.power === 0 && isAreaMove;
 
-        addLog(`⚡ ${member.name} usa ${action.move.name} contra ${targetEnemy.name}!`);
+        addLog(
+          isAreaMove
+            ? `⚡ ${member.name} usa ${move.name}!`
+            : `⚡ ${member.name} usa ${move.name} contra ${targetEnemy.name}!`
+        );
 
-        if (action.move.type === 'Eléctrico') {
-          soundManager.playElectricShock();
-        } else {
-          soundManager.playTackle();
+        if (move.power > 0) {
+          if (move.type === 'Eléctrico') soundManager.playElectricShock();
+          else soundManager.playTackle();
         }
 
         setAttackingMemberId(member.id);
-        await new Promise((r) => setTimeout(r, 220));
+        await wait(220);
         setAttackingMemberId(null);
 
-        // Calculate and apply damage to target enemy
-        if (action.move.power > 0) {
-          const { damage, effectiveness, isCrit } = calculateDamage(member, targetEnemy, action.move);
-          setHitEnemyId(targetEnemy.id);
-          soundManager.playHit();
-          setFloatingDamage({ targetId: targetEnemy.id, text: `-${damage}`, type: 'damage' });
+        // Status move: stat changes on the target (or every rival for field-wide moves)
+        if (move.power === 0) {
+          const targets = isFieldStatus ? currentEnemies.filter((e) => e.stats.hp > 0) : [targetEnemy];
+          if (!move.statChanges && !ailment) {
+            addLog('¡Pero no pasó nada!');
+            await wait(400);
+            continue;
+          }
+          for (const t of targets) {
+            if (!moveHits(member, t, move)) {
+              addLog(`¡${t.name} esquivó ${move.name}!`);
+              setFloatingDamage({ targetId: t.id, text: 'Fallo', type: 'miss' });
+              await wait(450);
+              setFloatingDamage(null);
+              continue;
+            }
+            if (move.statChanges) await applyStatChanges(t, move.statChanges);
+            if (ailment) {
+              if (getTypeEffectiveness(move.type, t.types) === 0) {
+                addLog(`No afecta a ${t.name}...`);
+                await wait(450);
+              } else {
+                await applyAilment(t, ailment, true);
+              }
+            }
+          }
+          continue;
+        }
 
-          targetEnemy.stats.hp = Math.max(0, targetEnemy.stats.hp - damage);
-          currentEnemies[targetEnemyIdx] = { ...targetEnemy };
+        // Damaging move: one target, or every rival for area moves (official 0.75x when several are hit)
+        const hitTargets = isAreaMove ? currentEnemies.filter((e) => e.stats.hp > 0) : [targetEnemy];
+        const spreadMult = hitTargets.length > 1 ? 0.75 : 1;
+        let selfBoostDone = false;
+        for (const t of hitTargets) {
+          const tIdx = isAreaMove ? currentEnemies.findIndex((e) => e.id === t.id) : targetEnemyIdx;
+          if (!moveHits(member, t, move)) {
+            addLog(`¡${t.name} esquivó el ataque!`);
+            setFloatingDamage({ targetId: t.id, text: 'Fallo', type: 'miss' });
+            await wait(550);
+            setFloatingDamage(null);
+            continue;
+          }
+
+          const { damage: rawDamage, effectiveness, isCrit } = calculateDamage(member, t, move);
+          const damage = Math.max(1, Math.round(rawDamage * spreadMult));
+          setHitEnemyId(t.id);
+          soundManager.playHit();
+          setFloatingDamage({ targetId: t.id, text: `-${damage}`, type: 'damage' });
+
+          t.stats.hp = Math.max(0, t.stats.hp - damage);
+          currentEnemies[tIdx] = { ...t };
           setEnemies([...currentEnemies]);
 
-          await new Promise((r) => setTimeout(r, 250));
+          await wait(250);
           setHitEnemyId(null);
 
           if (isCrit) addLog(`¡Golpe crítico de ${member.name}!`);
-          if (effectiveness > 1.0) addLog(`¡Ataque súper eficaz contra ${targetEnemy.name}!`);
-          if (effectiveness < 1.0 && effectiveness > 0) addLog(`No es muy eficaz...`);
+          if (effectiveness > 1.0) addLog(`¡Ataque súper eficaz contra ${t.name}!`);
+          if (effectiveness < 1.0 && effectiveness > 0) addLog(`No es muy eficaz contra ${t.name}...`);
 
-          if (targetEnemy.stats.hp <= 0) {
-            addLog(`¡${targetEnemy.name} cayó debilitado!`);
+          if (t.stats.hp <= 0) {
+            addLog(`¡${t.name} cayó debilitado!`);
             soundManager.playHit();
           }
 
-          await new Promise((r) => setTimeout(r, 450));
+          await wait(450);
           setFloatingDamage(null);
 
-          // Check if all enemies defeated
-          if (currentEnemies.every((e) => e.stats.hp <= 0)) {
-            await handleVictory(currentTeam, currentEnemies);
-            setIsProcessingTurn(false);
-            setCurrentActingActorId(null);
-            setCurrentExecutionQueue([]);
-            return;
+          // Secondary effects (e.g. Ácido may lower Sp. Def); a self-boost only triggers once per use
+          if (move.statChanges && Math.random() * 100 < (move.statChance ?? 100)) {
+            if (move.statTarget === 'self') {
+              if (!selfBoostDone) await applyStatChanges(member, move.statChanges);
+              selfBoostDone = true;
+            } else if (t.stats.hp > 0) {
+              await applyStatChanges(t, move.statChanges);
+            }
           }
+          if (ailment && t.stats.hp > 0 && Math.random() * 100 < (move.statusChance ?? 30)) {
+            await applyAilment(t, ailment, false);
+          }
+        }
+
+        // Check if all enemies defeated
+        if (currentEnemies.every((e) => e.stats.hp <= 0)) {
+          await handleVictory(currentTeam, currentEnemies);
+          setIsProcessingTurn(false);
+          setCurrentActingActorId(null);
+          setCurrentExecutionQueue([]);
+          return;
         }
       } else {
         // ENEMY'S ACTION
@@ -436,41 +723,129 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           continue;
         }
 
+        const move = withEffects(action.move);
+        const ailment = getMoveAilment(move);
+        if (!(await checkCanAct(enemyActor))) continue;
+
+        if (move.target === 'self' || move.healPercent) {
+          addLog(`✨ ¡${enemyActor.name} usa ${move.name}!`);
+          setAttackingEnemyId(enemyActor.id);
+          await wait(220);
+          setAttackingEnemyId(null);
+
+          if (move.healPercent) {
+            soundManager.playHeal();
+            const healAmount = Math.round((enemyActor.stats.maxHp * move.healPercent) / 100);
+            enemyActor.stats.hp = Math.min(enemyActor.stats.maxHp, enemyActor.stats.hp + healAmount);
+            currentEnemies[action.memberIndex!] = { ...enemyActor };
+            setEnemies([...currentEnemies]);
+            setFloatingDamage({ targetId: enemyActor.id, text: `+${healAmount} PS`, type: 'heal' });
+            await wait(550);
+            setFloatingDamage(null);
+          }
+          if (move.statChanges) await applyStatChanges(enemyActor, move.statChanges);
+          continue;
+        }
+
         const currentAlive = currentTeam.filter((m) => m.stats.hp > 0);
         if (currentAlive.length === 0) break;
 
         const targetMember = currentAlive[Math.floor(Math.random() * currentAlive.length)];
         const targetIdx = currentTeam.findIndex((m) => m.id === targetMember.id);
+        const isAreaMove = move.target === 'all_enemies';
+        const isFieldStatus = move.power === 0 && isAreaMove;
 
-        addLog(`💥 ¡${enemyActor.name} ataca a ${targetMember.name} con ${action.move.name}!`);
+        addLog(
+          isAreaMove
+            ? `💥 ¡${enemyActor.name} usa ${move.name}!`
+            : move.power > 0
+            ? `💥 ¡${enemyActor.name} ataca a ${targetMember.name} con ${move.name}!`
+            : `💥 ¡${enemyActor.name} usa ${move.name} contra ${targetMember.name}!`
+        );
 
         setAttackingEnemyId(enemyActor.id);
-        await new Promise((r) => setTimeout(r, 220));
+        await wait(220);
         setAttackingEnemyId(null);
 
-        const { damage, effectiveness, isCrit } = calculateDamage(enemyActor, targetMember, action.move);
+        if (move.power === 0) {
+          if (!move.statChanges && !ailment) {
+            addLog('¡Pero no pasó nada!');
+            await wait(400);
+            continue;
+          }
+          const targets = isFieldStatus ? currentAlive : [targetMember];
+          for (const t of targets) {
+            if (!moveHits(enemyActor, t, move)) {
+              addLog(`¡${t.name} esquivó ${move.name}!`);
+              setFloatingDamage({ targetId: t.id, text: 'Fallo', type: 'miss' });
+              await wait(450);
+              setFloatingDamage(null);
+              continue;
+            }
+            if (move.statChanges) await applyStatChanges(t, move.statChanges);
+            if (ailment) {
+              if (getTypeEffectiveness(move.type, t.types) === 0) {
+                addLog(`No afecta a ${t.name}...`);
+                await wait(450);
+              } else {
+                await applyAilment(t, ailment, true);
+              }
+            }
+          }
+          continue;
+        }
 
-        setHitMemberId(targetMember.id);
-        soundManager.playHit();
-        setFloatingDamage({ targetId: targetMember.id, text: `-${damage}`, type: 'damage' });
+        const hitTargets = isAreaMove ? currentAlive : [targetMember];
+        const spreadMult = hitTargets.length > 1 ? 0.75 : 1;
+        let selfBoostDone = false;
+        for (const t of hitTargets) {
+          const tIdx = isAreaMove ? currentTeam.findIndex((m) => m.id === t.id) : targetIdx;
+          if (!moveHits(enemyActor, t, move)) {
+            addLog(`¡${t.name} esquivó el ataque!`);
+            setFloatingDamage({ targetId: t.id, text: 'Fallo', type: 'miss' });
+            await wait(550);
+            setFloatingDamage(null);
+            continue;
+          }
 
-        targetMember.stats.hp = Math.max(0, targetMember.stats.hp - damage);
-        currentTeam[targetIdx] = { ...targetMember };
-        setTeam([...currentTeam]);
+          const { damage: rawDamage, effectiveness, isCrit } = calculateDamage(enemyActor, t, move);
+          const damage = Math.max(1, Math.round(rawDamage * spreadMult));
 
-        await new Promise((r) => setTimeout(r, 250));
-        setHitMemberId(null);
+          setHitMemberId(t.id);
+          soundManager.playHit();
+          setFloatingDamage({ targetId: t.id, text: `-${damage}`, type: 'damage' });
 
-        if (isCrit) addLog(`¡Golpe crítico de ${enemyActor.name}!`);
+          t.stats.hp = Math.max(0, t.stats.hp - damage);
+          currentTeam[tIdx] = { ...t };
+          setTeam([...currentTeam]);
 
-        await new Promise((r) => setTimeout(r, 450));
-        setFloatingDamage(null);
+          await wait(250);
+          setHitMemberId(null);
 
-        // Check if target member fainted
-        if (targetMember.stats.hp <= 0) {
-          addLog(`¡${targetMember.name} cayó debilitado!`);
-          soundManager.playDefeat();
-          await new Promise((r) => setTimeout(r, 400));
+          if (isCrit) addLog(`¡Golpe crítico de ${enemyActor.name}!`);
+          if (effectiveness > 1.0) addLog(`¡Ataque súper eficaz contra ${t.name}!`);
+          if (effectiveness < 1.0 && effectiveness > 0) addLog(`No es muy eficaz contra ${t.name}...`);
+
+          await wait(450);
+          setFloatingDamage(null);
+
+          if (move.statChanges && Math.random() * 100 < (move.statChance ?? 100)) {
+            if (move.statTarget === 'self') {
+              if (!selfBoostDone) await applyStatChanges(enemyActor, move.statChanges);
+              selfBoostDone = true;
+            } else if (t.stats.hp > 0) {
+              await applyStatChanges(t, move.statChanges);
+            }
+          }
+          if (ailment && t.stats.hp > 0 && Math.random() * 100 < (move.statusChance ?? 30)) {
+            await applyAilment(t, ailment, false);
+          }
+
+          if (t.stats.hp <= 0) {
+            addLog(`¡${t.name} cayó debilitado!`);
+            soundManager.playDefeat();
+            await wait(400);
+          }
         }
 
         // Check if all team fainted
@@ -483,6 +858,50 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           return;
         }
       }
+    }
+
+    // End of round: burn and poison damage
+    const residualTargets = [
+      ...currentTeam.map((p, i) => ({ p, i, isPlayer: true })),
+      ...currentEnemies.map((p, i) => ({ p, i, isPlayer: false })),
+    ];
+    for (const { p, i, isPlayer } of residualTargets) {
+      const status = ailmentsRef.current[p.id]?.status;
+      if (p.stats.hp <= 0 || (status !== 'burn' && status !== 'poison')) continue;
+      const dmg = Math.max(1, Math.floor(p.stats.maxHp / (status === 'burn' ? 16 : 8)));
+      const updated = { ...p, stats: { ...p.stats, hp: Math.max(0, p.stats.hp - dmg) } };
+      if (isPlayer) {
+        currentTeam[i] = updated;
+        setTeam([...currentTeam]);
+      } else {
+        currentEnemies[i] = updated;
+        setEnemies([...currentEnemies]);
+      }
+      addLog(status === 'burn' ? `🔥 ${p.name} se resiente de la quemadura.` : `☠️ ${p.name} sufre los efectos del veneno.`);
+      setFloatingDamage({ targetId: p.id, text: `-${dmg}`, type: 'damage' });
+      soundManager.playHit();
+      await wait(550);
+      setFloatingDamage(null);
+      if (updated.stats.hp <= 0) {
+        addLog(`¡${p.name} cayó debilitado!`);
+        await wait(350);
+      }
+    }
+
+    if (currentEnemies.every((e) => e.stats.hp <= 0)) {
+      await handleVictory(currentTeam, currentEnemies);
+      setIsProcessingTurn(false);
+      setCurrentActingActorId(null);
+      setCurrentExecutionQueue([]);
+      return;
+    }
+    if (currentTeam.every((m) => m.stats.hp <= 0)) {
+      addLog(`¡Todo tu equipo ha sido debilitado!`);
+      soundManager.playDefeat();
+      await wait(1000);
+      setIsProcessingTurn(false);
+      onDefeat();
+      return;
     }
 
     // Reset chosen moves and restart selection for next round
@@ -521,7 +940,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         : 0;
 
     // Level-up checks for surviving team members: strictly ONE notification message per Pokémon
-    const leveledMap = new Map<string, { name: string; oldLevel: number; newLevel: number }>();
+    const leveledMap = new Map<string, { name: string; oldLevel: number; newLevel: number; learned: string[] }>();
+    const pendingLearns: PendingLearn[] = [];
     const updatedTeam = finalTeam.map((member) => {
       const initialLevel = member.level;
       let exp = member.exp + expReward;
@@ -536,28 +956,32 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         nextExp = getExpToNextLevel(level);
         exp = Math.min(exp, nextExp - 1);
 
-        // Boost stats upon leveling
-        stats.maxHp += 4;
-        stats.hp = Math.min(stats.maxHp, stats.hp + 4);
-        stats.attack += 2;
-        stats.defense += 2;
-        stats.spAttack += 2;
-        stats.spDefense += 2;
-        stats.speed += 1;
+        // Boost stats upon leveling (official bases when available)
+        const official = applyOfficialStats({ ...member, level, stats });
+        if (official.stats !== stats) {
+          stats = official.stats;
+        } else {
+          stats.maxHp += 4;
+          stats.hp = Math.min(stats.maxHp, stats.hp + 4);
+          stats.attack += 2;
+          stats.defense += 2;
+          stats.spAttack += 2;
+          stats.spDefense += 2;
+          stats.speed += 1;
+        }
       }
 
-      // Add strictly ONE level-up alert for this Pokémon if its level increased
-      if (level > initialLevel && !leveledMap.has(member.id)) {
-        leveledMap.set(member.id, { name: member.name, oldLevel: initialLevel, newLevel: level });
-      }
+      const leveledMember = { ...member, exp, level, nextExp, stats };
+      if (level === initialLevel) return leveledMember;
 
-      return {
-        ...member,
-        exp,
-        level,
-        nextExp,
-        stats,
-      };
+      const { pokemon: withMoves, learned, pending } = learnLevelUpMoves(leveledMember);
+      pending.forEach((move) =>
+        pendingLearns.push({ memberId: member.id, memberName: member.name, move })
+      );
+      if (!leveledMap.has(member.id)) {
+        leveledMap.set(member.id, { name: member.name, oldLevel: initialLevel, newLevel: level, learned });
+      }
+      return withMoves;
     });
 
     const leveledList = Array.from(leveledMap.values());
@@ -603,6 +1027,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       droppedItem,
       recruitedPokemon: potentialRecruit,
       leveledUpPokemon: leveledList,
+      pendingLearns,
     });
   };
 
@@ -637,6 +1062,16 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       setSelectedBagItem(null);
       setTimeout(() => onEscapeDungeon(team, updatedInv), 900);
       return;
+    } else if (item.effectType === 'inflict_status') {
+      const foe =
+        enemies.find((e) => e.id === selectedTargetEnemyId && e.stats.hp > 0) ?? enemies.find((e) => e.stats.hp > 0);
+      if (foe && !ailmentsRef.current[foe.id]) {
+        setAilment(foe.id, { status: 'sleep', turns: item.effectValue || 3 });
+        soundManager.playSelect();
+        addLog(`💤 ¡${user.name} lanzó ${item.name} a ${foe.name}! ¡${foe.name} se ha dormido!`);
+      } else {
+        addLog(`🎒 ${user.name} usó ${item.name}... ¡pero no tuvo efecto!`);
+      }
     } else {
       addLog(`🎒 ${user.name} usó ${item.name}.`);
     }
@@ -801,6 +1236,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     className={`absolute -top-7 font-pixel text-xs px-2 py-0.5 rounded shadow-lg animate-bounce z-20 ${
                       floatingDamage.type === 'heal'
                         ? 'bg-emerald-500 text-white'
+                        : floatingDamage.type === 'status'
+                        ? 'bg-sky-600 text-white'
+                        : floatingDamage.type === 'miss'
+                        ? 'bg-slate-700 text-white'
                         : 'bg-red-600 text-white'
                     }`}
                   >
@@ -837,6 +1276,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       {member.stats.hp}/{member.stats.maxHp}
                     </span>
                   </div>
+                  {renderStages(member.id)}
                 </div>
 
                 {/* Portrait from PMD Sprite Repository */}
@@ -877,7 +1317,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 {/* Planned target indicator badge */}
                 {hasChosen && memberTargetMap[member.id] && (
                   <span className="text-[7px] text-sky-300 font-mono font-bold truncate max-w-[56px] text-center bg-slate-900/90 px-1 rounded border border-sky-500/40 mt-0.5">
-                    🎯 {enemies.find((e) => e.id === memberTargetMap[member.id])?.name || 'Rival'}
+                    🎯 {memberTargetMap[member.id] === member.id
+                      ? 'Sí mismo'
+                      : enemies.find((e) => e.id === memberTargetMap[member.id])?.name || 'Rival'}
                   </span>
                 )}
               </div>
@@ -927,6 +1369,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     className={`absolute -top-7 font-pixel text-xs sm:text-sm px-2 py-0.5 rounded shadow-lg animate-bounce z-20 ${
                       floatingDamage.type === 'miss'
                         ? 'bg-slate-700 text-white'
+                        : floatingDamage.type === 'heal'
+                        ? 'bg-emerald-500 text-white'
+                        : floatingDamage.type === 'status'
+                        ? 'bg-sky-600 text-white'
                         : 'bg-red-600 text-white'
                     }`}
                   >
@@ -969,6 +1415,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                   <span className="text-[7px] sm:text-[8px] font-mono text-emerald-400 font-bold">
                     {isAlive ? `${enemyMember.stats.hp}/${enemyMember.stats.maxHp}` : 'K.O.'}
                   </span>
+                  {isAlive && renderStages(enemyMember.id)}
                 </div>
 
                 {/* Enemy Field Portrait (PMD Repository) */}
@@ -1251,6 +1698,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                           <span className="text-[7px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 rounded font-bold">
                             Prioridad (+1)
                           </span>
+                        ) : withEffects(move).target === 'all_enemies' ? (
+                          <span className="text-[7px] bg-sky-400/20 text-sky-300 border border-sky-400/40 px-1 rounded font-bold">
+                            Área
+                          </span>
                         ) : (
                           <span className="text-[8px] capitalize text-slate-400">{move.category}</span>
                         )}
@@ -1390,7 +1841,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     disabled={isProcessingTurn || item.count <= 0}
                     onClick={() => {
                       soundManager.playSelect();
-                      if (item.effectType === 'escape' || item.category === 'orb') {
+                      if (item.effectType === 'escape' || item.category === 'orb' || item.effectType === 'inflict_status') {
                         handleUseItemOnTarget(item, 0);
                         return;
                       }
@@ -1518,14 +1969,66 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
                     <span>
                       ¡<strong>{p.name}</strong> subió al Nivel {p.newLevel}! (+Estadísticas)
+                      {p.learned.length > 0 && (
+                        <span className="block text-emerald-300">Aprendió {p.learned.join(', ')}.</span>
+                      )}
                     </span>
                   </div>
                 ))}
               </div>
             )}
 
-            {/* RECRUITMENT DECISION PROMPT */}
-            {victoryState.recruitedPokemon ? (
+            {/* MOVE LEARNING PROMPT (one at a time, before recruitment / continue) */}
+            {victoryState.pendingLearns.length > 0 ? (
+              (() => {
+                const learn = victoryState.pendingLearns[0];
+                const learner = team.find((m) => m.id === learn.memberId);
+                const resolveLearn = (forget: string | null) => {
+                  soundManager.playSelect();
+                  if (forget) {
+                    setTeam((prev) =>
+                      prev.map((m) => (m.id === learn.memberId ? replaceMove(m, forget, learn.move) : m))
+                    );
+                  }
+                  setVictoryState((prev) =>
+                    prev ? { ...prev, pendingLearns: prev.pendingLearns.slice(1) } : prev
+                  );
+                };
+                return (
+                  <div className="bg-sky-950/70 border-2 border-sky-400 rounded-xl p-3 text-sky-100 text-xs flex flex-col gap-2 text-left">
+                    <p>
+                      ¡<strong>{learn.memberName}</strong> quiere aprender{' '}
+                      <strong className="text-amber-300">{learn.move.name}</strong> ({learn.move.type}
+                      {learn.move.power > 0 ? `, Pot. ${learn.move.power}` : ''})! Pero ya conoce 4 movimientos.
+                      ¿Cuál quieres olvidar?
+                    </p>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {learner?.moves.map((m) => (
+                        <button
+                          key={m.id}
+                          onClick={() => resolveLearn(m.name)}
+                          className="py-1.5 px-2 bg-slate-800 hover:bg-red-900/70 border border-slate-600 rounded-lg text-left cursor-pointer transition-colors"
+                        >
+                          <span className="font-bold block truncate">Olvidar {m.name}</span>
+                          <span className="text-[10px] text-slate-400">
+                            {m.type}{m.power > 0 ? ` · Pot. ${m.power}` : ' · Estado'}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => resolveLearn(null)}
+                      className="py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg font-semibold cursor-pointer transition-colors"
+                    >
+                      No aprender {learn.move.name}
+                    </button>
+                    <p className="text-[10px] text-slate-400">
+                      Podrás cambiar sus movimientos cuando quieras desde Equipo.
+                    </p>
+                  </div>
+                );
+              })()
+            ) : victoryState.recruitedPokemon ? (
               <div className="bg-emerald-950/70 border-2 border-emerald-400 rounded-xl p-3.5 text-emerald-100 text-xs flex flex-col gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 bg-slate-900 rounded-xl p-1 border border-emerald-500/50 flex items-center justify-center shrink-0">
