@@ -102,7 +102,7 @@ export const generateFloorEvent = (
       description:
         bossCount > 1
           ? `Una manada de ${bossCount} ${boss.name} defiende el último piso. ¡Es la prueba final de esta mazmorra!`
-          : `Una imponente presencia estremece las paredes del piso ${floorNumber}. ¡Es el soberano de esta mazmorra!`,
+          : `Una imponente presencia estremece las paredes del piso ${floorNumber}. ¡Es el jefe de esta mazmorra!`,
       enemy: boss,
       enemies: bosses,
       dialogueSpeaker: boss.name,
