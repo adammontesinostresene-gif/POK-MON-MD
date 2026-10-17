@@ -66,6 +66,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   const [isBagOpen, setIsBagOpen] = useState<boolean>(false);
   const [isExitConfirmOpen, setIsExitConfirmOpen] = useState<boolean>(false);
   const [selectedItemForUse, setSelectedItemForUse] = useState<Item | null>(null);
+  const [elixirTargetIdx, setElixirTargetIdx] = useState<number | null>(null);
 
   // Initialize first floor
   useEffect(() => {
@@ -300,7 +301,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   };
 
   // Use Item from Bag
-  const handleUseItemOnTarget = (item: Item, targetPokemonIndex: number) => {
+  const handleUseItemOnTarget = (item: Item, targetPokemonIndex: number, moveIdx?: number) => {
     soundManager.playSelect();
     const updatedInv = inventory
       .map((it) => (it.id === item.id ? { ...it, count: it.count - 1 } : it))
@@ -325,18 +326,21 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         next[targetPokemonIndex] = target;
         return next;
       });
-    } else if (item.effectType === 'restore_pp') {
+    } else if (item.effectType === 'restore_pp' && moveIdx !== undefined) {
       soundManager.playHeal();
       setTeam((prev) => {
         const next = [...prev];
         const target = { ...next[targetPokemonIndex] };
-        target.moves = target.moves.map((m) => ({ ...m, pp: m.maxPp }));
+        target.moves = target.moves.map((m, i) =>
+          i === moveIdx ? { ...m, pp: Math.min(m.maxPp, m.pp + item.effectValue) } : m
+        );
         next[targetPokemonIndex] = target;
         return next;
       });
     }
 
     setSelectedItemForUse(null);
+    setElixirTargetIdx(null);
   };
 
   // If in combat, render TurnBasedCombat view
@@ -356,7 +360,8 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
               onExitDungeon(combatTeam, remainingInventory, gold)
             }
             canFlee={currentEvent.type !== 'boss'}
-            onFlee={() => {
+            onFlee={(combatTeam) => {
+              setTeam(combatTeam);
               setInCombat(false);
               setEventResolved(true);
               setResolutionMessage('¡Lograste huir del combate utilizando una maniobra evasiva!');
@@ -471,6 +476,12 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                     style={{
                       width: `${(member.stats.hp / member.stats.maxHp) * 100}%`,
                     }}
+                  />
+                </div>
+                <div className="w-full bg-slate-800 h-0.5 rounded-full overflow-hidden mt-0.5" title={`EXP ${member.exp}/${member.nextExp}`}>
+                  <div
+                    className="h-full bg-sky-400 transition-all"
+                    style={{ width: `${Math.min(100, (member.exp / member.nextExp) * 100)}%` }}
                   />
                 </div>
               </div>
@@ -664,6 +675,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                 onClick={() => {
                   setIsBagOpen(false);
                   setSelectedItemForUse(null);
+                  setElixirTargetIdx(null);
                 }}
                 className="text-slate-400 hover:text-white text-sm"
               >
@@ -671,7 +683,41 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
               </button>
             </div>
 
-            {selectedItemForUse ? (
+            {selectedItemForUse && elixirTargetIdx !== null ? (
+              <div className="flex flex-col gap-3">
+                <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                  <span className="font-bold text-white text-sm block">
+                    ¿Qué movimiento de {team[elixirTargetIdx].name} quieres restaurar?
+                  </span>
+                  <span className="text-xs text-slate-400 block mt-0.5">
+                    {selectedItemForUse.description}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2">
+                  {team[elixirTargetIdx].moves.map((move, moveIdx) => (
+                    <button
+                      key={move.id}
+                      disabled={move.pp >= move.maxPp}
+                      onClick={() => handleUseItemOnTarget(selectedItemForUse, elixirTargetIdx, moveIdx)}
+                      className="p-2.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg border border-slate-700 flex items-center justify-between text-left transition-colors"
+                    >
+                      <span className="font-bold text-xs text-white">{move.name}</span>
+                      <span className={`text-xs font-mono tabular-nums ${move.pp <= 0 ? 'text-red-400 font-bold' : 'text-slate-300'}`}>
+                        PP {move.pp}/{move.maxPp}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setElixirTargetIdx(null)}
+                  className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs"
+                >
+                  Volver
+                </button>
+              </div>
+            ) : selectedItemForUse ? (
               <div className="flex flex-col gap-3">
                 <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
                   <span className="font-bold text-white text-sm block">
@@ -686,7 +732,14 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                   {team.map((member, idx) => (
                     <button
                       key={member.id}
-                      onClick={() => handleUseItemOnTarget(selectedItemForUse, idx)}
+                      onClick={() => {
+                        if (selectedItemForUse.effectType === 'restore_pp') {
+                          soundManager.playSelect();
+                          setElixirTargetIdx(idx);
+                          return;
+                        }
+                        handleUseItemOnTarget(selectedItemForUse, idx);
+                      }}
                       className="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 flex items-center justify-between text-left transition-colors"
                     >
                       <div className="flex items-center gap-2">

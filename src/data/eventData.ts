@@ -45,7 +45,7 @@ export const generateEnemySquad = (
     const enemyKey = pool[Math.floor(Math.random() * pool.length)];
     let levelVariation = Math.max(1, baseLevel + (Math.floor(Math.random() * 3) - 1));
     if (dungeon.id === 'bosquejo_tutorial') {
-      levelVariation = Math.min(4, Math.max(2, levelVariation));
+      levelVariation = Math.min(3, Math.max(2, levelVariation));
     }
     const wild = createWildEnemy(enemyKey, levelVariation);
     wild.id = `${wild.id}_sq_${i}_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
@@ -94,7 +94,7 @@ export const generateFloorEvent = (
 
   let enemyLevel = dungeon.recommendedLevel + Math.floor((floorNumber - 1) / 2);
   if (dungeon.id === 'bosquejo_tutorial') {
-    enemyLevel = Math.min(4, Math.max(2, 2 + Math.floor((floorNumber - 1) / 1.5)));
+    enemyLevel = Math.min(3, Math.max(2, 2 + Math.floor((floorNumber - 1) / 1.5)));
   }
 
   if (eventType === 'combat') {
@@ -149,31 +149,6 @@ export const generateFloorEvent = (
               : 'Inspeccionar las runas con cautela',
             hint: 'Activa un mecanismo arcano con éxito garantizado',
             actionKey: 'force_lock' as const,
-          },
-        ],
-      },
-      {
-        id: 'rescued_friend',
-        title: `Piso ${floorNumber}: El Compañero en Apuros`,
-        description: `Entre unos escombros descubres a un Pokémon errante exhausto. Te mira con ojitos suplicantes pidiendo algo para recuperar sus fuerzas.`,
-        choices: [
-          {
-            id: 'give_berry_friend',
-            text: 'Ofrecerle una Baya Aranja de tu mochila',
-            hint: 'Gasta 1 Baya Aranja pero ¡podría unirse a tu equipo!',
-            actionKey: 'give_berry' as const,
-          },
-          {
-            id: 'share_encouragement',
-            text: 'Animarlo con palabras y ayudarlo a salir',
-            hint: 'Te agradece con 150 Pokécuartos de recompensa',
-            actionKey: 'avoid_trap' as const,
-          },
-          {
-            id: 'hurry_on',
-            text: 'Priorizar tu misión y seguir adelante',
-            hint: 'No gastas recursos pero el camino sigue solitario',
-            actionKey: 'rest_carefully' as const,
           },
         ],
       },

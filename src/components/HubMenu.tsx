@@ -854,6 +854,15 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   cat: 'seed' as const,
                   desc: 'Duerme al Pokémon rival durante el combate.',
                 },
+                {
+                  name: 'Elixir',
+                  price: 150,
+                  value: 10,
+                  effectType: 'restore_pp' as const,
+                  icon: '🧪',
+                  cat: 'healing' as const,
+                  desc: 'Restaura 10 PP de un movimiento.',
+                },
               ].map((shopItem) => (
                 <div
                   key={shopItem.name}
