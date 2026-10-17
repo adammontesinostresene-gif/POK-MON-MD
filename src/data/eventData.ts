@@ -7,8 +7,9 @@ import { createWildEnemy, EXTRA_RECRUITS, getPmdPortraitUrl } from './pokemonDat
  * 2 enemies: 25%
  * 3 enemies: 10%
  * 4 enemies: 5%
+ * (Bosquejo Tutorial uses 60% / 30% / 8% / 2%)
  */
-export const getWildEnemiesCount = (isMonsterHouse: boolean = false): number => {
+export const getWildEnemiesCount = (isMonsterHouse: boolean = false, dungeonId?: string): number => {
   if (isMonsterHouse) {
     const roll = Math.random();
     if (roll < 0.20) return 2;
@@ -17,6 +18,13 @@ export const getWildEnemiesCount = (isMonsterHouse: boolean = false): number => 
   }
 
   const roll = Math.random();
+  if (dungeonId === 'bosquejo_tutorial') {
+    if (roll < 0.60) return 1;
+    if (roll < 0.90) return 2;
+    if (roll < 0.98) return 3;
+    return 4;
+  }
+
   if (roll < 0.60) return 1;
   if (roll < 0.85) return 2;
   if (roll < 0.95) return 3;
@@ -36,7 +44,7 @@ export const generateEnemySquad = (
   for (let i = 0; i < count; i++) {
     const enemyKey = pool[Math.floor(Math.random() * pool.length)];
     let levelVariation = Math.max(1, baseLevel + (Math.floor(Math.random() * 3) - 1));
-    if (dungeon.id === 'bosque_misterioso') {
+    if (dungeon.id === 'bosquejo_tutorial') {
       levelVariation = Math.min(4, Math.max(2, levelVariation));
     }
     const wild = createWildEnemy(enemyKey, levelVariation);
@@ -85,12 +93,12 @@ export const generateFloorEvent = (
   const eventType = types[Math.floor(Math.random() * types.length)];
 
   let enemyLevel = dungeon.recommendedLevel + Math.floor((floorNumber - 1) / 2);
-  if (dungeon.id === 'bosque_misterioso') {
+  if (dungeon.id === 'bosquejo_tutorial') {
     enemyLevel = Math.min(4, Math.max(2, 2 + Math.floor((floorNumber - 1) / 1.5)));
   }
 
   if (eventType === 'combat') {
-    const count = getWildEnemiesCount(false);
+    const count = getWildEnemiesCount(false, dungeon.id);
     const enemies = generateEnemySquad(dungeon, enemyLevel, count);
     const leadEnemy = enemies[0];
 
@@ -253,7 +261,7 @@ export const generateFloorEvent = (
   }
 
   // Fallback combat
-  const fallbackCount = getWildEnemiesCount(false);
+  const fallbackCount = getWildEnemiesCount(false, dungeon.id);
   const fallbackEnemies = generateEnemySquad(dungeon, enemyLevel, fallbackCount);
   const leadEnemy = fallbackEnemies[0];
   return {

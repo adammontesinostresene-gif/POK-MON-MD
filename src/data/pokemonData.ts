@@ -952,7 +952,7 @@ export const EXTRA_RECRUITS: Pokemon[] = RECRUIT_TEMPLATES.map((p) => applyOffic
 // Dungeon Templates
 export const DUNGEONS: Dungeon[] = [
   {
-    id: 'bosque_misterioso',
+    id: 'bosquejo_tutorial',
     name: 'Bosquejo Tutorial',
     description: 'Un bosque tranquilo e inofensivo, ideal para dar tus primeros pasos. Abundan los Pokémon tipo Normal, Bicho y Planta.',
     floorsCount: 5,
@@ -1536,7 +1536,7 @@ export const INITIAL_MISSIONS: RescueMission[] = [
     clientPokemonName: 'Butterfree',
     clientPokedexId: 12,
     targetPokemonName: 'Caterpie',
-    dungeonId: 'bosque_misterioso',
+    dungeonId: 'bosquejo_tutorial',
     targetFloor: 3,
     rewardGold: 350,
     rewardItem: 'Baya Aranja x2',
