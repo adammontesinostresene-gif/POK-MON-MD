@@ -226,7 +226,7 @@ export const generateFloorEvent = (
     return {
       floorNumber,
       type: 'item_choice',
-      title: `Piso ${floorNumber}: Alijo Abandonado`,
+      title: `Piso ${floorNumber}: Objetos Encontrados`,
       description: `Encuentras tres objetos tirados en el suelo, pero solo hay sitio para llevarte uno. ¿Cuál eliges?`,
       itemChoices,
     };
