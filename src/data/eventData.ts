@@ -236,7 +236,7 @@ export const generateFloorEvent = (
     return {
       floorNumber,
       type: 'spring',
-      title: `Piso ${floorNumber}: Manantial Curativo Subterráneo`,
+      title: `Piso ${floorNumber}: Manantial Curativo`,
       description: `Brotan aguas cristalinas tibias ricas en minerales mágicos. El vapor suave calma la fatiga de tus Pokémon.`,
       reward: {
         message: '¡Todos los miembros del equipo han recuperado todos sus PS y PP! Tu estómago se siente reconfortado (+40 Hambre).',
