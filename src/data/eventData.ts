@@ -11,6 +11,15 @@ const FLOOR_ITEM_POOL: Omit<Item, 'id' | 'count'>[] = [
   { name: 'Orbe Escape', category: 'orb', description: 'Permite salir inmediatamente de la mazmorra conservando objetos y oro.', effectType: 'escape', effectValue: 1, icon: '🔮' },
 ];
 
+export const generateRandomFloorItem = (): Item => {
+  const template = FLOOR_ITEM_POOL[Math.floor(Math.random() * FLOOR_ITEM_POOL.length)];
+  return {
+    ...template,
+    id: `path_item_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    count: 1,
+  };
+};
+
 /**
  * Determines enemy squad size (1, 2, 3, or 4), same for every dungeon:
  * 1 enemy: 60%
@@ -71,8 +80,7 @@ export const generateEnemySquad = (
 
 export const generateFloorEvent = (
   dungeon: Dungeon,
-  floorNumber: number,
-  playerTeam: Pokemon[]
+  floorNumber: number
 ): FloorEvent => {
   // If it's the final floor, trigger the climatic Boss Event
   if (floorNumber >= dungeon.floorsCount) {
@@ -147,27 +155,22 @@ export const generateFloorEvent = (
     const decisionTypes = [
       {
         title: `Piso ${floorNumber}: La Bifurcación Misteriosa`,
-        description: `El camino se divide en dos galerías. A la izquierda, un sendero iluminado por musgo brillante y bayas del bosque. A la derecha, un túnel resonante donde se oyen ecos metálicos de un cofre.`,
+        description: 'Tres caminos se abren ante ti. Elige por dónde continuar.',
         choices: [
           {
-            id: 'path_berries',
-            text: 'Seguir el sendero vegetal iluminado',
-            hint: 'Recuperas 25 de Hambre y encuentras bayas',
-            actionKey: 'rest_carefully' as const,
+            id: 'path_center',
+            text: 'Centro',
+            actionKey: 'choose_path' as const,
           },
           {
-            id: 'path_treasure',
-            text: 'Aventurarse en el túnel resonante',
-            hint: 'Posible gran tesoro o trampa de rocas',
-            actionKey: 'explore_tunnel' as const,
+            id: 'path_left',
+            text: 'Izquierda',
+            actionKey: 'choose_path' as const,
           },
           {
-            id: 'path_electric',
-            text: playerTeam.some(p => p.types.includes('Eléctrico'))
-              ? '⚡ Canalizar electricidad en las runas de la pared (Bonus Eléctrico)'
-              : 'Inspeccionar las runas con cautela',
-            hint: 'Activa un mecanismo arcano con éxito garantizado',
-            actionKey: 'force_lock' as const,
+            id: 'path_right',
+            text: 'Derecha',
+            actionKey: 'choose_path' as const,
           },
         ],
       },

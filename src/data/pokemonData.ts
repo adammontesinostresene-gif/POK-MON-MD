@@ -991,40 +991,6 @@ export const DUNGEONS: Dungeon[] = [
       items: ['Baya Aranja', 'Elixir', 'Semilla Revivir'],
     },
   },
-  {
-    id: 'cueva_estruendo',
-    name: 'Cueva Resonante',
-    description: 'Cavernas subterráneas iluminadas por cristales cian. Hogar de Pokémon tipo Roca, Tierra y Eléctrico.',
-    floorsCount: 7,
-    difficulty: 'Media',
-    theme: 'cave',
-    bgImage: '/src/assets/images/pmd_dungeon_cave_1792068605494.jpg',
-    recommendedLevel: 8,
-    enemiesPool: ['geodude', 'zubat', 'machop', 'magnemite', 'diglett', 'clefairy'],
-    bossId: 'boss_onix',
-    rewards: {
-      gold: 900,
-      exp: 600,
-      items: ['Semilla Fuerza', 'Baya Meloc', 'Orbe Escape'],
-    },
-  },
-  {
-    id: 'pico_tempestad',
-    name: 'Pico de la Tempestad',
-    description: 'Una cordillera azotada por tormentas legendarias. Arriba aguarda el rey del trueno.',
-    floorsCount: 10,
-    difficulty: 'Difícil',
-    theme: 'cave',
-    bgImage: '/src/assets/images/pmd_dungeon_cave_1792068605494.jpg',
-    recommendedLevel: 12,
-    enemiesPool: ['electabuzz', 'graveler', 'haunter', 'fearow', 'raichu'],
-    bossId: 'boss_zapdos',
-    rewards: {
-      gold: 2500,
-      exp: 1800,
-      items: ['Semilla Revivir', 'Cinta Heroica', 'Max Elixir'],
-    },
-  },
 ];
 
 // Official Move Types and Stats Database

@@ -137,7 +137,7 @@ export interface DecisionChoice {
     item?: string;
   };
   hint?: string;
-  actionKey: 'risk_search' | 'rest_carefully' | 'give_berry' | 'force_lock' | 'avoid_trap' | 'buy_item' | 'steal_shop' | 'explore_tunnel';
+  actionKey: 'risk_search' | 'rest_carefully' | 'give_berry' | 'force_lock' | 'avoid_trap' | 'buy_item' | 'steal_shop' | 'explore_tunnel' | 'choose_path';
 }
 
 export interface FloorEvent {

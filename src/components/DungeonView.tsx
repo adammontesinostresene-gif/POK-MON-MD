@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Dungeon, Pokemon, Item, FloorEvent, DecisionChoice } from '../types/game';
-import { generateFloorEvent, getRandomRecruit } from '../data/eventData';
+import {
+  generateEnemySquad,
+  generateFloorEvent,
+  generateRandomFloorItem,
+  getRandomRecruit,
+  getWildEnemiesCount,
+} from '../data/eventData';
 import { BAG_LIMIT, bagCount, bagSpace } from '../data/pokemonData';
 import { TurnBasedCombat } from './TurnBasedCombat';
 import { PmdPortrait } from './PmdSprite';
@@ -78,9 +84,9 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     };
   }, []);
 
-  const loadFloor = (floorNum: number, teamForEvent: Pokemon[] = team) => {
+  const loadFloor = (floorNum: number) => {
     soundManager.startBgm('dungeon');
-    const event = generateFloorEvent(dungeon, floorNum, teamForEvent);
+    const event = generateFloorEvent(dungeon, floorNum);
     setCurrentEvent(event);
     setEventResolved(false);
     setResolutionMessage(null);
@@ -104,6 +110,48 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   // Resolving Decision Choices
   const handleMakeChoice = (choice: DecisionChoice) => {
     soundManager.playSelect();
+
+    if (choice.actionKey === 'choose_path') {
+      const outcome = Math.floor(Math.random() * 3);
+      if (outcome === 0) {
+        const item = generateRandomFloorItem();
+        if (bagSpace(inventory) > 0) {
+          setInventory((prev) => [...prev, item]);
+          soundManager.playDrop();
+          setResolutionMessage(`En el camino encontraste ${item.icon} ${item.name}.`);
+        } else {
+          setResolutionMessage('Encontraste un objeto, pero la mochila está llena y tuviste que dejarlo.');
+        }
+        setEventResolved(true);
+      } else if (outcome === 1) {
+        const reward = 100 + currentFloor * 25;
+        setGold((prev) => prev + reward);
+        soundManager.playDrop();
+        setResolutionMessage(`Encontraste ${reward} Pokécuartos en el camino.`);
+        setEventResolved(true);
+      } else {
+        const baseLevel = dungeon.recommendedLevel + Math.floor((currentFloor - 1) / 2);
+        const enemies = generateEnemySquad(
+          dungeon,
+          baseLevel,
+          getWildEnemiesCount(false, dungeon.squadSizeOdds)
+        );
+        const leadEnemy = enemies[0];
+        setCurrentEvent({
+          floorNumber: currentFloor,
+          type: 'combat',
+          title: `Piso ${currentFloor}: Encuentro en el camino`,
+          description: `Un ${leadEnemy.name} y su grupo te cortan el paso.`,
+          enemy: leadEnemy,
+          enemies,
+          dialogueSpeaker: leadEnemy.name,
+          speakerPortrait: leadEnemy.artworkUrl,
+        });
+        setResolutionMessage(null);
+        setInCombat(true);
+      }
+      return;
+    }
 
     if (choice.actionKey === 'give_berry') {
       const berryIdx = inventory.findIndex((it) => it.id.includes('oran') && it.count > 0);
@@ -308,7 +356,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       return;
     }
 
-    loadFloor(currentFloor + 1, finalTeam);
+    loadFloor(currentFloor + 1);
     setCurrentFloor((f) => f + 1);
   };
 

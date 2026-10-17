@@ -28,6 +28,7 @@ interface HubMenuProps {
   team: Pokemon[];
   reserves: Pokemon[];
   gold: number;
+  rankPoints: number;
   bankGold: number;
   inventory: Item[];
   storage: Item[];
@@ -45,6 +46,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   team,
   reserves,
   gold,
+  rankPoints,
   bankGold,
   inventory,
   storage,
@@ -252,7 +254,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   Aldea Pokémon
                 </span>
                 <span className="text-[10px] sm:text-xs font-pixel px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-600/40">
-                  Rango Bronce
+                  Rango Madera · {rankPoints} puntos
                 </span>
               </div>
               <div className="flex items-center gap-2 sm:gap-3 mt-1 sm:mt-1.5 short:mt-0">
@@ -325,7 +327,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                 Explorar Mazmorra
               </h3>
               <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
-                Elige tu destino: Bosquejo Tutorial, Cueva Resonante o Pico Tempestad.
+                Elige tu destino: Bosquejo Tutorial o Arroyo Corriente.
               </p>
             </div>
           </button>

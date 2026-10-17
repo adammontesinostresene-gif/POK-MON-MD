@@ -5,12 +5,19 @@ import { PmdPortrait } from './PmdSprite';
 
 interface TitleScreenProps {
   hasSave: boolean;
+  savedLeaderPokedexId?: number;
   notice: string | null;
   onStartGame: () => void;
   onNewGame: () => void;
 }
 
-export const TitleScreen: React.FC<TitleScreenProps> = ({ hasSave, notice, onStartGame, onNewGame }) => {
+export const TitleScreen: React.FC<TitleScreenProps> = ({
+  hasSave,
+  savedLeaderPokedexId,
+  notice,
+  onStartGame,
+  onNewGame,
+}) => {
   const [confirmNewGame, setConfirmNewGame] = useState<boolean>(false);
 
   useEffect(() => {
@@ -47,9 +54,14 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ hasSave, notice, onSta
 
       {/* Centerpiece Hero Lockup & Bespoke Title SVG */}
       <div className="relative z-10 flex flex-col items-center w-full max-w-4xl text-center px-4 my-auto">
-        {/* Pikachu Hero Centerpiece from PMD Sprite Repository */}
+        {/* Saved leader, or Pikachu for a new game */}
         <div className="w-28 h-28 sm:w-36 sm:h-36 short:w-20 short:h-20 mb-4 short:mb-1 relative flex items-center justify-center animate-bounce duration-1000">
-          <PmdPortrait pokedexId={25} size={88} emotion="Joyous" showFrame={true} />
+          <PmdPortrait
+            pokedexId={hasSave && savedLeaderPokedexId ? savedLeaderPokedexId : 25}
+            size={88}
+            emotion="Joyous"
+            showFrame={true}
+          />
         </div>
 
         {/* Bespoke inline SVG Title Lockup */}
