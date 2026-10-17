@@ -8,7 +8,7 @@ const FLOOR_ITEM_POOL: Omit<Item, 'id' | 'count'>[] = [
   { name: 'Semilla Revivir', category: 'seed', description: 'Revive inmediatamente a un Pokémon caído.', effectType: 'revive', effectValue: 100, icon: '🌰' },
   { name: 'Semilla Sueño', category: 'seed', description: 'Duerme al Pokémon rival durante varios turnos.', effectType: 'inflict_status', effectValue: 3, icon: '💤' },
   { name: 'Elixir', category: 'healing', description: 'Restaura 10 PP de un movimiento.', effectType: 'restore_pp', effectValue: 10, icon: '🧪' },
-  { name: 'Orbe Escape', category: 'orb', description: 'Permite salir inmediatamente de la mazmorra conservando objetos y oro.', effectType: 'escape', effectValue: 1, icon: '🔮' },
+  { name: 'Fugaesfera', category: 'orb', description: 'Permite salir inmediatamente de la mazmorra conservando objetos y oro.', effectType: 'escape', effectValue: 1, icon: '🔮' },
 ];
 
 export const generateRandomFloorItem = (): Item => {
