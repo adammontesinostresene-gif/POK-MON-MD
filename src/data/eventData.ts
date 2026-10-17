@@ -137,7 +137,7 @@ export const generateFloorEvent = (
     const description =
       count === 1
         ? `Al doblar la esquina de un pasadizo rocoso, ¡un ${leadEnemy.name} territorial salta para defender su territorio!`
-        : `¡Cuidado! Una horda de ${count} Pokémon (${enemies.map((e) => e.name).join(', ')}) bloquea el camino en formación hostil.`;
+        : `¡Cuidado! Una horda de ${count} Pokémon (${enemies.map((e) => e.name).join(', ')}) bloquea el camino!`;
 
     return {
       floorNumber,
