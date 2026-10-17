@@ -375,6 +375,9 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
   // Use Item from Bag
   const handleUseItemOnTarget = (item: Item, targetPokemonIndex: number, moveIdx?: number) => {
+    const targetPokemon = team[targetPokemonIndex];
+    if (item.effectType === 'heal_hp' && (!targetPokemon || targetPokemon.stats.hp <= 0)) return;
+
     soundManager.playSelect();
     const updatedInv = inventory
       .map((it) => (it.id === item.id ? { ...it, count: it.count - 1 } : it))
@@ -832,6 +835,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                   {team.map((member, idx) => (
                     <button
                       key={member.id}
+                      disabled={selectedItemForUse.effectType === 'heal_hp' && member.stats.hp <= 0}
                       onClick={() => {
                         if (selectedItemForUse.effectType === 'restore_pp') {
                           soundManager.playSelect();
@@ -840,7 +844,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                         }
                         handleUseItemOnTarget(selectedItemForUse, idx);
                       }}
-                      className="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 flex items-center justify-between text-left transition-colors"
+                      className="p-2.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg border border-slate-700 flex items-center justify-between text-left transition-colors"
                     >
                       <div className="flex items-center gap-2">
                         <PmdPortrait pokedexId={member.pokedexId} size={28} showFrame={true} />
@@ -853,8 +857,8 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                           </span>
                         </div>
                       </div>
-                      <span className="text-xs font-semibold text-emerald-400">
-                        Aplicar
+                      <span className={`text-xs font-semibold ${selectedItemForUse.effectType === 'heal_hp' && member.stats.hp <= 0 ? 'text-slate-500' : 'text-emerald-400'}`}>
+                        {selectedItemForUse.effectType === 'heal_hp' && member.stats.hp <= 0 ? 'Debilitado' : 'Aplicar'}
                       </span>
                     </button>
                   ))}

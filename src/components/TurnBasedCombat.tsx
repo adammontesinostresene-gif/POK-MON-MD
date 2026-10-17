@@ -1039,6 +1039,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
   // Handle using an item from the bag on a team member
   const handleUseItemOnTarget = (item: Item, targetIdx: number, moveIdx?: number, enemyId?: string) => {
+    const targetForHealing = team[targetIdx];
+    if (item.effectType === 'heal_hp' && (!targetForHealing || targetForHealing.stats.hp <= 0)) return;
+
     soundManager.playSelect();
     const user = currentMember;
     const updatedInv = inventory
@@ -1903,6 +1906,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               {team.map((member, idx) => (
                 <button
                   key={member.id}
+                  disabled={isProcessingTurn || (selectedBagItem.effectType === 'heal_hp' && member.stats.hp <= 0)}
                   onClick={() => {
                     if (selectedBagItem.effectType === 'restore_pp') {
                       soundManager.playSelect();
@@ -1912,7 +1916,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     }
                     handleUseItemOnTarget(selectedBagItem, idx);
                   }}
-                  className="p-2 bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-amber-400 rounded-xl flex items-center justify-between text-left cursor-pointer transition-colors"
+                  className="p-2 bg-slate-800 hover:bg-slate-750 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 hover:border-amber-400 rounded-xl flex items-center justify-between text-left cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2">
                     <PmdPortrait pokedexId={member.pokedexId} size={28} showFrame={true} />
@@ -1925,7 +1929,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       </span>
                     </div>
                   </div>
-                  <span className="text-xs font-bold text-emerald-400">Usar</span>
+                  <span className={`text-xs font-bold ${selectedBagItem.effectType === 'heal_hp' && member.stats.hp <= 0 ? 'text-slate-500' : 'text-emerald-400'}`}>
+                    {selectedBagItem.effectType === 'heal_hp' && member.stats.hp <= 0 ? 'Debilitado' : 'Usar'}
+                  </span>
                 </button>
               ))}
             </div>
