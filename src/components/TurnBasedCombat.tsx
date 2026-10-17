@@ -130,9 +130,8 @@ interface TurnBasedCombatProps {
     addToActiveTeam?: boolean
   ) => void;
   onDefeat: () => void;
-  onFlee: (team: Pokemon[]) => void;
   onEscapeDungeon: (team: Pokemon[], inventory: Item[]) => void;
-  canFlee?: boolean;
+  canUseEscapeOrb?: boolean;
   onUpdateInventory: (items: Item[]) => void;
 }
 
@@ -155,9 +154,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   bgImage,
   onVictory,
   onDefeat,
-  onFlee,
   onEscapeDungeon,
-  canFlee = true,
+  canUseEscapeOrb = true,
   onUpdateInventory,
 }) => {
   // Normalize initial enemies: accept array of 1 to 4 enemies, or single enemy
@@ -176,20 +174,17 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   const aliveMembers = team.filter((m) => m.stats.hp > 0);
   const aliveEnemies = enemies.filter((e) => e.stats.hp > 0);
 
-  // Target selection: ID of the enemy that player is currently targeting
-  const [selectedTargetEnemyId, setSelectedTargetEnemyId] = useState<string>(() => {
-    return initialEnemies[0]?.id || '';
-  });
-  // Per-member target mapping (defaulting to selectedTargetEnemyId)
+  // Target chosen per member when confirming each move
   const [memberTargetMap, setMemberTargetMap] = useState<Record<string, string>>({});
 
   // Combat sub-menus:
   // 'MOVES_SELECT': sequential per-member move selection (Team Order: Member 0, Member 1, ...)
-  // 'MAIN_MENU': overall options (Attack, Bag, Flee)
+  // 'MAIN_MENU': overall options (Attack, Bag)
   // 'BAG': inventory selection
   // 'BAG_TARGET': target for item
   // 'BAG_MOVE': move to restore with an Elixir
-  const [combatMenu, setCombatMenu] = useState<'MOVES_SELECT' | 'MAIN_MENU' | 'BAG' | 'BAG_TARGET' | 'BAG_MOVE'>('MOVES_SELECT');
+  // 'BAG_ENEMY': rival targeted by an offensive item
+  const [combatMenu, setCombatMenu] = useState<'MOVES_SELECT' | 'MAIN_MENU' | 'BAG' | 'BAG_TARGET' | 'BAG_MOVE' | 'BAG_ENEMY'>('MOVES_SELECT');
 
   // Multi-member move selection state:
   // Tracks which member in aliveMembers is currently picking their move (index 0, 1, 2, ...)
@@ -518,7 +513,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       const member = currentTeam[i];
       if (member.stats.hp > 0 && confirmedMoves[member.id]) {
         const move = confirmedMoves[member.id];
-        const assignedTarget = confirmedTargets[member.id] || selectedTargetEnemyId || aliveEnemies[0]?.id;
+        const assignedTarget = confirmedTargets[member.id] || aliveEnemies[0]?.id;
         actionQueue.push({
           actorId: member.id,
           actorName: member.name,
@@ -929,12 +924,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     setMemberTargetMap({});
     setPendingMoveChoice(null);
     setSelectingMemberIndex(0);
-    // If selected target is dead, pick first alive enemy
-    setSelectedTargetEnemyId((prev) => {
-      if (currentEnemies.some((e) => e.id === prev && e.stats.hp > 0)) return prev;
-      const nextAlive = currentEnemies.find((e) => e.stats.hp > 0);
-      return nextAlive ? nextAlive.id : '';
-    });
     setCombatMenu('MOVES_SELECT');
     setIsProcessingTurn(false);
   };
@@ -1049,7 +1038,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   };
 
   // Handle using an item from the bag on a team member
-  const handleUseItemOnTarget = (item: Item, targetIdx: number, moveIdx?: number) => {
+  const handleUseItemOnTarget = (item: Item, targetIdx: number, moveIdx?: number, enemyId?: string) => {
     soundManager.playSelect();
     const user = currentMember;
     const updatedInv = inventory
@@ -1059,7 +1048,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     const targetMember = { ...team[targetIdx], stats: { ...team[targetIdx].stats } };
 
-    if (!canFlee && item.category === 'orb') {
+    if (!canUseEscapeOrb && item.category === 'orb') {
       soundManager.playHit();
       addLog(`🚫 ${user.name} usó ${item.name}... ¡pero no tuvo efecto contra el jefe!`);
     } else if (item.effectType === 'heal_hp') {
@@ -1087,7 +1076,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       return;
     } else if (item.effectType === 'inflict_status') {
       const foe =
-        enemies.find((e) => e.id === selectedTargetEnemyId && e.stats.hp > 0) ?? enemies.find((e) => e.stats.hp > 0);
+        enemies.find((e) => e.id === enemyId && e.stats.hp > 0) ?? enemies.find((e) => e.stats.hp > 0);
       if (foe && !ailmentsRef.current[foe.id]) {
         setAilment(foe.id, { status: 'sleep', turns: item.effectValue || 3 });
         soundManager.playSelect();
@@ -1176,24 +1165,26 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           <div className="flex items-center gap-1 shrink min-w-0 overflow-x-auto py-0.5 scrollbar-none">
             {enemies.map((enemyMember) => {
               const isAlive = enemyMember.stats.hp > 0;
-              const isTarget = isAlive && (selectedTargetEnemyId === enemyMember.id || aliveEnemies.length === 1);
+              const isTarget = isAlive && Boolean(pendingMoveChoice || combatMenu === 'BAG_ENEMY');
               return (
                 <button
                   key={enemyMember.id}
                   type="button"
-                  disabled={!isAlive || isProcessingTurn}
+                  disabled={!isAlive || isProcessingTurn || !isTarget}
                   onClick={() => {
-                    if (isAlive && !isProcessingTurn) {
-                      setSelectedTargetEnemyId(enemyMember.id);
-                      soundManager.playSelect();
+                    if (!isAlive || isProcessingTurn) return;
+                    if (pendingMoveChoice) {
+                      handleConfirmMemberAction(pendingMoveChoice.member, pendingMoveChoice.move, enemyMember.id);
+                    } else if (combatMenu === 'BAG_ENEMY' && selectedBagItem) {
+                      handleUseItemOnTarget(selectedBagItem, 0, undefined, enemyMember.id);
                     }
                   }}
-                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg border text-left transition-all shrink-0 cursor-pointer ${
+                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg border text-left transition-all shrink-0 ${
                     isTarget
-                      ? 'border-red-500 bg-red-950/90 ring-1 ring-red-400 shadow-sm'
+                      ? 'border-red-500 bg-red-950/90 ring-1 ring-red-400 shadow-sm cursor-pointer'
                       : !isAlive
                       ? 'border-slate-800 bg-slate-900/40 opacity-40 grayscale cursor-not-allowed'
-                      : 'border-slate-700 bg-slate-950/80 hover:border-slate-500'
+                      : 'border-slate-700 bg-slate-950/80'
                   }`}
                 >
                   <PmdPortrait pokedexId={enemyMember.pokedexId} size={18} showFrame={false} />
@@ -1372,7 +1363,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             const isAlive = enemyMember.stats.hp > 0;
             const isAttacking = attackingEnemyId === enemyMember.id;
             const isHit = hitEnemyId === enemyMember.id;
-            const isTargeted = isAlive && (selectedTargetEnemyId === enemyMember.id || aliveEnemies.length === 1);
+            const isSelectingTarget = Boolean(pendingMoveChoice || (combatMenu === 'BAG_ENEMY' && selectedBagItem));
 
             return (
               <div
@@ -1385,13 +1376,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       pendingMoveChoice.move,
                       enemyMember.id
                     );
-                  } else {
-                    setSelectedTargetEnemyId(enemyMember.id);
-                    soundManager.playSelect();
+                  } else if (combatMenu === 'BAG_ENEMY' && selectedBagItem) {
+                    handleUseItemOnTarget(selectedBagItem, 0, undefined, enemyMember.id);
                   }
                 }}
-                className={`flex flex-col items-center relative transition-all duration-200 cursor-pointer ${
-                  !isAlive ? 'opacity-40 grayscale pointer-events-none' : 'hover:scale-105'
+                className={`flex flex-col items-center relative transition-all duration-200 ${
+                  !isAlive ? 'opacity-40 grayscale pointer-events-none' : isSelectingTarget ? 'cursor-pointer hover:scale-105' : ''
                 } ${isAttacking ? '-translate-x-3 sm:-translate-x-4 scale-105' : ''} ${
                   isHit ? 'animate-pulse brightness-150' : ''
                 }`}
@@ -1414,16 +1404,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 )}
 
                 {/* Target Marker */}
-                {((isTargeted && aliveEnemies.length > 1) || (pendingMoveChoice && isAlive)) && (
+                {isSelectingTarget && isAlive && (
                   <div
-                    className={`absolute -top-3.5 ${
-                      pendingMoveChoice
-                        ? 'bg-red-500 ring-2 ring-red-300 animate-bounce'
-                        : 'bg-red-600 animate-pulse'
-                    } text-white font-mono text-[8px] font-bold px-1.5 py-0.2 rounded-full border border-red-300 shadow-sm z-20 flex items-center gap-0.5`}
+                    className="absolute -top-3.5 bg-red-500 ring-2 ring-red-300 animate-bounce text-white font-mono text-[8px] font-bold px-1.5 py-0.2 rounded-full border border-red-300 shadow-sm z-20 flex items-center gap-0.5"
                   >
                     <span>🎯</span>
-                    <span className="hidden sm:inline">{pendingMoveChoice ? 'Atacar' : 'Objetivo'}</span>
+                    <span className="hidden sm:inline">{pendingMoveChoice ? 'Atacar' : 'Usar'}</span>
                   </div>
                 )}
 
@@ -1454,10 +1440,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 {/* Enemy Field Portrait (PMD Repository) */}
                 <div
                   className={`w-13 h-13 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center rounded-xl p-0.5 border-2 transition-all ${
-                    pendingMoveChoice && isAlive
+                    isSelectingTarget && isAlive
                       ? 'border-red-400 ring-2 ring-red-400/90 bg-red-950/60 shadow-lg'
-                      : isTargeted
-                      ? 'border-red-500 ring-2 ring-red-500/60 bg-red-950/40'
                       : 'border-slate-700 bg-slate-900/60'
                   }`}
                 >
@@ -1489,7 +1473,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         {/* Battle log overlay while the round resolves (keeps the panel height stable) */}
         {isProcessingTurn && (
           <div className="absolute inset-0 z-30 bg-[#1c3478] rounded-[10px] p-2 sm:p-2.5 short:p-1.5 flex flex-col">
-            <div className="flex-1 min-h-0 bg-slate-950 rounded-lg border border-slate-800 shadow-inner px-2.5 py-1.5 flex flex-col justify-end gap-0.5 overflow-hidden">
+            <div className="flex-1 min-h-0 bg-slate-950 rounded-lg border border-slate-800 shadow-inner px-2.5 py-1.5 flex flex-col justify-start gap-0.5 overflow-hidden">
               {battleLogs.map((log, i) => {
                 const isLatest = i === battleLogs.length - 1;
                 return (
@@ -1763,7 +1747,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               </div>
             )}
 
-            {/* Bottom Actions: Previous member / Mochila / Huir */}
+            {/* Bottom Actions: Previous member / Mochila */}
             <div className="flex items-center justify-between gap-1.5 pt-1 short:pt-0.5 border-t border-slate-800 shrink-0">
               {selectingMemberIndex > 0 ? (
                 <button
@@ -1803,19 +1787,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                   <Backpack className="w-3.5 h-3.5" />
                   <span>Mochila ({inventory.reduce((a, b) => a + b.count, 0)})</span>
                 </button>
-
-                {canFlee && (
-                  <button
-                    disabled={isProcessingTurn}
-                    onClick={() => {
-                      soundManager.playSelect();
-                      onFlee(team);
-                    }}
-                    className="py-1.5 px-3 bg-slate-750 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs font-semibold cursor-pointer transition-colors"
-                  >
-                    <span>Huir</span>
-                  </button>
-                )}
               </div>
             </div>
           </div>
@@ -1823,7 +1794,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
         {/* 2. MAIN SUB-MENU (TACTICAL OPTIONS) */}
         {combatMenu === 'MAIN_MENU' && (
-          <div className={`grid grid-cols-1 ${canFlee ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-1.5`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
             <button
               disabled={isProcessingTurn}
               onClick={() => {
@@ -1847,20 +1818,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               <Backpack className="w-4 h-4 text-white" />
               <span>Mochila ({inventory.reduce((a, b) => a + b.count, 0)})</span>
             </button>
-
-            {canFlee && (
-              <button
-                disabled={isProcessingTurn}
-                onClick={() => {
-                  soundManager.playSelect();
-                  onFlee(team);
-                }}
-                className="py-2 sm:py-2.5 px-3 bg-slate-750 hover:bg-slate-700 disabled:opacity-50 text-slate-200 font-bold rounded-xl text-xs sm:text-sm shadow transition-colors flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <ArrowLeft className="w-4 h-4 text-slate-400" />
-                <span>Huir del Combate</span>
-              </button>
-            )}
           </div>
         )}
 
@@ -1892,8 +1849,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     disabled={isProcessingTurn || item.count <= 0}
                     onClick={() => {
                       soundManager.playSelect();
+                      if (item.effectType === 'inflict_status' && aliveEnemies.length > 1) {
+                        setSelectedBagItem(item);
+                        setCombatMenu('BAG_ENEMY');
+                        return;
+                      }
                       if (item.effectType === 'escape' || item.category === 'orb' || item.effectType === 'inflict_status') {
-                        handleUseItemOnTarget(item, 0);
+                        handleUseItemOnTarget(item, 0, undefined, aliveEnemies[0]?.id);
                         return;
                       }
                       setSelectedBagItem(item);
@@ -1969,6 +1931,45 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             </div>
           </div>
         )}
+        {/* 4c. RIVAL SELECTION FOR OFFENSIVE ITEMS */}
+        {combatMenu === 'BAG_ENEMY' && selectedBagItem && (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300">
+                ¿A qué rival lanzas {selectedBagItem.name}?
+              </span>
+              <button
+                onClick={() => {
+                  setSelectedBagItem(null);
+                  setCombatMenu('BAG');
+                }}
+                className="text-xs text-sky-400 hover:text-sky-300 font-semibold cursor-pointer"
+              >
+                ← Volver a Mochila
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+              {aliveEnemies.map((enemyMember) => (
+                <button
+                  key={enemyMember.id}
+                  disabled={isProcessingTurn}
+                  onClick={() => handleUseItemOnTarget(selectedBagItem, 0, undefined, enemyMember.id)}
+                  className="p-1.5 sm:p-2 rounded-lg border border-red-500/60 bg-slate-800/90 hover:bg-red-950/70 hover:border-red-400 flex items-center gap-2 text-left cursor-pointer transition-colors"
+                >
+                  <PmdPortrait pokedexId={enemyMember.pokedexId} size={28} showFrame={true} />
+                  <div className="min-w-0">
+                    <span className="font-bold text-xs text-white block truncate">{enemyMember.name}</span>
+                    <span className="text-[9px] font-mono text-emerald-400">
+                      PS: {enemyMember.stats.hp}/{enemyMember.stats.maxHp}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* 4b. MOVE SELECTION FOR ELIXIR */}
         {combatMenu === 'BAG_MOVE' && selectedBagItem && elixirTargetIdx !== null && team[elixirTargetIdx] && (
           <div className="flex flex-col gap-2">

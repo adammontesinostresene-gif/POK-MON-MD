@@ -961,9 +961,9 @@ export const DUNGEONS: Dungeon[] = [
     bgImage: '/src/assets/images/pmd_dungeon_forest_1792068605705.jpg',
     recommendedLevel: 2,
     enemiesPool: ['rattata', 'caterpie', 'ledyba', 'kricketot', 'patrat', 'sunkern'],
+    squadSizeOdds: [0.7, 0.3],
     bossId: 'rattata',
-    bossLevel: 3,
-    bossCount: 3,
+    bossLevel: 4,
     rewards: {
       gold: 350,
       exp: 150,
@@ -973,7 +973,7 @@ export const DUNGEONS: Dungeon[] = [
   {
     id: 'arroyo_corriente',
     name: 'Arroyo Corriente',
-    description: 'Un arroyo de aguas cristalinas entre cascadas y riscos. Abundan los Pokémon tipo Agua y Bicho; dicen que un Psyduck con dolor de cabeza vigila el final del cauce.',
+    description: 'Un arroyo de aguas cristalinas entre cascadas y riscos. Abundan los Pokémon tipo Agua y Bicho.',
     floorsCount: 7,
     difficulty: 'Fácil',
     theme: 'forest',

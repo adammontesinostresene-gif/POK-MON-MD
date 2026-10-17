@@ -107,6 +107,7 @@ export interface Dungeon {
   enemiesPool: string[]; // Pokemon IDs or templates
   enemyWeights?: Record<string, number>; // relative spawn weight per pool entry (default 1)
   enemyLevelRange?: [number, number]; // clamps wild enemy levels (not the boss)
+  squadSizeOdds?: number[]; // chance of 1, 2, 3... enemies per battle; also disables Monster Houses
   bossId: string;
   bossLevel?: number; // defaults to recommendedLevel + 3
   bossCount?: number; // how many copies of the boss appear (default 1)

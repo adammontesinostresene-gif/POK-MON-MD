@@ -17,8 +17,9 @@ const FLOOR_ITEM_POOL: Omit<Item, 'id' | 'count'>[] = [
  * 2 enemies: 30%
  * 3 enemies: 8%
  * 4 enemies: 2%
+ * (a dungeon can override this with `squadSizeOdds`)
  */
-export const getWildEnemiesCount = (isMonsterHouse: boolean = false): number => {
+export const getWildEnemiesCount = (isMonsterHouse: boolean = false, squadSizeOdds?: number[]): number => {
   if (isMonsterHouse) {
     const roll = Math.random();
     if (roll < 0.20) return 2;
@@ -27,6 +28,11 @@ export const getWildEnemiesCount = (isMonsterHouse: boolean = false): number => 
   }
 
   const roll = Math.random();
+  if (squadSizeOdds) {
+    let acc = 0;
+    const idx = squadSizeOdds.findIndex((p) => roll < (acc += p));
+    return (idx === -1 ? squadSizeOdds.length - 1 : idx) + 1;
+  }
   if (roll < 0.60) return 1;
   if (roll < 0.90) return 2;
   if (roll < 0.98) return 3;
@@ -100,7 +106,7 @@ export const generateFloorEvent = (
   const otherEvents: FloorEventType[] = ['decision', 'kecleon', 'chest', 'spring', 'item_choice'];
   const eventType: FloorEventType =
     Math.random() < 0.5
-      ? Math.random() < 0.15
+      ? !dungeon.squadSizeOdds && Math.random() < 0.15
         ? 'monster_house'
         : 'combat'
       : otherEvents[Math.floor(Math.random() * otherEvents.length)];
@@ -111,7 +117,7 @@ export const generateFloorEvent = (
   }
 
   if (eventType === 'combat') {
-    const count = getWildEnemiesCount(false);
+    const count = getWildEnemiesCount(false, dungeon.squadSizeOdds);
     const enemies = generateEnemySquad(dungeon, enemyLevel, count);
     const leadEnemy = enemies[0];
 
@@ -265,7 +271,7 @@ export const generateFloorEvent = (
   }
 
   // Fallback combat
-  const fallbackCount = getWildEnemiesCount(false);
+  const fallbackCount = getWildEnemiesCount(false, dungeon.squadSizeOdds);
   const fallbackEnemies = generateEnemySquad(dungeon, enemyLevel, fallbackCount);
   const leadEnemy = fallbackEnemies[0];
   return {

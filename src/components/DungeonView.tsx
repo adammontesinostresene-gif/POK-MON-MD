@@ -384,14 +384,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
             onEscapeDungeon={(combatTeam, remainingInventory) =>
               onExitDungeon(combatTeam, remainingInventory, gold)
             }
-            canFlee={currentEvent.type !== 'boss'}
-            onFlee={(combatTeam) => {
-              setTeam(combatTeam);
-              setInCombat(false);
-              setEventResolved(true);
-              setResolutionMessage('¡Lograste huir del combate utilizando una maniobra evasiva!');
-              soundManager.startBgm('dungeon');
-            }}
+            canUseEscapeOrb={currentEvent.type !== 'boss'}
             onUpdateInventory={(updated) => setInventory(updated)}
           />
         </div>
