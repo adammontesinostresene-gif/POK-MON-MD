@@ -248,7 +248,7 @@ export const generateFloorEvent = (
     return {
       floorNumber,
       type: 'chest',
-      title: `Piso ${floorNumber}: Alijo de Explorador Perdido`,
+      title: `Piso ${floorNumber}: Cofre del tesoro`,
       description: `En un pedestal antiguo encuentras un cofre sellado intacto abandonado por un equipo de rescate anterior.`,
       reward: {
         gold: 150 + floorNumber * 40,
