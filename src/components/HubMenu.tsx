@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pokemon, Dungeon, Item, RescueMission } from '../types/game';
-import { DUNGEONS, TYPE_COLORS, canPokemonEvolve } from '../data/pokemonData';
+import { DUNGEONS, TYPE_COLORS, canPokemonEvolve, BAG_LIMIT, bagCount, bagSpace } from '../data/pokemonData';
 import { soundManager } from '../utils/audio';
 import {
   Compass,
@@ -69,7 +69,11 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   const transferItem = (item: Item, quantity: number, toStorage: boolean) => {
     const from = toStorage ? inventory : storage;
     const to = toStorage ? storage : inventory;
-    const amount = Math.min(quantity, item.count);
+    const amount = Math.min(quantity, item.count, toStorage ? item.count : bagSpace(inventory));
+    if (amount <= 0) {
+      soundManager.playHit();
+      return;
+    }
 
     const newFrom = from
       .map((it) => (it.id === item.id ? { ...it, count: it.count - amount } : it))
@@ -132,6 +136,12 @@ export const HubMenu: React.FC<HubMenuProps> = ({
     if (gold < itemTemplate.price) {
       soundManager.playHit();
       setShopFeedback('¡No tienes suficientes Pokécuartos!');
+      setTimeout(() => setShopFeedback(null), 2000);
+      return;
+    }
+    if (bagSpace(inventory) === 0) {
+      soundManager.playHit();
+      setShopFeedback(`¡Tu mochila está llena (${BAG_LIMIT}/${BAG_LIMIT})! Guarda algo en el almacén.`);
       setTimeout(() => setShopFeedback(null), 2000);
       return;
     }
@@ -604,7 +614,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   <div className="shrink-0 flex items-center justify-between text-xs font-bold uppercase tracking-wider">
                     <span className={column.accent}>{column.title}</span>
                     <span className="text-slate-500 font-mono">
-                      {column.items.reduce((a, b) => a + b.count, 0)} obj.
+                      {column.items.reduce((a, b) => a + b.count, 0)}{column.toStorage ? `/${BAG_LIMIT}` : ''} obj.
                     </span>
                   </div>
                   {column.items.length === 0 ? (
@@ -752,6 +762,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
                 <Backpack className="w-5 h-5 text-emerald-400" />
                 Mochila de Objetos
+                <span className="text-xs font-mono text-slate-400">({bagCount(inventory)}/{BAG_LIMIT})</span>
               </h3>
               <button
                 onClick={() => setActiveModal(null)}

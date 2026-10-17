@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Pokemon, Move, Item, PokemonType, BattleStat, StatChange, StatusAilment } from '../types/game';
-import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel, applyOfficialStats, learnLevelUpMoves, replaceMove } from '../data/pokemonData';
+import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel, applyOfficialStats, learnLevelUpMoves, replaceMove, bagSpace } from '../data/pokemonData';
 import { LEARNSET_MOVES } from '../data/learnsets';
 import { soundManager } from '../utils/audio';
 import {
@@ -1024,7 +1024,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     }
 
     let droppedItem: Item | undefined = undefined;
-    if (lootRoll >= 0.25 && lootRoll < 0.5) {
+    if (lootRoll >= 0.25 && lootRoll < 0.5 && bagSpace(inventory) > 0) {
       droppedItem = {
         id: `drop_oran_${Date.now()}`,
         name: 'Baya Aranja',

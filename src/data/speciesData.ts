@@ -753,6 +753,45 @@ export const SPECIES_DATA: Record<number, SpeciesData> = {
     "description": "Estos trillizos cavan a una profundidad de hasta 100 km. Se desconoce el aspecto de la parte de sus cuerpos que se oculta bajo tierra.",
     "evolutions": []
   },
+  "54": {
+    "name": "Psyduck",
+    "types": [
+      "Agua"
+    ],
+    "baseStats": [
+      50,
+      52,
+      48,
+      65,
+      50,
+      55
+    ],
+    "ability": "Humedad",
+    "description": "Sus dolores de cabeza empeoran a medida que aumenta su nivel de estrés. Su increíble poder psíquico puede causar estragos a su alrededor.",
+    "evolutions": [
+      {
+        "targetId": 55,
+        "minLevel": 33
+      }
+    ]
+  },
+  "55": {
+    "name": "Golduck",
+    "types": [
+      "Agua"
+    ],
+    "baseStats": [
+      80,
+      82,
+      78,
+      95,
+      80,
+      85
+    ],
+    "ability": "Humedad",
+    "description": "Cuenta una antigua leyenda que los Golduck arrastraban a quienes contaminaran sus ríos al fondo de las aguas.",
+    "evolutions": []
+  },
   "66": {
     "name": "Machop",
     "types": [
@@ -1099,6 +1138,46 @@ export const SPECIES_DATA: Record<number, SpeciesData> = {
       }
     ]
   },
+  "129": {
+    "name": "Magikarp",
+    "types": [
+      "Agua"
+    ],
+    "baseStats": [
+      20,
+      10,
+      55,
+      15,
+      20,
+      80
+    ],
+    "ability": "Nado Rápido",
+    "description": "Este Pokémon débil y patético se limita a dejarse llevar por la corriente cuando esta tiene fuerza.",
+    "evolutions": [
+      {
+        "targetId": 130,
+        "minLevel": 20
+      }
+    ]
+  },
+  "130": {
+    "name": "Gyarados",
+    "types": [
+      "Agua",
+      "Volador"
+    ],
+    "baseStats": [
+      95,
+      125,
+      79,
+      60,
+      100,
+      81
+    ],
+    "ability": "Intimidación",
+    "description": "Cuando monta en cólera, puede quemarlo todo, incluso en medio de la más violenta tormenta.",
+    "evolutions": []
+  },
   "133": {
     "name": "Eevee",
     "types": [
@@ -1406,6 +1485,45 @@ export const SPECIES_DATA: Record<number, SpeciesData> = {
     "description": "Feraligatr intimida a sus oponentes abriendo las grandes fauces que tiene. En combate, golpea el suelo bruscamente con las gruesas y fuertes patas traseras que tiene para cargar contra su rival a una velocidad de vértigo.",
     "evolutions": []
   },
+  "161": {
+    "name": "Sentret",
+    "types": [
+      "Normal"
+    ],
+    "baseStats": [
+      35,
+      46,
+      34,
+      35,
+      45,
+      20
+    ],
+    "ability": "Fuga",
+    "description": "Sentret no duerme a menos que otro haga guardia. El que hace de centinela lo despertará al mínimo signo de peligro. Cuando este Pokémon se separa de su manada, es incapaz de echarse a dormir, presa del miedo.",
+    "evolutions": [
+      {
+        "targetId": 162,
+        "minLevel": 15
+      }
+    ]
+  },
+  "162": {
+    "name": "Furret",
+    "types": [
+      "Normal"
+    ],
+    "baseStats": [
+      85,
+      76,
+      64,
+      45,
+      55,
+      90
+    ],
+    "ability": "Fuga",
+    "description": "Furret es de constitución muy delgada. En combate le resulta útil porque puede escabullirse con habilidad por cualquier huequito y escapar. A pesar de que tiene patas cortas, es ágil y veloz.",
+    "evolutions": []
+  },
   "165": {
     "name": "Ledyba",
     "types": [
@@ -1587,6 +1705,51 @@ export const SPECIES_DATA: Record<number, SpeciesData> = {
     ],
     "ability": "Clorofila",
     "description": "Sunflora transforma la energía solar en nutrientes. De día, cuando hace calor, está en continuo movimiento. Solo para cuando comienza a anochecer.",
+    "evolutions": []
+  },
+  "194": {
+    "name": "Wooper",
+    "types": [
+      "Agua",
+      "Tierra"
+    ],
+    "baseStats": [
+      55,
+      45,
+      45,
+      25,
+      25,
+      15
+    ],
+    "ability": "Humedad",
+    "description": "Cuando se desplaza en tierra firme, cubre su cuerpo con una membrana mucosa y venenosa para mantener hidratada la piel.",
+    "evolutions": [
+      {
+        "targetId": 195,
+        "minLevel": 20
+      },
+      {
+        "targetId": 980,
+        "minLevel": 20
+      }
+    ]
+  },
+  "195": {
+    "name": "Quagsire",
+    "types": [
+      "Agua",
+      "Tierra"
+    ],
+    "baseStats": [
+      95,
+      85,
+      85,
+      65,
+      65,
+      35
+    ],
+    "ability": "Humedad",
+    "description": "Su cuerpo siempre resulta escurridizo al tacto. Suele chocarse contra el lecho del río al nadar, pero no le importa demasiado.",
     "evolutions": []
   },
   "196": {
@@ -1848,6 +2011,112 @@ export const SPECIES_DATA: Record<number, SpeciesData> = {
     ],
     "ability": "Torrente",
     "description": "Swampert puede predecir tormentas al percibir con las aletas los sutiles cambios que producen las olas y las corrientes. Si está a punto de estallar una tormenta, empezará a apilar piedras para resguardarse.",
+    "evolutions": []
+  },
+  "270": {
+    "name": "Lotad",
+    "types": [
+      "Agua",
+      "Planta"
+    ],
+    "baseStats": [
+      40,
+      30,
+      30,
+      40,
+      50,
+      30
+    ],
+    "ability": "Nado Rápido",
+    "description": "El excesivo tamaño y peso de la hoja que tiene en la cabeza ha propiciado que viva flotando en el agua.",
+    "evolutions": [
+      {
+        "targetId": 271,
+        "minLevel": 14
+      }
+    ]
+  },
+  "271": {
+    "name": "Lombre",
+    "types": [
+      "Agua",
+      "Planta"
+    ],
+    "baseStats": [
+      60,
+      50,
+      50,
+      60,
+      70,
+      50
+    ],
+    "ability": "Nado Rápido",
+    "description": "Vive en las riberas bañadas por el sol. De día duerme sobre un lecho de plantas acuáticas y de noche entra en acción.",
+    "evolutions": [
+      {
+        "targetId": 272,
+        "minLevel": 1,
+        "requiredItem": "Piedra Agua"
+      }
+    ]
+  },
+  "272": {
+    "name": "Ludicolo",
+    "types": [
+      "Agua",
+      "Planta"
+    ],
+    "baseStats": [
+      80,
+      70,
+      70,
+      90,
+      100,
+      70
+    ],
+    "ability": "Nado Rápido",
+    "description": "Mover su cuerpo al ritmo de música festiva puede hacer que aumente su fuerza.",
+    "evolutions": []
+  },
+  "283": {
+    "name": "Surskit",
+    "types": [
+      "Bicho",
+      "Agua"
+    ],
+    "baseStats": [
+      40,
+      30,
+      32,
+      50,
+      52,
+      65
+    ],
+    "ability": "Nado Rápido",
+    "description": "Vive en estanques y pantanales donde abunde la flora acuática y compite fieramente con los Dewpider por el territorio y el sustento.",
+    "evolutions": [
+      {
+        "targetId": 284,
+        "minLevel": 22
+      }
+    ]
+  },
+  "284": {
+    "name": "Masquerain",
+    "types": [
+      "Bicho",
+      "Volador"
+    ],
+    "baseStats": [
+      70,
+      60,
+      62,
+      100,
+      82,
+      80
+    ],
+    "ability": "Intimidación",
+    "description": "Sus grandes antenas en forma de ojos tienden a absorber humedad. Los días de lluvia, se refugia en cavidades de los árboles y espera paciente.",
     "evolutions": []
   },
   "387": {
@@ -3129,6 +3398,45 @@ export const SPECIES_DATA: Record<number, SpeciesData> = {
     "description": "",
     "evolutions": []
   },
+  "917": {
+    "name": "Tarountula",
+    "types": [
+      "Bicho"
+    ],
+    "baseStats": [
+      35,
+      41,
+      45,
+      29,
+      40,
+      20
+    ],
+    "ability": "Insomnio",
+    "description": "",
+    "evolutions": [
+      {
+        "targetId": 918,
+        "minLevel": 15
+      }
+    ]
+  },
+  "918": {
+    "name": "Spidops",
+    "types": [
+      "Bicho"
+    ],
+    "baseStats": [
+      60,
+      79,
+      92,
+      52,
+      86,
+      35
+    ],
+    "ability": "Insomnio",
+    "description": "",
+    "evolutions": []
+  },
   "942": {
     "name": "Maschiff",
     "types": [
@@ -3165,6 +3473,24 @@ export const SPECIES_DATA: Record<number, SpeciesData> = {
       85
     ],
     "ability": "Intimidación",
+    "description": "",
+    "evolutions": []
+  },
+  "980": {
+    "name": "Clodsire",
+    "types": [
+      "Veneno",
+      "Tierra"
+    ],
+    "baseStats": [
+      130,
+      75,
+      60,
+      45,
+      100,
+      20
+    ],
+    "ability": "Punto Tóxico",
     "description": "",
     "evolutions": []
   }

@@ -3,10 +3,8 @@ import { Pokemon, PokemonType } from '../types/game';
 import {
   TYPE_COLORS,
   canPokemonEvolve,
-  learnLevelUpMoves,
   isEvolutionOptionAvailable,
   getEvolutionStatGains,
-  applyOfficialStats,
   evolvePokemon,
   EvolutionOption,
   getEvolutionOptions,
@@ -26,7 +24,6 @@ import {
   Award,
   ChevronRight,
   Info,
-  Flame,
 } from 'lucide-react';
 
 interface EvolutionMenuProps {
@@ -114,55 +111,6 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
   const readyCount = [...activeTeam, ...reserves].filter(
     (p) => canPokemonEvolve(p, availableItems).canEvolve
   ).length;
-
-  // Handle Level Up (Training candy / test helper)
-  const handleTrainLevelUp = () => {
-    if (!inspectedPokemon) return;
-    soundManager.playLevelUp();
-
-    const leveled = { ...inspectedPokemon, level: inspectedPokemon.level + 1 };
-    const official = applyOfficialStats(leveled);
-    const statUpdated: Pokemon =
-      official !== leveled
-        ? official
-        : {
-            ...leveled,
-            stats: {
-              ...inspectedPokemon.stats,
-              maxHp: inspectedPokemon.stats.maxHp + 3,
-              hp: inspectedPokemon.stats.hp + 3,
-              attack: inspectedPokemon.stats.attack + 2,
-              defense: inspectedPokemon.stats.defense + 2,
-              spAttack: inspectedPokemon.stats.spAttack + 2,
-              spDefense: inspectedPokemon.stats.spDefense + 2,
-              speed: inspectedPokemon.stats.speed + 1,
-            },
-          };
-    const { pokemon: updatedPokemon, learned, pending } = learnLevelUpMoves(statUpdated);
-
-    const isInActive = activeTeam.some((p) => p.id === inspectedPokemon.id);
-    if (isInActive) {
-      const newActive = activeTeam.map((p) =>
-        p.id === inspectedPokemon.id ? updatedPokemon : p
-      );
-      onUpdateTeam(newActive, reserves);
-    } else {
-      const newReserves = reserves.map((p) =>
-        p.id === inspectedPokemon.id ? updatedPokemon : p
-      );
-      onUpdateTeam(activeTeam, newReserves);
-    }
-
-    showToast(
-      `¡${inspectedPokemon.name} subió al Nivel ${updatedPokemon.level}!${
-        learned.length > 0 ? ` Aprendió ${learned.join(', ')}.` : ''
-      }${
-        pending.length > 0
-          ? ` Puede equipar ${pending.map((m) => m.name).join(', ')} desde Equipo.`
-          : ''
-      }`
-    );
-  };
 
   // Trigger Evolution Ceremony
   const handleInitiateEvolution = () => {
@@ -535,16 +483,6 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                     </span>
                   </div>
                 </div>
-
-                {/* Quick Train Button to test evolution easily */}
-                <button
-                  onClick={handleTrainLevelUp}
-                  title="Sube 1 nivel a este Pokémon para probar la evolución rápidamente"
-                  className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 shadow-sm"
-                >
-                  <Flame className="w-3.5 h-3.5 text-amber-400" />
-                  <span>+1 Nivel (Test)</span>
-                </button>
               </div>
 
               {/* Branch Selector if Pokémon has multiple evolutions (e.g. Eevee) */}
@@ -725,7 +663,7 @@ export const EvolutionMenu: React.FC<EvolutionMenuProps> = ({
                       </span>
                     ) : (
                       <span className="text-slate-400">
-                        ⚠️ Faltan <strong className="text-amber-300">{Math.max(0, activeOption.minLevel - inspectedPokemon.level)} niveles</strong>. Puedes ganar experiencia derrotando enemigos en mazmorras o usar el botón de entrenamiento rápido.
+                        ⚠️ Faltan <strong className="text-amber-300">{Math.max(0, activeOption.minLevel - inspectedPokemon.level)} niveles</strong>. Puedes ganar experiencia derrotando enemigos en mazmorras.
                       </span>
                     )}
                   </p>

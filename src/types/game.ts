@@ -105,6 +105,8 @@ export interface Dungeon {
   bgImage: string;
   recommendedLevel: number;
   enemiesPool: string[]; // Pokemon IDs or templates
+  enemyWeights?: Record<string, number>; // relative spawn weight per pool entry (default 1)
+  enemyLevelRange?: [number, number]; // clamps wild enemy levels (not the boss)
   bossId: string;
   bossLevel?: number; // defaults to recommendedLevel + 3
   bossCount?: number; // how many copies of the boss appear (default 1)
@@ -122,6 +124,7 @@ export type FloorEventType =
   | 'spring'
   | 'monster_house'
   | 'kecleon'
+  | 'item_choice'
   | 'boss';
 
 export interface DecisionChoice {
@@ -146,6 +149,7 @@ export interface FloorEvent {
   choices?: DecisionChoice[];
   enemy?: Pokemon;
   enemies?: Pokemon[];
+  itemChoices?: Item[];
   reward?: {
     gold?: number;
     items?: Item[];

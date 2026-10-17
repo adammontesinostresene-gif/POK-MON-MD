@@ -413,6 +413,17 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "statusChance": 10,
     "target": "all_enemies"
   },
+  "block": {
+    "id": "move_block",
+    "name": "Bloqueo",
+    "type": "Normal",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 5,
+    "maxPp": 5,
+    "description": "Le corta el paso al objetivo para que no pueda escapar."
+  },
   "body-slam": {
     "id": "move_body_slam",
     "name": "Golpe Cuerpo",
@@ -650,6 +661,17 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     ],
     "statTarget": "target",
     "statChance": 100
+  },
+  "circle-throw": {
+    "id": "move_circle_throw",
+    "name": "Llave Giro",
+    "type": "Lucha",
+    "category": "physical",
+    "power": 60,
+    "accuracy": 90,
+    "pp": 10,
+    "maxPp": 10,
+    "description": "Lanza por los aires al objetivo y hace que salga otro Pokémon. Si es uno salvaje, acaba el combate."
   },
   "close-combat": {
     "id": "move_close_combat",
@@ -1060,6 +1082,30 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "maxPp": 15,
     "description": "Araña al objetivo con garras afiladas."
   },
+  "dragon-dance": {
+    "id": "move_dragon_dance",
+    "name": "Danza Dragón",
+    "type": "Dragón",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "maxPp": 20,
+    "description": "Danza mística que sube el Ataque y la Velocidad.",
+    "target": "self",
+    "statChanges": [
+      {
+        "stat": "attack",
+        "stages": 1
+      },
+      {
+        "stat": "speed",
+        "stages": 1
+      }
+    ],
+    "statTarget": "self",
+    "statChance": 100
+  },
   "draining-kiss": {
     "id": "move_draining_kiss",
     "name": "Beso Drenaje",
@@ -1320,6 +1366,17 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "pp": 20,
     "maxPp": 20,
     "description": "Si el usuario está quemado, paralizado o envenenado, ataca con el doble de potencia."
+  },
+  "fake-out": {
+    "id": "move_fake_out",
+    "name": "Sorpresa",
+    "type": "Normal",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 10,
+    "maxPp": 10,
+    "description": "Amedrenta al objetivo con este movimiento de prioridad alta. Solo sirve en el primer turno."
   },
   "feather-dance": {
     "id": "move_feather_dance",
@@ -1952,6 +2009,17 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "pp": 5,
     "maxPp": 5,
     "description": "Lanza una gran masa de agua a presión para atacar."
+  },
+  "hyper-beam": {
+    "id": "move_hyper_beam",
+    "name": "Hiperrayo",
+    "type": "Normal",
+    "category": "special",
+    "power": 150,
+    "accuracy": 90,
+    "pp": 5,
+    "maxPp": 5,
+    "description": "Es eficaz, pero el atacante deberá descansar en el siguiente turno."
   },
   "hyper-fang": {
     "id": "move_hyper_fang",
@@ -2995,6 +3063,19 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "statusEffect": "poison",
     "statusChance": 30
   },
+  "poison-tail": {
+    "id": "move_poison_tail",
+    "name": "Cola Veneno",
+    "type": "Veneno",
+    "category": "physical",
+    "power": 50,
+    "accuracy": 100,
+    "pp": 25,
+    "maxPp": 25,
+    "description": "Puede envenenar y dar un golpe crítico.",
+    "statusEffect": "poison",
+    "statusChance": 10
+  },
   "pound": {
     "id": "move_pound",
     "name": "Destructor",
@@ -3707,6 +3788,26 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "maxPp": 20,
     "description": "Ataque eléctrico muy rápido e ineludible."
   },
+  "silk-trap": {
+    "id": "move_silk_trap",
+    "name": "Telatrampa",
+    "type": "Bicho",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "maxPp": 10,
+    "description": "Telatrampa",
+    "target": "self",
+    "statChanges": [
+      {
+        "stat": "speed",
+        "stages": -1
+      }
+    ],
+    "statTarget": "self",
+    "statChance": 100
+  },
   "silver-wind": {
     "id": "move_silver_wind",
     "name": "Viento Plata",
@@ -3766,6 +3867,25 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "maxPp": 10,
     "description": "Usa el poder psíquico para intercambiar habilidades con el objetivo."
   },
+  "skitter-smack": {
+    "id": "move_skitter_smack",
+    "name": "Golpe Rastrero",
+    "type": "Bicho",
+    "category": "physical",
+    "power": 70,
+    "accuracy": 90,
+    "pp": 10,
+    "maxPp": 10,
+    "description": "Ataca al objetivo por la espalda de forma subrepticia y además reduce su Ataque Especial.",
+    "statChanges": [
+      {
+        "stat": "spAttack",
+        "stages": -1
+      }
+    ],
+    "statTarget": "target",
+    "statChance": 100
+  },
   "slack-off": {
     "id": "move_slack_off",
     "name": "Relajo",
@@ -3813,6 +3933,20 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "description": "Esparce polvo que duerme al objetivo.",
     "statusEffect": "sleep",
     "statusChance": 100
+  },
+  "sludge-wave": {
+    "id": "move_sludge_wave",
+    "name": "Onda Tóxica",
+    "type": "Veneno",
+    "category": "special",
+    "power": 95,
+    "accuracy": 100,
+    "pp": 10,
+    "maxPp": 10,
+    "description": "Una onda tóxica que daña a los Pokémon de alrededor. Puede envenenar.",
+    "statusEffect": "poison",
+    "statusChance": 10,
+    "target": "all_enemies"
   },
   "smack-down": {
     "id": "move_smack_down",
@@ -4447,6 +4581,18 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "statTarget": "target",
     "statChance": 100
   },
+  "teeter-dance": {
+    "id": "move_teeter_dance",
+    "name": "Danza Caos",
+    "type": "Normal",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "maxPp": 20,
+    "description": "Danza histérica que confunde a los Pokémon que están alrededor del usuario.",
+    "target": "all_enemies"
+  },
   "thrash": {
     "id": "move_thrash",
     "name": "Saña",
@@ -4457,6 +4603,17 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "pp": 10,
     "maxPp": 10,
     "description": "Ataque de dos a tres turnos que acaba confundiendo al agresor."
+  },
+  "throat-chop": {
+    "id": "move_throat_chop",
+    "name": "Golpe Mordaza",
+    "type": "Siniestro",
+    "category": "physical",
+    "power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "maxPp": 15,
+    "description": "Inflige al rival un dolor tan abrumador que le impide utilizar durante dos turnos ataques que se sirven del sonido."
   },
   "thunder": {
     "id": "move_thunder",
@@ -4715,6 +4872,17 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "maxPp": 20,
     "description": "Golpea al oponente de dos a cinco veces con estrellas arrojadizas hechas de mucosidad. Este movimiento tiene prioridad alta."
   },
+  "waterfall": {
+    "id": "move_waterfall",
+    "name": "Cascada",
+    "type": "Agua",
+    "category": "physical",
+    "power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "maxPp": 15,
+    "description": "Embiste con un gran impulso que puede llegar a amedrentar."
+  },
   "wave-crash": {
     "id": "move_wave_crash",
     "name": "Envite Acuático",
@@ -4803,6 +4971,17 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     ],
     "statTarget": "self",
     "statChance": 100
+  },
+  "wonder-room": {
+    "id": "move_wonder_room",
+    "name": "Zona Extraña",
+    "type": "Psíquico",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "maxPp": 10,
+    "description": "Crea una zona misteriosa donde se intercambian la Defensa y la Defensa Especial de todos los Pokémon durante cinco turnos."
   },
   "wood-hammer": {
     "id": "move_wood_hammer",
@@ -4895,6 +5074,17 @@ export const LEARNSET_MOVES: Record<string, Move> = {
     "description": "Dispara una descarga eléctrica que causa daño y parálisis.",
     "statusEffect": "paralysis",
     "statusChance": 100
+  },
+  "zen-headbutt": {
+    "id": "move_zen_headbutt",
+    "name": "Cabezazo Zen",
+    "type": "Psíquico",
+    "category": "physical",
+    "power": 80,
+    "accuracy": 90,
+    "pp": 15,
+    "maxPp": 15,
+    "description": "Concentra su energía psíquica en la cabeza para golpear. Puede hacer que el objetivo se amedrente."
   }
 };
 
@@ -6914,6 +7104,130 @@ export const LEARNSETS: Record<number, { level: number; move: string }[]> = {
       "move": "fissure"
     }
   ],
+  "54": [
+    {
+      "level": 1,
+      "move": "scratch"
+    },
+    {
+      "level": 1,
+      "move": "tail-whip"
+    },
+    {
+      "level": 3,
+      "move": "water-gun"
+    },
+    {
+      "level": 6,
+      "move": "confusion"
+    },
+    {
+      "level": 9,
+      "move": "fury-swipes"
+    },
+    {
+      "level": 12,
+      "move": "water-pulse"
+    },
+    {
+      "level": 15,
+      "move": "disable"
+    },
+    {
+      "level": 18,
+      "move": "zen-headbutt"
+    },
+    {
+      "level": 21,
+      "move": "screech"
+    },
+    {
+      "level": 24,
+      "move": "aqua-tail"
+    },
+    {
+      "level": 27,
+      "move": "soak"
+    },
+    {
+      "level": 30,
+      "move": "psych-up"
+    },
+    {
+      "level": 34,
+      "move": "amnesia"
+    },
+    {
+      "level": 39,
+      "move": "wonder-room"
+    }
+  ],
+  "55": [
+    {
+      "level": 1,
+      "move": "aqua-jet"
+    },
+    {
+      "level": 1,
+      "move": "confusion"
+    },
+    {
+      "level": 1,
+      "move": "scratch"
+    },
+    {
+      "level": 1,
+      "move": "tail-whip"
+    },
+    {
+      "level": 1,
+      "move": "water-gun"
+    },
+    {
+      "level": 9,
+      "move": "fury-swipes"
+    },
+    {
+      "level": 12,
+      "move": "water-pulse"
+    },
+    {
+      "level": 15,
+      "move": "disable"
+    },
+    {
+      "level": 18,
+      "move": "zen-headbutt"
+    },
+    {
+      "level": 21,
+      "move": "screech"
+    },
+    {
+      "level": 24,
+      "move": "aqua-tail"
+    },
+    {
+      "level": 27,
+      "move": "soak"
+    },
+    {
+      "level": 30,
+      "move": "psych-up"
+    },
+    {
+      "level": 36,
+      "move": "amnesia"
+    },
+    {
+      "level": 40,
+      "move": "hydro-pump"
+    },
+    {
+      "level": 45,
+      "move": "wonder-room"
+    }
+  ],
   "66": [
     {
       "level": 1,
@@ -7876,6 +8190,98 @@ export const LEARNSETS: Record<number, { level: number; move: string }[]> = {
     {
       "level": 64,
       "move": "giga-impact"
+    }
+  ],
+  "129": [
+    {
+      "level": 1,
+      "move": "splash"
+    },
+    {
+      "level": 15,
+      "move": "tackle"
+    },
+    {
+      "level": 25,
+      "move": "flail"
+    }
+  ],
+  "130": [
+    {
+      "level": 0,
+      "move": "bite"
+    },
+    {
+      "level": 1,
+      "move": "flail"
+    },
+    {
+      "level": 1,
+      "move": "leer"
+    },
+    {
+      "level": 1,
+      "move": "splash"
+    },
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "twister"
+    },
+    {
+      "level": 4,
+      "move": "whirlpool"
+    },
+    {
+      "level": 8,
+      "move": "ice-fang"
+    },
+    {
+      "level": 12,
+      "move": "brine"
+    },
+    {
+      "level": 16,
+      "move": "scary-face"
+    },
+    {
+      "level": 21,
+      "move": "waterfall"
+    },
+    {
+      "level": 24,
+      "move": "crunch"
+    },
+    {
+      "level": 28,
+      "move": "rain-dance"
+    },
+    {
+      "level": 32,
+      "move": "aqua-tail"
+    },
+    {
+      "level": 36,
+      "move": "dragon-dance"
+    },
+    {
+      "level": 40,
+      "move": "hydro-pump"
+    },
+    {
+      "level": 44,
+      "move": "hurricane"
+    },
+    {
+      "level": 48,
+      "move": "thrash"
+    },
+    {
+      "level": 52,
+      "move": "hyper-beam"
     }
   ],
   "133": [
@@ -8862,6 +9268,122 @@ export const LEARNSETS: Record<number, { level: number; move: string }[]> = {
       "move": "hydro-pump"
     }
   ],
+  "161": [
+    {
+      "level": 1,
+      "move": "scratch"
+    },
+    {
+      "level": 4,
+      "move": "defense-curl"
+    },
+    {
+      "level": 7,
+      "move": "quick-attack"
+    },
+    {
+      "level": 13,
+      "move": "fury-swipes"
+    },
+    {
+      "level": 16,
+      "move": "helping-hand"
+    },
+    {
+      "level": 19,
+      "move": "follow-me"
+    },
+    {
+      "level": 25,
+      "move": "slam"
+    },
+    {
+      "level": 28,
+      "move": "rest"
+    },
+    {
+      "level": 31,
+      "move": "sucker-punch"
+    },
+    {
+      "level": 36,
+      "move": "amnesia"
+    },
+    {
+      "level": 39,
+      "move": "baton-pass"
+    },
+    {
+      "level": 42,
+      "move": "double-edge"
+    },
+    {
+      "level": 47,
+      "move": "hyper-voice"
+    }
+  ],
+  "162": [
+    {
+      "level": 0,
+      "move": "agility"
+    },
+    {
+      "level": 1,
+      "move": "coil"
+    },
+    {
+      "level": 1,
+      "move": "defense-curl"
+    },
+    {
+      "level": 1,
+      "move": "quick-attack"
+    },
+    {
+      "level": 1,
+      "move": "scratch"
+    },
+    {
+      "level": 13,
+      "move": "fury-swipes"
+    },
+    {
+      "level": 17,
+      "move": "helping-hand"
+    },
+    {
+      "level": 21,
+      "move": "follow-me"
+    },
+    {
+      "level": 28,
+      "move": "slam"
+    },
+    {
+      "level": 32,
+      "move": "rest"
+    },
+    {
+      "level": 36,
+      "move": "sucker-punch"
+    },
+    {
+      "level": 42,
+      "move": "amnesia"
+    },
+    {
+      "level": 46,
+      "move": "baton-pass"
+    },
+    {
+      "level": 50,
+      "move": "double-edge"
+    },
+    {
+      "level": 56,
+      "move": "hyper-voice"
+    }
+  ],
   "165": [
     {
       "level": 1,
@@ -9346,6 +9868,114 @@ export const LEARNSETS: Record<number, { level: number; move: string }[]> = {
     {
       "level": 50,
       "move": "petal-blizzard"
+    }
+  ],
+  "194": [
+    {
+      "level": 1,
+      "move": "tail-whip"
+    },
+    {
+      "level": 1,
+      "move": "water-gun"
+    },
+    {
+      "level": 4,
+      "move": "rain-dance"
+    },
+    {
+      "level": 8,
+      "move": "mud-shot"
+    },
+    {
+      "level": 12,
+      "move": "haze"
+    },
+    {
+      "level": 12,
+      "move": "mist"
+    },
+    {
+      "level": 16,
+      "move": "slam"
+    },
+    {
+      "level": 21,
+      "move": "yawn"
+    },
+    {
+      "level": 24,
+      "move": "aqua-tail"
+    },
+    {
+      "level": 28,
+      "move": "muddy-water"
+    },
+    {
+      "level": 32,
+      "move": "amnesia"
+    },
+    {
+      "level": 36,
+      "move": "toxic"
+    },
+    {
+      "level": 40,
+      "move": "earthquake"
+    }
+  ],
+  "195": [
+    {
+      "level": 1,
+      "move": "mud-shot"
+    },
+    {
+      "level": 1,
+      "move": "rain-dance"
+    },
+    {
+      "level": 1,
+      "move": "tail-whip"
+    },
+    {
+      "level": 1,
+      "move": "water-gun"
+    },
+    {
+      "level": 12,
+      "move": "haze"
+    },
+    {
+      "level": 12,
+      "move": "mist"
+    },
+    {
+      "level": 16,
+      "move": "slam"
+    },
+    {
+      "level": 23,
+      "move": "yawn"
+    },
+    {
+      "level": 28,
+      "move": "aqua-tail"
+    },
+    {
+      "level": 34,
+      "move": "muddy-water"
+    },
+    {
+      "level": 40,
+      "move": "amnesia"
+    },
+    {
+      "level": 46,
+      "move": "toxic"
+    },
+    {
+      "level": 52,
+      "move": "earthquake"
     }
   ],
   "196": [
@@ -10260,6 +10890,240 @@ export const LEARNSETS: Record<number, { level: number; move: string }[]> = {
     {
       "level": 63,
       "move": "hydro-pump"
+    }
+  ],
+  "270": [
+    {
+      "level": 1,
+      "move": "astonish"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 3,
+      "move": "absorb"
+    },
+    {
+      "level": 6,
+      "move": "water-gun"
+    },
+    {
+      "level": 9,
+      "move": "mist"
+    },
+    {
+      "level": 12,
+      "move": "mega-drain"
+    },
+    {
+      "level": 16,
+      "move": "flail"
+    },
+    {
+      "level": 20,
+      "move": "bubble-beam"
+    },
+    {
+      "level": 24,
+      "move": "leech-seed"
+    },
+    {
+      "level": 28,
+      "move": "giga-drain"
+    },
+    {
+      "level": 33,
+      "move": "rain-dance"
+    },
+    {
+      "level": 38,
+      "move": "zen-headbutt"
+    },
+    {
+      "level": 43,
+      "move": "energy-ball"
+    }
+  ],
+  "271": [
+    {
+      "level": 1,
+      "move": "absorb"
+    },
+    {
+      "level": 1,
+      "move": "astonish"
+    },
+    {
+      "level": 1,
+      "move": "fake-out"
+    },
+    {
+      "level": 1,
+      "move": "flail"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "knock-off"
+    },
+    {
+      "level": 1,
+      "move": "teeter-dance"
+    },
+    {
+      "level": 1,
+      "move": "water-gun"
+    },
+    {
+      "level": 9,
+      "move": "mist"
+    },
+    {
+      "level": 12,
+      "move": "mega-drain"
+    },
+    {
+      "level": 18,
+      "move": "fury-swipes"
+    },
+    {
+      "level": 24,
+      "move": "bubble-beam"
+    },
+    {
+      "level": 30,
+      "move": "leech-seed"
+    },
+    {
+      "level": 36,
+      "move": "giga-drain"
+    },
+    {
+      "level": 50,
+      "move": "zen-headbutt"
+    },
+    {
+      "level": 57,
+      "move": "energy-ball"
+    },
+    {
+      "level": 64,
+      "move": "hydro-pump"
+    }
+  ],
+  "272": [
+    {
+      "level": 1,
+      "move": "bubble-beam"
+    },
+    {
+      "level": 1,
+      "move": "fake-out"
+    },
+    {
+      "level": 1,
+      "move": "rain-dance"
+    }
+  ],
+  "283": [
+    {
+      "level": 1,
+      "move": "water-gun"
+    },
+    {
+      "level": 6,
+      "move": "quick-attack"
+    },
+    {
+      "level": 9,
+      "move": "sweet-scent"
+    },
+    {
+      "level": 14,
+      "move": "soak"
+    },
+    {
+      "level": 17,
+      "move": "bubble-beam"
+    },
+    {
+      "level": 22,
+      "move": "agility"
+    },
+    {
+      "level": 25,
+      "move": "haze"
+    },
+    {
+      "level": 25,
+      "move": "mist"
+    },
+    {
+      "level": 35,
+      "move": "baton-pass"
+    },
+    {
+      "level": 38,
+      "move": "sticky-web"
+    }
+  ],
+  "284": [
+    {
+      "level": 1,
+      "move": "quick-attack"
+    },
+    {
+      "level": 1,
+      "move": "soak"
+    },
+    {
+      "level": 1,
+      "move": "sweet-scent"
+    },
+    {
+      "level": 1,
+      "move": "water-gun"
+    },
+    {
+      "level": 1,
+      "move": "whirlwind"
+    },
+    {
+      "level": 17,
+      "move": "gust"
+    },
+    {
+      "level": 22,
+      "move": "air-cutter"
+    },
+    {
+      "level": 22,
+      "move": "scary-face"
+    },
+    {
+      "level": 26,
+      "move": "stun-spore"
+    },
+    {
+      "level": 32,
+      "move": "air-slash"
+    },
+    {
+      "level": 38,
+      "move": "giga-drain"
+    },
+    {
+      "level": 44,
+      "move": "bug-buzz"
+    },
+    {
+      "level": 52,
+      "move": "quiver-dance"
     }
   ],
   "387": [
@@ -14136,6 +15000,126 @@ export const LEARNSETS: Record<number, { level: number; move: string }[]> = {
       "move": "wave-crash"
     }
   ],
+  "917": [
+    {
+      "level": 1,
+      "move": "string-shot"
+    },
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 5,
+      "move": "struggle-bug"
+    },
+    {
+      "level": 8,
+      "move": "assurance"
+    },
+    {
+      "level": 11,
+      "move": "feint"
+    },
+    {
+      "level": 14,
+      "move": "bug-bite"
+    },
+    {
+      "level": 18,
+      "move": "block"
+    },
+    {
+      "level": 22,
+      "move": "counter"
+    },
+    {
+      "level": 25,
+      "move": "headbutt"
+    },
+    {
+      "level": 29,
+      "move": "sticky-web"
+    },
+    {
+      "level": 33,
+      "move": "gastro-acid"
+    },
+    {
+      "level": 36,
+      "move": "circle-throw"
+    },
+    {
+      "level": 40,
+      "move": "throat-chop"
+    },
+    {
+      "level": 44,
+      "move": "skitter-smack"
+    }
+  ],
+  "918": [
+    {
+      "level": 0,
+      "move": "silk-trap"
+    },
+    {
+      "level": 1,
+      "move": "string-shot"
+    },
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 5,
+      "move": "struggle-bug"
+    },
+    {
+      "level": 8,
+      "move": "assurance"
+    },
+    {
+      "level": 11,
+      "move": "feint"
+    },
+    {
+      "level": 14,
+      "move": "bug-bite"
+    },
+    {
+      "level": 19,
+      "move": "block"
+    },
+    {
+      "level": 24,
+      "move": "counter"
+    },
+    {
+      "level": 28,
+      "move": "headbutt"
+    },
+    {
+      "level": 33,
+      "move": "sticky-web"
+    },
+    {
+      "level": 37,
+      "move": "gastro-acid"
+    },
+    {
+      "level": 41,
+      "move": "circle-throw"
+    },
+    {
+      "level": 45,
+      "move": "throat-chop"
+    },
+    {
+      "level": 49,
+      "move": "skitter-smack"
+    }
+  ],
   "942": [
     {
       "level": 1,
@@ -14266,6 +15250,60 @@ export const LEARNSETS: Record<number, { level: number; move: string }[]> = {
     {
       "level": 60,
       "move": "outrage"
+    }
+  ],
+  "980": [
+    {
+      "level": 0,
+      "move": "amnesia"
+    },
+    {
+      "level": 1,
+      "move": "poison-sting"
+    },
+    {
+      "level": 1,
+      "move": "tail-whip"
+    },
+    {
+      "level": 4,
+      "move": "toxic-spikes"
+    },
+    {
+      "level": 8,
+      "move": "mud-shot"
+    },
+    {
+      "level": 12,
+      "move": "poison-tail"
+    },
+    {
+      "level": 16,
+      "move": "slam"
+    },
+    {
+      "level": 21,
+      "move": "yawn"
+    },
+    {
+      "level": 24,
+      "move": "poison-jab"
+    },
+    {
+      "level": 30,
+      "move": "sludge-wave"
+    },
+    {
+      "level": 36,
+      "move": "megahorn"
+    },
+    {
+      "level": 40,
+      "move": "toxic"
+    },
+    {
+      "level": 48,
+      "move": "earthquake"
     }
   ]
 };

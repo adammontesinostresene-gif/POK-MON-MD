@@ -1,15 +1,24 @@
-import { FloorEvent, FloorEventType, Dungeon, Pokemon } from '../types/game';
+import { FloorEvent, FloorEventType, Dungeon, Pokemon, Item } from '../types/game';
 import { createWildEnemy, EXTRA_RECRUITS, getPmdPortraitUrl } from './pokemonData';
 
+// Items that can show up in the "choose one of three" floor event
+const FLOOR_ITEM_POOL: Omit<Item, 'id' | 'count'>[] = [
+  { name: 'Baya Aranja', category: 'healing', description: 'Restaura 50 PS a un Pokémon del equipo.', effectType: 'heal_hp', effectValue: 50, icon: '🍎' },
+  { name: 'Manzana Grande', category: 'food', description: 'Recupera 50 de Hambre/Tripa.', effectType: 'restore_belly', effectValue: 50, icon: '🍏' },
+  { name: 'Semilla Revivir', category: 'seed', description: 'Revive inmediatamente a un Pokémon caído.', effectType: 'revive', effectValue: 100, icon: '🌰' },
+  { name: 'Semilla Sueño', category: 'seed', description: 'Duerme al Pokémon rival durante varios turnos.', effectType: 'inflict_status', effectValue: 3, icon: '💤' },
+  { name: 'Elixir', category: 'healing', description: 'Restaura 10 PP de un movimiento.', effectType: 'restore_pp', effectValue: 10, icon: '🧪' },
+  { name: 'Orbe Escape', category: 'orb', description: 'Permite salir inmediatamente de la mazmorra conservando objetos y oro.', effectType: 'escape', effectValue: 1, icon: '🔮' },
+];
+
 /**
- * Determines enemy squad size (1, 2, 3, or 4) with exact requested probabilities:
+ * Determines enemy squad size (1, 2, 3, or 4), same for every dungeon:
  * 1 enemy: 60%
- * 2 enemies: 25%
- * 3 enemies: 10%
- * 4 enemies: 5%
- * (Bosquejo Tutorial uses 60% / 30% / 8% / 2%)
+ * 2 enemies: 30%
+ * 3 enemies: 8%
+ * 4 enemies: 2%
  */
-export const getWildEnemiesCount = (isMonsterHouse: boolean = false, dungeonId?: string): number => {
+export const getWildEnemiesCount = (isMonsterHouse: boolean = false): number => {
   if (isMonsterHouse) {
     const roll = Math.random();
     if (roll < 0.20) return 2;
@@ -18,16 +27,9 @@ export const getWildEnemiesCount = (isMonsterHouse: boolean = false, dungeonId?:
   }
 
   const roll = Math.random();
-  if (dungeonId === 'bosquejo_tutorial') {
-    if (roll < 0.60) return 1;
-    if (roll < 0.90) return 2;
-    if (roll < 0.98) return 3;
-    return 4;
-  }
-
   if (roll < 0.60) return 1;
-  if (roll < 0.85) return 2;
-  if (roll < 0.95) return 3;
+  if (roll < 0.90) return 2;
+  if (roll < 0.98) return 3;
   return 4;
 };
 
@@ -42,10 +44,16 @@ export const generateEnemySquad = (
     : ['caterpie', 'pidgey', 'rattata'];
 
   for (let i = 0; i < count; i++) {
-    const enemyKey = pool[Math.floor(Math.random() * pool.length)];
+    const weightOf = (key: string) => dungeon.enemyWeights?.[key] ?? 1;
+    let roll = Math.random() * pool.reduce((sum, key) => sum + weightOf(key), 0);
+    const enemyKey = pool.find((key) => (roll -= weightOf(key)) < 0) ?? pool[pool.length - 1];
     let levelVariation = Math.max(1, baseLevel + (Math.floor(Math.random() * 3) - 1));
     if (dungeon.id === 'bosquejo_tutorial') {
       levelVariation = Math.min(3, Math.max(2, levelVariation));
+    }
+    if (dungeon.enemyLevelRange) {
+      const [minLevel, maxLevel] = dungeon.enemyLevelRange;
+      levelVariation = Math.min(maxLevel, Math.max(minLevel, levelVariation));
     }
     const wild = createWildEnemy(enemyKey, levelVariation);
     wild.id = `${wild.id}_sq_${i}_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
@@ -88,9 +96,14 @@ export const generateFloorEvent = (
     };
   }
 
-  // Every non-boss floor rolls a random event (repeated entries act as weights)
-  const types: FloorEventType[] = ['combat', 'decision', 'combat', 'decision', 'chest', 'spring', 'monster_house'];
-  const eventType = types[Math.floor(Math.random() * types.length)];
+  // 50% battle (a Monster House is a rare kind of battle), 50% one of the other events with equal odds
+  const otherEvents: FloorEventType[] = ['decision', 'kecleon', 'chest', 'spring', 'item_choice'];
+  const eventType: FloorEventType =
+    Math.random() < 0.5
+      ? Math.random() < 0.15
+        ? 'monster_house'
+        : 'combat'
+      : otherEvents[Math.floor(Math.random() * otherEvents.length)];
 
   let enemyLevel = dungeon.recommendedLevel + Math.floor((floorNumber - 1) / 2);
   if (dungeon.id === 'bosquejo_tutorial') {
@@ -98,7 +111,7 @@ export const generateFloorEvent = (
   }
 
   if (eventType === 'combat') {
-    const count = getWildEnemiesCount(false, dungeon.id);
+    const count = getWildEnemiesCount(false);
     const enemies = generateEnemySquad(dungeon, enemyLevel, count);
     const leadEnemy = enemies[0];
 
@@ -124,7 +137,7 @@ export const generateFloorEvent = (
     };
   }
 
-  if (eventType === 'decision') {
+  if (eventType === 'decision' || eventType === 'kecleon') {
     const decisionTypes = [
       {
         title: `Piso ${floorNumber}: La Bifurcación Misteriosa`,
@@ -182,7 +195,7 @@ export const generateFloorEvent = (
     ];
 
     const chosenDilemma: { title: string; description: string; choices: typeof decisionTypes[number]['choices']; speaker?: string; portrait?: string } =
-      decisionTypes[Math.floor(Math.random() * decisionTypes.length)];
+      decisionTypes[eventType === 'kecleon' ? 1 : 0];
     return {
       floorNumber,
       type: 'decision',
@@ -191,6 +204,22 @@ export const generateFloorEvent = (
       choices: chosenDilemma.choices,
       dialogueSpeaker: chosenDilemma.speaker,
       speakerPortrait: chosenDilemma.portrait,
+    };
+  }
+
+  if (eventType === 'item_choice') {
+    const shuffled = [...FLOOR_ITEM_POOL].sort(() => Math.random() - 0.5);
+    const itemChoices: Item[] = shuffled.slice(0, 3).map((template, i) => ({
+      ...template,
+      id: `floor_item_${i}_${Date.now()}`,
+      count: 1,
+    }));
+    return {
+      floorNumber,
+      type: 'item_choice',
+      title: `Piso ${floorNumber}: Alijo Abandonado`,
+      description: `Encuentras tres objetos tirados en el suelo, pero solo hay sitio para llevarte uno. ¿Cuál eliges?`,
+      itemChoices,
     };
   }
 
@@ -236,7 +265,7 @@ export const generateFloorEvent = (
   }
 
   // Fallback combat
-  const fallbackCount = getWildEnemiesCount(false, dungeon.id);
+  const fallbackCount = getWildEnemiesCount(false);
   const fallbackEnemies = generateEnemySquad(dungeon, enemyLevel, fallbackCount);
   const leadEnemy = fallbackEnemies[0];
   return {

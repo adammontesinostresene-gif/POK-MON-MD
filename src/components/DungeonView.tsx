@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dungeon, Pokemon, Item, FloorEvent, DecisionChoice } from '../types/game';
 import { generateFloorEvent, getRandomRecruit } from '../data/eventData';
+import { BAG_LIMIT, bagCount, bagSpace } from '../data/pokemonData';
 import { TurnBasedCombat } from './TurnBasedCombat';
 import { PmdPortrait } from './PmdSprite';
 import { soundManager } from '../utils/audio';
@@ -148,6 +149,14 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       // Elemental resonance reward
       const bonusGold = 180 + currentFloor * 25;
       setGold((g) => g + bonusGold);
+      if (bagSpace(inventory) === 0) {
+        soundManager.playLevelUp();
+        setResolutionMessage(
+          `¡Las runas brillaron abriendo una cámara secreta! Encontraste ${bonusGold} Pokécuartos, pero tu mochila está llena y tuviste que dejar una Semilla Revivir.`
+        );
+        setEventResolved(true);
+        return;
+      }
       const reviverItem: Item = {
         id: `reviver_reward_${Date.now()}`,
         name: 'Semilla Revivir',
@@ -170,7 +179,9 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         `Recolectaste deliciosas bayas y descansaste un momento. ¡Recuperas +25 de Hambre!`
       );
     } else if (choice.actionKey === 'buy_item') {
-      if (choice.id.includes('oran')) {
+      if (bagSpace(inventory) === 0) {
+        setResolutionMessage(`Kecleon miró tu mochila: "¡Ahí no cabe nada más! Vuelve cuando tengas sitio."`);
+      } else if (choice.id.includes('oran')) {
         if (gold >= 80) {
           setGold((g) => g - 80);
           const oran: Item = {
@@ -237,6 +248,20 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     setEventResolved(true);
   };
 
+  // Pick one of three floor items (null = take nothing)
+  const handlePickFloorItem = (item: Item | null) => {
+    soundManager.playSelect();
+    if (item) {
+      if (bagSpace(inventory) === 0) return;
+      soundManager.playDrop();
+      setInventory((inv) => [...inv, item]);
+      setResolutionMessage(`¡Guardaste ${item.icon} ${item.name} en la mochila!`);
+    } else {
+      setResolutionMessage('Decidiste no llevarte nada y seguiste adelante.');
+    }
+    setEventResolved(true);
+  };
+
   // Open Chest trigger
   const handleOpenChest = () => {
     soundManager.playVictory();
@@ -272,7 +297,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     setTeam(finalTeam);
     setReserves(finalReserves);
     const finalGold = gold + goldGained;
-    const finalInventory = droppedItem ? [...inventory, droppedItem] : inventory;
+    const finalInventory = droppedItem && bagSpace(inventory) > 0 ? [...inventory, droppedItem] : inventory;
     setGold(finalGold);
     setInventory(finalInventory);
 
@@ -527,7 +552,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                     />
                   ) : currentEvent.type === 'spring' ? (
                     <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400 animate-pulse" />
-                  ) : currentEvent.type === 'chest' ? (
+                  ) : currentEvent.type === 'chest' || currentEvent.type === 'item_choice' ? (
                     <Gift className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 animate-bounce" />
                   ) : currentEvent.type === 'decision' ? (
                     <HelpCircle className="w-6 h-6 sm:w-7 sm:h-7 text-amber-300" />
@@ -610,6 +635,39 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                     </button>
                   )}
 
+                  {/* Pick one of three items (or none) */}
+                  {currentEvent.type === 'item_choice' && currentEvent.itemChoices && (
+                    <div className="flex flex-col gap-1.5 w-full">
+                      {bagSpace(inventory) === 0 && (
+                        <p className="text-[11px] text-red-300">
+                          Tu mochila está llena ({BAG_LIMIT}/{BAG_LIMIT}). Usa o tira algo para poder coger un objeto.
+                        </p>
+                      )}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2 w-full text-left">
+                        {currentEvent.itemChoices.map((item) => (
+                          <button
+                            key={item.id}
+                            disabled={bagSpace(inventory) === 0}
+                            onClick={() => handlePickFloorItem(item)}
+                            className="p-2 sm:p-2.5 bg-slate-800/95 hover:bg-slate-750 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 hover:border-amber-400 rounded-xl transition-all flex items-center gap-2 cursor-pointer"
+                          >
+                            <span className="text-xl">{item.icon}</span>
+                            <span className="min-w-0">
+                              <span className="font-semibold text-xs text-white block">{item.name}</span>
+                              <span className="text-[10px] text-slate-400 block leading-tight">{item.description}</span>
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => handlePickFloorItem(null)}
+                        className="w-full max-w-md mx-auto py-2 px-5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs shadow transition-colors cursor-pointer"
+                      >
+                        No coger ninguno
+                      </button>
+                    </div>
+                  )}
+
                   {/* Chest Event Action */}
                   {currentEvent.type === 'chest' && (
                     <button
@@ -670,6 +728,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
               <h3 className="font-bold text-base text-white flex items-center gap-2">
                 <Backpack className="w-4 h-4 text-amber-400" />
                 Mochila de Expedición
+                <span className="text-xs font-mono text-slate-400">({bagCount(inventory)}/{BAG_LIMIT})</span>
               </h3>
               <button
                 onClick={() => {
