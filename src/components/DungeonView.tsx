@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Dungeon, Pokemon, Item, FloorEvent, DecisionChoice } from '../types/game';
-import { generateFloorEvent, getRandomRecruit } from '../data/eventData';
+import {
+  generateEnemySquad,
+  generateFloorEvent,
+  generateRandomFloorItem,
+  getRandomRecruit,
+  getWildEnemiesCount,
+} from '../data/eventData';
+import { BAG_LIMIT, bagCount, bagSpace } from '../data/pokemonData';
 import { TurnBasedCombat } from './TurnBasedCombat';
 import { PmdPortrait } from './PmdSprite';
 import { soundManager } from '../utils/audio';
@@ -66,6 +73,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   const [isBagOpen, setIsBagOpen] = useState<boolean>(false);
   const [isExitConfirmOpen, setIsExitConfirmOpen] = useState<boolean>(false);
   const [selectedItemForUse, setSelectedItemForUse] = useState<Item | null>(null);
+  const [elixirTargetIdx, setElixirTargetIdx] = useState<number | null>(null);
 
   // Initialize first floor
   useEffect(() => {
@@ -76,9 +84,9 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     };
   }, []);
 
-  const loadFloor = (floorNum: number, teamForEvent: Pokemon[] = team) => {
+  const loadFloor = (floorNum: number) => {
     soundManager.startBgm('dungeon');
-    const event = generateFloorEvent(dungeon, floorNum, teamForEvent);
+    const event = generateFloorEvent(dungeon, floorNum);
     setCurrentEvent(event);
     setEventResolved(false);
     setResolutionMessage(null);
@@ -102,6 +110,48 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   // Resolving Decision Choices
   const handleMakeChoice = (choice: DecisionChoice) => {
     soundManager.playSelect();
+
+    if (choice.actionKey === 'choose_path') {
+      const outcome = Math.floor(Math.random() * 3);
+      if (outcome === 0) {
+        const item = generateRandomFloorItem();
+        if (bagSpace(inventory) > 0) {
+          setInventory((prev) => [...prev, item]);
+          soundManager.playDrop();
+          setResolutionMessage(`En el camino encontraste ${item.icon} ${item.name}.`);
+        } else {
+          setResolutionMessage('Encontraste un objeto, pero la mochila está llena y tuviste que dejarlo.');
+        }
+        setEventResolved(true);
+      } else if (outcome === 1) {
+        const reward = 100 + currentFloor * 25;
+        setGold((prev) => prev + reward);
+        soundManager.playDrop();
+        setResolutionMessage(`Encontraste ${reward} Pokécuartos en el camino.`);
+        setEventResolved(true);
+      } else {
+        const baseLevel = dungeon.recommendedLevel + Math.floor((currentFloor - 1) / 2);
+        const enemies = generateEnemySquad(
+          dungeon,
+          baseLevel,
+          getWildEnemiesCount(false, dungeon.squadSizeOdds)
+        );
+        const leadEnemy = enemies[0];
+        setCurrentEvent({
+          floorNumber: currentFloor,
+          type: 'combat',
+          title: `Piso ${currentFloor}: Encuentro en el camino`,
+          description: `Un ${leadEnemy.name} y su grupo te cortan el paso.`,
+          enemy: leadEnemy,
+          enemies,
+          dialogueSpeaker: leadEnemy.name,
+          speakerPortrait: leadEnemy.artworkUrl,
+        });
+        setResolutionMessage(null);
+        setInCombat(true);
+      }
+      return;
+    }
 
     if (choice.actionKey === 'give_berry') {
       const berryIdx = inventory.findIndex((it) => it.id.includes('oran') && it.count > 0);
@@ -147,6 +197,14 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       // Elemental resonance reward
       const bonusGold = 180 + currentFloor * 25;
       setGold((g) => g + bonusGold);
+      if (bagSpace(inventory) === 0) {
+        soundManager.playLevelUp();
+        setResolutionMessage(
+          `¡Las runas brillaron abriendo una cámara secreta! Encontraste ${bonusGold} Pokécuartos, pero tu mochila está llena y tuviste que dejar una Semilla Revivir.`
+        );
+        setEventResolved(true);
+        return;
+      }
       const reviverItem: Item = {
         id: `reviver_reward_${Date.now()}`,
         name: 'Semilla Revivir',
@@ -169,7 +227,9 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         `Recolectaste deliciosas bayas y descansaste un momento. ¡Recuperas +25 de Hambre!`
       );
     } else if (choice.actionKey === 'buy_item') {
-      if (choice.id.includes('oran')) {
+      if (bagSpace(inventory) === 0) {
+        setResolutionMessage(`Kecleon miró tu mochila: "¡Ahí no cabe nada más! Vuelve cuando tengas sitio."`);
+      } else if (choice.id.includes('oran')) {
         if (gold >= 80) {
           setGold((g) => g - 80);
           const oran: Item = {
@@ -236,6 +296,20 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     setEventResolved(true);
   };
 
+  // Pick one of three floor items (null = take nothing)
+  const handlePickFloorItem = (item: Item | null) => {
+    soundManager.playSelect();
+    if (item) {
+      if (bagSpace(inventory) === 0) return;
+      soundManager.playDrop();
+      setInventory((inv) => [...inv, item]);
+      setResolutionMessage(`¡Guardaste ${item.icon} ${item.name} en la mochila!`);
+    } else {
+      setResolutionMessage('Decidiste no llevarte nada y seguiste adelante.');
+    }
+    setEventResolved(true);
+  };
+
   // Open Chest trigger
   const handleOpenChest = () => {
     soundManager.playVictory();
@@ -271,7 +345,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     setTeam(finalTeam);
     setReserves(finalReserves);
     const finalGold = gold + goldGained;
-    const finalInventory = droppedItem ? [...inventory, droppedItem] : inventory;
+    const finalInventory = droppedItem && bagSpace(inventory) > 0 ? [...inventory, droppedItem] : inventory;
     setGold(finalGold);
     setInventory(finalInventory);
 
@@ -282,7 +356,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       return;
     }
 
-    loadFloor(currentFloor + 1, finalTeam);
+    loadFloor(currentFloor + 1);
     setCurrentFloor((f) => f + 1);
   };
 
@@ -300,7 +374,10 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   };
 
   // Use Item from Bag
-  const handleUseItemOnTarget = (item: Item, targetPokemonIndex: number) => {
+  const handleUseItemOnTarget = (item: Item, targetPokemonIndex: number, moveIdx?: number) => {
+    const targetPokemon = team[targetPokemonIndex];
+    if (item.effectType === 'heal_hp' && (!targetPokemon || targetPokemon.stats.hp <= 0)) return;
+
     soundManager.playSelect();
     const updatedInv = inventory
       .map((it) => (it.id === item.id ? { ...it, count: it.count - 1 } : it))
@@ -325,18 +402,21 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         next[targetPokemonIndex] = target;
         return next;
       });
-    } else if (item.effectType === 'restore_pp') {
+    } else if (item.effectType === 'restore_pp' && moveIdx !== undefined) {
       soundManager.playHeal();
       setTeam((prev) => {
         const next = [...prev];
         const target = { ...next[targetPokemonIndex] };
-        target.moves = target.moves.map((m) => ({ ...m, pp: m.maxPp }));
+        target.moves = target.moves.map((m, i) =>
+          i === moveIdx ? { ...m, pp: Math.min(m.maxPp, m.pp + item.effectValue) } : m
+        );
         next[targetPokemonIndex] = target;
         return next;
       });
     }
 
     setSelectedItemForUse(null);
+    setElixirTargetIdx(null);
   };
 
   // If in combat, render TurnBasedCombat view
@@ -355,13 +435,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
             onEscapeDungeon={(combatTeam, remainingInventory) =>
               onExitDungeon(combatTeam, remainingInventory, gold)
             }
-            canFlee={currentEvent.type !== 'boss'}
-            onFlee={() => {
-              setInCombat(false);
-              setEventResolved(true);
-              setResolutionMessage('¡Lograste huir del combate utilizando una maniobra evasiva!');
-              soundManager.startBgm('dungeon');
-            }}
+            canUseEscapeOrb={currentEvent.type !== 'boss'}
             onUpdateInventory={(updated) => setInventory(updated)}
           />
         </div>
@@ -473,6 +547,12 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                     }}
                   />
                 </div>
+                <div className="w-full bg-slate-800 h-0.5 rounded-full overflow-hidden mt-0.5" title={`EXP ${member.exp}/${member.nextExp}`}>
+                  <div
+                    className="h-full bg-sky-400 transition-all"
+                    style={{ width: `${Math.min(100, (member.exp / member.nextExp) * 100)}%` }}
+                  />
+                </div>
               </div>
             </div>
           ))}
@@ -516,7 +596,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                     />
                   ) : currentEvent.type === 'spring' ? (
                     <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400 animate-pulse" />
-                  ) : currentEvent.type === 'chest' ? (
+                  ) : currentEvent.type === 'chest' || currentEvent.type === 'item_choice' ? (
                     <Gift className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 animate-bounce" />
                   ) : currentEvent.type === 'decision' ? (
                     <HelpCircle className="w-6 h-6 sm:w-7 sm:h-7 text-amber-300" />
@@ -599,6 +679,39 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                     </button>
                   )}
 
+                  {/* Pick one of three items (or none) */}
+                  {currentEvent.type === 'item_choice' && currentEvent.itemChoices && (
+                    <div className="flex flex-col gap-1.5 w-full">
+                      {bagSpace(inventory) === 0 && (
+                        <p className="text-[11px] text-red-300">
+                          Tu mochila está llena ({BAG_LIMIT}/{BAG_LIMIT}). Usa o tira algo para poder coger un objeto.
+                        </p>
+                      )}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2 w-full text-left">
+                        {currentEvent.itemChoices.map((item) => (
+                          <button
+                            key={item.id}
+                            disabled={bagSpace(inventory) === 0}
+                            onClick={() => handlePickFloorItem(item)}
+                            className="p-2 sm:p-2.5 bg-slate-800/95 hover:bg-slate-750 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 hover:border-amber-400 rounded-xl transition-all flex items-center gap-2 cursor-pointer"
+                          >
+                            <span className="text-xl">{item.icon}</span>
+                            <span className="min-w-0">
+                              <span className="font-semibold text-xs text-white block">{item.name}</span>
+                              <span className="text-[10px] text-slate-400 block leading-tight">{item.description}</span>
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => handlePickFloorItem(null)}
+                        className="w-full max-w-md mx-auto py-2 px-5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs shadow transition-colors cursor-pointer"
+                      >
+                        No coger ninguno
+                      </button>
+                    </div>
+                  )}
+
                   {/* Chest Event Action */}
                   {currentEvent.type === 'chest' && (
                     <button
@@ -659,11 +772,13 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
               <h3 className="font-bold text-base text-white flex items-center gap-2">
                 <Backpack className="w-4 h-4 text-amber-400" />
                 Mochila de Expedición
+                <span className="text-xs font-mono text-slate-400">({bagCount(inventory)}/{BAG_LIMIT})</span>
               </h3>
               <button
                 onClick={() => {
                   setIsBagOpen(false);
                   setSelectedItemForUse(null);
+                  setElixirTargetIdx(null);
                 }}
                 className="text-slate-400 hover:text-white text-sm"
               >
@@ -671,7 +786,41 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
               </button>
             </div>
 
-            {selectedItemForUse ? (
+            {selectedItemForUse && elixirTargetIdx !== null ? (
+              <div className="flex flex-col gap-3">
+                <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                  <span className="font-bold text-white text-sm block">
+                    ¿Qué movimiento de {team[elixirTargetIdx].name} quieres restaurar?
+                  </span>
+                  <span className="text-xs text-slate-400 block mt-0.5">
+                    {selectedItemForUse.description}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2">
+                  {team[elixirTargetIdx].moves.map((move, moveIdx) => (
+                    <button
+                      key={move.id}
+                      disabled={move.pp >= move.maxPp}
+                      onClick={() => handleUseItemOnTarget(selectedItemForUse, elixirTargetIdx, moveIdx)}
+                      className="p-2.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg border border-slate-700 flex items-center justify-between text-left transition-colors"
+                    >
+                      <span className="font-bold text-xs text-white">{move.name}</span>
+                      <span className={`text-xs font-mono tabular-nums ${move.pp <= 0 ? 'text-red-400 font-bold' : 'text-slate-300'}`}>
+                        PP {move.pp}/{move.maxPp}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setElixirTargetIdx(null)}
+                  className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs"
+                >
+                  Volver
+                </button>
+              </div>
+            ) : selectedItemForUse ? (
               <div className="flex flex-col gap-3">
                 <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
                   <span className="font-bold text-white text-sm block">
@@ -686,8 +835,16 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                   {team.map((member, idx) => (
                     <button
                       key={member.id}
-                      onClick={() => handleUseItemOnTarget(selectedItemForUse, idx)}
-                      className="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 flex items-center justify-between text-left transition-colors"
+                      disabled={selectedItemForUse.effectType === 'heal_hp' && member.stats.hp <= 0}
+                      onClick={() => {
+                        if (selectedItemForUse.effectType === 'restore_pp') {
+                          soundManager.playSelect();
+                          setElixirTargetIdx(idx);
+                          return;
+                        }
+                        handleUseItemOnTarget(selectedItemForUse, idx);
+                      }}
+                      className="p-2.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg border border-slate-700 flex items-center justify-between text-left transition-colors"
                     >
                       <div className="flex items-center gap-2">
                         <PmdPortrait pokedexId={member.pokedexId} size={28} showFrame={true} />
@@ -700,8 +857,8 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                           </span>
                         </div>
                       </div>
-                      <span className="text-xs font-semibold text-emerald-400">
-                        Aplicar
+                      <span className={`text-xs font-semibold ${selectedItemForUse.effectType === 'heal_hp' && member.stats.hp <= 0 ? 'text-slate-500' : 'text-emerald-400'}`}>
+                        {selectedItemForUse.effectType === 'heal_hp' && member.stats.hp <= 0 ? 'Debilitado' : 'Aplicar'}
                       </span>
                     </button>
                   ))}

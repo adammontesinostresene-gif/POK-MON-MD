@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Pokemon, Move, Item, PokemonType, BattleStat, StatChange, StatusAilment } from '../types/game';
-import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel, applyOfficialStats, learnLevelUpMoves, replaceMove } from '../data/pokemonData';
+import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel, applyOfficialStats, learnLevelUpMoves, replaceMove, bagSpace } from '../data/pokemonData';
 import { LEARNSET_MOVES } from '../data/learnsets';
 import { soundManager } from '../utils/audio';
 import {
@@ -27,6 +27,21 @@ import { PmdSprite, PmdPortrait } from './PmdSprite';
 const DAMAGE_MULTIPLIER = 1.35;
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Typeless, unlimited basic attack available to every member (never consumes PP)
+const BASIC_ATTACK: Move = {
+  id: 'move_basic_attack',
+  name: 'Ataque Básico',
+  type: 'Normal',
+  category: 'physical',
+  power: 30,
+  accuracy: 100,
+  pp: 1,
+  maxPp: 1,
+  description: 'Golpe sin tipo que se puede usar siempre.',
+};
+
+const isTypeless = (move: Move) => move.id === BASIC_ATTACK.id;
 
 const OFFICIAL_MOVES_BY_ID = new Map(Object.values(LEARNSET_MOVES).map((m) => [m.id, m]));
 
@@ -115,9 +130,8 @@ interface TurnBasedCombatProps {
     addToActiveTeam?: boolean
   ) => void;
   onDefeat: () => void;
-  onFlee: () => void;
   onEscapeDungeon: (team: Pokemon[], inventory: Item[]) => void;
-  canFlee?: boolean;
+  canUseEscapeOrb?: boolean;
   onUpdateInventory: (items: Item[]) => void;
 }
 
@@ -140,9 +154,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   bgImage,
   onVictory,
   onDefeat,
-  onFlee,
   onEscapeDungeon,
-  canFlee = true,
+  canUseEscapeOrb = true,
   onUpdateInventory,
 }) => {
   // Normalize initial enemies: accept array of 1 to 4 enemies, or single enemy
@@ -161,19 +174,17 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   const aliveMembers = team.filter((m) => m.stats.hp > 0);
   const aliveEnemies = enemies.filter((e) => e.stats.hp > 0);
 
-  // Target selection: ID of the enemy that player is currently targeting
-  const [selectedTargetEnemyId, setSelectedTargetEnemyId] = useState<string>(() => {
-    return initialEnemies[0]?.id || '';
-  });
-  // Per-member target mapping (defaulting to selectedTargetEnemyId)
+  // Target chosen per member when confirming each move
   const [memberTargetMap, setMemberTargetMap] = useState<Record<string, string>>({});
 
   // Combat sub-menus:
   // 'MOVES_SELECT': sequential per-member move selection (Team Order: Member 0, Member 1, ...)
-  // 'MAIN_MENU': overall options (Attack, Bag, Flee)
+  // 'MAIN_MENU': overall options (Attack, Bag)
   // 'BAG': inventory selection
   // 'BAG_TARGET': target for item
-  const [combatMenu, setCombatMenu] = useState<'MOVES_SELECT' | 'MAIN_MENU' | 'BAG' | 'BAG_TARGET'>('MOVES_SELECT');
+  // 'BAG_MOVE': move to restore with an Elixir
+  // 'BAG_ENEMY': rival targeted by an offensive item
+  const [combatMenu, setCombatMenu] = useState<'MOVES_SELECT' | 'MAIN_MENU' | 'BAG' | 'BAG_TARGET' | 'BAG_MOVE' | 'BAG_ENEMY'>('MOVES_SELECT');
 
   // Multi-member move selection state:
   // Tracks which member in aliveMembers is currently picking their move (index 0, 1, 2, ...)
@@ -185,6 +196,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
   // Item usage state
   const [selectedBagItem, setSelectedBagItem] = useState<Item | null>(null);
+  const [elixirTargetIdx, setElixirTargetIdx] = useState<number | null>(null);
   // Members who spent this round's action on an item (member.id -> item name)
   const [itemUsers, setItemUsers] = useState<Record<string, string>>({});
 
@@ -392,8 +404,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     const atkStat = effectiveStat(attacker, isPhysical ? 'attack' : 'spAttack');
     const defStat = effectiveStat(defender, isPhysical ? 'defense' : 'spDefense');
 
-    const effectiveness = getTypeEffectiveness(move.type, defender.types);
-    const stab = attacker.types.includes(move.type) ? 1.5 : 1.0;
+    const effectiveness = isTypeless(move) ? 1 : getTypeEffectiveness(move.type, defender.types);
+    const stab = !isTypeless(move) && attacker.types.includes(move.type) ? 1.5 : 1.0;
     const variance = 0.85 + Math.random() * 0.15;
     const isCrit = Math.random() < 0.08;
     const critMult = isCrit ? 1.5 : 1.0;
@@ -501,7 +513,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       const member = currentTeam[i];
       if (member.stats.hp > 0 && confirmedMoves[member.id]) {
         const move = confirmedMoves[member.id];
-        const assignedTarget = confirmedTargets[member.id] || selectedTargetEnemyId || aliveEnemies[0]?.id;
+        const assignedTarget = confirmedTargets[member.id] || aliveEnemies[0]?.id;
         actionQueue.push({
           actorId: member.id,
           actorName: member.name,
@@ -912,12 +924,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     setMemberTargetMap({});
     setPendingMoveChoice(null);
     setSelectingMemberIndex(0);
-    // If selected target is dead, pick first alive enemy
-    setSelectedTargetEnemyId((prev) => {
-      if (currentEnemies.some((e) => e.id === prev && e.stats.hp > 0)) return prev;
-      const nextAlive = currentEnemies.find((e) => e.stats.hp > 0);
-      return nextAlive ? nextAlive.id : '';
-    });
     setCombatMenu('MOVES_SELECT');
     setIsProcessingTurn(false);
   };
@@ -1007,7 +1013,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     }
 
     let droppedItem: Item | undefined = undefined;
-    if (lootRoll >= 0.25 && lootRoll < 0.5) {
+    if (lootRoll >= 0.25 && lootRoll < 0.5 && bagSpace(inventory) > 0) {
       droppedItem = {
         id: `drop_oran_${Date.now()}`,
         name: 'Baya Aranja',
@@ -1032,7 +1038,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   };
 
   // Handle using an item from the bag on a team member
-  const handleUseItemOnTarget = (item: Item, targetIdx: number) => {
+  const handleUseItemOnTarget = (item: Item, targetIdx: number, moveIdx?: number, enemyId?: string) => {
+    const targetForHealing = team[targetIdx];
+    if (item.effectType === 'heal_hp' && (!targetForHealing || targetForHealing.stats.hp <= 0)) return;
+
     soundManager.playSelect();
     const user = currentMember;
     const updatedInv = inventory
@@ -1042,7 +1051,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     const targetMember = { ...team[targetIdx], stats: { ...team[targetIdx].stats } };
 
-    if (!canFlee && item.category === 'orb') {
+    if (!canUseEscapeOrb && item.category === 'orb') {
       soundManager.playHit();
       addLog(`🚫 ${user.name} usó ${item.name}... ¡pero no tuvo efecto contra el jefe!`);
     } else if (item.effectType === 'heal_hp') {
@@ -1054,6 +1063,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       targetMember.stats.hp = Math.round(targetMember.stats.maxHp * 0.6);
       soundManager.playLevelUp();
       addLog(`⭐ ¡${user.name} revivió a ${targetMember.name} con ${item.name}!`);
+    } else if (item.effectType === 'restore_pp' && moveIdx !== undefined) {
+      const mv = targetMember.moves[moveIdx];
+      const restored = Math.min(mv.maxPp, mv.pp + (item.effectValue || 10)) - mv.pp;
+      targetMember.moves = targetMember.moves.map((m, i) => (i === moveIdx ? { ...m, pp: m.pp + restored } : m));
+      soundManager.playHeal();
+      addLog(`🧪 ¡${user.name} usó ${item.name}! ${mv.name} de ${targetMember.name} recuperó ${restored} PP.`);
     } else if (item.effectType === 'escape') {
       soundManager.playSelect();
       addLog(`🌀 ¡${user.name} usó el Orbe Escape! El equipo sale de la mazmorra con todo su botín.`);
@@ -1064,7 +1079,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       return;
     } else if (item.effectType === 'inflict_status') {
       const foe =
-        enemies.find((e) => e.id === selectedTargetEnemyId && e.stats.hp > 0) ?? enemies.find((e) => e.stats.hp > 0);
+        enemies.find((e) => e.id === enemyId && e.stats.hp > 0) ?? enemies.find((e) => e.stats.hp > 0);
       if (foe && !ailmentsRef.current[foe.id]) {
         setAilment(foe.id, { status: 'sleep', turns: item.effectValue || 3 });
         soundManager.playSelect();
@@ -1082,6 +1097,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     setCombatMenu('MOVES_SELECT');
     setSelectedBagItem(null);
+    setElixirTargetIdx(null);
     setPendingMoveChoice(null);
 
     // The item replaces this member's action for the round
@@ -1152,24 +1168,26 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           <div className="flex items-center gap-1 shrink min-w-0 overflow-x-auto py-0.5 scrollbar-none">
             {enemies.map((enemyMember) => {
               const isAlive = enemyMember.stats.hp > 0;
-              const isTarget = isAlive && (selectedTargetEnemyId === enemyMember.id || aliveEnemies.length === 1);
+              const isTarget = isAlive && Boolean(pendingMoveChoice || combatMenu === 'BAG_ENEMY');
               return (
                 <button
                   key={enemyMember.id}
                   type="button"
-                  disabled={!isAlive || isProcessingTurn}
+                  disabled={!isAlive || isProcessingTurn || !isTarget}
                   onClick={() => {
-                    if (isAlive && !isProcessingTurn) {
-                      setSelectedTargetEnemyId(enemyMember.id);
-                      soundManager.playSelect();
+                    if (!isAlive || isProcessingTurn) return;
+                    if (pendingMoveChoice) {
+                      handleConfirmMemberAction(pendingMoveChoice.member, pendingMoveChoice.move, enemyMember.id);
+                    } else if (combatMenu === 'BAG_ENEMY' && selectedBagItem) {
+                      handleUseItemOnTarget(selectedBagItem, 0, undefined, enemyMember.id);
                     }
                   }}
-                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg border text-left transition-all shrink-0 cursor-pointer ${
+                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg border text-left transition-all shrink-0 ${
                     isTarget
-                      ? 'border-red-500 bg-red-950/90 ring-1 ring-red-400 shadow-sm'
+                      ? 'border-red-500 bg-red-950/90 ring-1 ring-red-400 shadow-sm cursor-pointer'
                       : !isAlive
                       ? 'border-slate-800 bg-slate-900/40 opacity-40 grayscale cursor-not-allowed'
-                      : 'border-slate-700 bg-slate-950/80 hover:border-slate-500'
+                      : 'border-slate-700 bg-slate-950/80'
                   }`}
                 >
                   <PmdPortrait pokedexId={enemyMember.pokedexId} size={18} showFrame={false} />
@@ -1276,6 +1294,15 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       {member.stats.hp}/{member.stats.maxHp}
                     </span>
                   </div>
+                  <div className="flex items-center gap-1 mt-0.5" title={`EXP ${member.exp}/${member.nextExp}`}>
+                    <div className="flex-1 bg-slate-800 h-0.5 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-sky-400 transition-all"
+                        style={{ width: `${Math.min(100, (member.exp / member.nextExp) * 100)}%` }}
+                      />
+                    </div>
+                    <span className="text-[6px] sm:text-[7px] font-mono font-bold text-sky-400">EXP</span>
+                  </div>
                   {renderStages(member.id)}
                 </div>
 
@@ -1339,7 +1366,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             const isAlive = enemyMember.stats.hp > 0;
             const isAttacking = attackingEnemyId === enemyMember.id;
             const isHit = hitEnemyId === enemyMember.id;
-            const isTargeted = isAlive && (selectedTargetEnemyId === enemyMember.id || aliveEnemies.length === 1);
+            const isSelectingTarget = Boolean(pendingMoveChoice || (combatMenu === 'BAG_ENEMY' && selectedBagItem));
 
             return (
               <div
@@ -1352,13 +1379,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       pendingMoveChoice.move,
                       enemyMember.id
                     );
-                  } else {
-                    setSelectedTargetEnemyId(enemyMember.id);
-                    soundManager.playSelect();
+                  } else if (combatMenu === 'BAG_ENEMY' && selectedBagItem) {
+                    handleUseItemOnTarget(selectedBagItem, 0, undefined, enemyMember.id);
                   }
                 }}
-                className={`flex flex-col items-center relative transition-all duration-200 cursor-pointer ${
-                  !isAlive ? 'opacity-40 grayscale pointer-events-none' : 'hover:scale-105'
+                className={`flex flex-col items-center relative transition-all duration-200 ${
+                  !isAlive ? 'opacity-40 grayscale pointer-events-none' : isSelectingTarget ? 'cursor-pointer hover:scale-105' : ''
                 } ${isAttacking ? '-translate-x-3 sm:-translate-x-4 scale-105' : ''} ${
                   isHit ? 'animate-pulse brightness-150' : ''
                 }`}
@@ -1381,16 +1407,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 )}
 
                 {/* Target Marker */}
-                {((isTargeted && aliveEnemies.length > 1) || (pendingMoveChoice && isAlive)) && (
+                {isSelectingTarget && isAlive && (
                   <div
-                    className={`absolute -top-3.5 ${
-                      pendingMoveChoice
-                        ? 'bg-red-500 ring-2 ring-red-300 animate-bounce'
-                        : 'bg-red-600 animate-pulse'
-                    } text-white font-mono text-[8px] font-bold px-1.5 py-0.2 rounded-full border border-red-300 shadow-sm z-20 flex items-center gap-0.5`}
+                    className="absolute -top-3.5 bg-red-500 ring-2 ring-red-300 animate-bounce text-white font-mono text-[8px] font-bold px-1.5 py-0.2 rounded-full border border-red-300 shadow-sm z-20 flex items-center gap-0.5"
                   >
                     <span>🎯</span>
-                    <span className="hidden sm:inline">{pendingMoveChoice ? 'Atacar' : 'Objetivo'}</span>
+                    <span className="hidden sm:inline">{pendingMoveChoice ? 'Atacar' : 'Usar'}</span>
                   </div>
                 )}
 
@@ -1421,10 +1443,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 {/* Enemy Field Portrait (PMD Repository) */}
                 <div
                   className={`w-13 h-13 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center rounded-xl p-0.5 border-2 transition-all ${
-                    pendingMoveChoice && isAlive
+                    isSelectingTarget && isAlive
                       ? 'border-red-400 ring-2 ring-red-400/90 bg-red-950/60 shadow-lg'
-                      : isTargeted
-                      ? 'border-red-500 ring-2 ring-red-500/60 bg-red-950/40'
                       : 'border-slate-700 bg-slate-900/60'
                   }`}
                 >
@@ -1456,7 +1476,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         {/* Battle log overlay while the round resolves (keeps the panel height stable) */}
         {isProcessingTurn && (
           <div className="absolute inset-0 z-30 bg-[#1c3478] rounded-[10px] p-2 sm:p-2.5 short:p-1.5 flex flex-col">
-            <div className="flex-1 min-h-0 bg-slate-950 rounded-lg border border-slate-800 shadow-inner px-2.5 py-1.5 flex flex-col justify-end gap-0.5 overflow-hidden">
+            <div className="flex-1 min-h-0 bg-slate-950 rounded-lg border border-slate-800 shadow-inner px-2.5 py-1.5 flex flex-col justify-start gap-0.5 overflow-hidden">
               {battleLogs.map((log, i) => {
                 const isLatest = i === battleLogs.length - 1;
                 return (
@@ -1565,7 +1585,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                   <div className="flex items-center gap-2 min-w-0">
                     <Crosshair className="w-4 h-4 text-red-400 shrink-0 animate-pulse" />
                     <span className="text-[11px] sm:text-xs text-white font-bold truncate">
-                      ¿A qué rival ataca <strong className="text-amber-300">{pendingMoveChoice.member.name}</strong> con <strong className="text-sky-300">{pendingMoveChoice.move.name}</strong> ({pendingMoveChoice.move.type})?
+                      ¿A qué rival ataca <strong className="text-amber-300">{pendingMoveChoice.member.name}</strong> con <strong className="text-sky-300">{pendingMoveChoice.move.name}</strong> ({isTypeless(pendingMoveChoice.move) ? 'Sin tipo' : pendingMoveChoice.move.type})?
                     </span>
                   </div>
                   <button
@@ -1591,7 +1611,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                   } gap-1.5 shrink-0`}
                 >
                   {aliveEnemies.map((enemy) => {
-                    const effectiveness = getTypeEffectiveness(pendingMoveChoice.move.type, enemy.types);
+                    const effectiveness = isTypeless(pendingMoveChoice.move)
+                      ? 1
+                      : getTypeEffectiveness(pendingMoveChoice.move.type, enemy.types);
                     return (
                       <button
                         key={enemy.id}
@@ -1646,8 +1668,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               </div>
             ) : (
               /* THE 4 MOVES IN A CLEAN 2x2 GRID (GUARANTEED VISIBLE & NEVER CUT OFF) */
-              <div className="grid grid-cols-2 gap-1.5 shrink-0">
-                {currentMember.moves.map((move) => {
+              <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-1.5 shrink-0">
+                {currentMember.moves.map((move, moveIdx) => {
                   const col = TYPE_COLORS[move.type];
                   const isOutOfPp = move.pp <= 0;
                   const isSelectedForThisMember = chosenMoves[currentMember.id]?.id === move.id;
@@ -1657,6 +1679,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       key={move.id}
                       disabled={isProcessingTurn || isOutOfPp}
                       onClick={() => handleSelectMemberMove(currentMember, move)}
+                      style={{ gridColumn: moveIdx % 2 === 0 ? 1 : 3, gridRow: Math.floor(moveIdx / 2) + 1 }}
                       className={`p-1.5 sm:p-2 short:p-1 rounded-lg border text-left flex flex-col justify-between transition-all min-h-[44px] sm:min-h-[48px] short:min-h-0 cursor-pointer active:scale-98 ${
                         isSelectedForThisMember
                           ? 'bg-amber-950/90 border-amber-400 ring-2 ring-amber-400/60 shadow-lg'
@@ -1709,10 +1732,25 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     </button>
                   );
                 })}
+                <button
+                  type="button"
+                  disabled={isProcessingTurn}
+                  onClick={() => handleSelectMemberMove(currentMember, BASIC_ATTACK)}
+                  title={`${BASIC_ATTACK.name} · Sin tipo · Pot: ${BASIC_ATTACK.power} · PP ∞`}
+                  style={{ gridColumn: 2, gridRow: '1 / span 2' }}
+                  className={`self-center w-12 h-12 sm:w-14 sm:h-14 short:w-10 short:h-10 rounded-full border-2 flex flex-col items-center justify-center shadow-xl transition-all cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    chosenMoves[currentMember.id]?.id === BASIC_ATTACK.id
+                      ? 'bg-amber-500 border-amber-200 ring-2 ring-amber-400/60 text-amber-950'
+                      : 'bg-slate-200 hover:bg-white border-slate-500 hover:border-amber-400 text-slate-900'
+                  }`}
+                >
+                  <Swords className="w-4 h-4 short:w-3.5 short:h-3.5" />
+                  <span className="text-[7px] sm:text-[8px] font-extrabold leading-none mt-0.5">∞</span>
+                </button>
               </div>
             )}
 
-            {/* Bottom Actions: Previous member / Mochila / Huir */}
+            {/* Bottom Actions: Previous member / Mochila */}
             <div className="flex items-center justify-between gap-1.5 pt-1 short:pt-0.5 border-t border-slate-800 shrink-0">
               {selectingMemberIndex > 0 ? (
                 <button
@@ -1752,19 +1790,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                   <Backpack className="w-3.5 h-3.5" />
                   <span>Mochila ({inventory.reduce((a, b) => a + b.count, 0)})</span>
                 </button>
-
-                {canFlee && (
-                  <button
-                    disabled={isProcessingTurn}
-                    onClick={() => {
-                      soundManager.playSelect();
-                      onFlee();
-                    }}
-                    className="py-1.5 px-3 bg-slate-750 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs font-semibold cursor-pointer transition-colors"
-                  >
-                    <span>Huir</span>
-                  </button>
-                )}
               </div>
             </div>
           </div>
@@ -1772,7 +1797,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
         {/* 2. MAIN SUB-MENU (TACTICAL OPTIONS) */}
         {combatMenu === 'MAIN_MENU' && (
-          <div className={`grid grid-cols-1 ${canFlee ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-1.5`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
             <button
               disabled={isProcessingTurn}
               onClick={() => {
@@ -1796,20 +1821,6 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               <Backpack className="w-4 h-4 text-white" />
               <span>Mochila ({inventory.reduce((a, b) => a + b.count, 0)})</span>
             </button>
-
-            {canFlee && (
-              <button
-                disabled={isProcessingTurn}
-                onClick={() => {
-                  soundManager.playSelect();
-                  onFlee();
-                }}
-                className="py-2 sm:py-2.5 px-3 bg-slate-750 hover:bg-slate-700 disabled:opacity-50 text-slate-200 font-bold rounded-xl text-xs sm:text-sm shadow transition-colors flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <ArrowLeft className="w-4 h-4 text-slate-400" />
-                <span>Huir del Combate</span>
-              </button>
-            )}
           </div>
         )}
 
@@ -1841,8 +1852,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     disabled={isProcessingTurn || item.count <= 0}
                     onClick={() => {
                       soundManager.playSelect();
+                      if (item.effectType === 'inflict_status' && aliveEnemies.length > 1) {
+                        setSelectedBagItem(item);
+                        setCombatMenu('BAG_ENEMY');
+                        return;
+                      }
                       if (item.effectType === 'escape' || item.category === 'orb' || item.effectType === 'inflict_status') {
-                        handleUseItemOnTarget(item, 0);
+                        handleUseItemOnTarget(item, 0, undefined, aliveEnemies[0]?.id);
                         return;
                       }
                       setSelectedBagItem(item);
@@ -1890,8 +1906,17 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               {team.map((member, idx) => (
                 <button
                   key={member.id}
-                  onClick={() => handleUseItemOnTarget(selectedBagItem, idx)}
-                  className="p-2 bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-amber-400 rounded-xl flex items-center justify-between text-left cursor-pointer transition-colors"
+                  disabled={isProcessingTurn || (selectedBagItem.effectType === 'heal_hp' && member.stats.hp <= 0)}
+                  onClick={() => {
+                    if (selectedBagItem.effectType === 'restore_pp') {
+                      soundManager.playSelect();
+                      setElixirTargetIdx(idx);
+                      setCombatMenu('BAG_MOVE');
+                      return;
+                    }
+                    handleUseItemOnTarget(selectedBagItem, idx);
+                  }}
+                  className="p-2 bg-slate-800 hover:bg-slate-750 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 hover:border-amber-400 rounded-xl flex items-center justify-between text-left cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2">
                     <PmdPortrait pokedexId={member.pokedexId} size={28} showFrame={true} />
@@ -1904,7 +1929,80 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       </span>
                     </div>
                   </div>
-                  <span className="text-xs font-bold text-emerald-400">Usar</span>
+                  <span className={`text-xs font-bold ${selectedBagItem.effectType === 'heal_hp' && member.stats.hp <= 0 ? 'text-slate-500' : 'text-emerald-400'}`}>
+                    {selectedBagItem.effectType === 'heal_hp' && member.stats.hp <= 0 ? 'Debilitado' : 'Usar'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {/* 4c. RIVAL SELECTION FOR OFFENSIVE ITEMS */}
+        {combatMenu === 'BAG_ENEMY' && selectedBagItem && (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300">
+                ¿A qué rival lanzas {selectedBagItem.name}?
+              </span>
+              <button
+                onClick={() => {
+                  setSelectedBagItem(null);
+                  setCombatMenu('BAG');
+                }}
+                className="text-xs text-sky-400 hover:text-sky-300 font-semibold cursor-pointer"
+              >
+                ← Volver a Mochila
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+              {aliveEnemies.map((enemyMember) => (
+                <button
+                  key={enemyMember.id}
+                  disabled={isProcessingTurn}
+                  onClick={() => handleUseItemOnTarget(selectedBagItem, 0, undefined, enemyMember.id)}
+                  className="p-1.5 sm:p-2 rounded-lg border border-red-500/60 bg-slate-800/90 hover:bg-red-950/70 hover:border-red-400 flex items-center gap-2 text-left cursor-pointer transition-colors"
+                >
+                  <PmdPortrait pokedexId={enemyMember.pokedexId} size={28} showFrame={true} />
+                  <div className="min-w-0">
+                    <span className="font-bold text-xs text-white block truncate">{enemyMember.name}</span>
+                    <span className="text-[9px] font-mono text-emerald-400">
+                      PS: {enemyMember.stats.hp}/{enemyMember.stats.maxHp}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 4b. MOVE SELECTION FOR ELIXIR */}
+        {combatMenu === 'BAG_MOVE' && selectedBagItem && elixirTargetIdx !== null && team[elixirTargetIdx] && (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300">
+                ¿Qué movimiento de {team[elixirTargetIdx].name} quieres restaurar?
+              </span>
+              <button
+                onClick={() => setCombatMenu('BAG_TARGET')}
+                className="text-xs text-sky-400 hover:text-sky-300 font-semibold cursor-pointer"
+              >
+                ← Volver
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              {team[elixirTargetIdx].moves.map((move, moveIdx) => (
+                <button
+                  key={move.id}
+                  disabled={isProcessingTurn || move.pp >= move.maxPp}
+                  onClick={() => handleUseItemOnTarget(selectedBagItem, elixirTargetIdx, moveIdx)}
+                  className="p-2 bg-slate-800 hover:bg-slate-750 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 hover:border-amber-400 rounded-xl flex items-center justify-between text-left cursor-pointer transition-colors"
+                >
+                  <span className="font-bold text-xs text-white truncate">{move.name}</span>
+                  <span className={`text-[10px] font-mono tabular-nums ${move.pp <= 0 ? 'text-red-400 font-bold' : 'text-slate-300'}`}>
+                    PP {move.pp}/{move.maxPp}
+                  </span>
                 </button>
               ))}
             </div>

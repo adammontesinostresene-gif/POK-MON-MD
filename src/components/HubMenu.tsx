@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pokemon, Dungeon, Item, RescueMission } from '../types/game';
-import { DUNGEONS, TYPE_COLORS, canPokemonEvolve } from '../data/pokemonData';
+import { DUNGEONS, TYPE_COLORS, canPokemonEvolve, BAG_LIMIT, bagCount, bagSpace } from '../data/pokemonData';
 import { soundManager } from '../utils/audio';
 import {
   Compass,
@@ -28,6 +28,7 @@ interface HubMenuProps {
   team: Pokemon[];
   reserves: Pokemon[];
   gold: number;
+  rankPoints: number;
   bankGold: number;
   inventory: Item[];
   storage: Item[];
@@ -45,6 +46,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   team,
   reserves,
   gold,
+  rankPoints,
   bankGold,
   inventory,
   storage,
@@ -69,7 +71,11 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   const transferItem = (item: Item, quantity: number, toStorage: boolean) => {
     const from = toStorage ? inventory : storage;
     const to = toStorage ? storage : inventory;
-    const amount = Math.min(quantity, item.count);
+    const amount = Math.min(quantity, item.count, toStorage ? item.count : bagSpace(inventory));
+    if (amount <= 0) {
+      soundManager.playHit();
+      return;
+    }
 
     const newFrom = from
       .map((it) => (it.id === item.id ? { ...it, count: it.count - amount } : it))
@@ -132,6 +138,12 @@ export const HubMenu: React.FC<HubMenuProps> = ({
     if (gold < itemTemplate.price) {
       soundManager.playHit();
       setShopFeedback('¡No tienes suficientes Pokécuartos!');
+      setTimeout(() => setShopFeedback(null), 2000);
+      return;
+    }
+    if (bagSpace(inventory) === 0) {
+      soundManager.playHit();
+      setShopFeedback(`¡Tu mochila está llena (${BAG_LIMIT}/${BAG_LIMIT})! Guarda algo en el almacén.`);
       setTimeout(() => setShopFeedback(null), 2000);
       return;
     }
@@ -242,7 +254,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   Aldea Pokémon
                 </span>
                 <span className="text-[10px] sm:text-xs font-pixel px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-600/40">
-                  Rango Bronce
+                  Rango Madera · {rankPoints} puntos
                 </span>
               </div>
               <div className="flex items-center gap-2 sm:gap-3 mt-1 sm:mt-1.5 short:mt-0">
@@ -315,7 +327,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                 Explorar Mazmorra
               </h3>
               <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
-                Elige tu destino: Bosquejo Tutorial, Cueva Resonante o Pico Tempestad.
+                Elige tu destino: Bosquejo Tutorial o Arroyo Corriente.
               </p>
             </div>
           </button>
@@ -604,7 +616,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   <div className="shrink-0 flex items-center justify-between text-xs font-bold uppercase tracking-wider">
                     <span className={column.accent}>{column.title}</span>
                     <span className="text-slate-500 font-mono">
-                      {column.items.reduce((a, b) => a + b.count, 0)} obj.
+                      {column.items.reduce((a, b) => a + b.count, 0)}{column.toStorage ? `/${BAG_LIMIT}` : ''} obj.
                     </span>
                   </div>
                   {column.items.length === 0 ? (
@@ -752,6 +764,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
                 <Backpack className="w-5 h-5 text-emerald-400" />
                 Mochila de Objetos
+                <span className="text-xs font-mono text-slate-400">({bagCount(inventory)}/{BAG_LIMIT})</span>
               </h3>
               <button
                 onClick={() => setActiveModal(null)}
@@ -853,6 +866,15 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   icon: '💤',
                   cat: 'seed' as const,
                   desc: 'Duerme al Pokémon rival durante el combate.',
+                },
+                {
+                  name: 'Elixir',
+                  price: 150,
+                  value: 10,
+                  effectType: 'restore_pp' as const,
+                  icon: '🧪',
+                  cat: 'healing' as const,
+                  desc: 'Restaura 10 PP de un movimiento.',
                 },
               ].map((shopItem) => (
                 <div

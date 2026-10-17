@@ -61,6 +61,7 @@ export default function App() {
     initialSave && !abandonedExpedition ? initialSave.gold : 0
   );
   const [bankGold, setBankGold] = useState<number>(initialSave?.bankGold ?? 0);
+  const [rankPoints, setRankPoints] = useState<number>(initialSave?.rankPoints ?? 0);
   const [inventory, setInventory] = useState<Item[]>(
     initialSave && !abandonedExpedition ? initialSave.inventory : []
   );
@@ -84,13 +85,14 @@ export default function App() {
       reserves,
       gold,
       bankGold,
+      rankPoints,
       inventory,
       storage,
       missions,
       inDungeon: screen === 'DUNGEON_EXPLORE',
     });
     setHasSave(true);
-  }, [screen, activeTeam, reserves, gold, bankGold, inventory, storage, missions]);
+  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions]);
 
   // Handlers
   const handleStartFromTitle = () => {
@@ -104,6 +106,7 @@ export default function App() {
     setReserves([]);
     setGold(0);
     setBankGold(0);
+    setRankPoints(0);
     setInventory([]);
     setStorage([]);
     setMissions(INITIAL_MISSIONS);
@@ -160,6 +163,7 @@ export default function App() {
       {screen === 'TITLE' && (
         <TitleScreen
           hasSave={hasSave}
+          savedLeaderPokedexId={initialSave?.activeTeam[0]?.pokedexId}
           notice={
             abandonedExpedition
               ? 'Abandonaste una expedición a medias: perdiste el dinero y los objetos que llevabas encima.'
@@ -179,6 +183,7 @@ export default function App() {
           team={activeTeam}
           reserves={reserves}
           gold={gold}
+          rankPoints={rankPoints}
           bankGold={bankGold}
           inventory={inventory}
           storage={storage}

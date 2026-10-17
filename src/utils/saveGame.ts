@@ -3,11 +3,12 @@ import { Item, Pokemon, RescueMission } from '../types/game';
 const SAVE_KEY = 'pmd-expedicion-save-v1';
 
 export interface SaveData {
-  version: 1;
+  version: 1 | 2;
   activeTeam: Pokemon[];
   reserves: Pokemon[];
   gold: number;
   bankGold: number;
+  rankPoints: number;
   inventory: Item[];
   storage: Item[];
   missions: RescueMission[];
@@ -25,7 +26,7 @@ export const loadGame = (): SaveData | null => {
     const data = JSON.parse(raw) as Partial<SaveData>;
 
     const isValid =
-      data.version === 1 &&
+      (data.version === 1 || data.version === 2) &&
       Array.isArray(data.activeTeam) &&
       data.activeTeam.length > 0 &&
       Array.isArray(data.reserves) &&
@@ -33,9 +34,10 @@ export const loadGame = (): SaveData | null => {
       Array.isArray(data.storage) &&
       Array.isArray(data.missions) &&
       isNonNegativeNumber(data.gold) &&
-      isNonNegativeNumber(data.bankGold);
+      isNonNegativeNumber(data.bankGold) &&
+      (data.rankPoints === undefined || isNonNegativeNumber(data.rankPoints));
 
-    return isValid ? (data as SaveData) : null;
+    return isValid ? ({ ...data, rankPoints: data.rankPoints ?? 0 } as SaveData) : null;
   } catch {
     return null;
   }

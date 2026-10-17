@@ -433,6 +433,12 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                             }}
                           />
                         </div>
+                        <div className="w-full bg-slate-700 h-1 rounded-full overflow-hidden mt-0.5" title={`EXP ${pokemon.exp}/${pokemon.nextExp}`}>
+                          <div
+                            className="bg-sky-400 h-full transition-all"
+                            style={{ width: `${Math.min(100, (pokemon.exp / pokemon.nextExp) * 100)}%` }}
+                          />
+                        </div>
                       </div>
 
                       {/* Remove quick action */}
