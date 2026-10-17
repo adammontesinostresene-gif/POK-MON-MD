@@ -159,17 +159,17 @@ export const generateFloorEvent = (
         choices: [
           {
             id: 'path_center',
-            text: 'Centro',
+            text: 'Tomar el camino del centro',
             actionKey: 'choose_path' as const,
           },
           {
             id: 'path_left',
-            text: 'Izquierda',
+            text: 'Tomar el camino de la izquierda',
             actionKey: 'choose_path' as const,
           },
           {
             id: 'path_right',
-            text: 'Derecha',
+            text: 'Tomar el camino de la derecha',
             actionKey: 'choose_path' as const,
           },
         ],
