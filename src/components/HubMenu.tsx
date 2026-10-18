@@ -226,23 +226,23 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       </header>
 
       {/* Main Hub Showcase Content */}
-      <main className="relative z-10 flex-1 min-h-0 flex flex-col justify-center gap-3 sm:gap-6 short:gap-2 max-w-6xl w-full mx-auto p-3 sm:p-6 short:p-2">
+      <main className="relative z-10 flex-1 min-h-0 flex flex-col justify-center gap-2 sm:gap-3 md:gap-4 short:gap-1.5 max-w-6xl w-full mx-auto p-2 sm:p-4 short:p-1.5 overflow-hidden">
         {/* Rescue Team Hero Strip */}
-        <div className="pmd-window shrink-0 bg-slate-900/85 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 shadow-2xl flex flex-col md:flex-row short:flex-row items-center justify-between gap-3 sm:gap-6 short:gap-3">
-          <div className="flex items-center gap-3 sm:gap-6 short:gap-3 w-full md:w-auto short:w-auto">
+        <div className="pmd-window shrink-0 bg-slate-900/85 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 md:p-4 short:p-1.5 border border-slate-800 shadow-2xl flex flex-col md:flex-row short:flex-row items-center justify-between gap-2.5 sm:gap-4 short:gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-4 short:gap-2 w-full md:w-auto short:w-auto">
             {/* Perfectly squared PMD Leader Portrait Window */}
-            <div className="w-16 h-16 sm:w-24 sm:h-24 short:w-12 short:h-12 aspect-square rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-amber-400/90 shadow-2xl relative flex items-center justify-center overflow-hidden shrink-0 ring-4 ring-amber-500/15">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 short:w-12 short:h-12 aspect-square rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-amber-400/90 shadow-2xl relative flex items-center justify-center overflow-hidden shrink-0 ring-4 ring-amber-500/15">
               {leader && (
                 <PmdPortrait
                   pokedexId={leader.pokedexId}
                   emotion="Normal"
-                  className="w-full h-full p-2.5 sm:p-3 flex items-center justify-center"
+                  className="w-full h-full p-2 sm:p-2.5 flex items-center justify-center"
                   showFrame={false}
                 />
               )}
               {/* Leader Ribbon at bottom */}
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 py-0.5 text-center shadow-md border-t border-amber-300/40">
-                <span className="text-[9px] sm:text-[10px] font-pixel text-amber-950 font-extrabold uppercase tracking-wider block leading-none">
+                <span className="text-[8px] sm:text-[9px] font-pixel text-amber-950 font-extrabold uppercase tracking-wider block leading-none">
                   Líder
                 </span>
               </div>
@@ -257,17 +257,17 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   Rango Madera · {rankPoints} puntos
                 </span>
               </div>
-              <div className="flex items-center gap-2 sm:gap-3 mt-1 sm:mt-1.5 short:mt-0">
+              <div className="flex items-center gap-2 sm:gap-2.5 mt-0.5 sm:mt-1 short:mt-0">
                 <img
                   src={rescueBadgeImg}
                   alt="Insignia de Equipo de Rescate"
-                  className="hidden sm:block w-9 h-9 object-contain shrink-0 filter drop-shadow-[0_2px_8px_rgba(245,158,11,0.5)]"
+                  className="hidden sm:block w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0 filter drop-shadow-[0_2px_8px_rgba(245,158,11,0.5)]"
                 />
-                <h2 className="text-lg sm:text-3xl short:text-base font-extrabold text-white tracking-tight">
+                <h2 className="text-base sm:text-2xl short:text-base font-extrabold text-white tracking-tight">
                   Equipo Rescate
                 </h2>
               </div>
-              <p className="text-[11px] sm:text-sm text-slate-300 mt-0.5 sm:mt-1">
+              <p className="text-[11px] sm:text-xs md:text-sm text-slate-300 mt-0.5">
                 Líder: <strong className="text-white">{leader?.name}</strong> (Nv. {leader?.level})
                 · {team.length} {team.length === 1 ? 'miembro activo' : 'miembros activos'} · {reserves.length} en reserva
               </p>
@@ -275,15 +275,15 @@ export const HubMenu: React.FC<HubMenuProps> = ({
           </div>
 
           {/* Quick Active Squad Preview */}
-          <div className="hidden sm:flex short:flex items-center gap-2 bg-slate-950/70 p-2 sm:p-3 short:p-1.5 rounded-xl border border-slate-800">
+          <div className="hidden sm:flex short:flex items-center gap-1.5 bg-slate-950/70 p-1.5 sm:p-2 short:p-1 rounded-xl border border-slate-800">
             <div className="flex items-center gap-1.5 sm:gap-2">
-              {team.map((member, i) => (
+              {team.map((member) => (
                 <div
                   key={member.id}
-                  className="flex flex-col items-center p-1 sm:p-1.5 rounded-lg bg-slate-800/90 border border-slate-700 w-14 sm:w-16"
+                  className="flex flex-col items-center p-1 rounded-lg bg-slate-800/90 border border-slate-700 w-12 sm:w-14"
                 >
-                  <PmdPortrait pokedexId={member.pokedexId} emotion="Normal" size={32} />
-                  <span className="text-[10px] font-bold text-white truncate max-w-full mt-1 short:hidden">
+                  <PmdPortrait pokedexId={member.pokedexId} emotion="Normal" size={28} />
+                  <span className="text-[9px] font-bold text-white truncate max-w-full mt-0.5 short:hidden">
                     {member.name}
                   </span>
                 </div>
@@ -296,10 +296,10 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                     soundManager.playSelect();
                     onOpenTeamManager();
                   }}
-                  className="w-14 sm:w-16 self-stretch min-h-12 rounded-lg border border-dashed border-slate-700 bg-slate-900/40 flex flex-col items-center justify-center cursor-pointer hover:border-slate-500 transition-colors p-1"
+                  className="w-12 sm:w-14 self-stretch min-h-10 rounded-lg border border-dashed border-slate-700 bg-slate-900/40 flex flex-col items-center justify-center cursor-pointer hover:border-slate-500 transition-colors p-0.5"
                 >
                   <span className="text-slate-500 text-xs">+</span>
-                  <span className="text-[9px] text-slate-500 text-center">Vacío</span>
+                  <span className="text-[8px] text-slate-500 text-center">Vacío</span>
                 </div>
               ))}
             </div>
@@ -307,26 +307,26 @@ export const HubMenu: React.FC<HubMenuProps> = ({
         </div>
 
         {/* 5 Core Action Hub Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 short:grid-cols-4 gap-2 sm:gap-4 short:gap-2 min-h-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 short:grid-cols-4 gap-2 sm:gap-2.5 md:gap-3 short:gap-1.5 min-h-0">
           {/* Card 1: Explorar Mazmorras */}
           <button
             onClick={() => {
               soundManager.playSelect();
               setActiveModal('DUNGEONS');
             }}
-            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-sky-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border border-slate-800 hover:border-sky-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-sky-500/20 border border-sky-400/80 flex items-center justify-center text-sky-300 group-hover:scale-105 transition-transform">
-                <Compass className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-sky-500/20 border border-sky-400/80 flex items-center justify-center text-sky-300 group-hover:scale-105 transition-transform">
+                <Compass className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-sky-400 transition-colors" />
+              <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition-colors" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-sky-300 transition-colors">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-sky-300 transition-colors">
                 Explorar Mazmorra
               </h3>
-              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
                 Elige tu destino: Bosquejo Tutorial o Arroyo Corriente.
               </p>
             </div>
@@ -338,19 +338,19 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               onOpenTeamManager();
             }}
-            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border-2 border-amber-500/70 hover:border-amber-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border-2 border-amber-500/70 hover:border-amber-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-amber-500/20 border border-amber-400/80 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform">
-                <Users className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-amber-500/20 border border-amber-400/80 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform">
+                <Users className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-amber-400 transition-colors" />
+              <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-amber-300 transition-colors">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-amber-300 transition-colors">
                 Equipo
               </h3>
-              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
                 Organiza tus Pokémon en cajitas activas y de reserva mediante arrastrar y soltar.
               </p>
             </div>
@@ -362,25 +362,25 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               onOpenEvolution();
             }}
-            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border-2 border-violet-500/70 hover:border-violet-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border-2 border-violet-500/70 hover:border-violet-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-violet-500/20 border border-violet-400/80 flex items-center justify-center text-violet-300 group-hover:scale-105 transition-transform">
-                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-violet-500/20 border border-violet-400/80 flex items-center justify-center text-violet-300 group-hover:scale-105 transition-transform">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               {readyToEvolveCount > 0 ? (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
                   ¡{readyToEvolveCount} Listo!
                 </span>
               ) : (
-                <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-violet-400 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-violet-400 transition-colors" />
               )}
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-violet-300 transition-colors">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-violet-300 transition-colors">
                 Manantial Evolución
               </h3>
-              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
                 Revisa los requisitos y evoluciona a tus Pokémon con el poder de la luz.
               </p>
             </div>
@@ -392,21 +392,21 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               setActiveModal('BAG');
             }}
-            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-emerald-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border border-slate-800 hover:border-emerald-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/80 flex items-center justify-center text-emerald-300 group-hover:scale-105 transition-transform">
-                <Backpack className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-emerald-500/20 border border-emerald-400/80 flex items-center justify-center text-emerald-300 group-hover:scale-105 transition-transform">
+                <Backpack className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <span className="text-xs font-mono font-bold text-slate-400">
+              <span className="text-[11px] sm:text-xs font-mono font-bold text-slate-400">
                 {inventory.reduce((a, b) => a + b.count, 0)} obj.
               </span>
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
                 Mochila y Objetos
               </h3>
-              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
                 Revisa tus Bayas Aranja, Manzanas para el hambre, Semillas y Orbes.
               </p>
             </div>
@@ -418,19 +418,19 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               setActiveModal('SHOP');
             }}
-            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-purple-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border border-slate-800 hover:border-purple-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-purple-500/20 border border-purple-400/80 flex items-center justify-center text-purple-300 group-hover:scale-105 transition-transform overflow-hidden">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-purple-500/20 border border-purple-400/80 flex items-center justify-center text-purple-300 group-hover:scale-105 transition-transform overflow-hidden">
                 <PmdPortrait pokedexId={352} emotion="Normal" className="w-full h-full" />
               </div>
-              <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-purple-400 transition-colors" />
+              <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-purple-300 transition-colors">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-purple-300 transition-colors">
                 Bazar de Kecleon
               </h3>
-              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
                 Abastece provisiones esenciales para tus próximas expediciones.
               </p>
             </div>
@@ -443,10 +443,10 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               setBankAmount('');
               setActiveModal('BANK');
             }}
-            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-cyan-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border border-slate-800 hover:border-cyan-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/80 flex items-center justify-center text-cyan-300 group-hover:scale-105 transition-transform overflow-hidden">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-cyan-500/20 border border-cyan-400/80 flex items-center justify-center text-cyan-300 group-hover:scale-105 transition-transform overflow-hidden">
                 <PmdPortrait pokedexId={999} emotion="Normal" className="w-full h-full" />
               </div>
               <span className="text-[10px] sm:text-xs font-mono font-bold text-cyan-300 tabular-nums">
@@ -454,10 +454,10 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               </span>
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
                 PokéBanco
               </h3>
-              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
                 Guarda tus Pokécuartos a salvo antes de entrar en una mazmorra.
               </p>
             </div>
@@ -469,10 +469,10 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               setActiveModal('STORAGE');
             }}
-            className="col-span-2 md:col-span-1 short:col-span-1 pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-3 sm:p-5 short:p-2 border border-slate-800 hover:border-orange-400 transition-all text-left flex flex-col justify-start gap-2 shadow-xl sm:min-h-[150px] short:min-h-0"
+            className="col-span-2 md:col-span-1 short:col-span-1 pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border border-slate-800 hover:border-orange-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
-              <div className="w-9 h-9 sm:w-12 sm:h-12 short:w-8 short:h-8 rounded-xl bg-orange-500/20 border border-orange-400/80 flex items-center justify-center text-orange-300 group-hover:scale-105 transition-transform overflow-hidden">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-orange-500/20 border border-orange-400/80 flex items-center justify-center text-orange-300 group-hover:scale-105 transition-transform overflow-hidden">
                 <PmdPortrait pokedexId={115} emotion="Normal" className="w-full h-full" />
               </div>
               <span className="text-[10px] sm:text-xs font-mono font-bold text-orange-300 tabular-nums">
@@ -480,10 +480,10 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               </span>
             </div>
             <div>
-              <h3 className="text-sm sm:text-base short:text-xs font-bold text-white group-hover:text-orange-300 transition-colors">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-orange-300 transition-colors">
                 Almacén Kangaskhan
               </h3>
-              <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
                 Deja tus objetos a buen recaudo para no perderlos en las mazmorras.
               </p>
             </div>
@@ -492,7 +492,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       </main>
 
       {/* Footer hint bar */}
-      <footer className="hidden md:block short:hidden shrink-0 relative z-10 px-6 py-3 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-sm text-center text-xs text-slate-500">
+      <footer className="hidden md:block short:hidden shrink-0 relative z-10 px-4 py-2 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-sm text-center text-xs text-slate-500">
         Juego inspirado en Pokémon Mundo Misterioso · Sistema de mazmorras por eventos y combates tácticos
       </footer>
 

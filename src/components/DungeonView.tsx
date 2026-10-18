@@ -413,6 +413,17 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         next[targetPokemonIndex] = target;
         return next;
       });
+    } else if (item.effectType === 'revive') {
+      soundManager.playLevelUp();
+      setTeam((prev) => {
+        const next = [...prev];
+        const target = { ...next[targetPokemonIndex] };
+        target.stats.hp = target.stats.maxHp;
+        target.status = 'none';
+        target.statusTurns = 0;
+        next[targetPokemonIndex] = target;
+        return next;
+      });
     }
 
     setSelectedItemForUse(null);

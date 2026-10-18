@@ -263,6 +263,79 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     setAilments(next);
   };
 
+  // Inventory synchronization ref for turn execution
+  const currentInventoryRef = useRef<Item[]>(inventory);
+  useEffect(() => {
+    currentInventoryRef.current = inventory;
+  }, [inventory]);
+
+  /**
+   * Automatic Reviver Seed activation (PMD mechanic):
+   * When any ally's HP drops to 0, if there is a Reviver Seed in the backpack,
+   * it is instantly consumed, the ally is revived to 100% HP, cured of ailments,
+   * and negative stat debuffs are cleared.
+   */
+  const tryTriggerReviverSeed = async (
+    member: Pokemon,
+    teamArray: Pokemon[],
+    memberIndex: number
+  ): Promise<boolean> => {
+    const inv = currentInventoryRef.current;
+    const seedIndex = inv.findIndex(
+      (it) =>
+        (it.effectType === 'revive' || it.name.toLowerCase().includes('revivir')) &&
+        it.count > 0
+    );
+    if (seedIndex === -1) {
+      return false;
+    }
+
+    const seedItem = inv[seedIndex];
+    // Deduct 1 seed from inventory
+    const updatedInv = inv
+      .map((it, idx) => (idx === seedIndex ? { ...it, count: it.count - 1 } : it))
+      .filter((it) => it.count > 0);
+
+    currentInventoryRef.current = updatedInv;
+    onUpdateInventory(updatedInv);
+
+    // Full revival to 100% HP, reset status
+    const revived: Pokemon = {
+      ...member,
+      stats: {
+        ...member.stats,
+        hp: member.stats.maxHp,
+      },
+      status: 'none',
+      statusTurns: 0,
+    };
+    teamArray[memberIndex] = revived;
+    setTeam([...teamArray]);
+
+    // Clear ailment & debuffs
+    setAilment(member.id, null);
+    if (stagesRef.current[member.id]) {
+      const cleaned = { ...stagesRef.current[member.id] };
+      for (const st of Object.keys(cleaned) as BattleStat[]) {
+        if ((cleaned[st] ?? 0) < 0) cleaned[st] = 0;
+      }
+      stagesRef.current[member.id] = cleaned;
+      setStatStages({ ...stagesRef.current });
+    }
+
+    // Authentic PMD dialogue & feedback
+    addLog(`✨ ¡La ${seedItem.name} de la mochila se activó al instante!`);
+    soundManager.playLevelUp();
+    setFloatingDamage({ targetId: member.id, text: '¡REVIVIR!', type: 'heal' });
+    await wait(350);
+    soundManager.playHeal();
+    addLog(`💖 ¡${member.name} revivió con todos sus PS recuperados!`);
+    await wait(450);
+    setFloatingDamage(null);
+
+    return true;
+  };
+
   // Safe reference to the current selecting member
   const currentMember = aliveMembers[selectingMemberIndex] || aliveMembers[0];
 
@@ -810,7 +883,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         const hitTargets = isAreaMove ? currentAlive : [targetMember];
         const spreadMult = hitTargets.length > 1 ? 0.75 : 1;
         let selfBoostDone = false;
-        for (const t of hitTargets) {
+        for (let t of hitTargets) {
           const tIdx = isAreaMove ? currentTeam.findIndex((m) => m.id === t.id) : targetIdx;
           if (!moveHits(enemyActor, t, move)) {
             addLog(`¡${t.name} esquivó el ataque!`);
@@ -856,7 +929,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           if (t.stats.hp <= 0) {
             addLog(`¡${t.name} cayó debilitado!`);
             soundManager.playDefeat();
-            await wait(400);
+            await wait(350);
+
+            // Instant Reviver Seed consumption from backpack
+            const revived = await tryTriggerReviverSeed(t, currentTeam, tIdx);
+            if (revived) {
+              t = currentTeam[tIdx];
+            }
           }
         }
 
@@ -897,6 +976,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       if (updated.stats.hp <= 0) {
         addLog(`¡${p.name} cayó debilitado!`);
         await wait(350);
+        if (isPlayer) {
+          const revived = await tryTriggerReviverSeed(updated, currentTeam, i);
+          if (revived) {
+            // Member was revived with 100% HP
+            currentTeam[i] = currentTeam[i];
+          }
+        }
       }
     }
 
@@ -1060,9 +1146,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       soundManager.playHeal();
       addLog(`✨ ¡${user.name} usó ${item.name} en ${targetMember.name}! Recuperó ${healAmount} PS.`);
     } else if (item.effectType === 'revive') {
-      targetMember.stats.hp = Math.round(targetMember.stats.maxHp * 0.6);
+      targetMember.stats.hp = targetMember.stats.maxHp;
+      targetMember.status = 'none';
+      targetMember.statusTurns = 0;
+      setAilment(targetMember.id, null);
       soundManager.playLevelUp();
-      addLog(`⭐ ¡${user.name} revivió a ${targetMember.name} con ${item.name}!`);
+      addLog(`⭐ ¡${user.name} revivió a ${targetMember.name} con ${item.name}! ¡Recuperó el 100% de sus PS!`);
     } else if (item.effectType === 'restore_pp' && moveIdx !== undefined) {
       const mv = targetMember.moves[moveIdx];
       const restored = Math.min(mv.maxPp, mv.pp + (item.effectValue || 10)) - mv.pp;
