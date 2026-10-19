@@ -12,12 +12,17 @@ export interface SaveData {
   inventory: Item[];
   storage: Item[];
   missions: RescueMission[];
+  seenPokedex: number[];
+  caughtPokedex: number[];
   // True while an expedition is in progress; reloading mid-dungeon counts as abandoning it
   inDungeon: boolean;
 }
 
 const isNonNegativeNumber = (value: unknown): value is number =>
   typeof value === 'number' && Number.isFinite(value) && value >= 0;
+
+const toDexIds = (value: unknown): number[] =>
+  Array.isArray(value) ? value.filter((id): id is number => Number.isInteger(id) && id > 0) : [];
 
 export const loadGame = (): SaveData | null => {
   try {
@@ -37,7 +42,14 @@ export const loadGame = (): SaveData | null => {
       isNonNegativeNumber(data.bankGold) &&
       (data.rankPoints === undefined || isNonNegativeNumber(data.rankPoints));
 
-    return isValid ? ({ ...data, rankPoints: data.rankPoints ?? 0 } as SaveData) : null;
+    return isValid
+      ? ({
+          ...data,
+          rankPoints: data.rankPoints ?? 0,
+          seenPokedex: toDexIds(data.seenPokedex),
+          caughtPokedex: toDexIds(data.caughtPokedex),
+        } as SaveData)
+      : null;
   } catch {
     return null;
   }

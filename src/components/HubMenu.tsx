@@ -20,8 +20,11 @@ import {
   Award,
   Landmark,
   Warehouse,
+  BookOpen,
 } from 'lucide-react';
 import { PmdPortrait } from './PmdSprite';
+import { PokedexModal } from './PokedexModal';
+import { SPECIES_DATA } from '../data/speciesData';
 import rescueBadgeImg from '../assets/images/pmd_rescue_team_badge.png';
 
 interface HubMenuProps {
@@ -33,6 +36,8 @@ interface HubMenuProps {
   inventory: Item[];
   storage: Item[];
   missions: RescueMission[];
+  seenPokedex: number[];
+  caughtPokedex: number[];
   onSelectDungeon: (dungeon: Dungeon) => void;
   onOpenTeamManager: () => void;
   onOpenEvolution: () => void;
@@ -51,6 +56,8 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   inventory,
   storage,
   missions,
+  seenPokedex,
+  caughtPokedex,
   onSelectDungeon,
   onOpenTeamManager,
   onOpenEvolution,
@@ -60,7 +67,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   onUpdateStorage,
 }) => {
   const [activeModal, setActiveModal] = useState<
-    'DUNGEONS' | 'BAG' | 'MISSIONS' | 'SHOP' | 'BANK' | 'STORAGE' | null
+    'DUNGEONS' | 'BAG' | 'MISSIONS' | 'SHOP' | 'BANK' | 'STORAGE' | 'POKEDEX' | null
   >(null);
   const [selectedDungeon, setSelectedDungeon] = useState<Dungeon>(DUNGEONS[0]);
   const [isMuted, setIsMuted] = useState<boolean>(soundManager.getMuted());
@@ -469,7 +476,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               soundManager.playSelect();
               setActiveModal('STORAGE');
             }}
-            className="col-span-2 md:col-span-1 short:col-span-1 pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border border-slate-800 hover:border-orange-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border border-slate-800 hover:border-orange-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
           >
             <div className="flex items-center justify-between w-full">
               <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-orange-500/20 border border-orange-400/80 flex items-center justify-center text-orange-300 group-hover:scale-105 transition-transform overflow-hidden">
@@ -485,6 +492,32 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               </h3>
               <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
                 Deja tus objetos a buen recaudo para no perderlos en las mazmorras.
+              </p>
+            </div>
+          </button>
+
+          {/* Card 8: Pokédex */}
+          <button
+            onClick={() => {
+              soundManager.playSelect();
+              setActiveModal('POKEDEX');
+            }}
+            className="pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 md:p-3.5 short:p-1.5 border border-slate-800 hover:border-red-400 transition-all text-left flex flex-col justify-start gap-1.5 shadow-xl min-h-0 sm:min-h-[100px] md:min-h-[115px] short:min-h-0"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 rounded-xl bg-red-500/20 border border-red-400/80 flex items-center justify-center text-red-300 group-hover:scale-105 transition-transform">
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <span className="text-[10px] sm:text-xs font-mono font-bold text-red-300 tabular-nums">
+                {caughtPokedex.length}/{Object.keys(SPECIES_DATA).length}
+              </span>
+            </div>
+            <div>
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-red-300 transition-colors">
+                Pokédex
+              </h3>
+              <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
+                Consulta los Pokémon que has visto y reclutado en cada región.
               </p>
             </div>
           </button>
@@ -580,6 +613,10 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {activeModal === 'POKEDEX' && (
+        <PokedexModal seenIds={seenPokedex} caughtIds={caughtPokedex} onClose={() => setActiveModal(null)} />
       )}
 
       {/* MODAL: ALMACÉN KANGASKHAN */}

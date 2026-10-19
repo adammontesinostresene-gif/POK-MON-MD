@@ -33,6 +33,8 @@ interface DungeonViewProps {
   reserves: Pokemon[];
   inventory: Item[];
   gold: number;
+  onSeePokemon: (pokedexIds: number[]) => void;
+  onRecruitPokemon: (pokedexIds: number[]) => void;
   onCompleteDungeon: (
     updatedTeam: Pokemon[],
     updatedReserves: Pokemon[],
@@ -52,6 +54,8 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   reserves: initialReserves,
   inventory: initialInventory,
   gold: initialGold,
+  onSeePokemon,
+  onRecruitPokemon,
   onCompleteDungeon,
   onExitDungeon,
 }) => {
@@ -83,6 +87,16 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       soundManager.stopBgm();
     };
   }, []);
+
+  useEffect(() => {
+    const foes = currentEvent?.enemies ?? (currentEvent?.enemy ? [currentEvent.enemy] : []);
+    if (foes.length > 0) onSeePokemon(foes.map((p) => p.pokedexId));
+  }, [currentEvent]);
+
+  // Register recruits right away so they count even if the expedition is lost
+  useEffect(() => {
+    onRecruitPokemon([...team, ...reserves].map((p) => p.pokedexId));
+  }, [team, reserves]);
 
   const loadFloor = (floorNum: number) => {
     soundManager.startBgm('dungeon');

@@ -39,6 +39,11 @@ const restorePokemon = (p: Pokemon): Pokemon => {
   };
 };
 
+const mergeDexIds = (prev: number[], ids: number[]): number[] => {
+  const missing = [...new Set(ids)].filter((id) => !prev.includes(id));
+  return missing.length > 0 ? [...prev, ...missing] : prev;
+};
+
 export default function App() {
   // Screen state
   const [screen, setScreen] = useState<ViewScreen>('TITLE');
@@ -67,6 +72,16 @@ export default function App() {
   );
   const [storage, setStorage] = useState<Item[]>(initialSave?.storage ?? []);
   const [missions, setMissions] = useState<RescueMission[]>(initialSave?.missions ?? INITIAL_MISSIONS);
+  const [seenPokedex, setSeenPokedex] = useState<number[]>(initialSave?.seenPokedex ?? []);
+  const [caughtPokedex, setCaughtPokedex] = useState<number[]>(initialSave?.caughtPokedex ?? []);
+
+  const registerSeen = (ids: number[]) => setSeenPokedex((prev) => mergeDexIds(prev, ids));
+  const registerCaught = (ids: number[]) => setCaughtPokedex((prev) => mergeDexIds(prev, ids));
+
+  // Anyone who has been on the team counts as recruited (also migrates older saves)
+  useEffect(() => {
+    registerCaught([...activeTeam, ...reserves].map((p) => p.pokedexId));
+  }, [activeTeam, reserves]);
 
   // Active expedition
   const [currentDungeon, setCurrentDungeon] = useState<Dungeon | null>(null);
@@ -89,10 +104,12 @@ export default function App() {
       inventory,
       storage,
       missions,
+      seenPokedex,
+      caughtPokedex,
       inDungeon: screen === 'DUNGEON_EXPLORE',
     });
     setHasSave(true);
-  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions]);
+  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, seenPokedex, caughtPokedex]);
 
   // Handlers
   const handleStartFromTitle = () => {
@@ -110,6 +127,8 @@ export default function App() {
     setInventory([]);
     setStorage([]);
     setMissions(INITIAL_MISSIONS);
+    setSeenPokedex([]);
+    setCaughtPokedex([]);
     setHasSave(false);
     soundManager.startBgm('hub');
     setScreen('PERSONALITY_QUIZ');
@@ -188,6 +207,8 @@ export default function App() {
           inventory={inventory}
           storage={storage}
           missions={missions}
+          seenPokedex={seenPokedex}
+          caughtPokedex={caughtPokedex}
           onSelectDungeon={handleSelectDungeon}
           onOpenTeamManager={() => setScreen('TEAM_MANAGEMENT')}
           onOpenEvolution={() => setScreen('EVOLUTION')}
@@ -262,6 +283,8 @@ export default function App() {
           reserves={reserves}
           inventory={inventory}
           gold={gold}
+          onSeePokemon={registerSeen}
+          onRecruitPokemon={registerCaught}
           onCompleteDungeon={handleDungeonComplete}
           onExitDungeon={handleDungeonExit}
         />

@@ -3,15307 +3,1741 @@ import { Move } from '../types/game';
 
 /** Official move data (Spanish names) keyed by PokéAPI slug. */
 export const LEARNSET_MOVES: Record<string, Move> = {
-  "absorb": {
-    "id": "move_absorb",
-    "name": "Absorber",
-    "type": "Planta",
-    "category": "special",
-    "power": 20,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
-  },
-  "acid": {
-    "id": "move_acid",
-    "name": "Ácido",
-    "type": "Veneno",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Rocía a los enemigos con un ácido corrosivo. Puede bajar la Defensa Especial.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "acid-armor": {
-    "id": "move_acid_armor",
-    "name": "Armadura Ácida",
-    "type": "Veneno",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Transforma la estructura celular para hacerse líquido y aumenta mucho la Defensa.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "acrobatics": {
-    "id": "move_acrobatics",
-    "name": "Acróbata",
-    "type": "Volador",
-    "category": "physical",
-    "power": 55,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Golpea ágilmente. Si el usuario no porta ningún objeto, el objetivo resulta seriamente dañado."
-  },
-  "aerial-ace": {
-    "id": "move_aerial_ace",
-    "name": "Golpe Aéreo",
-    "type": "Volador",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "El usuario lanza un ataque muy rápido e ineludible."
-  },
-  "after-you": {
-    "id": "move_after_you",
-    "name": "Cede Paso",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Si el usuario es el más rápido, permite al objetivo usar un movimiento justo tras él, adelantándose a Pokémon más rápidos."
-  },
-  "agility": {
-    "id": "move_agility",
-    "name": "Agilidad",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Relaja el cuerpo para ganar mucha Velocidad.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "air-cutter": {
-    "id": "move_air_cutter",
-    "name": "Aire Afilado",
-    "type": "Volador",
-    "category": "special",
-    "power": 60,
-    "accuracy": 95,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Viento cortante que azota. Suele ser un golpe crítico.",
-    "target": "all_enemies"
-  },
-  "air-slash": {
-    "id": "move_air_slash",
-    "name": "Tajo Aéreo",
-    "type": "Volador",
-    "category": "special",
-    "power": 75,
-    "accuracy": 95,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataca con un viento afilado que incluso corta el aire. También puede amedrentar al objetivo."
-  },
-  "amnesia": {
-    "id": "move_amnesia",
-    "name": "Amnesia",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "El usuario olvida sus preocupaciones y aumenta mucho la Defensa Especial.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "ancient-power": {
-    "id": "move_ancient_power",
-    "name": "Poder Pasado",
-    "type": "Roca",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Ataque prehistórico que puede subir todas las características.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "defense",
-        "stages": 1
-      },
-      {
-        "stat": "spAttack",
-        "stages": 1
-      },
-      {
-        "stat": "spDefense",
-        "stages": 1
-      },
-      {
-        "stat": "speed",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "aqua-cutter": {
-    "id": "move_aqua_cutter",
-    "name": "Tajo Acuático",
-    "type": "Agua",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Tajo Acuático"
-  },
-  "aqua-jet": {
-    "id": "move_aqua_jet",
-    "name": "Acua Jet",
-    "type": "Agua",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ataque de una rapidez espeluznante. Este movimiento tiene prioridad alta."
-  },
-  "aqua-ring": {
-    "id": "move_aqua_ring",
-    "name": "Acua Aro",
-    "type": "Agua",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Un manto de agua cubre al Pokémon que lo usa. Recupera algunos PS en cada turno.",
-    "target": "self"
-  },
-  "aqua-step": {
-    "id": "move_aqua_step",
-    "name": "Danza Acuática",
-    "type": "Agua",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Danza Acuática",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "aqua-tail": {
-    "id": "move_aqua_tail",
-    "name": "Acua Cola",
-    "type": "Agua",
-    "category": "physical",
-    "power": 90,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataca agitando la cola como si fuera una ola rabiosa en una tormenta devastadora."
-  },
-  "arm-thrust": {
-    "id": "move_arm_thrust",
-    "name": "Empujón",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 15,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Fuertes empujones que golpean de dos a cinco veces seguidas."
-  },
-  "assurance": {
-    "id": "move_assurance",
-    "name": "Buena Baza",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Si el objetivo ya ha sufrido daño en ese turno, la fuerza del ataque se duplica."
-  },
-  "astonish": {
-    "id": "move_astonish",
-    "name": "Impresionar",
-    "type": "Fantasma",
-    "category": "physical",
-    "power": 30,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Lanza un grito tan tremendo que impresiona y puede amedrentar al objetivo."
-  },
-  "aurora-beam": {
-    "id": "move_aurora_beam",
-    "name": "Rayo Aurora",
-    "type": "Hielo",
-    "category": "special",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Rayo multicolor que puede reducir el Ataque.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "autotomize": {
-    "id": "move_autotomize",
-    "name": "Aligerar",
-    "type": "Acero",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El usuario se desprende de partes prescindibles de su cuerpo para hacerse más ligero y aumentar mucho su Velocidad.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "baby-doll-eyes": {
-    "id": "move_baby_doll_eyes",
-    "name": "Ojitos Tiernos",
-    "type": "Hada",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Lanza una mirada al objetivo con ojos acaramelados, con lo que logra que su Ataque se reduzca. Este movimiento tiene prioridad alta.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "baton-pass": {
-    "id": "move_baton_pass",
-    "name": "Relevo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Cambia el puesto con otro miembro del equipo y le pasa los cambios de características.",
-    "target": "self"
-  },
-  "bide": {
-    "id": "move_bide",
-    "name": "Venganza",
-    "type": "Normal",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
-    "target": "self"
-  },
-  "bind": {
-    "id": "move_bind",
-    "name": "Atadura",
-    "type": "Normal",
-    "category": "physical",
-    "power": 15,
-    "accuracy": 85,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ata y oprime de cuatro a cinco turnos."
-  },
-  "bite": {
-    "id": "move_bite",
-    "name": "Mordisco",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Un voraz bocado que puede amedrentar al objetivo."
-  },
-  "blaze-kick": {
-    "id": "move_blaze_kick",
-    "name": "Patada Ígnea",
-    "type": "Fuego",
-    "category": "physical",
-    "power": 85,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Patada que suele ser un golpe crítico y puede causar quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 10
-  },
-  "blizzard": {
-    "id": "move_blizzard",
-    "name": "Ventisca",
-    "type": "Hielo",
-    "category": "special",
-    "power": 110,
-    "accuracy": 70,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Tormenta de hielo que puede llegar a congelar.",
-    "statusEffect": "freeze",
-    "statusChance": 10,
-    "target": "all_enemies"
-  },
-  "block": {
-    "id": "move_block",
-    "name": "Bloqueo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Le corta el paso al objetivo para que no pueda escapar."
-  },
-  "body-slam": {
-    "id": "move_body_slam",
-    "name": "Golpe Cuerpo",
-    "type": "Normal",
-    "category": "physical",
-    "power": 85,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Salta sobre el objetivo con todo su peso y puede llegar a paralizarlo.",
-    "statusEffect": "paralysis",
-    "statusChance": 30
-  },
-  "boomburst": {
-    "id": "move_boomburst",
-    "name": "Estruendo",
-    "type": "Normal",
-    "category": "special",
-    "power": 140,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataca a todos los Pokémon a su alrededor con una potentísima onda sonora.",
-    "target": "all_enemies"
-  },
-  "bounce": {
-    "id": "move_bounce",
-    "name": "Bote",
-    "type": "Volador",
-    "category": "physical",
-    "power": 85,
-    "accuracy": 85,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "El usuario bota en el primer turno y golpea al objetivo en el segundo y puede llegar a paralizarlo.",
-    "statusEffect": "paralysis",
-    "statusChance": 30
-  },
-  "branch-poke": {
-    "id": "move_branch_poke",
-    "name": "Punzada Rama",
-    "type": "Planta",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Ataca pinchando al objetivo con una rama afilada."
-  },
-  "brave-bird": {
-    "id": "move_brave_bird",
-    "name": "Pájaro Osado",
-    "type": "Volador",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Pliega sus alas y ataca con un vuelo rasante. El Pokémon que lo usa también resulta seriamente dañado."
-  },
-  "brine": {
-    "id": "move_brine",
-    "name": "Salmuera",
-    "type": "Agua",
-    "category": "special",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Si al objetivo le queda la mitad o menos de sus PS, el ataque será el doble de fuerte."
-  },
-  "bubble-beam": {
-    "id": "move_bubble_beam",
-    "name": "Rayo Burbuja",
-    "type": "Agua",
-    "category": "special",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Diluvio de burbujas que puede bajar la Velocidad.",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "bug-bite": {
-    "id": "move_bug_bite",
-    "name": "Picadura",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Pica al objetivo. Si el objetivo lleva una baya, el usuario se la come y se beneficia de su efecto."
-  },
-  "bug-buzz": {
-    "id": "move_bug_buzz",
-    "name": "Zumbido",
-    "type": "Bicho",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario crea una onda sónica dañina moviendo su cuerpo que también puede disminuir la Defensa Especial del objetivo.",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "bulk-up": {
-    "id": "move_bulk_up",
-    "name": "Corpulencia",
-    "type": "Lucha",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Robustece el cuerpo para subir el Ataque y la Defensa.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "defense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "bulldoze": {
-    "id": "move_bulldoze",
-    "name": "Terratemblor",
-    "type": "Tierra",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Sacudida sísmica que afecta a los demás Pokémon adyacentes y también reduce su Velocidad.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "bullet-seed": {
-    "id": "move_bullet_seed",
-    "name": "Semilladora",
-    "type": "Planta",
-    "category": "physical",
-    "power": 25,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Dispara rápido de dos a cinco ráfagas de semillas de manera consecutiva."
-  },
-  "calm-mind": {
-    "id": "move_calm_mind",
-    "name": "Paz Mental",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Aumenta la concentración y calma el espíritu para subir el Ataque Especial y la Defensa Especial.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": 1
-      },
-      {
-        "stat": "spDefense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "charge": {
-    "id": "move_charge",
-    "name": "Carga",
-    "type": "Eléctrico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Recarga energía para potenciar el siguiente movimiento de tipo Eléctrico. También sube la Defensa Especial.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "charm": {
-    "id": "move_charm",
-    "name": "Encanto",
-    "type": "Hada",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Engatusa al objetivo y reduce mucho su Ataque.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "circle-throw": {
-    "id": "move_circle_throw",
-    "name": "Llave Giro",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Lanza por los aires al objetivo y hace que salga otro Pokémon. Si es uno salvaje, acaba el combate."
-  },
-  "close-combat": {
-    "id": "move_close_combat",
-    "name": "A Bocajarro",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Lucha abiertamente contra el objetivo sin protegerse. También reduce la Defensa y la Defensa Especial del usuario.",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      },
-      {
-        "stat": "spDefense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "coil": {
-    "id": "move_coil",
-    "name": "Enrosque",
-    "type": "Veneno",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "El usuario se concentra, lo que le permite aumentar su Ataque, Defensa y Precisión.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "defense",
-        "stages": 1
-      },
-      {
-        "stat": "accuracy",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "comet-punch": {
-    "id": "move_comet_punch",
-    "name": "Puño Cometa",
-    "type": "Normal",
-    "category": "physical",
-    "power": 18,
-    "accuracy": 85,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-  },
-  "comeuppance": {
-    "id": "move_comeuppance",
-    "name": "Resarcimiento",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 1,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Resarcimiento"
-  },
-  "confuse-ray": {
-    "id": "move_confuse_ray",
-    "name": "Rayo Confuso",
-    "type": "Fantasma",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Rayo siniestro que confunde al objetivo."
-  },
-  "confusion": {
-    "id": "move_confusion",
-    "name": "Confusión",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Débil ataque telequinético que puede causar confusión."
-  },
-  "copycat": {
-    "id": "move_copycat",
-    "name": "Copión",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Imita el movimiento usado justo antes. El movimiento falla si no se ha usado aún ninguno.",
-    "target": "self"
-  },
-  "cosmic-power": {
-    "id": "move_cosmic_power",
-    "name": "Masa Cósmica",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Sube la Defensa y la Defensa Especial propias con energía mística.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": 1
-      },
-      {
-        "stat": "spDefense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "counter": {
-    "id": "move_counter",
-    "name": "Contraataque",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Devuelve un golpe físico por duplicado."
-  },
-  "court-change": {
-    "id": "move_court_change",
-    "name": "Cambio de Cancha",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Extraño poder que intercambia los efectos en el terreno de combate de ambos bandos."
-  },
-  "covet": {
-    "id": "move_covet",
-    "name": "Antojo",
-    "type": "Normal",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Se acerca con ternura al objetivo, pero le ataca y le roba el objeto que lleve."
-  },
-  "cross-chop": {
-    "id": "move_cross_chop",
-    "name": "Tajo Cruzado",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 100,
-    "accuracy": 80,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Corte doble que suele propinar un golpe crítico."
-  },
-  "cross-poison": {
-    "id": "move_cross_poison",
-    "name": "Veneno X",
-    "type": "Veneno",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Tajo que puede envenenar al objetivo. Suele ser crítico.",
-    "statusEffect": "poison",
-    "statusChance": 10
-  },
-  "crunch": {
-    "id": "move_crunch",
-    "name": "Triturar",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Tritura con afilados colmillos y puede bajar la Defensa del objetivo.",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 20
-  },
-  "curse": {
-    "id": "move_curse",
-    "name": "Maldición",
-    "type": "Fantasma",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Un movimiento que tiene efectos distintos si el usuario es de tipo Fantasma o no."
-  },
-  "dark-pulse": {
-    "id": "move_dark_pulse",
-    "name": "Pulso Umbrío",
-    "type": "Siniestro",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Libera una horrible aura llena de malos pensamientos que puede amedrentar al objetivo."
-  },
-  "darkest-lariat": {
-    "id": "move_darkest_lariat",
-    "name": "Lariat Oscuro",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 85,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Gira sobre sí mismo y golpea al oponente con ambos brazos. Ignora los cambios en las características del objetivo."
-  },
-  "defense-curl": {
-    "id": "move_defense_curl",
-    "name": "Rizo Defensa",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Se enrosca para ocultar sus puntos débiles y aumentar la Defensa.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "destiny-bond": {
-    "id": "move_destiny_bond",
-    "name": "Mismo Destino",
-    "type": "Fantasma",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Si el usuario se debilita por un ataque rival antes de usar otro movimiento, el Pokémon rival se debilitará también. Puede fallar si se usa repetidamente.",
-    "target": "self"
-  },
-  "detect": {
-    "id": "move_detect",
-    "name": "Detección",
-    "type": "Lucha",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Frena todos los ataques, pero puede fallar si se usa repetidamente.",
-    "target": "self"
-  },
-  "dig": {
-    "id": "move_dig",
-    "name": "Excavar",
-    "type": "Tierra",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario cava durante el primer turno y ataca en el segundo."
-  },
-  "disable": {
-    "id": "move_disable",
-    "name": "Anulación",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Desactiva el último movimiento del objetivo durante cuatro turnos."
-  },
-  "disarming-voice": {
-    "id": "move_disarming_voice",
-    "name": "Voz Cautivadora",
-    "type": "Hada",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Obnubila a los oponentes con su fascinante voz y les provoca daños emocionales. Siempre acierta al objetivo.",
-    "target": "all_enemies"
-  },
-  "discharge": {
-    "id": "move_discharge",
-    "name": "Chispazo",
-    "type": "Eléctrico",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Una deslumbradora onda eléctrica afecta a los Pokémon que hay combatiendo alrededor. Puede paralizar.",
-    "statusEffect": "paralysis",
-    "statusChance": 30,
-    "target": "all_enemies"
-  },
-  "double-edge": {
-    "id": "move_double_edge",
-    "name": "Doble Filo",
-    "type": "Normal",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataque arriesgado que también hiere al agresor."
-  },
-  "double-hit": {
-    "id": "move_double_hit",
-    "name": "Doble Golpe",
-    "type": "Normal",
-    "category": "physical",
-    "power": 35,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Golpea al objetivo dos veces seguidas con la cola u otras partes de su cuerpo."
-  },
-  "double-kick": {
-    "id": "move_double_kick",
-    "name": "Doble Patada",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 30,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Una patada doble. Golpea dos veces."
-  },
-  "double-team": {
-    "id": "move_double_team",
-    "name": "Doble Equipo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Crea copias de sí mismo para mejorar la Evasión.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "evasion",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "dragon-breath": {
-    "id": "move_dragon_breath",
-    "name": "Dragoaliento",
-    "type": "Dragón",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Poderosa ráfaga de aliento que golpea al objetivo y puede paralizarlo.",
-    "statusEffect": "paralysis",
-    "statusChance": 30
-  },
-  "dragon-claw": {
-    "id": "move_dragon_claw",
-    "name": "Garra Dragón",
-    "type": "Dragón",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Araña al objetivo con garras afiladas."
-  },
-  "dragon-dance": {
-    "id": "move_dragon_dance",
-    "name": "Danza Dragón",
-    "type": "Dragón",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Danza mística que sube el Ataque y la Velocidad.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "speed",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "draining-kiss": {
-    "id": "move_draining_kiss",
-    "name": "Beso Drenaje",
-    "type": "Hada",
-    "category": "special",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario absorbe PS del objetivo con un beso y restaura su propia energía en una cantidad igual o superior a la mitad del daño infligido."
-  },
-  "dream-eater": {
-    "id": "move_dream_eater",
-    "name": "Comesueños",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 100,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Restaura al usuario la mitad del daño causado a un objetivo dormido."
-  },
-  "drill-peck": {
-    "id": "move_drill_peck",
-    "name": "Pico Taladro",
-    "type": "Volador",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Picotazo giratorio y perforador muy potente."
-  },
-  "drill-run": {
-    "id": "move_drill_run",
-    "name": "Taladradora",
-    "type": "Tierra",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 95,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario golpea usando su cuerpo como un taladro. Suele ser crítico."
-  },
-  "drum-beating": {
-    "id": "move_drum_beating",
-    "name": "Batería Asalto",
-    "type": "Planta",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario controla un tocón mediante la percusión y al atacar reduce la Velocidad del objetivo.",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "dual-chop": {
-    "id": "move_dual_chop",
-    "name": "Golpe Bis",
-    "type": "Dragón",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 90,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Golpea dos veces seguidas con las partes más recias de su cuerpo."
-  },
-  "dynamic-punch": {
-    "id": "move_dynamic_punch",
-    "name": "Puño Dinámico",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 100,
-    "accuracy": 50,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Puñetazo con toda la fuerza concentrada. Causa confusión si atina."
-  },
-  "earth-power": {
-    "id": "move_earth_power",
-    "name": "Tierra Viva",
-    "type": "Tierra",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "La tierra a los pies del objetivo erupciona violentamente. Puede disminuir la Defensa Especial del objetivo.",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "earthquake": {
-    "id": "move_earthquake",
-    "name": "Terremoto",
-    "type": "Tierra",
-    "category": "physical",
-    "power": 100,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Un terremoto que afecta a todos los Pokémon que estén a su alrededor.",
-    "target": "all_enemies"
-  },
-  "echoed-voice": {
-    "id": "move_echoed_voice",
-    "name": "Eco Voz",
-    "type": "Normal",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Un susurro que aumenta de potencia conforme el usuario y otros Pokémon lo van utilizando."
-  },
-  "electric-terrain": {
-    "id": "move_electric_terrain",
-    "name": "Campo Eléctrico",
-    "type": "Eléctrico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Durante cinco turnos, se potencian los movimientos de tipo Eléctrico y los Pokémon que están en contacto con el suelo no pueden quedarse dormidos."
-  },
-  "electro-ball": {
-    "id": "move_electro_ball",
-    "name": "Bola Voltio",
-    "type": "Eléctrico",
-    "category": "special",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Lanza una bola eléctrica. Cuanto mayor sea la Velocidad del usuario en comparación con la del objetivo, mayor será el daño causado."
-  },
-  "ember": {
-    "id": "move_ember",
-    "name": "Ascuas",
-    "type": "Fuego",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Ataca con llamas pequeñas que pueden causar quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 10
-  },
-  "encore": {
-    "id": "move_encore",
-    "name": "Otra Vez",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "El objetivo repite su último movimiento durante tres turnos."
-  },
-  "endeavor": {
-    "id": "move_endeavor",
-    "name": "Esfuerzo",
-    "type": "Normal",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Reduce los PS del objetivo para que igualen a los del atacante."
-  },
-  "endure": {
-    "id": "move_endure",
-    "name": "Aguante",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Resiste cualquier ataque y deja al menos 1 PS. Puede fallar si se usa repetidamente.",
-    "target": "self"
-  },
-  "energy-ball": {
-    "id": "move_energy_ball",
-    "name": "Energibola",
-    "type": "Planta",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Aúna fuerzas de la naturaleza y libera su ataque. Puede disminuir la Defensa Especial del objetivo.",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "eruption": {
-    "id": "move_eruption",
-    "name": "Estallido",
-    "type": "Fuego",
-    "category": "special",
-    "power": 150,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Furia explosiva. Cuanto menor sea el número de PS del usuario, menos daño hará el ataque.",
-    "target": "all_enemies"
-  },
-  "explosion": {
-    "id": "move_explosion",
-    "name": "Explosión",
-    "type": "Normal",
-    "category": "physical",
-    "power": 250,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "El atacante causa una grandísima explosión y hiere a todos a su alrededor. El usuario se debilita de inmediato.",
-    "target": "all_enemies"
-  },
-  "extrasensory": {
-    "id": "move_extrasensory",
-    "name": "Paranormal",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Emite una energía muy extraña que puede amedrentar al objetivo."
-  },
-  "facade": {
-    "id": "move_facade",
-    "name": "Fachada",
-    "type": "Normal",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Si el usuario está quemado, paralizado o envenenado, ataca con el doble de potencia."
-  },
-  "fake-out": {
-    "id": "move_fake_out",
-    "name": "Sorpresa",
-    "type": "Normal",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Amedrenta al objetivo con este movimiento de prioridad alta. Solo sirve en el primer turno."
-  },
-  "feather-dance": {
-    "id": "move_feather_dance",
-    "name": "Danza Pluma",
-    "type": "Volador",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Envuelve al objetivo con un manto de plumas para reducir mucho su Ataque.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "feint": {
-    "id": "move_feint",
-    "name": "Amago",
-    "type": "Normal",
-    "category": "physical",
-    "power": 30,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Permite golpear a objetivos que han utilizado movimientos como Protección o Detección y anula sus efectos."
-  },
-  "fell-stinger": {
-    "id": "move_fell_stinger",
-    "name": "Aguijón Letal",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Si se derrota al objetivo utilizando este movimiento, aumenta muchísimo el Ataque del usuario."
-  },
-  "fire-blast": {
-    "id": "move_fire_blast",
-    "name": "Llamarada",
-    "type": "Fuego",
-    "category": "special",
-    "power": 110,
-    "accuracy": 85,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Llama intensa que chamusca y puede causar quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 10
-  },
-  "fire-fang": {
-    "id": "move_fire_fang",
-    "name": "Colmillo Ígneo",
-    "type": "Fuego",
-    "category": "physical",
-    "power": 65,
-    "accuracy": 95,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El usuario muerde al objetivo con colmillos en llamas y puede hacer que se amedrente o sufra quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 10
-  },
-  "fire-spin": {
-    "id": "move_fire_spin",
-    "name": "Giro Fuego",
-    "type": "Fuego",
-    "category": "special",
-    "power": 35,
-    "accuracy": 85,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Un aro de fuego que atrapa al objetivo de cuatro a cinco turnos."
-  },
-  "fissure": {
-    "id": "move_fissure",
-    "name": "Fisura",
-    "type": "Tierra",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 30,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Abre una grieta en el suelo y mete al objetivo en ella. Fulmina en un golpe."
-  },
-  "flail": {
-    "id": "move_flail",
-    "name": "Azote",
-    "type": "Normal",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataque frenético. Cuantos menos PS tenga el usuario, más daño producirá."
-  },
-  "flame-charge": {
-    "id": "move_flame_charge",
-    "name": "Nitrocarga",
-    "type": "Fuego",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Llamas que golpean al objetivo y aumentan la Velocidad del atacante.",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "flame-wheel": {
-    "id": "move_flame_wheel",
-    "name": "Rueda Fuego",
-    "type": "Fuego",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Ataca envuelto en fuego. Puede causar quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 10
-  },
-  "flamethrower": {
-    "id": "move_flamethrower",
-    "name": "Lanzallamas",
-    "type": "Fuego",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataca con una gran ráfaga de fuego que puede causar quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 10
-  },
-  "flare-blitz": {
-    "id": "move_flare_blitz",
-    "name": "Envite Ígneo",
-    "type": "Fuego",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El Pokémon se cubre de llamas y carga contra el objetivo, aunque él también recibe daño. Puede quemar.",
-    "statusEffect": "burn",
-    "statusChance": 10
-  },
-  "flash-cannon": {
-    "id": "move_flash_cannon",
-    "name": "Cañón Resplandor",
-    "type": "Acero",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario concentra toda la luz del cuerpo y la libera. Puede bajar la Defensa Especial del objetivo.",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "fling": {
-    "id": "move_fling",
-    "name": "Lanzamiento",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario lanza contra el objetivo el objeto que lleva. La fuerza del ataque y su efecto varían según el objeto."
-  },
-  "flower-trick": {
-    "id": "move_flower_trick",
-    "name": "Truco Floral",
-    "type": "Planta",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Truco Floral"
-  },
-  "focus-energy": {
-    "id": "move_focus_energy",
-    "name": "Foco Energía",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Concentra energía para aumentar las posibilidades de asestar un golpe crítico.",
-    "target": "self"
-  },
-  "follow-me": {
-    "id": "move_follow_me",
-    "name": "Señuelo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Llama la atención para concentrar todos los ataques de todos los del equipo rival hacia sí mismo.",
-    "target": "self"
-  },
-  "freeze-dry": {
-    "id": "move_freeze_dry",
-    "name": "Liofilización",
-    "type": "Hielo",
-    "category": "special",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Enfría súbitamente al objetivo e incluso puede congelarlo. Es supereficaz contra Pokémon de tipo Agua.",
-    "statusEffect": "freeze",
-    "statusChance": 10
-  },
-  "fury-attack": {
-    "id": "move_fury_attack",
-    "name": "Ataque Furia",
-    "type": "Normal",
-    "category": "physical",
-    "power": 15,
-    "accuracy": 85,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Cornea al objetivo de dos a cinco veces."
-  },
-  "fury-cutter": {
-    "id": "move_fury_cutter",
-    "name": "Corte Furia",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 95,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ataque con garras o guadaña que crece en intensidad si se usa repetidas veces."
-  },
-  "fury-swipes": {
-    "id": "move_fury_swipes",
-    "name": "Golpes Furia",
-    "type": "Normal",
-    "category": "physical",
-    "power": 18,
-    "accuracy": 80,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Araña rápidamente de dos a cinco veces."
-  },
-  "future-sight": {
-    "id": "move_future_sight",
-    "name": "Premonición",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Concentra energía psíquica para golpear al objetivo dos turnos después."
-  },
-  "gastro-acid": {
-    "id": "move_gastro_acid",
-    "name": "Bilis",
-    "type": "Veneno",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario arroja sus jugos biliares al objetivo, lo que anula el efecto de la habilidad en uso."
-  },
-  "giga-drain": {
-    "id": "move_giga_drain",
-    "name": "Gigadrenado",
-    "type": "Planta",
-    "category": "special",
-    "power": 75,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
-  },
-  "giga-impact": {
-    "id": "move_giga_impact",
-    "name": "Gigaimpacto",
-    "type": "Normal",
-    "category": "physical",
-    "power": 150,
-    "accuracy": 90,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "El usuario carga contra el objetivo con toda la fuerza que tiene y descansa durante el siguiente turno."
-  },
-  "grassy-terrain": {
-    "id": "move_grassy_terrain",
-    "name": "Campo de Hierba",
-    "type": "Planta",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Durante cinco turnos, se potencian los movimientos de tipo Planta y los Pokémon que están en contacto con el suelo recuperan PS en cada turno."
-  },
-  "gravity": {
-    "id": "move_gravity",
-    "name": "Gravedad",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Durante cinco turnos, se anulan los movimientos que alzan el vuelo y los Pokémon de tipo Volador o que levitan son vulnerables a movimientos de tipo Tierra."
-  },
-  "growl": {
-    "id": "move_growl",
-    "name": "Gruñido",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Dulce gruñido que reduce el Ataque del equipo rival.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "growth": {
-    "id": "move_growth",
-    "name": "Desarrollo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Hace que su cuerpo crezca a marchas forzadas con lo que aumenta su Ataque y Ataque Especial.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "spAttack",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "guard-swap": {
-    "id": "move_guard_swap",
-    "name": "Cambiadefensa",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario emplea su poder mental para intercambiar los cambios en la Defensa y Defensa Especial con el objetivo."
-  },
-  "gust": {
-    "id": "move_gust",
-    "name": "Tornado",
-    "type": "Volador",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Crea un tornado con las alas y lo lanza contra el objetivo."
-  },
-  "gyro-ball": {
-    "id": "move_gyro_ball",
-    "name": "Giro Bola",
-    "type": "Acero",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Embiste al objetivo con un potente ataque giratorio. Cuanto más lento es el usuario, más daño causa."
-  },
-  "hammer-arm": {
-    "id": "move_hammer_arm",
-    "name": "Machada",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 100,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Gira con fuerza el puño y da un gran golpe. No obstante, baja la Velocidad.",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "harden": {
-    "id": "move_harden",
-    "name": "Fortaleza",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Tensa la musculatura del usuario para aumentar la Defensa.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "haze": {
-    "id": "move_haze",
-    "name": "Niebla",
-    "type": "Hielo",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Neblina que elimina los cambios de características de todos los Pokémon en combate."
-  },
-  "head-smash": {
-    "id": "move_head_smash",
-    "name": "Testarazo",
-    "type": "Roca",
-    "category": "physical",
-    "power": 150,
-    "accuracy": 80,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "El usuario arriesga su vida y lanza un cabezazo con toda su fuerza. El agresor resulta seriamente dañado."
-  },
-  "headbutt": {
-    "id": "move_headbutt",
-    "name": "Golpe Cabeza",
-    "type": "Normal",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Potente cabezazo que puede amedrentar al objetivo."
-  },
-  "headlong-rush": {
-    "id": "move_headlong_rush",
-    "name": "Arremetida",
-    "type": "Tierra",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Arremetida"
-  },
-  "healing-wish": {
-    "id": "move_healing_wish",
-    "name": "Deseo Cura",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El Pokémon cae debilitado, pero su sustituto recupera su estado y los PS.",
-    "target": "self"
-  },
-  "heat-crash": {
-    "id": "move_heat_crash",
-    "name": "Golpe Calor",
-    "type": "Fuego",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario ataca con su cuerpo ardiente. Cuanto mayor sea su peso comparado con el del objetivo, más daño causará."
-  },
-  "heat-wave": {
-    "id": "move_heat_wave",
-    "name": "Onda Ígnea",
-    "type": "Fuego",
-    "category": "special",
-    "power": 95,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Provoca un viento abrasador que puede quemar al objetivo.",
-    "statusEffect": "burn",
-    "statusChance": 10,
-    "target": "all_enemies"
-  },
-  "heavy-slam": {
-    "id": "move_heavy_slam",
-    "name": "Cuerpo Pesado",
-    "type": "Acero",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario golpea con todo su cuerpo. Cuanto mayor sea su peso comparado con el del objetivo, más daño causará."
-  },
-  "helping-hand": {
-    "id": "move_helping_hand",
-    "name": "Refuerzo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "El usuario ayuda a un aliado reforzando la potencia de su ataque.",
-    "target": "self"
-  },
-  "hex": {
-    "id": "move_hex",
-    "name": "Infortunio",
-    "type": "Fantasma",
-    "category": "special",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataque que causa un gran daño a los objetivos que sufren problemas de estado."
-  },
-  "hone-claws": {
-    "id": "move_hone_claws",
-    "name": "Afilagarras",
-    "type": "Siniestro",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El usuario se afila las garras para aumentar su Ataque y Precisión.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "accuracy",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "howl": {
-    "id": "move_howl",
-    "name": "Aullido",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Aullido que sube el ánimo y aumenta el Ataque del equipo.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "hurricane": {
-    "id": "move_hurricane",
-    "name": "Vendaval",
-    "type": "Volador",
-    "category": "special",
-    "power": 110,
-    "accuracy": 70,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Golpea al objetivo con un fuerte torbellino que envuelve al rival y puede confundirlo."
-  },
-  "hydro-pump": {
-    "id": "move_hydro_pump",
-    "name": "Hidrobomba",
-    "type": "Agua",
-    "category": "special",
-    "power": 110,
-    "accuracy": 80,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Lanza una gran masa de agua a presión para atacar."
-  },
-  "hyper-beam": {
-    "id": "move_hyper_beam",
-    "name": "Hiperrayo",
-    "type": "Normal",
-    "category": "special",
-    "power": 150,
-    "accuracy": 90,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Es eficaz, pero el atacante deberá descansar en el siguiente turno."
-  },
-  "hyper-fang": {
-    "id": "move_hyper_fang",
-    "name": "Hipercolmillo",
-    "type": "Normal",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 90,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataca con agudos colmillos. Puede amedrentar al objetivo."
-  },
-  "hyper-voice": {
-    "id": "move_hyper_voice",
-    "name": "Vozarrón",
-    "type": "Normal",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Grito desgarrador que inflige daño al objetivo.",
-    "target": "all_enemies"
-  },
-  "hypnosis": {
-    "id": "move_hypnosis",
-    "name": "Hipnosis",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 60,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ataque hipnótico que hace dormir profundamente al objetivo.",
-    "statusEffect": "sleep",
-    "statusChance": 100
-  },
-  "ice-fang": {
-    "id": "move_ice_fang",
-    "name": "Colmillo Hielo",
-    "type": "Hielo",
-    "category": "physical",
-    "power": 65,
-    "accuracy": 95,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El usuario muerde al objetivo con colmillos helados y puede hacer que se amedrente o se congele.",
-    "statusEffect": "freeze",
-    "statusChance": 10
-  },
-  "ice-shard": {
-    "id": "move_ice_shard",
-    "name": "Esquirla Helada",
-    "type": "Hielo",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Crea bolas de hielo y las lanza a gran velocidad. Este movimiento tiene prioridad alta."
-  },
-  "icy-wind": {
-    "id": "move_icy_wind",
-    "name": "Viento Hielo",
-    "type": "Hielo",
-    "category": "special",
-    "power": 55,
-    "accuracy": 95,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataque con aire helado que baja la Velocidad de los rivales.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "incinerate": {
-    "id": "move_incinerate",
-    "name": "Calcinación",
-    "type": "Fuego",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Llamas que golpean a los objetivos adyacentes. Si estos llevan bayas o ciertos objetos, se quemarán y ya no se podrán usar.",
-    "target": "all_enemies"
-  },
-  "inferno": {
-    "id": "move_inferno",
-    "name": "Infierno",
-    "type": "Fuego",
-    "category": "special",
-    "power": 100,
-    "accuracy": 50,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Ataca con una gran ráfaga de fuego que causa quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 100
-  },
-  "ingrain": {
-    "id": "move_ingrain",
-    "name": "Arraigo",
-    "type": "Planta",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Echa raíces para recuperar PS en cada turno, pero impide el relevo.",
-    "target": "self"
-  },
-  "iron-defense": {
-    "id": "move_iron_defense",
-    "name": "Defensa Férrea",
-    "type": "Acero",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Fortalece el cuerpo como si fuera de hierro y sube mucho la Defensa.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "iron-tail": {
-    "id": "move_iron_tail",
-    "name": "Cola Férrea",
-    "type": "Acero",
-    "category": "physical",
-    "power": 100,
-    "accuracy": 75,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataca con una cola férrea y puede bajar la Defensa del objetivo.",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 30
-  },
-  "jaw-lock": {
-    "id": "move_jaw_lock",
-    "name": "Presa Maxilar",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Impide que tanto el atacante como el defensor puedan ser intercambiados hasta que uno de ellos se debilite o abandone el terreno de combate."
-  },
-  "knock-off": {
-    "id": "move_knock_off",
-    "name": "Desarme",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Impide al objetivo usar el objeto que lleva durante el combate. La potencia del movimiento se multiplica si el objetivo lleva un objeto."
-  },
-  "last-resort": {
-    "id": "move_last_resort",
-    "name": "Última Baza",
-    "type": "Normal",
-    "category": "physical",
-    "power": 140,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Este movimiento solo puede utilizarse tras haber usado al menos una vez todos los demás conocidos por el Pokémon."
-  },
-  "lava-plume": {
-    "id": "move_lava_plume",
-    "name": "Humareda",
-    "type": "Fuego",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Un infierno de llamas daña a los Pokémon adyacentes en combate. Puede quemar.",
-    "statusEffect": "burn",
-    "statusChance": 30,
-    "target": "all_enemies"
-  },
-  "leaf-blade": {
-    "id": "move_leaf_blade",
-    "name": "Hoja Aguda",
-    "type": "Planta",
-    "category": "physical",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Acuchilla con una hoja fina. Suele dar un golpe crítico."
-  },
-  "leaf-storm": {
-    "id": "move_leaf_storm",
-    "name": "Lluevehojas",
-    "type": "Planta",
-    "category": "special",
-    "power": 130,
-    "accuracy": 90,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Envuelve al objetivo con una lluvia de hojas afiladas, pero reduce mucho su Ataque Especial.",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "leafage": {
-    "id": "move_leafage",
-    "name": "Follaje",
-    "type": "Planta",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Ataca al oponente lanzando hojas."
-  },
-  "leech-life": {
-    "id": "move_leech_life",
-    "name": "Chupavidas",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Restaura al usuario la mitad del daño causado al objetivo."
-  },
-  "leech-seed": {
-    "id": "move_leech_seed",
-    "name": "Drenadoras",
-    "type": "Planta",
-    "category": "status",
-    "power": 0,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Planta semillas que absorben PS del objetivo en cada turno y que le sirven para recuperarse."
-  },
-  "leer": {
-    "id": "move_leer",
-    "name": "Malicioso",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Intimida a los rivales para bajar su Defensa.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "lick": {
-    "id": "move_lick",
-    "name": "Lengüetazo",
-    "type": "Fantasma",
-    "category": "physical",
-    "power": 30,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Una lengua ataca al objetivo. Puede causar parálisis.",
-    "statusEffect": "paralysis",
-    "statusChance": 30
-  },
-  "life-dew": {
-    "id": "move_life_dew",
-    "name": "Gota Vital",
-    "type": "Agua",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Vierte un agua misteriosa y balsámica que restaura tanto sus propios PS como los de aquellos aliados presentes en el terreno de combate.",
-    "healPercent": 25,
-    "target": "self"
-  },
-  "light-screen": {
-    "id": "move_light_screen",
-    "name": "Pantalla de Luz",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Pared de luz que reduce durante cinco turnos el daño producido por los ataques especiales.",
-    "target": "self"
-  },
-  "liquidation": {
-    "id": "move_liquidation",
-    "name": "Hidroariete",
-    "type": "Agua",
-    "category": "physical",
-    "power": 85,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataca golpeando gracias a la fuerza del agua. También puede reducir la Defensa del objetivo.",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 20
-  },
-  "lock-on": {
-    "id": "move_lock_on",
-    "name": "Fijar Blanco",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Fija el blanco para que el siguiente ataque no falle."
-  },
-  "low-kick": {
-    "id": "move_low_kick",
-    "name": "Patada Baja",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Patada baja que derriba al oponente. Cuanto más pesa el objetivo, más daño le causa."
-  },
-  "low-sweep": {
-    "id": "move_low_sweep",
-    "name": "Puntapié",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ataque rápido dirigido a los pies del objetivo que le hace perder Velocidad.",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "mach-punch": {
-    "id": "move_mach_punch",
-    "name": "Ultrapuño",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Puñetazo de velocidad fulminante. Este movimiento tiene prioridad alta."
-  },
-  "magic-room": {
-    "id": "move_magic_room",
-    "name": "Zona Mágica",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Crea un espacio misterioso que inutiliza todos los objetos de los Pokémon durante cinco turnos."
-  },
-  "magical-leaf": {
-    "id": "move_magical_leaf",
-    "name": "Hoja Mágica",
-    "type": "Planta",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Esparce extrañas hojas que persiguen al objetivo. No se puede esquivar."
-  },
-  "magnet-rise": {
-    "id": "move_magnet_rise",
-    "name": "Levitón",
-    "type": "Eléctrico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Levita gracias a un campo magnético generado por electricidad durante cinco turnos.",
-    "target": "self"
-  },
-  "magnetic-flux": {
-    "id": "move_magnetic_flux",
-    "name": "Aura Magnética",
-    "type": "Eléctrico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Manipula el campo magnético y logra aumentar la Defensa y la Defensa Especial de los Pokémon aliados que cuenten con las habilidades Más y Menos.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": 1
-      },
-      {
-        "stat": "spDefense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "mean-look": {
-    "id": "move_mean_look",
-    "name": "Mal de Ojo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Mal de ojo que impide al objetivo huir del combate."
-  },
-  "mega-drain": {
-    "id": "move_mega_drain",
-    "name": "Megaagotar",
-    "type": "Planta",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
-  },
-  "mega-kick": {
-    "id": "move_mega_kick",
-    "name": "Megapatada",
-    "type": "Normal",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 75,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Patada de extrema fuerza."
-  },
-  "megahorn": {
-    "id": "move_megahorn",
-    "name": "Megacuerno",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 85,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Violenta embestida con cuernos imponentes."
-  },
-  "metal-claw": {
-    "id": "move_metal_claw",
-    "name": "Garra Metal",
-    "type": "Acero",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 95,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Ataque con garras de acero que puede aumentar el Ataque del usuario.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "metal-sound": {
-    "id": "move_metal_sound",
-    "name": "Eco Metálico",
-    "type": "Acero",
-    "category": "status",
-    "power": 0,
-    "accuracy": 85,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Horrible chirrido metálico que baja mucho la Defensa Especial del objetivo.",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "meteor-mash": {
-    "id": "move_meteor_mash",
-    "name": "Puño Meteoro",
-    "type": "Acero",
-    "category": "physical",
-    "power": 90,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Puñetazo que impacta como un meteorito y puede subir el Ataque del agresor.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 20
-  },
-  "metronome": {
-    "id": "move_metronome",
-    "name": "Metrónomo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Mueve un dedo y estimula su cerebro para usar al azar casi cualquier movimiento.",
-    "target": "self"
-  },
-  "mimic": {
-    "id": "move_mimic",
-    "name": "Mimético",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Copia el último movimiento usado por el objetivo, y puede utilizarlo mientras esté en el combate."
-  },
-  "mirror-coat": {
-    "id": "move_mirror_coat",
-    "name": "Manto Espejo",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Responde a un ataque especial ocasionando el doble del daño recibido."
-  },
-  "mirror-move": {
-    "id": "move_mirror_move",
-    "name": "Espejo",
-    "type": "Volador",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-  },
-  "mist": {
-    "id": "move_mist",
-    "name": "Neblina",
-    "type": "Hielo",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Rodea de fina niebla al usuario y protege las características de su equipo durante cinco turnos.",
-    "target": "self"
-  },
-  "misty-terrain": {
-    "id": "move_misty_terrain",
-    "name": "Campo de Niebla",
-    "type": "Hada",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Durante cinco turnos, los Pokémon que están en el suelo no sufren problemas de estado y se reduce a la mitad el daño de los movimientos de tipo Dragón."
-  },
-  "moonblast": {
-    "id": "move_moonblast",
-    "name": "Fuerza Lunar",
-    "type": "Hada",
-    "category": "special",
-    "power": 95,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Invoca el poder de la luna para atacar al objetivo. Puede disminuir el Ataque Especial del objetivo.",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 30
-  },
-  "moonlight": {
-    "id": "move_moonlight",
-    "name": "Luz Lunar",
-    "type": "Hada",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Restaura PS del usuario. La cantidad varía según el tiempo que haga.",
-    "healPercent": 50,
-    "target": "self"
-  },
-  "morning-sun": {
-    "id": "move_morning_sun",
-    "name": "Sol Matinal",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Restaura PS del usuario. La cantidad varía según el tiempo que haga.",
-    "healPercent": 50,
-    "target": "self"
-  },
-  "mud-shot": {
-    "id": "move_mud_shot",
-    "name": "Disparo Lodo",
-    "type": "Tierra",
-    "category": "special",
-    "power": 55,
-    "accuracy": 95,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El usuario lanza lodo al objetivo y reduce su Velocidad.",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "mud-slap": {
-    "id": "move_mud_slap",
-    "name": "Bofetón Lodo",
-    "type": "Tierra",
-    "category": "special",
-    "power": 20,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Echa lodo en la cara para bajar la Precisión.",
-    "statChanges": [
-      {
-        "stat": "accuracy",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "muddy-water": {
-    "id": "move_muddy_water",
-    "name": "Agua Lodosa",
-    "type": "Agua",
-    "category": "special",
-    "power": 90,
-    "accuracy": 85,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataque con agua lodosa que puede bajar la Precisión del equipo rival.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "accuracy",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 30
-  },
-  "mystical-fire": {
-    "id": "move_mystical_fire",
-    "name": "Llama Embrujada",
-    "type": "Fuego",
-    "category": "special",
-    "power": 75,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario lanza por la boca una singular llama a gran temperatura con la que ataca a su oponente y baja su Ataque Especial.",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "nasty-plot": {
-    "id": "move_nasty_plot",
-    "name": "Maquinación",
-    "type": "Siniestro",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Estimula su cerebro pensando en cosas malas. Aumenta mucho el Ataque Especial.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "night-shade": {
-    "id": "move_night_shade",
-    "name": "Tinieblas",
-    "type": "Fantasma",
-    "category": "special",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Produce un espejismo ante el objetivo, que pierde tantos PS como nivel tenga el usuario."
-  },
-  "night-slash": {
-    "id": "move_night_slash",
-    "name": "Tajo Umbrío",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataca al objetivo a la primera oportunidad. Suele ser crítico."
-  },
-  "noble-roar": {
-    "id": "move_noble_roar",
-    "name": "Rugido de Guerra",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Intimida a su oponente con un rugido de guerra, lo que hace que disminuyan tanto su Ataque como su Ataque Especial.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -1
-      },
-      {
-        "stat": "spAttack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "nuzzle": {
-    "id": "move_nuzzle",
-    "name": "Moflete Estático",
-    "type": "Eléctrico",
-    "category": "physical",
-    "power": 20,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Quien lo usa frota sus mofletes cargados de electricidad contra el objetivo y consigue paralizarlo.",
-    "statusEffect": "paralysis",
-    "statusChance": 100
-  },
-  "outrage": {
-    "id": "move_outrage",
-    "name": "Enfado",
-    "type": "Dragón",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataca de dos a tres turnos y acaba confundiendo al agresor."
-  },
-  "overheat": {
-    "id": "move_overheat",
-    "name": "Sofoco",
-    "type": "Fuego",
-    "category": "special",
-    "power": 130,
-    "accuracy": 90,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Ataque en toda regla que baja mucho el Ataque Especial de quien lo usa.",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "pain-split": {
-    "id": "move_pain_split",
-    "name": "Divide Dolor",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Suma los PS del usuario a los del objetivo y los reparte a partes iguales."
-  },
-  "payback": {
-    "id": "move_payback",
-    "name": "Vendetta",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario contraataca con el doble de fuerza si el objetivo usa un movimiento antes."
-  },
-  "peck": {
-    "id": "move_peck",
-    "name": "Picotazo",
-    "type": "Volador",
-    "category": "physical",
-    "power": 35,
-    "accuracy": 100,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Ensarta al objetivo con un cuerno o pico punzante."
-  },
-  "perish-song": {
-    "id": "move_perish_song",
-    "name": "Canto Mortal",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Si un Pokémon escucha este canto y no es cambiado por otro en tres turnos, acaba debilitándose."
-  },
-  "petal-blizzard": {
-    "id": "move_petal_blizzard",
-    "name": "Tormenta Floral",
-    "type": "Planta",
-    "category": "physical",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El usuario desata un intenso vendaval de pétalos que daña a los Pokémon a su alrededor.",
-    "target": "all_enemies"
-  },
-  "petal-dance": {
-    "id": "move_petal_dance",
-    "name": "Danza Pétalo",
-    "type": "Planta",
-    "category": "special",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Lanza pétalos de dos a tres turnos y acaba confundiendo al atacante."
-  },
-  "phantom-force": {
-    "id": "move_phantom_force",
-    "name": "Golpe Fantasma",
-    "type": "Fantasma",
-    "category": "physical",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario desaparece en el primer turno y ataca a su objetivo en el segundo. Permite acertar aunque el objetivo esté protegiéndose."
-  },
-  "pin-missile": {
-    "id": "move_pin_missile",
-    "name": "Pin Misil",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 25,
-    "accuracy": 95,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Lanza finas púas que hieren de dos a cinco veces."
-  },
-  "play-nice": {
-    "id": "move_play_nice",
-    "name": "Camaradería",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Se hace amigo de su oponente y consigue que a este se le quiten las ganas de combatir. Además, reduce su Ataque.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "play-rough": {
-    "id": "move_play_rough",
-    "name": "Carantoña",
-    "type": "Hada",
-    "category": "physical",
-    "power": 90,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El Pokémon que lo usa le hace cucamonas al objetivo y lo ataca. Puede disminuir el Ataque del objetivo.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "pluck": {
-    "id": "move_pluck",
-    "name": "Picoteo",
-    "type": "Volador",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Picotea al objetivo. Si este sostiene una baya, la picotea también y obtiene sus efectos."
-  },
-  "poison-fang": {
-    "id": "move_poison_fang",
-    "name": "Colmillo Veneno",
-    "type": "Veneno",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Colmillos tóxicos que pueden envenenar gravemente al objetivo.",
-    "statusEffect": "poison",
-    "statusChance": 50
-  },
-  "poison-jab": {
-    "id": "move_poison_jab",
-    "name": "Puya Nociva",
-    "type": "Veneno",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Pincha al objetivo con un tentáculo o brazo envenenado. Puede llegar a envenenar al objetivo.",
-    "statusEffect": "poison",
-    "statusChance": 30
-  },
-  "poison-powder": {
-    "id": "move_poison_powder",
-    "name": "Polvo Veneno",
-    "type": "Veneno",
-    "category": "status",
-    "power": 0,
-    "accuracy": 75,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Polvo tóxico que envenena al objetivo.",
-    "statusEffect": "poison",
-    "statusChance": 100
-  },
-  "poison-sting": {
-    "id": "move_poison_sting",
-    "name": "Picotazo Veneno",
-    "type": "Veneno",
-    "category": "physical",
-    "power": 15,
-    "accuracy": 100,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Lanza un aguijón tóxico que puede envenenar al objetivo.",
-    "statusEffect": "poison",
-    "statusChance": 30
-  },
-  "poison-tail": {
-    "id": "move_poison_tail",
-    "name": "Cola Veneno",
-    "type": "Veneno",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Puede envenenar y dar un golpe crítico.",
-    "statusEffect": "poison",
-    "statusChance": 10
-  },
-  "pound": {
-    "id": "move_pound",
-    "name": "Destructor",
-    "type": "Normal",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Golpea con las patas o la cola."
-  },
-  "power-swap": {
-    "id": "move_power_swap",
-    "name": "Cambiafuerza",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario emplea su poder mental para intercambiar los cambios en el Ataque y Ataque Especial con el objetivo."
-  },
-  "power-whip": {
-    "id": "move_power_whip",
-    "name": "Latigazo",
-    "type": "Planta",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 85,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario agita violentamente sus lianas o tentáculos para golpear al objetivo."
-  },
-  "protect": {
-    "id": "move_protect",
-    "name": "Protección",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Frena todos los ataques, pero puede fallar si se usa repetidamente.",
-    "target": "self"
-  },
-  "psybeam": {
-    "id": "move_psybeam",
-    "name": "Psicorrayo",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Extraño rayo que puede causar confusión."
-  },
-  "psych-up": {
-    "id": "move_psych_up",
-    "name": "Autosugestión",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Quien lo usa se sume en un trance y copia cualquier cambio que haya en las características de su objetivo."
-  },
-  "psychic": {
-    "id": "move_psychic",
-    "name": "Psíquico",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Fuerte ataque telequinético que puede bajar la Defensa Especial del objetivo.",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "psyshock": {
-    "id": "move_psyshock",
-    "name": "Psicocarga",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Crea una onda psíquica que causa daño físico al objetivo."
-  },
-  "pursuit": {
-    "id": "move_pursuit",
-    "name": "Persecución",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-  },
-  "pyro-ball": {
-    "id": "move_pyro_ball",
-    "name": "Balón Ígneo",
-    "type": "Fuego",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 90,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "El usuario prende una pequeña piedra para crear una bola de fuego con la que ataca al rival. Puede causar quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 10
-  },
-  "quick-attack": {
-    "id": "move_quick_attack",
-    "name": "Ataque Rápido",
-    "type": "Normal",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Ataca al objetivo a gran velocidad. Este movimiento tiene prioridad alta."
-  },
-  "quick-guard": {
-    "id": "move_quick_guard",
-    "name": "Anticipo",
-    "type": "Lucha",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Se protege a sí mismo y a sus aliados de movimientos con prioridad.",
-    "target": "self"
-  },
-  "quiver-dance": {
-    "id": "move_quiver_dance",
-    "name": "Danza Aleteo",
-    "type": "Bicho",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Danza mística que sube el Ataque Especial, la Defensa Especial y la Velocidad.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": 1
-      },
-      {
-        "stat": "spDefense",
-        "stages": 1
-      },
-      {
-        "stat": "speed",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "rage": {
-    "id": "move_rage",
-    "name": "Furia",
-    "type": "Normal",
-    "category": "physical",
-    "power": 20,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-  },
-  "rage-powder": {
-    "id": "move_rage_powder",
-    "name": "Polvo Ira",
-    "type": "Bicho",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Usa un polvo que irrita y centra en el usuario la atención y los ataques de los rivales.",
-    "target": "self"
-  },
-  "raging-fury": {
-    "id": "move_raging_fury",
-    "name": "Erupción de Ira",
-    "type": "Fuego",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Erupción de Ira"
-  },
-  "rain-dance": {
-    "id": "move_rain_dance",
-    "name": "Danza Lluvia",
-    "type": "Agua",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Genera una fuerte lluvia que refuerza los movimientos de tipo Agua durante cinco turnos y debilita los de tipo Fuego."
-  },
-  "rapid-spin": {
-    "id": "move_rapid_spin",
-    "name": "Giro Rápido",
-    "type": "Normal",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Ataque giratorio que puede eliminar movimientos como Atadura, Constricción y Drenadoras. También aumenta la Velocidad del usuario.",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "razor-leaf": {
-    "id": "move_razor_leaf",
-    "name": "Hoja Afilada",
-    "type": "Planta",
-    "category": "physical",
-    "power": 55,
-    "accuracy": 95,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Corta con hojas afiladas. Un ataque que suele ser crítico.",
-    "target": "all_enemies"
-  },
-  "razor-shell": {
-    "id": "move_razor_shell",
-    "name": "Concha Filo",
-    "type": "Agua",
-    "category": "physical",
-    "power": 75,
-    "accuracy": 95,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Una afilada vieira ataca al objetivo. También puede hacer disminuir su Defensa.",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 50
-  },
-  "reflect": {
-    "id": "move_reflect",
-    "name": "Reflejo",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Pared de luz que reduce durante cinco turnos el daño producido por los ataques físicos.",
-    "target": "self"
-  },
-  "reflect-type": {
-    "id": "move_reflect_type",
-    "name": "Clonatipo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Cambia el tipo del Pokémon al mismo tipo que el del objetivo."
-  },
-  "rest": {
-    "id": "move_rest",
-    "name": "Descanso",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Restaura todos los PS y cura todos los problemas de estado del usuario, que se duerme los dos turnos siguientes.",
-    "target": "self"
-  },
-  "retaliate": {
-    "id": "move_retaliate",
-    "name": "Represalia",
-    "type": "Normal",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Venga a los amigos caídos. Si en el turno anterior han derrotado a alguno, la potencia del ataque aumentará."
-  },
-  "revenge": {
-    "id": "move_revenge",
-    "name": "Desquite",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataque que produce el doble de daño si el usuario resulta herido en el mismo turno."
-  },
-  "reversal": {
-    "id": "move_reversal",
-    "name": "Inversión",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataque desesperado que causa más daño cuantos menos PS tenga el usuario."
-  },
-  "roar": {
-    "id": "move_roar",
-    "name": "Rugido",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Se lleva al objetivo, que es cambiado por otro Pokémon. Si es un Pokémon salvaje, acaba el combate."
-  },
-  "rock-blast": {
-    "id": "move_rock_blast",
-    "name": "Pedrada",
-    "type": "Roca",
-    "category": "physical",
-    "power": 25,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Lanza pedruscos al objetivo de dos a cinco veces consecutivas."
-  },
-  "rock-polish": {
-    "id": "move_rock_polish",
-    "name": "Pulimento",
-    "type": "Roca",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Reduce la resistencia puliendo su cuerpo. Aumenta mucho la Velocidad.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "rock-slide": {
-    "id": "move_rock_slide",
-    "name": "Avalancha",
-    "type": "Roca",
-    "category": "physical",
-    "power": 75,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Lanza grandes pedruscos. Puede amedrentar al objetivo.",
-    "target": "all_enemies"
-  },
-  "rock-smash": {
-    "id": "move_rock_smash",
-    "name": "Golpe Roca",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataque con los puños. Puede bajar la Defensa del objetivo.",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 50
-  },
-  "rock-throw": {
-    "id": "move_rock_throw",
-    "name": "Lanzarrocas",
-    "type": "Roca",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 90,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Tira una pequeña roca al objetivo."
-  },
-  "role-play": {
-    "id": "move_role_play",
-    "name": "Imitación",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Imita al objetivo por completo y copia su habilidad."
-  },
-  "rollout": {
-    "id": "move_rollout",
-    "name": "Rodar",
-    "type": "Roca",
-    "category": "physical",
-    "power": 30,
-    "accuracy": 90,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "El atacante rueda contra el objetivo durante cinco turnos, cada vez con mayor fuerza."
-  },
-  "roost": {
-    "id": "move_roost",
-    "name": "Respiro",
-    "type": "Volador",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Aterriza sobre la superficie para descansar. Recupera hasta la mitad del total de sus PS.",
-    "healPercent": 50,
-    "target": "self"
-  },
-  "rototiller": {
-    "id": "move_rototiller",
-    "name": "Fertilizante",
-    "type": "Tierra",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "spAttack",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "round": {
-    "id": "move_round",
-    "name": "Canon",
-    "type": "Normal",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Un canto que ataca al objetivo. Cuantos más Pokémon lo usan, más aumenta de potencia."
-  },
-  "safeguard": {
-    "id": "move_safeguard",
-    "name": "Velo Sagrado",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Un escudo que protege de problemas de estado, como el sueño o la parálisis, durante cinco turnos.",
-    "target": "self"
-  },
-  "sand-attack": {
-    "id": "move_sand_attack",
-    "name": "Ataque Arena",
-    "type": "Tierra",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Arroja arena a la cara y baja la Precisión.",
-    "statChanges": [
-      {
-        "stat": "accuracy",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "sand-tomb": {
-    "id": "move_sand_tomb",
-    "name": "Bucle Arena",
-    "type": "Tierra",
-    "category": "physical",
-    "power": 35,
-    "accuracy": 85,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Enreda al objetivo en un remolino de arena de cuatro a cinco turnos."
-  },
-  "sandstorm": {
-    "id": "move_sandstorm",
-    "name": "Tormenta de Arena",
-    "type": "Roca",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Tormenta de arena que dura cinco turnos y hiere a todos, excepto a los de tipo Roca, Tierra y Acero, y aumenta la Defensa Especial de los de tipo Roca."
-  },
-  "scary-face": {
-    "id": "move_scary_face",
-    "name": "Cara Susto",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Asusta al objetivo para reducir mucho su Velocidad.",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "scratch": {
-    "id": "move_scratch",
-    "name": "Arañazo",
-    "type": "Normal",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Araña con afiladas garras."
-  },
-  "screech": {
-    "id": "move_screech",
-    "name": "Chirrido",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 85,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Alarido agudo que reduce mucho la Defensa del objetivo.",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "seed-bomb": {
-    "id": "move_seed_bomb",
-    "name": "Bomba Germen",
-    "type": "Planta",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Lanza al objetivo una descarga de semillas explosivas desde arriba."
-  },
-  "seismic-toss": {
-    "id": "move_seismic_toss",
-    "name": "Sísmico",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Aprovecha la gravedad para derribar al objetivo. Le resta tantos PS como nivel tenga el usuario."
-  },
-  "self-destruct": {
-    "id": "move_self_destruct",
-    "name": "Autodestrucción",
-    "type": "Normal",
-    "category": "physical",
-    "power": 200,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "El atacante explota y hiere a todos a su alrededor. El usuario se debilita de inmediato.",
-    "target": "all_enemies"
-  },
-  "shadow-ball": {
-    "id": "move_shadow_ball",
-    "name": "Bola Sombra",
-    "type": "Fantasma",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Lanza una bola oscura que puede bajar la Defensa Especial del objetivo.",
-    "statChanges": [
-      {
-        "stat": "spDefense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 20
-  },
-  "shadow-punch": {
-    "id": "move_shadow_punch",
-    "name": "Puño Sombra",
-    "type": "Fantasma",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Puñetazo ineludible procedente de las sombras."
-  },
-  "shadow-sneak": {
-    "id": "move_shadow_sneak",
-    "name": "Sombra Vil",
-    "type": "Fantasma",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Extiende su sombra y ataca al objetivo por la espalda. Este movimiento tiene prioridad alta."
-  },
-  "shell-smash": {
-    "id": "move_shell_smash",
-    "name": "Rompecoraza",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El usuario rompe su coraza y baja su Defensa y Defensa Especial, pero aumenta mucho su Ataque, Ataque Especial y Velocidad.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      },
-      {
-        "stat": "spDefense",
-        "stages": -1
-      },
-      {
-        "stat": "attack",
-        "stages": 2
-      },
-      {
-        "stat": "spAttack",
-        "stages": 2
-      },
-      {
-        "stat": "speed",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "shock-wave": {
-    "id": "move_shock_wave",
-    "name": "Onda Voltio",
-    "type": "Eléctrico",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ataque eléctrico muy rápido e ineludible."
-  },
-  "silk-trap": {
-    "id": "move_silk_trap",
-    "name": "Telatrampa",
-    "type": "Bicho",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Telatrampa",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "silver-wind": {
-    "id": "move_silver_wind",
-    "name": "Viento Plata",
-    "type": "Bicho",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "defense",
-        "stages": 1
-      },
-      {
-        "stat": "spAttack",
-        "stages": 1
-      },
-      {
-        "stat": "spDefense",
-        "stages": 1
-      },
-      {
-        "stat": "speed",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 10
-  },
-  "sing": {
-    "id": "move_sing",
-    "name": "Canto",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 55,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Cancioncilla que hace dormir profundamente al objetivo.",
-    "statusEffect": "sleep",
-    "statusChance": 100
-  },
-  "skill-swap": {
-    "id": "move_skill_swap",
-    "name": "Intercambio",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Usa el poder psíquico para intercambiar habilidades con el objetivo."
-  },
-  "skitter-smack": {
-    "id": "move_skitter_smack",
-    "name": "Golpe Rastrero",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataca al objetivo por la espalda de forma subrepticia y además reduce su Ataque Especial.",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "slack-off": {
-    "id": "move_slack_off",
-    "name": "Relajo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "El usuario se relaja y restaura la mitad de sus PS máximos.",
-    "healPercent": 50,
-    "target": "self"
-  },
-  "slam": {
-    "id": "move_slam",
-    "name": "Atizar",
-    "type": "Normal",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 75,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Golpea con la cola o con lianas, por ejemplo, para causar daño al objetivo."
-  },
-  "slash": {
-    "id": "move_slash",
-    "name": "Cuchillada",
-    "type": "Normal",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ataca con cuchillas o con pinzas. Suele asestar un golpe crítico."
-  },
-  "sleep-powder": {
-    "id": "move_sleep_powder",
-    "name": "Somnífero",
-    "type": "Planta",
-    "category": "status",
-    "power": 0,
-    "accuracy": 75,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Esparce polvo que duerme al objetivo.",
-    "statusEffect": "sleep",
-    "statusChance": 100
-  },
-  "sludge-wave": {
-    "id": "move_sludge_wave",
-    "name": "Onda Tóxica",
-    "type": "Veneno",
-    "category": "special",
-    "power": 95,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Una onda tóxica que daña a los Pokémon de alrededor. Puede envenenar.",
-    "statusEffect": "poison",
-    "statusChance": 10,
-    "target": "all_enemies"
-  },
-  "smack-down": {
-    "id": "move_smack_down",
-    "name": "Antiaéreo",
-    "type": "Roca",
-    "category": "physical",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Ataca lanzando una piedra o un proyectil. Si el objetivo está en el aire, lo estrella contra el suelo."
-  },
-  "smog": {
-    "id": "move_smog",
-    "name": "Polución",
-    "type": "Veneno",
-    "category": "special",
-    "power": 30,
-    "accuracy": 70,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Lanza un ataque con gases tóxicos que pueden llegar a envenenar.",
-    "statusEffect": "poison",
-    "statusChance": 40
-  },
-  "smokescreen": {
-    "id": "move_smokescreen",
-    "name": "Pantalla de Humo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Baja la Precisión del objetivo con una nube de humo o tinta.",
-    "statChanges": [
-      {
-        "stat": "accuracy",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "snarl": {
-    "id": "move_snarl",
-    "name": "Alarido",
-    "type": "Siniestro",
-    "category": "special",
-    "power": 55,
-    "accuracy": 95,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Chillido desagradable que baja el Ataque Especial del rival.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "snipe-shot": {
-    "id": "move_snipe_shot",
-    "name": "Disparo Certero",
-    "type": "Agua",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Permite atacar al objetivo seleccionado ignorando las habilidades o movimientos que permiten a un rival centrar la atención sobre sí."
-  },
-  "snowscape": {
-    "id": "move_snowscape",
-    "name": "Paisaje Nevado",
-    "type": "Hielo",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Paisaje Nevado"
-  },
-  "soak": {
-    "id": "move_soak",
-    "name": "Empapar",
-    "type": "Agua",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Potente lluvia que transforma al objetivo en un Pokémon de tipo Agua."
-  },
-  "solar-beam": {
-    "id": "move_solar_beam",
-    "name": "Rayo Solar",
-    "type": "Planta",
-    "category": "special",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario absorbe luz en el primer turno y en el segundo lanza un potente rayo de energía."
-  },
-  "spark": {
-    "id": "move_spark",
-    "name": "Chispa",
-    "type": "Eléctrico",
-    "category": "physical",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ataque eléctrico que puede llegar a paralizar.",
-    "statusEffect": "paralysis",
-    "statusChance": 30
-  },
-  "sparkling-aria": {
-    "id": "move_sparkling_aria",
-    "name": "Aria Burbuja",
-    "type": "Agua",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Libera burbujas al cantar. Este movimiento cura las quemaduras de los Pokémon que reciban daño.",
-    "target": "all_enemies"
-  },
-  "spikes": {
-    "id": "move_spikes",
-    "name": "Púas",
-    "type": "Tierra",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Esparce púas alrededor del equipo rival que hieren a los Pokémon rivales que entran en combate.",
-    "target": "all_enemies"
-  },
-  "spiky-shield": {
-    "id": "move_spiky_shield",
-    "name": "Barrera Espinosa",
-    "type": "Planta",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Protege al usuario de ataques, e inflige daño a quien se los lance si entra en contacto con él.",
-    "target": "self"
-  },
-  "spirit-shackle": {
-    "id": "move_spirit_shackle",
-    "name": "Puntada Sombría",
-    "type": "Fantasma",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataca al oponente y, al mismo tiempo, fija su sombra al terreno para impedir su huida."
-  },
-  "spit-up": {
-    "id": "move_spit_up",
-    "name": "Escupir",
-    "type": "Normal",
-    "category": "special",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Libera de una vez la energía acumulada con Reserva. La potencia del ataque será proporcional a la cantidad de energía acumulada."
-  },
-  "spite": {
-    "id": "move_spite",
-    "name": "Rencor",
-    "type": "Fantasma",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Da rienda suelta a su rencor para reducir cuatro PP del último movimiento usado por el objetivo."
-  },
-  "splash": {
-    "id": "move_splash",
-    "name": "Salpicadura",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "No tiene ningún efecto. Solo salpica.",
-    "target": "self"
-  },
-  "stealth-rock": {
-    "id": "move_stealth_rock",
-    "name": "Trampa Rocas",
-    "type": "Roca",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Una trampa de rocas que flota en el aire y daña a los objetivos que entran en combate.",
-    "target": "all_enemies"
-  },
-  "sticky-web": {
-    "id": "move_sticky_web",
-    "name": "Red Viscosa",
-    "type": "Bicho",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Coloca una red pegajosa alrededor del equipo rival que baja la Velocidad de cualquier adversario que entre a combatir.",
-    "target": "all_enemies"
-  },
-  "stockpile": {
-    "id": "move_stockpile",
-    "name": "Reserva",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Acumula energía y sube la Defensa y la Defensa Especial. Puede utilizarse hasta tres veces.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": 1
-      },
-      {
-        "stat": "spDefense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "stone-edge": {
-    "id": "move_stone_edge",
-    "name": "Roca Afilada",
-    "type": "Roca",
-    "category": "physical",
-    "power": 100,
-    "accuracy": 80,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Clava piedras muy afiladas al objetivo. Suele ser crítico."
-  },
-  "stored-power": {
-    "id": "move_stored_power",
-    "name": "Poder Reserva",
-    "type": "Psíquico",
-    "category": "special",
-    "power": 20,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Acumula poder para golpear. Cuanto más suban las características del usuario, mayor será el daño."
-  },
-  "strength": {
-    "id": "move_strength",
-    "name": "Fuerza",
-    "type": "Normal",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Propina un potente puñetazo con todas sus fuerzas."
-  },
-  "string-shot": {
-    "id": "move_string_shot",
-    "name": "Disparo Demora",
-    "type": "Bicho",
-    "category": "status",
-    "power": 0,
-    "accuracy": 95,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "Lanza seda a los rivales y reduce mucho su Velocidad.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "speed",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "struggle-bug": {
-    "id": "move_struggle_bug",
-    "name": "Estoicismo",
-    "type": "Bicho",
-    "category": "special",
-    "power": 50,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "El usuario opone resistencia y ataca a los oponentes. También reduce su Ataque Especial.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "stun-spore": {
-    "id": "move_stun_spore",
-    "name": "Paralizador",
-    "type": "Planta",
-    "category": "status",
-    "power": 0,
-    "accuracy": 75,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Esparce polvo que paraliza al objetivo.",
-    "statusEffect": "paralysis",
-    "statusChance": 100
-  },
-  "substitute": {
-    "id": "move_substitute",
-    "name": "Sustituto",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Utiliza parte de los PS propios para crear un sustituto que actúa como señuelo.",
-    "target": "self"
-  },
-  "sucker-punch": {
-    "id": "move_sucker_punch",
-    "name": "Golpe Bajo",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Permite atacar con prioridad. Falla si el objetivo no está preparando ningún ataque."
-  },
-  "sunny-day": {
-    "id": "move_sunny_day",
-    "name": "Día Soleado",
-    "type": "Fuego",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Hace que se intensifique el efecto del sol durante cinco turnos, lo que potencia los movimientos de tipo Fuego y debilita los de tipo Agua."
-  },
-  "super-fang": {
-    "id": "move_super_fang",
-    "name": "Superdiente",
-    "type": "Normal",
-    "category": "physical",
-    "power": 0,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Finos colmillos que reducen a la mitad los PS del objetivo."
-  },
-  "superpower": {
-    "id": "move_superpower",
-    "name": "Fuerza Bruta",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Ataque de gran potencia, pero que reduce el Ataque y la Defensa del agresor.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -1
-      },
-      {
-        "stat": "defense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "supersonic": {
-    "id": "move_supersonic",
-    "name": "Supersónico",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 55,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Raras ondas sónicas que confunden al objetivo."
-  },
-  "surf": {
-    "id": "move_surf",
-    "name": "Surf",
-    "type": "Agua",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Inunda el terreno de combate con una ola gigante.",
-    "target": "all_enemies"
-  },
-  "swagger": {
-    "id": "move_swagger",
-    "name": "Fanfarronear",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 85,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Provoca confusión en el objetivo, pero también sube mucho su Ataque.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "swallow": {
-    "id": "move_swallow",
-    "name": "Tragar",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Absorbe la energía acumulada con Reserva para recobrar salud. Cuanta más se haya acumulado, mayor será el número de PS que se recuperen.",
-    "healPercent": 25,
-    "target": "self"
-  },
-  "sweet-kiss": {
-    "id": "move_sweet_kiss",
-    "name": "Beso Dulce",
-    "type": "Hada",
-    "category": "status",
-    "power": 0,
-    "accuracy": 75,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Da un beso con tal dulzura que causa confusión."
-  },
-  "sweet-scent": {
-    "id": "move_sweet_scent",
-    "name": "Dulce Aroma",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Un dulce aroma engatusa al objetivo, por lo que se reduce mucho su Evasión.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "evasion",
-        "stages": -2
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "swift": {
-    "id": "move_swift",
-    "name": "Meteoros",
-    "type": "Normal",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Lanza rayos en forma de estrella que no fallan nunca.",
-    "target": "all_enemies"
-  },
-  "switcheroo": {
-    "id": "move_switcheroo",
-    "name": "Trapicheo",
-    "type": "Siniestro",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Intercambia con el objetivo los objetos que llevan tan rápido que es imposible verlo a simple vista."
-  },
-  "swords-dance": {
-    "id": "move_swords_dance",
-    "name": "Danza Espada",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Baile frenético que aumenta mucho el Ataque.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 2
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "synthesis": {
-    "id": "move_synthesis",
-    "name": "Fotosíntesis",
-    "type": "Planta",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Restaura PS del usuario. La cantidad varía según el tiempo que haga.",
-    "healPercent": 50,
-    "target": "self"
-  },
-  "tackle": {
-    "id": "move_tackle",
-    "name": "Placaje",
-    "type": "Normal",
-    "category": "physical",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Embestida con todo el cuerpo."
-  },
-  "tail-whip": {
-    "id": "move_tail_whip",
-    "name": "Agitacola",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Agita la cola para bajar la Defensa del equipo rival.",
-    "target": "all_enemies",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "tailwind": {
-    "id": "move_tailwind",
-    "name": "Viento Afín",
-    "type": "Volador",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Crea un fuerte remolino que aumenta la Velocidad de los Pokémon de tu equipo durante cuatro turnos.",
-    "target": "self"
-  },
-  "take-down": {
-    "id": "move_take_down",
-    "name": "Derribo",
-    "type": "Normal",
-    "category": "physical",
-    "power": 90,
-    "accuracy": 85,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Carga desmedida que también hiere al agresor."
-  },
-  "taunt": {
-    "id": "move_taunt",
-    "name": "Mofa",
-    "type": "Siniestro",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Enfurece al objetivo para que solo use movimientos de ataque durante tres turnos."
-  },
-  "tearful-look": {
-    "id": "move_tearful_look",
-    "name": "Ojos Llorosos",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Mira al objetivo con ojos llorosos para hacerle perder su espíritu combativo y reduce su Ataque y Ataque Especial.",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": -1
-      },
-      {
-        "stat": "spAttack",
-        "stages": -1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "teeter-dance": {
-    "id": "move_teeter_dance",
-    "name": "Danza Caos",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Danza histérica que confunde a los Pokémon que están alrededor del usuario.",
-    "target": "all_enemies"
-  },
-  "thrash": {
-    "id": "move_thrash",
-    "name": "Saña",
-    "type": "Normal",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataque de dos a tres turnos que acaba confundiendo al agresor."
-  },
-  "throat-chop": {
-    "id": "move_throat_chop",
-    "name": "Golpe Mordaza",
-    "type": "Siniestro",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Inflige al rival un dolor tan abrumador que le impide utilizar durante dos turnos ataques que se sirven del sonido."
-  },
-  "thunder": {
-    "id": "move_thunder",
-    "name": "Trueno",
-    "type": "Eléctrico",
-    "category": "special",
-    "power": 110,
-    "accuracy": 70,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Un poderoso rayo que daña al objetivo y puede paralizarlo.",
-    "statusEffect": "paralysis",
-    "statusChance": 30
-  },
-  "thunder-fang": {
-    "id": "move_thunder_fang",
-    "name": "Colmillo Rayo",
-    "type": "Eléctrico",
-    "category": "physical",
-    "power": 65,
-    "accuracy": 95,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "El usuario muerde al objetivo con colmillos electrificados y puede hacer que se amedrente o se paralice.",
-    "statusEffect": "paralysis",
-    "statusChance": 10
-  },
-  "thunder-punch": {
-    "id": "move_thunder_punch",
-    "name": "Puño Trueno",
-    "type": "Eléctrico",
-    "category": "physical",
-    "power": 75,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Puñetazo eléctrico que puede paralizar al adversario.",
-    "statusEffect": "paralysis",
-    "statusChance": 10
-  },
-  "thunder-shock": {
-    "id": "move_thunder_shock",
-    "name": "Impactrueno",
-    "type": "Eléctrico",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Ataque eléctrico que puede paralizar al objetivo.",
-    "statusEffect": "paralysis",
-    "statusChance": 10
-  },
-  "thunder-wave": {
-    "id": "move_thunder_wave",
-    "name": "Onda Trueno",
-    "type": "Eléctrico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 90,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Una ligera descarga que paraliza al objetivo si lo alcanza.",
-    "statusEffect": "paralysis",
-    "statusChance": 100
-  },
-  "thunderbolt": {
-    "id": "move_thunderbolt",
-    "name": "Rayo",
-    "type": "Eléctrico",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Potente ataque eléctrico que puede paralizar al objetivo.",
-    "statusEffect": "paralysis",
-    "statusChance": 10
-  },
-  "torch-song": {
-    "id": "move_torch_song",
-    "name": "Canto Ardiente",
-    "type": "Fuego",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Canto Ardiente",
-    "statChanges": [
-      {
-        "stat": "spAttack",
-        "stages": 1
-      }
-    ],
-    "statTarget": "target",
-    "statChance": 100
-  },
-  "torment": {
-    "id": "move_torment",
-    "name": "Tormento",
-    "type": "Siniestro",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Atormenta y enfurece al objetivo, que no puede usar dos veces seguidas el mismo movimiento."
-  },
-  "toxic": {
-    "id": "move_toxic",
-    "name": "Tóxico",
-    "type": "Veneno",
-    "category": "status",
-    "power": 0,
-    "accuracy": 90,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Envenena gravemente al objetivo y causa un daño mayor en cada turno.",
-    "statusEffect": "poison",
-    "statusChance": 100
-  },
-  "toxic-spikes": {
-    "id": "move_toxic_spikes",
-    "name": "Púas Tóxicas",
-    "type": "Veneno",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Lanza una trampa de púas tóxicas a los pies del objetivo. El veneno afecta a los Pokémon oponentes que entran en combate.",
-    "target": "all_enemies"
-  },
-  "tri-attack": {
-    "id": "move_tri_attack",
-    "name": "Triataque",
-    "type": "Normal",
-    "category": "special",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataque triple que puede paralizar, quemar o congelar al objetivo."
-  },
-  "twineedle": {
-    "id": "move_twineedle",
-    "name": "Doble Ataque",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 25,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
-    "statusEffect": "poison",
-    "statusChance": 20
-  },
-  "twister": {
-    "id": "move_twister",
-    "name": "Ciclón",
-    "type": "Dragón",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Crea un violento tornado para hacer trizas al objetivo. Puede amedrentarlo.",
-    "target": "all_enemies"
-  },
-  "u-turn": {
-    "id": "move_u_turn",
-    "name": "Ida y Vuelta",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Tras atacar, el usuario vuelve a toda prisa para dar paso a otro Pokémon del equipo."
-  },
-  "uproar": {
-    "id": "move_uproar",
-    "name": "Alboroto",
-    "type": "Normal",
-    "category": "special",
-    "power": 90,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Ataca de forma alborotada durante tres turnos. Mantiene despiertos a todos."
-  },
-  "venoshock": {
-    "id": "move_venoshock",
-    "name": "Carga Tóxica",
-    "type": "Veneno",
-    "category": "special",
-    "power": 65,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Cubre al objetivo con un líquido venenoso. El daño será doble si este ya está envenenado."
-  },
-  "vine-whip": {
-    "id": "move_vine_whip",
-    "name": "Látigo Cepa",
-    "type": "Planta",
-    "category": "physical",
-    "power": 45,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Azota al objetivo con ramas finas."
-  },
-  "vital-throw": {
-    "id": "move_vital_throw",
-    "name": "Llave Vital",
-    "type": "Lucha",
-    "category": "physical",
-    "power": 70,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "El usuario ataca el último, pero no falla."
-  },
-  "water-gun": {
-    "id": "move_water_gun",
-    "name": "Pistola Agua",
-    "type": "Agua",
-    "category": "special",
-    "power": 40,
-    "accuracy": 100,
-    "pp": 25,
-    "maxPp": 25,
-    "description": "Ataca disparando agua con gran potencia."
-  },
-  "water-pulse": {
-    "id": "move_water_pulse",
-    "name": "Hidropulso",
-    "type": "Agua",
-    "category": "special",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Ataca con un potente chorro de agua. Puede confundir al objetivo."
-  },
-  "water-shuriken": {
-    "id": "move_water_shuriken",
-    "name": "Shuriken de Agua",
-    "type": "Agua",
-    "category": "special",
-    "power": 15,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Golpea al oponente de dos a cinco veces con estrellas arrojadizas hechas de mucosidad. Este movimiento tiene prioridad alta."
-  },
-  "waterfall": {
-    "id": "move_waterfall",
-    "name": "Cascada",
-    "type": "Agua",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Embiste con un gran impulso que puede llegar a amedrentar."
-  },
-  "wave-crash": {
-    "id": "move_wave_crash",
-    "name": "Envite Acuático",
-    "type": "Agua",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Envite Acuático"
-  },
-  "whirlpool": {
-    "id": "move_whirlpool",
-    "name": "Torbellino",
-    "type": "Agua",
-    "category": "special",
-    "power": 35,
-    "accuracy": 85,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Una tromba de agua atrapa al objetivo durante cuatro o cinco turnos."
-  },
-  "whirlwind": {
-    "id": "move_whirlwind",
-    "name": "Remolino",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Se lleva al objetivo, que es cambiado por otro Pokémon. Si es un Pokémon salvaje, acaba el combate."
-  },
-  "wide-guard": {
-    "id": "move_wide_guard",
-    "name": "Vasta Guardia",
-    "type": "Roca",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Bloquea los ataques de objetivo múltiple lanzados contra tu equipo durante un turno.",
-    "target": "self"
-  },
-  "will-o-wisp": {
-    "id": "move_will_o_wisp",
-    "name": "Fuego Fatuo",
-    "type": "Fuego",
-    "category": "status",
-    "power": 0,
-    "accuracy": 85,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Siniestra llama morada que produce quemaduras.",
-    "statusEffect": "burn",
-    "statusChance": 100
-  },
-  "wing-attack": {
-    "id": "move_wing_attack",
-    "name": "Ataque Ala",
-    "type": "Volador",
-    "category": "physical",
-    "power": 60,
-    "accuracy": 100,
-    "pp": 35,
-    "maxPp": 35,
-    "description": "Golpea al objetivo con unas grandes alas."
-  },
-  "withdraw": {
-    "id": "move_withdraw",
-    "name": "Refugio",
-    "type": "Agua",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 40,
-    "maxPp": 40,
-    "description": "El usuario se resguarda en su coraza, por lo que le sube la Defensa.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "defense",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "wonder-room": {
-    "id": "move_wonder_room",
-    "name": "Zona Extraña",
-    "type": "Psíquico",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Crea una zona misteriosa donde se intercambian la Defensa y la Defensa Especial de todos los Pokémon durante cinco turnos."
-  },
-  "wood-hammer": {
-    "id": "move_wood_hammer",
-    "name": "Mazazo",
-    "type": "Planta",
-    "category": "physical",
-    "power": 120,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Arremete contra el objetivo con su robusto cuerpo. El agresor también sufre bastante daño."
-  },
-  "work-up": {
-    "id": "move_work_up",
-    "name": "Avivar",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 30,
-    "maxPp": 30,
-    "description": "Quien lo usa se concentra y potencia su Ataque y su Ataque Especial.",
-    "target": "self",
-    "statChanges": [
-      {
-        "stat": "attack",
-        "stages": 1
-      },
-      {
-        "stat": "spAttack",
-        "stages": 1
-      }
-    ],
-    "statTarget": "self",
-    "statChance": 100
-  },
-  "worry-seed": {
-    "id": "move_worry_seed",
-    "name": "Abatidoras",
-    "type": "Planta",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Planta una semilla en el objetivo que le causa pesar. Sustituye la habilidad del objetivo por Insomnio y le impide dormirse."
-  },
-  "wrap": {
-    "id": "move_wrap",
-    "name": "Constricción",
-    "type": "Normal",
-    "category": "physical",
-    "power": 15,
-    "accuracy": 90,
-    "pp": 20,
-    "maxPp": 20,
-    "description": "Oprime al objetivo de cuatro a cinco turnos con ramas o con su cuerpo."
-  },
-  "x-scissor": {
-    "id": "move_x_scissor",
-    "name": "Tijera X",
-    "type": "Bicho",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 100,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Cruza las guadañas o las garras para atacar al objetivo como si fueran unas tijeras."
-  },
-  "yawn": {
-    "id": "move_yawn",
-    "name": "Bostezo",
-    "type": "Normal",
-    "category": "status",
-    "power": 0,
-    "accuracy": 100,
-    "pp": 10,
-    "maxPp": 10,
-    "description": "Gran bostezo que induce al sueño al objetivo en el siguiente turno."
-  },
-  "zap-cannon": {
-    "id": "move_zap_cannon",
-    "name": "Electrocañón",
-    "type": "Eléctrico",
-    "category": "special",
-    "power": 120,
-    "accuracy": 50,
-    "pp": 5,
-    "maxPp": 5,
-    "description": "Dispara una descarga eléctrica que causa daño y parálisis.",
-    "statusEffect": "paralysis",
-    "statusChance": 100
-  },
-  "zen-headbutt": {
-    "id": "move_zen_headbutt",
-    "name": "Cabezazo Zen",
-    "type": "Psíquico",
-    "category": "physical",
-    "power": 80,
-    "accuracy": 90,
-    "pp": 15,
-    "maxPp": 15,
-    "description": "Concentra su energía psíquica en la cabeza para golpear. Puede hacer que el objetivo se amedrente."
-  }
+  "absorb": {"id":"move_absorb","name":"Absorber","type":"Planta","category":"special","power":20,"accuracy":100,"pp":25,"maxPp":25,"description":"Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."},
+  "accelerock": {"id":"move_accelerock","name":"Roca Veloz","type":"Roca","category":"physical","power":40,"accuracy":100,"pp":20,"maxPp":20,"description":"El usuario se lanza contra el objetivo a gran velocidad. Este movimiento tiene prioridad alta."},
+  "acid": {"id":"move_acid","name":"Ácido","type":"Veneno","category":"special","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"Rocía a los enemigos con un ácido corrosivo. Puede bajar la Defensa Especial.","target":"all_enemies","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":10},
+  "acid-armor": {"id":"move_acid_armor","name":"Armadura Ácida","type":"Veneno","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Transforma la estructura celular para hacerse líquido y aumenta mucho la Defensa.","target":"self","statChanges":[{"stat":"defense","stages":2}],"statTarget":"self","statChance":100},
+  "acid-spray": {"id":"move_acid_spray","name":"Bomba Ácida","type":"Veneno","category":"special","power":40,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca con un líquido corrosivo que reduce mucho la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-2}],"statTarget":"target","statChance":100},
+  "acrobatics": {"id":"move_acrobatics","name":"Acróbata","type":"Volador","category":"physical","power":55,"accuracy":100,"pp":15,"maxPp":15,"description":"Golpea ágilmente. Si el usuario no porta ningún objeto, el objetivo resulta seriamente dañado."},
+  "acupressure": {"id":"move_acupressure","name":"Acupresión","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Aplica presión en puntos clave del cuerpo para potenciar mucho una de sus características.","target":"self"},
+  "aerial-ace": {"id":"move_aerial_ace","name":"Golpe Aéreo","type":"Volador","category":"physical","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"El usuario lanza un ataque muy rápido e ineludible."},
+  "aeroblast": {"id":"move_aeroblast","name":"Aerochorro","type":"Volador","category":"special","power":100,"accuracy":95,"pp":5,"maxPp":5,"description":"Lanza un chorro de aire que suele asestar un golpe crítico."},
+  "after-you": {"id":"move_after_you","name":"Cede Paso","type":"Normal","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Si el usuario es el más rápido, permite al objetivo usar un movimiento justo tras él, adelantándose a Pokémon más rápidos."},
+  "agility": {"id":"move_agility","name":"Agilidad","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Relaja el cuerpo para ganar mucha Velocidad.","target":"self","statChanges":[{"stat":"speed","stages":2}],"statTarget":"self","statChance":100},
+  "air-cutter": {"id":"move_air_cutter","name":"Aire Afilado","type":"Volador","category":"special","power":60,"accuracy":95,"pp":25,"maxPp":25,"description":"Viento cortante que azota. Suele ser un golpe crítico.","target":"all_enemies"},
+  "air-slash": {"id":"move_air_slash","name":"Tajo Aéreo","type":"Volador","category":"special","power":75,"accuracy":95,"pp":15,"maxPp":15,"description":"Ataca con un viento afilado que incluso corta el aire. También puede amedrentar al objetivo."},
+  "ally-switch": {"id":"move_ally_switch","name":"Cambio de Banda","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Extraño poder que intercambia la posición del usuario con la de un aliado sobre el terreno de combate.","target":"self"},
+  "amnesia": {"id":"move_amnesia","name":"Amnesia","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"El usuario olvida sus preocupaciones y aumenta mucho la Defensa Especial.","target":"self","statChanges":[{"stat":"spDefense","stages":2}],"statTarget":"self","statChance":100},
+  "anchor-shot": {"id":"move_anchor_shot","name":"Anclaje","type":"Acero","category":"physical","power":80,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca lanzando un ancla al oponente, que queda atrapado y no puede huir."},
+  "ancient-power": {"id":"move_ancient_power","name":"Poder Pasado","type":"Roca","category":"special","power":60,"accuracy":100,"pp":5,"maxPp":5,"description":"Ataque prehistórico que puede subir todas las características.","statChanges":[{"stat":"attack","stages":1},{"stat":"defense","stages":1},{"stat":"spAttack","stages":1},{"stat":"spDefense","stages":1},{"stat":"speed","stages":1}],"statTarget":"target","statChance":10},
+  "apple-acid": {"id":"move_apple_acid","name":"Ácido Málico","type":"Planta","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca al objetivo con el fluido corrosivo que desprende una manzana ácida, lo que también disminuye la Defensa Especial de este.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":100},
+  "aqua-cutter": {"id":"move_aqua_cutter","name":"Tajo Acuático","type":"Agua","category":"physical","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Tajo Acuático"},
+  "aqua-jet": {"id":"move_aqua_jet","name":"Acua Jet","type":"Agua","category":"physical","power":40,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataque de una rapidez espeluznante. Este movimiento tiene prioridad alta."},
+  "aqua-ring": {"id":"move_aqua_ring","name":"Acua Aro","type":"Agua","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Un manto de agua cubre al Pokémon que lo usa. Recupera algunos PS en cada turno.","target":"self"},
+  "aqua-step": {"id":"move_aqua_step","name":"Danza Acuática","type":"Agua","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Danza Acuática","statChanges":[{"stat":"speed","stages":1}],"statTarget":"target","statChance":100},
+  "aqua-tail": {"id":"move_aqua_tail","name":"Acua Cola","type":"Agua","category":"physical","power":90,"accuracy":90,"pp":10,"maxPp":10,"description":"Ataca agitando la cola como si fuera una ola rabiosa en una tormenta devastadora."},
+  "arm-thrust": {"id":"move_arm_thrust","name":"Empujón","type":"Lucha","category":"physical","power":15,"accuracy":100,"pp":20,"maxPp":20,"description":"Fuertes empujones que golpean de dos a cinco veces seguidas."},
+  "armor-cannon": {"id":"move_armor_cannon","name":"Cañón Armadura","type":"Fuego","category":"special","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Cañón Armadura","statChanges":[{"stat":"defense","stages":-1},{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":100},
+  "aromatherapy": {"id":"move_aromatherapy","name":"Aromaterapia","type":"Planta","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Cura todos los problemas de estado del equipo con un suave aroma.","target":"self"},
+  "aromatic-mist": {"id":"move_aromatic_mist","name":"Niebla Aromática","type":"Hada","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Consigue aumentar la Defensa Especial de un Pokémon de su equipo con una fragancia misteriosa.","target":"self","statChanges":[{"stat":"spDefense","stages":1}],"statTarget":"self","statChance":100},
+  "assist": {"id":"move_assist","name":"Ayuda","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","target":"self"},
+  "assurance": {"id":"move_assurance","name":"Buena Baza","type":"Siniestro","category":"physical","power":60,"accuracy":100,"pp":10,"maxPp":10,"description":"Si el objetivo ya ha sufrido daño en ese turno, la fuerza del ataque se duplica."},
+  "astonish": {"id":"move_astonish","name":"Impresionar","type":"Fantasma","category":"physical","power":30,"accuracy":100,"pp":15,"maxPp":15,"description":"Lanza un grito tan tremendo que impresiona y puede amedrentar al objetivo."},
+  "attack-order": {"id":"move_attack_order","name":"Al Ataque","type":"Bicho","category":"physical","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario llama a sus súbditos para que ataquen al objetivo. Suele ser crítico."},
+  "attract": {"id":"move_attract","name":"Atracción","type":"Normal","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Si el objetivo es del sexo opuesto, se enamorará y bajará la posibilidad de que ataque."},
+  "aura-sphere": {"id":"move_aura_sphere","name":"Esfera Aural","type":"Lucha","category":"special","power":80,"accuracy":100,"pp":20,"maxPp":20,"description":"Libera, desde su interior, una inmensa descarga de aura. Es infalible."},
+  "aura-wheel": {"id":"move_aura_wheel","name":"Rueda Aural","type":"Eléctrico","category":"physical","power":110,"accuracy":100,"pp":10,"maxPp":10,"description":"La energía que acumula en las mejillas le sirve para atacar y aumentar su Velocidad. Este movimiento cambia de tipo según la forma que adopte Morpeko.","statChanges":[{"stat":"speed","stages":1}],"statTarget":"target","statChance":100},
+  "aurora-beam": {"id":"move_aurora_beam","name":"Rayo Aurora","type":"Hielo","category":"special","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Rayo multicolor que puede reducir el Ataque.","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":10},
+  "aurora-veil": {"id":"move_aurora_veil","name":"Velo Aurora","type":"Hielo","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Reduce el daño de los ataques físicos y especiales que ejecuta el rival durante cinco turnos. Solo puede usarse cuando está granizando.","target":"self"},
+  "autotomize": {"id":"move_autotomize","name":"Aligerar","type":"Acero","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario se desprende de partes prescindibles de su cuerpo para hacerse más ligero y aumentar mucho su Velocidad.","target":"self","statChanges":[{"stat":"speed","stages":2}],"statTarget":"self","statChance":100},
+  "avalanche": {"id":"move_avalanche","name":"Alud","type":"Hielo","category":"physical","power":60,"accuracy":100,"pp":10,"maxPp":10,"description":"Este ataque inflige el doble de daño a un objetivo que haya golpeado al usuario en ese mismo turno."},
+  "axe-kick": {"id":"move_axe_kick","name":"Patada Hacha","type":"Lucha","category":"physical","power":120,"accuracy":90,"pp":10,"maxPp":10,"description":"Patada Hacha"},
+  "baby-doll-eyes": {"id":"move_baby_doll_eyes","name":"Ojitos Tiernos","type":"Hada","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Lanza una mirada al objetivo con ojos acaramelados, con lo que logra que su Ataque se reduzca. Este movimiento tiene prioridad alta.","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":100},
+  "baneful-bunker": {"id":"move_baneful_bunker","name":"Búnker","type":"Veneno","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Protege de los ataques y, al mismo tiempo, envenena al Pokémon que use un movimiento de contacto contra el usuario.","target":"self"},
+  "barb-barrage": {"id":"move_barb_barrage","name":"Mil Púas Tóxicas","type":"Veneno","category":"physical","power":60,"accuracy":100,"pp":10,"maxPp":10,"description":"Mil Púas Tóxicas"},
+  "baton-pass": {"id":"move_baton_pass","name":"Relevo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"Cambia el puesto con otro miembro del equipo y le pasa los cambios de características.","target":"self"},
+  "beak-blast": {"id":"move_beak_blast","name":"Pico Cañón","type":"Volador","category":"physical","power":100,"accuracy":100,"pp":15,"maxPp":15,"description":"Primero aumenta la temperatura de su pico y luego ejecuta un ataque. Quema al rival si este le propina un ataque físico mientras está calentando el pico."},
+  "beat-up": {"id":"move_beat_up","name":"Paliza","type":"Siniestro","category":"physical","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataque de todo el equipo Pokémon. Cuantos más haya, más veces se atacará."},
+  "belch": {"id":"move_belch","name":"Eructo","type":"Veneno","category":"special","power":120,"accuracy":90,"pp":10,"maxPp":10,"description":"El Pokémon causa daño a su oponente lanzándole un eructo. Para poder utilizar este movimiento tiene que llevar una baya y comérsela."},
+  "belly-drum": {"id":"move_belly_drum","name":"Tambor","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Reduce la mitad de los PS máximos para mejorar al máximo el Ataque.","target":"self"},
+  "bide": {"id":"move_bide","name":"Venganza","type":"Normal","category":"physical","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","target":"self"},
+  "bind": {"id":"move_bind","name":"Atadura","type":"Normal","category":"physical","power":15,"accuracy":85,"pp":20,"maxPp":20,"description":"Ata y oprime de cuatro a cinco turnos."},
+  "bite": {"id":"move_bite","name":"Mordisco","type":"Siniestro","category":"physical","power":60,"accuracy":100,"pp":25,"maxPp":25,"description":"Un voraz bocado que puede amedrentar al objetivo."},
+  "bitter-blade": {"id":"move_bitter_blade","name":"Espada Lamento","type":"Fuego","category":"physical","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Espada Lamento"},
+  "blaze-kick": {"id":"move_blaze_kick","name":"Patada Ígnea","type":"Fuego","category":"physical","power":85,"accuracy":90,"pp":10,"maxPp":10,"description":"Patada que suele ser un golpe crítico y puede causar quemaduras.","statusEffect":"burn","statusChance":10},
+  "bleakwind-storm": {"id":"move_bleakwind_storm","name":"Vendaval Gélido","type":"Volador","category":"special","power":100,"accuracy":80,"pp":10,"maxPp":10,"description":"Vendaval Gélido","target":"all_enemies"},
+  "blizzard": {"id":"move_blizzard","name":"Ventisca","type":"Hielo","category":"special","power":110,"accuracy":70,"pp":5,"maxPp":5,"description":"Tormenta de hielo que puede llegar a congelar.","statusEffect":"freeze","statusChance":10,"target":"all_enemies"},
+  "block": {"id":"move_block","name":"Bloqueo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Le corta el paso al objetivo para que no pueda escapar."},
+  "blue-flare": {"id":"move_blue_flare","name":"Llama Azul","type":"Fuego","category":"special","power":130,"accuracy":85,"pp":5,"maxPp":5,"description":"Ataca con una bella pero potente llama azul que rodea al objetivo. Puede quemarlo.","statusEffect":"burn","statusChance":20},
+  "body-press": {"id":"move_body_press","name":"Plancha Corporal","type":"Lucha","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario usa el cuerpo para lanzar su ataque e infligir un daño directamente proporcional a su Defensa."},
+  "body-slam": {"id":"move_body_slam","name":"Golpe Cuerpo","type":"Normal","category":"physical","power":85,"accuracy":100,"pp":15,"maxPp":15,"description":"Salta sobre el objetivo con todo su peso y puede llegar a paralizarlo.","statusEffect":"paralysis","statusChance":30},
+  "bolt-beak": {"id":"move_bolt_beak","name":"Electropico","type":"Eléctrico","category":"physical","power":85,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ensarta al objetivo con su pico cargado de electricidad. Si ataca en primer lugar, la potencia del movimiento se duplica."},
+  "bolt-strike": {"id":"move_bolt_strike","name":"Ataque Fulgor","type":"Eléctrico","category":"physical","power":130,"accuracy":85,"pp":5,"maxPp":5,"description":"Ataca envolviéndose de una gran carga eléctrica y embistiendo al objetivo con ella. Puede paralizar.","statusEffect":"paralysis","statusChance":20},
+  "bone-rush": {"id":"move_bone_rush","name":"Ataque Óseo","type":"Tierra","category":"physical","power":25,"accuracy":90,"pp":10,"maxPp":10,"description":"Hueso en ristre, aporrea al objetivo de dos a cinco veces."},
+  "bonemerang": {"id":"move_bonemerang","name":"Huesomerang","type":"Tierra","category":"physical","power":50,"accuracy":90,"pp":10,"maxPp":10,"description":"Lanza un hueso a modo de bumerán que golpea dos veces."},
+  "boomburst": {"id":"move_boomburst","name":"Estruendo","type":"Normal","category":"special","power":140,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca a todos los Pokémon a su alrededor con una potentísima onda sonora.","target":"all_enemies"},
+  "bounce": {"id":"move_bounce","name":"Bote","type":"Volador","category":"physical","power":85,"accuracy":85,"pp":5,"maxPp":5,"description":"El usuario bota en el primer turno y golpea al objetivo en el segundo y puede llegar a paralizarlo.","statusEffect":"paralysis","statusChance":30},
+  "branch-poke": {"id":"move_branch_poke","name":"Punzada Rama","type":"Planta","category":"physical","power":40,"accuracy":100,"pp":40,"maxPp":40,"description":"Ataca pinchando al objetivo con una rama afilada."},
+  "brave-bird": {"id":"move_brave_bird","name":"Pájaro Osado","type":"Volador","category":"physical","power":120,"accuracy":100,"pp":15,"maxPp":15,"description":"Pliega sus alas y ataca con un vuelo rasante. El Pokémon que lo usa también resulta seriamente dañado."},
+  "breaking-swipe": {"id":"move_breaking_swipe","name":"Vasto Impacto","type":"Dragón","category":"physical","power":60,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario sacude violentamente su enorme cola para golpear a todos los rivales y reducir su Ataque a la par.","target":"all_enemies","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":100},
+  "brick-break": {"id":"move_brick_break","name":"Demolición","type":"Lucha","category":"physical","power":75,"accuracy":100,"pp":15,"maxPp":15,"description":"Potente ataque que también es capaz de destruir barreras como Pantalla de Luz y Reflejo."},
+  "brine": {"id":"move_brine","name":"Salmuera","type":"Agua","category":"special","power":65,"accuracy":100,"pp":10,"maxPp":10,"description":"Si al objetivo le queda la mitad o menos de sus PS, el ataque será el doble de fuerte."},
+  "brutal-swing": {"id":"move_brutal_swing","name":"Giro Vil","type":"Siniestro","category":"physical","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Hace pivotar su cuerpo para causar daño a su alrededor.","target":"all_enemies"},
+  "bubble-beam": {"id":"move_bubble_beam","name":"Rayo Burbuja","type":"Agua","category":"special","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Diluvio de burbujas que puede bajar la Velocidad.","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":10},
+  "bug-bite": {"id":"move_bug_bite","name":"Picadura","type":"Bicho","category":"physical","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Pica al objetivo. Si el objetivo lleva una baya, el usuario se la come y se beneficia de su efecto."},
+  "bug-buzz": {"id":"move_bug_buzz","name":"Zumbido","type":"Bicho","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario crea una onda sónica dañina moviendo su cuerpo que también puede disminuir la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":10},
+  "bulk-up": {"id":"move_bulk_up","name":"Corpulencia","type":"Lucha","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Robustece el cuerpo para subir el Ataque y la Defensa.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"defense","stages":1}],"statTarget":"self","statChance":100},
+  "bulldoze": {"id":"move_bulldoze","name":"Terratemblor","type":"Tierra","category":"physical","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Sacudida sísmica que afecta a los demás Pokémon adyacentes y también reduce su Velocidad.","target":"all_enemies","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "bullet-punch": {"id":"move_bullet_punch","name":"Puño Bala","type":"Acero","category":"physical","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"Ataca con fuertes puñetazos tan rápidos como proyectiles. Este movimiento tiene prioridad alta."},
+  "bullet-seed": {"id":"move_bullet_seed","name":"Semilladora","type":"Planta","category":"physical","power":25,"accuracy":100,"pp":30,"maxPp":30,"description":"Dispara rápido de dos a cinco ráfagas de semillas de manera consecutiva."},
+  "burn-up": {"id":"move_burn_up","name":"Llama Final","type":"Fuego","category":"special","power":130,"accuracy":100,"pp":5,"maxPp":5,"description":"Utiliza hasta el último resquicio de llamas de su cuerpo para infligir un grave daño al oponente. Tras el ataque, el usuario deja de ser de tipo Fuego."},
+  "burning-bulwark": {"id":"move_burning_bulwark","name":"Llama Protectora","type":"Fuego","category":"status","power":0,"accuracy":0,"pp":10,"maxPp":10,"description":"Llama Protectora","target":"self"},
+  "calm-mind": {"id":"move_calm_mind","name":"Paz Mental","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Aumenta la concentración y calma el espíritu para subir el Ataque Especial y la Defensa Especial.","target":"self","statChanges":[{"stat":"spAttack","stages":1},{"stat":"spDefense","stages":1}],"statTarget":"self","statChance":100},
+  "camouflage": {"id":"move_camouflage","name":"Camuflaje","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","target":"self"},
+  "captivate": {"id":"move_captivate","name":"Seducción","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","target":"all_enemies","statChanges":[{"stat":"spAttack","stages":-2}],"statTarget":"target","statChance":100},
+  "charge": {"id":"move_charge","name":"Carga","type":"Eléctrico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Recarga energía para potenciar el siguiente movimiento de tipo Eléctrico. También sube la Defensa Especial.","target":"self","statChanges":[{"stat":"spDefense","stages":1}],"statTarget":"self","statChance":100},
+  "charge-beam": {"id":"move_charge_beam","name":"Rayo Carga","type":"Eléctrico","category":"special","power":50,"accuracy":90,"pp":10,"maxPp":10,"description":"Lanza un rayo eléctrico contra el objetivo. Puede subir el Ataque Especial de quien lo usa.","statChanges":[{"stat":"spAttack","stages":1}],"statTarget":"target","statChance":70},
+  "charm": {"id":"move_charm","name":"Encanto","type":"Hada","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Engatusa al objetivo y reduce mucho su Ataque.","statChanges":[{"stat":"attack","stages":-2}],"statTarget":"target","statChance":100},
+  "chatter": {"id":"move_chatter","name":"Cháchara","type":"Volador","category":"special","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca con una onda de sonido muy ruidosa compuesta por palabras y confunde al objetivo."},
+  "circle-throw": {"id":"move_circle_throw","name":"Llave Giro","type":"Lucha","category":"physical","power":60,"accuracy":90,"pp":10,"maxPp":10,"description":"Lanza por los aires al objetivo y hace que salga otro Pokémon. Si es uno salvaje, acaba el combate."},
+  "clamp": {"id":"move_clamp","name":"Tenaza","type":"Agua","category":"physical","power":35,"accuracy":85,"pp":15,"maxPp":15,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "clanging-scales": {"id":"move_clanging_scales","name":"Fragor Escamas","type":"Dragón","category":"special","power":110,"accuracy":100,"pp":5,"maxPp":5,"description":"Frota todas las escamas de su cuerpo para crear un fuerte sonido con el que ataca. Cuando el ataque termina, su Defensa se ve reducida.","target":"all_enemies","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":100},
+  "clangorous-soul": {"id":"move_clangorous_soul","name":"Estruendo Escama","type":"Dragón","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Utiliza parte de los PS propios para subir sus características.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"defense","stages":1},{"stat":"spAttack","stages":1},{"stat":"spDefense","stages":1},{"stat":"speed","stages":1}],"statTarget":"self","statChance":100},
+  "clear-smog": {"id":"move_clear_smog","name":"Niebla Clara","type":"Veneno","category":"special","power":50,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca al objetivo con una singular bola de lodo que elimina cualquier cambio en sus características."},
+  "close-combat": {"id":"move_close_combat","name":"A Bocajarro","type":"Lucha","category":"physical","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Lucha abiertamente contra el objetivo sin protegerse. También reduce la Defensa y la Defensa Especial del usuario.","statChanges":[{"stat":"defense","stages":-1},{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":100},
+  "coil": {"id":"move_coil","name":"Enrosque","type":"Veneno","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"El usuario se concentra, lo que le permite aumentar su Ataque, Defensa y Precisión.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"defense","stages":1},{"stat":"accuracy","stages":1}],"statTarget":"self","statChance":100},
+  "collision-course": {"id":"move_collision_course","name":"Nitrochoque","type":"Lucha","category":"physical","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Nitrochoque"},
+  "comet-punch": {"id":"move_comet_punch","name":"Puño Cometa","type":"Normal","category":"physical","power":18,"accuracy":85,"pp":15,"maxPp":15,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "comeuppance": {"id":"move_comeuppance","name":"Resarcimiento","type":"Siniestro","category":"physical","power":1,"accuracy":100,"pp":10,"maxPp":10,"description":"Resarcimiento"},
+  "confide": {"id":"move_confide","name":"Confidencia","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Hace que el objetivo pierda la concentración contándole un secreto. Disminuye el Ataque Especial del oponente.","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "confuse-ray": {"id":"move_confuse_ray","name":"Rayo Confuso","type":"Fantasma","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Rayo siniestro que confunde al objetivo."},
+  "confusion": {"id":"move_confusion","name":"Confusión","type":"Psíquico","category":"special","power":50,"accuracy":100,"pp":25,"maxPp":25,"description":"Débil ataque telequinético que puede causar confusión."},
+  "conversion": {"id":"move_conversion","name":"Conversión","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Cambia el tipo del usuario por el del primero de sus movimientos.","target":"self"},
+  "conversion-2": {"id":"move_conversion_2","name":"Conversión 2","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"El usuario cambia de tipo para hacerse resistente al último tipo de movimiento usado por el objetivo."},
+  "copycat": {"id":"move_copycat","name":"Copión","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Imita el movimiento usado justo antes. El movimiento falla si no se ha usado aún ninguno.","target":"self"},
+  "core-enforcer": {"id":"move_core_enforcer","name":"Núcleo Castigo","type":"Dragón","category":"special","power":100,"accuracy":100,"pp":10,"maxPp":10,"description":"Inflige daño al rival, y si este ya ha hecho uso de algún movimiento, pierde su habilidad.","target":"all_enemies"},
+  "cosmic-power": {"id":"move_cosmic_power","name":"Masa Cósmica","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Sube la Defensa y la Defensa Especial propias con energía mística.","target":"self","statChanges":[{"stat":"defense","stages":1},{"stat":"spDefense","stages":1}],"statTarget":"self","statChance":100},
+  "cotton-guard": {"id":"move_cotton_guard","name":"Rizo Algodón","type":"Planta","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Cubre al Pokémon con una madeja protectora. Aumenta muchísimo la Defensa.","target":"self","statChanges":[{"stat":"defense","stages":3}],"statTarget":"self","statChance":100},
+  "cotton-spore": {"id":"move_cotton_spore","name":"Esporagodón","type":"Planta","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"Adhiere esporas a los rivales para reducir mucho su Velocidad.","target":"all_enemies","statChanges":[{"stat":"speed","stages":-2}],"statTarget":"target","statChance":100},
+  "counter": {"id":"move_counter","name":"Contraataque","type":"Lucha","category":"physical","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Devuelve un golpe físico por duplicado."},
+  "court-change": {"id":"move_court_change","name":"Cambio de Cancha","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Extraño poder que intercambia los efectos en el terreno de combate de ambos bandos."},
+  "covet": {"id":"move_covet","name":"Antojo","type":"Normal","category":"physical","power":60,"accuracy":100,"pp":25,"maxPp":25,"description":"Se acerca con ternura al objetivo, pero le ataca y le roba el objeto que lleve."},
+  "crabhammer": {"id":"move_crabhammer","name":"Martillazo","type":"Agua","category":"physical","power":100,"accuracy":90,"pp":10,"maxPp":10,"description":"Golpea con fuerza con una pinza enorme. Suele asestar un golpe crítico."},
+  "crafty-shield": {"id":"move_crafty_shield","name":"Truco Defensa","type":"Hada","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Usa unos misteriosos poderes para protegerse a sí mismo y a sus aliados de movimientos de estado, pero no de otro tipo de ataques.","target":"self"},
+  "cross-chop": {"id":"move_cross_chop","name":"Tajo Cruzado","type":"Lucha","category":"physical","power":100,"accuracy":80,"pp":5,"maxPp":5,"description":"Corte doble que suele propinar un golpe crítico."},
+  "cross-poison": {"id":"move_cross_poison","name":"Veneno X","type":"Veneno","category":"physical","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Tajo que puede envenenar al objetivo. Suele ser crítico.","statusEffect":"poison","statusChance":10},
+  "crunch": {"id":"move_crunch","name":"Triturar","type":"Siniestro","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Tritura con afilados colmillos y puede bajar la Defensa del objetivo.","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":20},
+  "crush-claw": {"id":"move_crush_claw","name":"Garra Brutal","type":"Normal","category":"physical","power":75,"accuracy":95,"pp":10,"maxPp":10,"description":"Hace trizas al objetivo con garras afiladas y puede bajar su Defensa.","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":50},
+  "crush-grip": {"id":"move_crush_grip","name":"Agarrón","type":"Normal","category":"physical","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Estruja al objetivo con gran fuerza. Cuantos más PS le queden al objetivo, más fuerte será el ataque."},
+  "curse": {"id":"move_curse","name":"Maldición","type":"Fantasma","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Un movimiento que tiene efectos distintos si el usuario es de tipo Fantasma o no."},
+  "cut": {"id":"move_cut","name":"Corte","type":"Normal","category":"physical","power":50,"accuracy":95,"pp":30,"maxPp":30,"description":"Corta al adversario con garras, guadañas, etc."},
+  "dark-pulse": {"id":"move_dark_pulse","name":"Pulso Umbrío","type":"Siniestro","category":"special","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Libera una horrible aura llena de malos pensamientos que puede amedrentar al objetivo."},
+  "dark-void": {"id":"move_dark_void","name":"Brecha Negra","type":"Siniestro","category":"status","power":0,"accuracy":50,"pp":10,"maxPp":10,"description":"El objetivo es enviado a un mundo de tinieblas que lo hace dormir.","statusEffect":"sleep","statusChance":100,"target":"all_enemies"},
+  "darkest-lariat": {"id":"move_darkest_lariat","name":"Lariat Oscuro","type":"Siniestro","category":"physical","power":85,"accuracy":100,"pp":10,"maxPp":10,"description":"Gira sobre sí mismo y golpea al oponente con ambos brazos. Ignora los cambios en las características del objetivo."},
+  "dazzling-gleam": {"id":"move_dazzling_gleam","name":"Brillo Mágico","type":"Hada","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Inflige daño a los oponentes con una potente luz.","target":"all_enemies"},
+  "decorate": {"id":"move_decorate","name":"Decoración","type":"Hada","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Aumenta mucho el Ataque y el Ataque Especial del objetivo al decorarlo.","statChanges":[{"stat":"attack","stages":2},{"stat":"spAttack","stages":2}],"statTarget":"target","statChance":100},
+  "defend-order": {"id":"move_defend_order","name":"A Defender","type":"Bicho","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario llama a sus súbditos para que formen un escudo viviente. Sube la Defensa y la Defensa Especial.","target":"self","statChanges":[{"stat":"defense","stages":1},{"stat":"spDefense","stages":1}],"statTarget":"self","statChance":100},
+  "defense-curl": {"id":"move_defense_curl","name":"Rizo Defensa","type":"Normal","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"Se enrosca para ocultar sus puntos débiles y aumentar la Defensa.","target":"self","statChanges":[{"stat":"defense","stages":1}],"statTarget":"self","statChance":100},
+  "defog": {"id":"move_defog","name":"Despejar","type":"Volador","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Potente viento que barre el reflejo o la pantalla de luz creada por el objetivo. También puede reducir su Evasión.","statChanges":[{"stat":"evasion","stages":-1}],"statTarget":"target","statChance":100},
+  "destiny-bond": {"id":"move_destiny_bond","name":"Mismo Destino","type":"Fantasma","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Si el usuario se debilita por un ataque rival antes de usar otro movimiento, el Pokémon rival se debilitará también. Puede fallar si se usa repetidamente.","target":"self"},
+  "detect": {"id":"move_detect","name":"Detección","type":"Lucha","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Frena todos los ataques, pero puede fallar si se usa repetidamente.","target":"self"},
+  "diamond-storm": {"id":"move_diamond_storm","name":"Tormenta de Diamantes","type":"Roca","category":"physical","power":100,"accuracy":95,"pp":5,"maxPp":5,"description":"Desata un devastador vendaval de diamantes para dañar a los oponentes. Puede aumentar mucho la Defensa del usuario.","target":"all_enemies","statChanges":[{"stat":"defense","stages":2}],"statTarget":"target","statChance":50},
+  "dig": {"id":"move_dig","name":"Excavar","type":"Tierra","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario cava durante el primer turno y ataca en el segundo."},
+  "dire-claw": {"id":"move_dire_claw","name":"Garra Nociva","type":"Veneno","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Garra Nociva"},
+  "disable": {"id":"move_disable","name":"Anulación","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Desactiva el último movimiento del objetivo durante cuatro turnos."},
+  "disarming-voice": {"id":"move_disarming_voice","name":"Voz Cautivadora","type":"Hada","category":"special","power":40,"accuracy":100,"pp":15,"maxPp":15,"description":"Obnubila a los oponentes con su fascinante voz y les provoca daños emocionales. Siempre acierta al objetivo.","target":"all_enemies"},
+  "discharge": {"id":"move_discharge","name":"Chispazo","type":"Eléctrico","category":"special","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Una deslumbradora onda eléctrica afecta a los Pokémon que hay combatiendo alrededor. Puede paralizar.","statusEffect":"paralysis","statusChance":30,"target":"all_enemies"},
+  "dive": {"id":"move_dive","name":"Buceo","type":"Agua","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario se sumerge en el primer turno y ataca en el segundo."},
+  "dizzy-punch": {"id":"move_dizzy_punch","name":"Puño Mareo","type":"Normal","category":"physical","power":70,"accuracy":100,"pp":10,"maxPp":10,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "doodle": {"id":"move_doodle","name":"Decalcomanía","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Decalcomanía"},
+  "doom-desire": {"id":"move_doom_desire","name":"Deseo Oculto","type":"Acero","category":"special","power":140,"accuracy":100,"pp":5,"maxPp":5,"description":"Concentra un haz de luz y ataca dos turnos después."},
+  "double-edge": {"id":"move_double_edge","name":"Doble Filo","type":"Normal","category":"physical","power":120,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataque arriesgado que también hiere al agresor."},
+  "double-hit": {"id":"move_double_hit","name":"Doble Golpe","type":"Normal","category":"physical","power":35,"accuracy":90,"pp":10,"maxPp":10,"description":"Golpea al objetivo dos veces seguidas con la cola u otras partes de su cuerpo."},
+  "double-iron-bash": {"id":"move_double_iron_bash","name":"Ferropuño Doble","type":"Acero","category":"physical","power":60,"accuracy":100,"pp":5,"maxPp":5,"description":"Usando la tuerca del pecho como eje, gira sobre sí mismo y golpea con los brazos dos veces seguidas. Puede amedrentar al rival."},
+  "double-kick": {"id":"move_double_kick","name":"Doble Patada","type":"Lucha","category":"physical","power":30,"accuracy":100,"pp":30,"maxPp":30,"description":"Una patada doble. Golpea dos veces."},
+  "double-shock": {"id":"move_double_shock","name":"Electropalmas","type":"Eléctrico","category":"physical","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Electropalmas"},
+  "double-slap": {"id":"move_double_slap","name":"Doble Bofetón","type":"Normal","category":"physical","power":15,"accuracy":85,"pp":10,"maxPp":10,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "double-team": {"id":"move_double_team","name":"Doble Equipo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Crea copias de sí mismo para mejorar la Evasión.","target":"self","statChanges":[{"stat":"evasion","stages":1}],"statTarget":"self","statChance":100},
+  "dragon-ascent": {"id":"move_dragon_ascent","name":"Ascenso Draco","type":"Volador","category":"physical","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario se precipita desde el cielo a una velocidad de vértigo para atacar al objetivo, pero hace que bajen la Defensa y la Defensa Especial del usuario.","statChanges":[{"stat":"defense","stages":-1},{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":100},
+  "dragon-breath": {"id":"move_dragon_breath","name":"Dragoaliento","type":"Dragón","category":"special","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Poderosa ráfaga de aliento que golpea al objetivo y puede paralizarlo.","statusEffect":"paralysis","statusChance":30},
+  "dragon-claw": {"id":"move_dragon_claw","name":"Garra Dragón","type":"Dragón","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Araña al objetivo con garras afiladas."},
+  "dragon-dance": {"id":"move_dragon_dance","name":"Danza Dragón","type":"Dragón","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Danza mística que sube el Ataque y la Velocidad.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"speed","stages":1}],"statTarget":"self","statChance":100},
+  "dragon-darts": {"id":"move_dragon_darts","name":"Dracoflechas","type":"Dragón","category":"physical","power":50,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ataca propulsando a ambos Dreepy. En caso de haber dos adversarios, cada Dreepy golpea a su propio objetivo por separado."},
+  "dragon-energy": {"id":"move_dragon_energy","name":"Dracoenergía","type":"Dragón","category":"special","power":150,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario convierte su fuerza vital en una energía con la que ataca al objetivo. Cuantos menos PS tenga el usuario, menor será la potencia del movimiento.","target":"all_enemies"},
+  "dragon-hammer": {"id":"move_dragon_hammer","name":"Martillo Dragón","type":"Dragón","category":"physical","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"Usa el cuerpo como un martillo para abalanzarse sobre su rival y causarle daño."},
+  "dragon-pulse": {"id":"move_dragon_pulse","name":"Pulso Dragón","type":"Dragón","category":"special","power":85,"accuracy":100,"pp":10,"maxPp":10,"description":"Abre mucho la boca y libera una onda de choque que ataca al objetivo."},
+  "dragon-rush": {"id":"move_dragon_rush","name":"Carga Dragón","type":"Dragón","category":"physical","power":100,"accuracy":75,"pp":10,"maxPp":10,"description":"Ataca de forma brutal mientras intimida al objetivo. También puede amedrentarlo."},
+  "dragon-tail": {"id":"move_dragon_tail","name":"Cola Dragón","type":"Dragón","category":"physical","power":60,"accuracy":90,"pp":10,"maxPp":10,"description":"Ataca al objetivo y lo obliga a cambiarse por otro Pokémon. Si es uno salvaje, acaba el combate."},
+  "drain-punch": {"id":"move_drain_punch","name":"Puño Drenaje","type":"Lucha","category":"physical","power":75,"accuracy":100,"pp":10,"maxPp":10,"description":"Un golpe que drena energía. El Pokémon recupera la mitad de los PS arrebatados al objetivo."},
+  "draining-kiss": {"id":"move_draining_kiss","name":"Beso Drenaje","type":"Hada","category":"special","power":50,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario absorbe PS del objetivo con un beso y restaura su propia energía en una cantidad igual o superior a la mitad del daño infligido."},
+  "dream-eater": {"id":"move_dream_eater","name":"Comesueños","type":"Psíquico","category":"special","power":100,"accuracy":100,"pp":15,"maxPp":15,"description":"Restaura al usuario la mitad del daño causado a un objetivo dormido."},
+  "drill-peck": {"id":"move_drill_peck","name":"Pico Taladro","type":"Volador","category":"physical","power":80,"accuracy":100,"pp":20,"maxPp":20,"description":"Picotazo giratorio y perforador muy potente."},
+  "drill-run": {"id":"move_drill_run","name":"Taladradora","type":"Tierra","category":"physical","power":80,"accuracy":95,"pp":10,"maxPp":10,"description":"El usuario golpea usando su cuerpo como un taladro. Suele ser crítico."},
+  "drum-beating": {"id":"move_drum_beating","name":"Batería Asalto","type":"Planta","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario controla un tocón mediante la percusión y al atacar reduce la Velocidad del objetivo.","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "dual-chop": {"id":"move_dual_chop","name":"Golpe Bis","type":"Dragón","category":"physical","power":40,"accuracy":90,"pp":15,"maxPp":15,"description":"Golpea dos veces seguidas con las partes más recias de su cuerpo."},
+  "dual-wingbeat": {"id":"move_dual_wingbeat","name":"Ala Bis","type":"Volador","category":"physical","power":40,"accuracy":90,"pp":10,"maxPp":10,"description":"Ataca al adversario golpeándolo dos veces con las alas."},
+  "dynamax-cannon": {"id":"move_dynamax_cannon","name":"Cañón Dinamax","type":"Dragón","category":"special","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario ataca emitiendo un rayo desde su núcleo. El daño infligido se duplica si el objetivo ha alcanzado el estado Dinamax."},
+  "dynamic-punch": {"id":"move_dynamic_punch","name":"Puño Dinámico","type":"Lucha","category":"physical","power":100,"accuracy":50,"pp":5,"maxPp":5,"description":"Puñetazo con toda la fuerza concentrada. Causa confusión si atina."},
+  "earth-power": {"id":"move_earth_power","name":"Tierra Viva","type":"Tierra","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"La tierra a los pies del objetivo erupciona violentamente. Puede disminuir la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":10},
+  "earthquake": {"id":"move_earthquake","name":"Terremoto","type":"Tierra","category":"physical","power":100,"accuracy":100,"pp":10,"maxPp":10,"description":"Un terremoto que afecta a todos los Pokémon que estén a su alrededor.","target":"all_enemies"},
+  "echoed-voice": {"id":"move_echoed_voice","name":"Eco Voz","type":"Normal","category":"special","power":40,"accuracy":100,"pp":15,"maxPp":15,"description":"Un susurro que aumenta de potencia conforme el usuario y otros Pokémon lo van utilizando."},
+  "eerie-impulse": {"id":"move_eerie_impulse","name":"Onda Anómala","type":"Eléctrico","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario irradia unas raras ondas que, al alcanzar a un oponente, hacen que disminuya mucho su Ataque Especial.","statChanges":[{"stat":"spAttack","stages":-2}],"statTarget":"target","statChance":100},
+  "electric-terrain": {"id":"move_electric_terrain","name":"Campo Eléctrico","type":"Eléctrico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Durante cinco turnos, se potencian los movimientos de tipo Eléctrico y los Pokémon que están en contacto con el suelo no pueden quedarse dormidos."},
+  "electrify": {"id":"move_electrify","name":"Electrificación","type":"Eléctrico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Si el objetivo queda electrificado antes de usar un movimiento, este será de tipo Eléctrico."},
+  "electro-ball": {"id":"move_electro_ball","name":"Bola Voltio","type":"Eléctrico","category":"special","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Lanza una bola eléctrica. Cuanto mayor sea la Velocidad del usuario en comparación con la del objetivo, mayor será el daño causado."},
+  "electro-drift": {"id":"move_electro_drift","name":"Electroderrape","type":"Eléctrico","category":"special","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Electroderrape"},
+  "electro-shot": {"id":"move_electro_shot","name":"Electrorrayo","type":"Eléctrico","category":"special","power":130,"accuracy":100,"pp":10,"maxPp":10,"description":"Electrorrayo","statChanges":[{"stat":"spAttack","stages":1}],"statTarget":"target","statChance":100},
+  "electroweb": {"id":"move_electroweb","name":"Electrotela","type":"Eléctrico","category":"special","power":55,"accuracy":95,"pp":15,"maxPp":15,"description":"Atrapa y ataca a los objetivos con una telaraña eléctrica. También reduce su Velocidad.","target":"all_enemies","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "ember": {"id":"move_ember","name":"Ascuas","type":"Fuego","category":"special","power":40,"accuracy":100,"pp":25,"maxPp":25,"description":"Ataca con llamas pequeñas que pueden causar quemaduras.","statusEffect":"burn","statusChance":10},
+  "encore": {"id":"move_encore","name":"Otra Vez","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"El objetivo repite su último movimiento durante tres turnos."},
+  "endeavor": {"id":"move_endeavor","name":"Esfuerzo","type":"Normal","category":"physical","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Reduce los PS del objetivo para que igualen a los del atacante."},
+  "endure": {"id":"move_endure","name":"Aguante","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Resiste cualquier ataque y deja al menos 1 PS. Puede fallar si se usa repetidamente.","target":"self"},
+  "energy-ball": {"id":"move_energy_ball","name":"Energibola","type":"Planta","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Aúna fuerzas de la naturaleza y libera su ataque. Puede disminuir la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":10},
+  "entrainment": {"id":"move_entrainment","name":"Danza Amiga","type":"Normal","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Una extraña danza que hace que el usuario y el objetivo tengan la misma habilidad."},
+  "eruption": {"id":"move_eruption","name":"Estallido","type":"Fuego","category":"special","power":150,"accuracy":100,"pp":5,"maxPp":5,"description":"Furia explosiva. Cuanto menor sea el número de PS del usuario, menos daño hará el ataque.","target":"all_enemies"},
+  "expanding-force": {"id":"move_expanding_force","name":"Vasta Fuerza","type":"Psíquico","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ataca al objetivo con sus poderes psíquicos. Cuando se usa en conjunción con un campo psíquico, aumenta su potencia e inflige daño a todos los rivales."},
+  "explosion": {"id":"move_explosion","name":"Explosión","type":"Normal","category":"physical","power":250,"accuracy":100,"pp":5,"maxPp":5,"description":"El atacante causa una grandísima explosión y hiere a todos a su alrededor. El usuario se debilita de inmediato.","target":"all_enemies"},
+  "extrasensory": {"id":"move_extrasensory","name":"Paranormal","type":"Psíquico","category":"special","power":80,"accuracy":100,"pp":20,"maxPp":20,"description":"Emite una energía muy extraña que puede amedrentar al objetivo."},
+  "extreme-speed": {"id":"move_extreme_speed","name":"Velocidad Extrema","type":"Normal","category":"physical","power":80,"accuracy":100,"pp":5,"maxPp":5,"description":"Ataque de una velocidad extrema. Este movimiento tiene prioridad alta."},
+  "facade": {"id":"move_facade","name":"Fachada","type":"Normal","category":"physical","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Si el usuario está quemado, paralizado o envenenado, ataca con el doble de potencia."},
+  "fairy-lock": {"id":"move_fairy_lock","name":"Cerrojo Feérico","type":"Hada","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Consigue que ningún Pokémon pueda huir en el siguiente turno echando un cerrojo."},
+  "fairy-wind": {"id":"move_fairy_wind","name":"Viento Feérico","type":"Hada","category":"special","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"El Pokémon que lo usa desata un vendaval feérico que arremete contra el objetivo."},
+  "fake-out": {"id":"move_fake_out","name":"Sorpresa","type":"Normal","category":"physical","power":40,"accuracy":100,"pp":10,"maxPp":10,"description":"Amedrenta al objetivo con este movimiento de prioridad alta. Solo sirve en el primer turno."},
+  "fake-tears": {"id":"move_fake_tears","name":"Llanto Falso","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Lágrimas de cocodrilo que bajan mucho la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-2}],"statTarget":"target","statChance":100},
+  "false-surrender": {"id":"move_false_surrender","name":"Irreverencia","type":"Siniestro","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario finge hacer una reverencia y aprovecha la ocasión para ensartar al objetivo con su cabello alborotado. Siempre acierta."},
+  "false-swipe": {"id":"move_false_swipe","name":"Falso Tortazo","type":"Normal","category":"physical","power":40,"accuracy":100,"pp":40,"maxPp":40,"description":"Ataque moderado que no debilita al objetivo y le deja al menos 1 PS."},
+  "feather-dance": {"id":"move_feather_dance","name":"Danza Pluma","type":"Volador","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Envuelve al objetivo con un manto de plumas para reducir mucho su Ataque.","statChanges":[{"stat":"attack","stages":-2}],"statTarget":"target","statChance":100},
+  "feint": {"id":"move_feint","name":"Amago","type":"Normal","category":"physical","power":30,"accuracy":100,"pp":10,"maxPp":10,"description":"Permite golpear a objetivos que han utilizado movimientos como Protección o Detección y anula sus efectos."},
+  "feint-attack": {"id":"move_feint_attack","name":"Finta","type":"Siniestro","category":"physical","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "fell-stinger": {"id":"move_fell_stinger","name":"Aguijón Letal","type":"Bicho","category":"physical","power":50,"accuracy":100,"pp":25,"maxPp":25,"description":"Si se derrota al objetivo utilizando este movimiento, aumenta muchísimo el Ataque del usuario."},
+  "fickle-beam": {"id":"move_fickle_beam","name":"Láser Veleidoso","type":"Dragón","category":"special","power":80,"accuracy":100,"pp":5,"maxPp":5,"description":"Láser Veleidoso"},
+  "fiery-dance": {"id":"move_fiery_dance","name":"Danza Llama","type":"Fuego","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Envuelve en llamas y daña al objetivo. Puede aumentar el Ataque Especial de quien lo usa.","statChanges":[{"stat":"spAttack","stages":1}],"statTarget":"target","statChance":50},
+  "fillet-away": {"id":"move_fillet_away","name":"Deslome","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Deslome","target":"self","statChanges":[{"stat":"attack","stages":2},{"stat":"spAttack","stages":2},{"stat":"speed","stages":2}],"statTarget":"self","statChance":100},
+  "final-gambit": {"id":"move_final_gambit","name":"Sacrificio","type":"Lucha","category":"special","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario se sacrifica causándole un daño al objetivo equivalente a sus propios PS perdidos."},
+  "fire-blast": {"id":"move_fire_blast","name":"Llamarada","type":"Fuego","category":"special","power":110,"accuracy":85,"pp":5,"maxPp":5,"description":"Llama intensa que chamusca y puede causar quemaduras.","statusEffect":"burn","statusChance":10},
+  "fire-fang": {"id":"move_fire_fang","name":"Colmillo Ígneo","type":"Fuego","category":"physical","power":65,"accuracy":95,"pp":15,"maxPp":15,"description":"El usuario muerde al objetivo con colmillos en llamas y puede hacer que se amedrente o sufra quemaduras.","statusEffect":"burn","statusChance":10},
+  "fire-lash": {"id":"move_fire_lash","name":"Látigo Ígneo","type":"Fuego","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Golpea al oponente con un látigo incandescente y reduce su Defensa.","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":100},
+  "fire-punch": {"id":"move_fire_punch","name":"Puño Fuego","type":"Fuego","category":"physical","power":75,"accuracy":100,"pp":15,"maxPp":15,"description":"Puñetazo ardiente que puede causar quemaduras.","statusEffect":"burn","statusChance":10},
+  "fire-spin": {"id":"move_fire_spin","name":"Giro Fuego","type":"Fuego","category":"special","power":35,"accuracy":85,"pp":15,"maxPp":15,"description":"Un aro de fuego que atrapa al objetivo de cuatro a cinco turnos."},
+  "first-impression": {"id":"move_first_impression","name":"Escaramuza","type":"Bicho","category":"physical","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Movimiento de gran potencia que solo puede usarse en el turno en que el usuario sale al combate."},
+  "fishious-rend": {"id":"move_fishious_rend","name":"Branquibocado","type":"Agua","category":"physical","power":85,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario agarra al objetivo con sus duras branquias. En caso de atacar antes que este último, la potencia del movimiento se duplica."},
+  "fissure": {"id":"move_fissure","name":"Fisura","type":"Tierra","category":"physical","power":0,"accuracy":30,"pp":5,"maxPp":5,"description":"Abre una grieta en el suelo y mete al objetivo en ella. Fulmina en un golpe."},
+  "flail": {"id":"move_flail","name":"Azote","type":"Normal","category":"physical","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataque frenético. Cuantos menos PS tenga el usuario, más daño producirá."},
+  "flame-burst": {"id":"move_flame_burst","name":"Pirotecnia","type":"Fuego","category":"special","power":70,"accuracy":100,"pp":15,"maxPp":15,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "flame-charge": {"id":"move_flame_charge","name":"Nitrocarga","type":"Fuego","category":"physical","power":50,"accuracy":100,"pp":20,"maxPp":20,"description":"Llamas que golpean al objetivo y aumentan la Velocidad del atacante.","statChanges":[{"stat":"speed","stages":1}],"statTarget":"target","statChance":100},
+  "flame-wheel": {"id":"move_flame_wheel","name":"Rueda Fuego","type":"Fuego","category":"physical","power":60,"accuracy":100,"pp":25,"maxPp":25,"description":"Ataca envuelto en fuego. Puede causar quemaduras.","statusEffect":"burn","statusChance":10},
+  "flamethrower": {"id":"move_flamethrower","name":"Lanzallamas","type":"Fuego","category":"special","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca con una gran ráfaga de fuego que puede causar quemaduras.","statusEffect":"burn","statusChance":10},
+  "flare-blitz": {"id":"move_flare_blitz","name":"Envite Ígneo","type":"Fuego","category":"physical","power":120,"accuracy":100,"pp":15,"maxPp":15,"description":"El Pokémon se cubre de llamas y carga contra el objetivo, aunque él también recibe daño. Puede quemar.","statusEffect":"burn","statusChance":10},
+  "flash-cannon": {"id":"move_flash_cannon","name":"Cañón Resplandor","type":"Acero","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario concentra toda la luz del cuerpo y la libera. Puede bajar la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":10},
+  "flatter": {"id":"move_flatter","name":"Camelo","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Halaga al objetivo y lo confunde, pero también sube su Ataque Especial.","statChanges":[{"stat":"spAttack","stages":1}],"statTarget":"target","statChance":100},
+  "fleur-cannon": {"id":"move_fleur_cannon","name":"Cañón Floral","type":"Hada","category":"special","power":130,"accuracy":90,"pp":5,"maxPp":5,"description":"El usuario emite un potente rayo, pero su Ataque Especial se reduce mucho.","statChanges":[{"stat":"spAttack","stages":-2}],"statTarget":"target","statChance":100},
+  "fling": {"id":"move_fling","name":"Lanzamiento","type":"Siniestro","category":"physical","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario lanza contra el objetivo el objeto que lleva. La fuerza del ataque y su efecto varían según el objeto."},
+  "flip-turn": {"id":"move_flip_turn","name":"Viraje","type":"Agua","category":"physical","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Tras atacar, el usuario da paso a toda prisa a otro Pokémon del equipo."},
+  "floral-healing": {"id":"move_floral_healing","name":"Cura Floral","type":"Hada","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Restaura la mitad de los PS máximos del objetivo. Es más efectivo cuando se usa en conjunción con Campo de Hierba.","healPercent":50},
+  "flower-shield": {"id":"move_flower_shield","name":"Defensa Floral","type":"Hada","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Aumenta la Defensa de todos los Pokémon de tipo Planta que hay en el combate usando unos misteriosos poderes.","statChanges":[{"stat":"defense","stages":1}],"statTarget":"target","statChance":100},
+  "flower-trick": {"id":"move_flower_trick","name":"Truco Floral","type":"Planta","category":"physical","power":70,"accuracy":100,"pp":10,"maxPp":10,"description":"Truco Floral"},
+  "fly": {"id":"move_fly","name":"Vuelo","type":"Volador","category":"physical","power":90,"accuracy":95,"pp":15,"maxPp":15,"description":"El usuario vuela en el primer turno y ataca en el segundo."},
+  "flying-press": {"id":"move_flying_press","name":"Plancha Voladora","type":"Lucha","category":"physical","power":100,"accuracy":95,"pp":10,"maxPp":10,"description":"El Pokémon que lo usa se lanza sobre su oponente. Este movimiento es de tipo Lucha y tipo Volador al mismo tiempo."},
+  "focus-blast": {"id":"move_focus_blast","name":"Onda Certera","type":"Lucha","category":"special","power":120,"accuracy":70,"pp":5,"maxPp":5,"description":"Agudiza la concentración mental y libera su poder. Puede disminuir la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":10},
+  "focus-energy": {"id":"move_focus_energy","name":"Foco Energía","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Concentra energía para aumentar las posibilidades de asestar un golpe crítico.","target":"self"},
+  "focus-punch": {"id":"move_focus_punch","name":"Puño Certero","type":"Lucha","category":"physical","power":150,"accuracy":100,"pp":20,"maxPp":20,"description":"Se concentra para dar un puñetazo. Falla si se sufre un golpe antes de su uso."},
+  "follow-me": {"id":"move_follow_me","name":"Señuelo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Llama la atención para concentrar todos los ataques de todos los del equipo rival hacia sí mismo.","target":"self"},
+  "force-palm": {"id":"move_force_palm","name":"Palmeo","type":"Lucha","category":"physical","power":60,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca al objetivo con una onda de choque y puede llegar a paralizarlo.","statusEffect":"paralysis","statusChance":30},
+  "foresight": {"id":"move_foresight","name":"Profecía","type":"Normal","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "forests-curse": {"id":"move_forests_curse","name":"Condena Silvana","type":"Planta","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"El objetivo es presa de la maldición del bosque, por lo que pasa a ser un Pokémon de tipo Planta, además de conservar sus tipos habituales."},
+  "foul-play": {"id":"move_foul_play","name":"Juego Sucio","type":"Siniestro","category":"physical","power":95,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario emplea la fuerza del objetivo para atacarlo. Cuanto mayor es el Ataque del objetivo, más daño provoca."},
+  "freeze-dry": {"id":"move_freeze_dry","name":"Liofilización","type":"Hielo","category":"special","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Enfría súbitamente al objetivo e incluso puede congelarlo. Es supereficaz contra Pokémon de tipo Agua.","statusEffect":"freeze","statusChance":10},
+  "frost-breath": {"id":"move_frost_breath","name":"Vaho Gélido","type":"Hielo","category":"special","power":60,"accuracy":90,"pp":10,"maxPp":10,"description":"Quien lo usa ataca lanzando un aliento gélido. Siempre asesta un golpe crítico."},
+  "fury-attack": {"id":"move_fury_attack","name":"Ataque Furia","type":"Normal","category":"physical","power":15,"accuracy":85,"pp":20,"maxPp":20,"description":"Cornea al objetivo de dos a cinco veces."},
+  "fury-cutter": {"id":"move_fury_cutter","name":"Corte Furia","type":"Bicho","category":"physical","power":40,"accuracy":95,"pp":20,"maxPp":20,"description":"Ataque con garras o guadaña que crece en intensidad si se usa repetidas veces."},
+  "fury-swipes": {"id":"move_fury_swipes","name":"Golpes Furia","type":"Normal","category":"physical","power":18,"accuracy":80,"pp":15,"maxPp":15,"description":"Araña rápidamente de dos a cinco veces."},
+  "fusion-bolt": {"id":"move_fusion_bolt","name":"Rayo Fusión","type":"Eléctrico","category":"physical","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Ataca con una enorme descarga eléctrica. Aumenta su potencia si es influenciada por una gigantesca llamarada."},
+  "fusion-flare": {"id":"move_fusion_flare","name":"Llama Fusión","type":"Fuego","category":"special","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Ataca con una llamarada gigantesca. Aumenta su potencia si es influenciada por una gran energía eléctrica."},
+  "future-sight": {"id":"move_future_sight","name":"Premonición","type":"Psíquico","category":"special","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"Concentra energía psíquica para golpear al objetivo dos turnos después."},
+  "gastro-acid": {"id":"move_gastro_acid","name":"Bilis","type":"Veneno","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario arroja sus jugos biliares al objetivo, lo que anula el efecto de la habilidad en uso."},
+  "gear-grind": {"id":"move_gear_grind","name":"Rueda Doble","type":"Acero","category":"physical","power":50,"accuracy":85,"pp":15,"maxPp":15,"description":"Rota dos engranajes de hierro sobre el objetivo. Golpea dos veces."},
+  "gear-up": {"id":"move_gear_up","name":"Piñón Auxiliar","type":"Acero","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Cambia de marcha y logra aumentar el Ataque y el Ataque Especial de los Pokémon aliados que cuenten con las habilidades Más y Menos.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"spAttack","stages":1}],"statTarget":"self","statChance":100},
+  "geomancy": {"id":"move_geomancy","name":"Geocontrol","type":"Hada","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Concentra energía durante el primer turno, de forma que su Velocidad, Ataque Especial y Defensa Especial aumenten mucho en el segundo.","target":"self","statChanges":[{"stat":"spAttack","stages":2},{"stat":"spDefense","stages":2},{"stat":"speed","stages":2}],"statTarget":"self","statChance":100},
+  "giga-drain": {"id":"move_giga_drain","name":"Gigadrenado","type":"Planta","category":"special","power":75,"accuracy":100,"pp":10,"maxPp":10,"description":"Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."},
+  "giga-impact": {"id":"move_giga_impact","name":"Gigaimpacto","type":"Normal","category":"physical","power":150,"accuracy":90,"pp":5,"maxPp":5,"description":"El usuario carga contra el objetivo con toda la fuerza que tiene y descansa durante el siguiente turno."},
+  "gigaton-hammer": {"id":"move_gigaton_hammer","name":"Martillo Colosal","type":"Acero","category":"physical","power":160,"accuracy":100,"pp":5,"maxPp":5,"description":"Martillo Colosal"},
+  "glaciate": {"id":"move_glaciate","name":"Mundo Gélido","type":"Hielo","category":"special","power":65,"accuracy":95,"pp":10,"maxPp":10,"description":"Ataque con aire helado que baja la Velocidad del objetivo.","target":"all_enemies","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "glaive-rush": {"id":"move_glaive_rush","name":"Asalto Espadón","type":"Dragón","category":"physical","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Asalto Espadón"},
+  "glare": {"id":"move_glare","name":"Deslumbrar","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Intimida y asusta al objetivo con la mirada para dejarlo paralizado.","statusEffect":"paralysis","statusChance":100},
+  "grass-knot": {"id":"move_grass_knot","name":"Hierba Lazo","type":"Planta","category":"special","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Enreda al objetivo con hierba y lo derriba. Cuanto más pesado es el objetivo, más daño inflige."},
+  "grassy-terrain": {"id":"move_grassy_terrain","name":"Campo de Hierba","type":"Planta","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Durante cinco turnos, se potencian los movimientos de tipo Planta y los Pokémon que están en contacto con el suelo recuperan PS en cada turno."},
+  "grav-apple": {"id":"move_grav_apple","name":"Fuerza G","type":"Planta","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ataca haciendo caer una manzana desde gran altura. Disminuye la Defensa del objetivo.","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":100},
+  "gravity": {"id":"move_gravity","name":"Gravedad","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Durante cinco turnos, se anulan los movimientos que alzan el vuelo y los Pokémon de tipo Volador o que levitan son vulnerables a movimientos de tipo Tierra."},
+  "growl": {"id":"move_growl","name":"Gruñido","type":"Normal","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"Dulce gruñido que reduce el Ataque del equipo rival.","target":"all_enemies","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":100},
+  "growth": {"id":"move_growth","name":"Desarrollo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Hace que su cuerpo crezca a marchas forzadas con lo que aumenta su Ataque y Ataque Especial.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"spAttack","stages":1}],"statTarget":"self","statChance":100},
+  "grudge": {"id":"move_grudge","name":"Rabia","type":"Fantasma","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Si el usuario se debilita al recibir un ataque, todos los PP de este último ataque serán eliminados.","target":"self"},
+  "guard-split": {"id":"move_guard_split","name":"Isoguardia","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario emplea sus poderes para hacer la media de su Defensa y Defensa Especial con las de su objetivo y compartirlas."},
+  "guard-swap": {"id":"move_guard_swap","name":"Cambiadefensa","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario emplea su poder mental para intercambiar los cambios en la Defensa y Defensa Especial con el objetivo."},
+  "guillotine": {"id":"move_guillotine","name":"Guillotina","type":"Normal","category":"physical","power":0,"accuracy":30,"pp":5,"maxPp":5,"description":"Ataque cortante que debilita al oponente de un golpe si acierta."},
+  "gunk-shot": {"id":"move_gunk_shot","name":"Lanzamugre","type":"Veneno","category":"physical","power":120,"accuracy":80,"pp":5,"maxPp":5,"description":"Lanza contra el objetivo basura asquerosa y puede envenenarlo.","statusEffect":"poison","statusChance":30},
+  "gust": {"id":"move_gust","name":"Tornado","type":"Volador","category":"special","power":40,"accuracy":100,"pp":35,"maxPp":35,"description":"Crea un tornado con las alas y lo lanza contra el objetivo."},
+  "gyro-ball": {"id":"move_gyro_ball","name":"Giro Bola","type":"Acero","category":"physical","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Embiste al objetivo con un potente ataque giratorio. Cuanto más lento es el usuario, más daño causa."},
+  "hail": {"id":"move_hail","name":"Granizo","type":"Hielo","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Tormenta de granizo que dura cinco turnos. Hiere a todos los Pokémon excepto a los de tipo Hielo."},
+  "hammer-arm": {"id":"move_hammer_arm","name":"Machada","type":"Lucha","category":"physical","power":100,"accuracy":90,"pp":10,"maxPp":10,"description":"Gira con fuerza el puño y da un gran golpe. No obstante, baja la Velocidad.","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "harden": {"id":"move_harden","name":"Fortaleza","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Tensa la musculatura del usuario para aumentar la Defensa.","target":"self","statChanges":[{"stat":"defense","stages":1}],"statTarget":"self","statChance":100},
+  "haze": {"id":"move_haze","name":"Niebla","type":"Hielo","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Neblina que elimina los cambios de características de todos los Pokémon en combate."},
+  "head-charge": {"id":"move_head_charge","name":"Ariete","type":"Normal","category":"physical","power":120,"accuracy":100,"pp":15,"maxPp":15,"description":"Propina un tremendo cabezazo. También daña al usuario un poco."},
+  "head-smash": {"id":"move_head_smash","name":"Testarazo","type":"Roca","category":"physical","power":150,"accuracy":80,"pp":5,"maxPp":5,"description":"El usuario arriesga su vida y lanza un cabezazo con toda su fuerza. El agresor resulta seriamente dañado."},
+  "headbutt": {"id":"move_headbutt","name":"Golpe Cabeza","type":"Normal","category":"physical","power":70,"accuracy":100,"pp":15,"maxPp":15,"description":"Potente cabezazo que puede amedrentar al objetivo."},
+  "headlong-rush": {"id":"move_headlong_rush","name":"Arremetida","type":"Tierra","category":"physical","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Arremetida"},
+  "heal-bell": {"id":"move_heal_bell","name":"Cascabel Cura","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Tañido que cura los problemas de estado de todos los Pokémon del equipo.","target":"self"},
+  "heal-pulse": {"id":"move_heal_pulse","name":"Pulso Cura","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Una onda curativa restaura la mitad de los PS máximos del objetivo.","healPercent":50},
+  "healing-wish": {"id":"move_healing_wish","name":"Deseo Cura","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El Pokémon cae debilitado, pero su sustituto recupera su estado y los PS.","target":"self"},
+  "heart-swap": {"id":"move_heart_swap","name":"Cambiaalmas","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "heat-crash": {"id":"move_heat_crash","name":"Golpe Calor","type":"Fuego","category":"physical","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ataca con su cuerpo ardiente. Cuanto mayor sea su peso comparado con el del objetivo, más daño causará."},
+  "heat-wave": {"id":"move_heat_wave","name":"Onda Ígnea","type":"Fuego","category":"special","power":95,"accuracy":90,"pp":10,"maxPp":10,"description":"Provoca un viento abrasador que puede quemar al objetivo.","statusEffect":"burn","statusChance":10,"target":"all_enemies"},
+  "heavy-slam": {"id":"move_heavy_slam","name":"Cuerpo Pesado","type":"Acero","category":"physical","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario golpea con todo su cuerpo. Cuanto mayor sea su peso comparado con el del objetivo, más daño causará."},
+  "helping-hand": {"id":"move_helping_hand","name":"Refuerzo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"El usuario ayuda a un aliado reforzando la potencia de su ataque.","target":"self"},
+  "hex": {"id":"move_hex","name":"Infortunio","type":"Fantasma","category":"special","power":65,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataque que causa un gran daño a los objetivos que sufren problemas de estado."},
+  "hidden-power": {"id":"move_hidden_power","name":"Poder Oculto","type":"Normal","category":"special","power":60,"accuracy":100,"pp":15,"maxPp":15,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "high-horsepower": {"id":"move_high_horsepower","name":"Fuerza Equina","type":"Tierra","category":"physical","power":95,"accuracy":95,"pp":10,"maxPp":10,"description":"Asesta un golpe devastador usando todo su cuerpo."},
+  "high-jump-kick": {"id":"move_high_jump_kick","name":"Patada Salto Alta","type":"Lucha","category":"physical","power":130,"accuracy":90,"pp":10,"maxPp":10,"description":"El usuario salta muy alto y da un rodillazo. Si falla, se hará daño."},
+  "hone-claws": {"id":"move_hone_claws","name":"Afilagarras","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario se afila las garras para aumentar su Ataque y Precisión.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"accuracy","stages":1}],"statTarget":"self","statChance":100},
+  "horn-attack": {"id":"move_horn_attack","name":"Cornada","type":"Normal","category":"physical","power":65,"accuracy":100,"pp":25,"maxPp":25,"description":"Ataca al objetivo con una cornada."},
+  "horn-drill": {"id":"move_horn_drill","name":"Perforador","type":"Normal","category":"physical","power":0,"accuracy":30,"pp":5,"maxPp":5,"description":"Ataque con un cuerno giratorio que fulmina de un solo golpe al objetivo si lo alcanza."},
+  "horn-leech": {"id":"move_horn_leech","name":"Asta Drenaje","type":"Planta","category":"physical","power":75,"accuracy":100,"pp":10,"maxPp":10,"description":"Un golpe que drena energía. El Pokémon recupera la mitad de los PS arrebatados al objetivo."},
+  "howl": {"id":"move_howl","name":"Aullido","type":"Normal","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"Aullido que sube el ánimo y aumenta el Ataque del equipo.","target":"self","statChanges":[{"stat":"attack","stages":1}],"statTarget":"self","statChance":100},
+  "hurricane": {"id":"move_hurricane","name":"Vendaval","type":"Volador","category":"special","power":110,"accuracy":70,"pp":10,"maxPp":10,"description":"Golpea al objetivo con un fuerte torbellino que envuelve al rival y puede confundirlo."},
+  "hydro-pump": {"id":"move_hydro_pump","name":"Hidrobomba","type":"Agua","category":"special","power":110,"accuracy":80,"pp":5,"maxPp":5,"description":"Lanza una gran masa de agua a presión para atacar."},
+  "hydro-steam": {"id":"move_hydro_steam","name":"Hidrovapor","type":"Agua","category":"special","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Hidrovapor"},
+  "hyper-beam": {"id":"move_hyper_beam","name":"Hiperrayo","type":"Normal","category":"special","power":150,"accuracy":90,"pp":5,"maxPp":5,"description":"Es eficaz, pero el atacante deberá descansar en el siguiente turno."},
+  "hyper-drill": {"id":"move_hyper_drill","name":"Hipertaladro","type":"Normal","category":"physical","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Hipertaladro"},
+  "hyper-fang": {"id":"move_hyper_fang","name":"Hipercolmillo","type":"Normal","category":"physical","power":80,"accuracy":90,"pp":15,"maxPp":15,"description":"Ataca con agudos colmillos. Puede amedrentar al objetivo."},
+  "hyper-voice": {"id":"move_hyper_voice","name":"Vozarrón","type":"Normal","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Grito desgarrador que inflige daño al objetivo.","target":"all_enemies"},
+  "hyperspace-hole": {"id":"move_hyperspace_hole","name":"Paso Dimensional","type":"Psíquico","category":"special","power":80,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario aparece junto al rival usando un agujero dimensional y le asesta un golpe que movimientos como Protección o Detección no pueden evitar."},
+  "hypnosis": {"id":"move_hypnosis","name":"Hipnosis","type":"Psíquico","category":"status","power":0,"accuracy":60,"pp":20,"maxPp":20,"description":"Ataque hipnótico que hace dormir profundamente al objetivo.","statusEffect":"sleep","statusChance":100},
+  "ice-beam": {"id":"move_ice_beam","name":"Rayo Hielo","type":"Hielo","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Rayo de hielo que puede llegar a congelar.","statusEffect":"freeze","statusChance":10},
+  "ice-fang": {"id":"move_ice_fang","name":"Colmillo Hielo","type":"Hielo","category":"physical","power":65,"accuracy":95,"pp":15,"maxPp":15,"description":"El usuario muerde al objetivo con colmillos helados y puede hacer que se amedrente o se congele.","statusEffect":"freeze","statusChance":10},
+  "ice-hammer": {"id":"move_ice_hammer","name":"Martillo Hielo","type":"Hielo","category":"physical","power":100,"accuracy":90,"pp":10,"maxPp":10,"description":"Un terrible puño golpea al contrincante, pero la Velocidad del usuario se ve reducida.","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "ice-punch": {"id":"move_ice_punch","name":"Puño Hielo","type":"Hielo","category":"physical","power":75,"accuracy":100,"pp":15,"maxPp":15,"description":"Puñetazo helado que puede llegar a congelar.","statusEffect":"freeze","statusChance":10},
+  "ice-shard": {"id":"move_ice_shard","name":"Esquirla Helada","type":"Hielo","category":"physical","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"Crea bolas de hielo y las lanza a gran velocidad. Este movimiento tiene prioridad alta."},
+  "ice-spinner": {"id":"move_ice_spinner","name":"Pirueta Helada","type":"Hielo","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Pirueta Helada"},
+  "icicle-crash": {"id":"move_icicle_crash","name":"Chuzos","type":"Hielo","category":"physical","power":85,"accuracy":90,"pp":10,"maxPp":10,"description":"Lanza grandes carámbanos. Puede amedrentar al objetivo."},
+  "icicle-spear": {"id":"move_icicle_spear","name":"Carámbano","type":"Hielo","category":"physical","power":25,"accuracy":100,"pp":30,"maxPp":30,"description":"Ataca lanzando de dos a cinco ráfagas consecutivas de carámbanos."},
+  "icy-wind": {"id":"move_icy_wind","name":"Viento Hielo","type":"Hielo","category":"special","power":55,"accuracy":95,"pp":15,"maxPp":15,"description":"Ataque con aire helado que baja la Velocidad de los rivales.","target":"all_enemies","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "imprison": {"id":"move_imprison","name":"Sellar","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Impide a los contrincantes usar ataques conocidos por el usuario durante el combate.","target":"self"},
+  "incinerate": {"id":"move_incinerate","name":"Calcinación","type":"Fuego","category":"special","power":60,"accuracy":100,"pp":15,"maxPp":15,"description":"Llamas que golpean a los objetivos adyacentes. Si estos llevan bayas o ciertos objetos, se quemarán y ya no se podrán usar.","target":"all_enemies"},
+  "inferno": {"id":"move_inferno","name":"Infierno","type":"Fuego","category":"special","power":100,"accuracy":50,"pp":5,"maxPp":5,"description":"Ataca con una gran ráfaga de fuego que causa quemaduras.","statusEffect":"burn","statusChance":100},
+  "infestation": {"id":"move_infestation","name":"Acoso","type":"Bicho","category":"special","power":20,"accuracy":100,"pp":20,"maxPp":20,"description":"Hostiga al objetivo durante cuatro o cinco turnos e impide que pueda huir mientras tanto."},
+  "ingrain": {"id":"move_ingrain","name":"Arraigo","type":"Planta","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Echa raíces para recuperar PS en cada turno, pero impide el relevo.","target":"self"},
+  "instruct": {"id":"move_instruct","name":"Mandato","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Fuerza al objetivo a repetir inmediatamente su último movimiento."},
+  "iron-defense": {"id":"move_iron_defense","name":"Defensa Férrea","type":"Acero","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Fortalece el cuerpo como si fuera de hierro y sube mucho la Defensa.","target":"self","statChanges":[{"stat":"defense","stages":2}],"statTarget":"self","statChance":100},
+  "iron-head": {"id":"move_iron_head","name":"Cabeza de Hierro","type":"Acero","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca con su dura cabeza de hierro. Puede hacer que el objetivo se amedrente."},
+  "iron-tail": {"id":"move_iron_tail","name":"Cola Férrea","type":"Acero","category":"physical","power":100,"accuracy":75,"pp":15,"maxPp":15,"description":"Ataca con una cola férrea y puede bajar la Defensa del objetivo.","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":30},
+  "ivy-cudgel": {"id":"move_ivy_cudgel","name":"Garrote Liana","type":"Planta","category":"physical","power":100,"accuracy":100,"pp":10,"maxPp":10,"description":"Garrote Liana"},
+  "jaw-lock": {"id":"move_jaw_lock","name":"Presa Maxilar","type":"Siniestro","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Impide que tanto el atacante como el defensor puedan ser intercambiados hasta que uno de ellos se debilite o abandone el terreno de combate."},
+  "jet-punch": {"id":"move_jet_punch","name":"Puño Jet","type":"Agua","category":"physical","power":60,"accuracy":100,"pp":15,"maxPp":15,"description":"Puño Jet"},
+  "judgment": {"id":"move_judgment","name":"Sentencia","type":"Normal","category":"special","power":100,"accuracy":100,"pp":10,"maxPp":10,"description":"Emite incontables haces de luz. El tipo del movimiento varía según la tabla que lleve el usuario."},
+  "jungle-healing": {"id":"move_jungle_healing","name":"Cura Selvática","type":"Planta","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Al entrar en plena armonía con la selva, el usuario cura problemas de estado y restaura PS no solo de sí mismo, sino también de los aliados presentes en el terreno.","healPercent":25,"target":"self"},
+  "kinesis": {"id":"move_kinesis","name":"Kinético","type":"Psíquico","category":"status","power":0,"accuracy":80,"pp":15,"maxPp":15,"description":"Dobla una cuchara para distraer al objetivo y bajar su nivel de Precisión.","statChanges":[{"stat":"accuracy","stages":-1}],"statTarget":"target","statChance":100},
+  "kings-shield": {"id":"move_kings_shield","name":"Escudo Real","type":"Acero","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario adopta una postura defensiva y se protege de cualquier daño. Reduce el Ataque de cualquier Pokémon con el que entre en contacto.","target":"self"},
+  "knock-off": {"id":"move_knock_off","name":"Desarme","type":"Siniestro","category":"physical","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Impide al objetivo usar el objeto que lleva durante el combate. La potencia del movimiento se multiplica si el objetivo lleva un objeto."},
+  "kowtow-cleave": {"id":"move_kowtow_cleave","name":"Genufendiente","type":"Siniestro","category":"physical","power":85,"accuracy":100,"pp":10,"maxPp":10,"description":"Genufendiente"},
+  "lands-wrath": {"id":"move_lands_wrath","name":"Fuerza Telúrica","type":"Tierra","category":"physical","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Acumula energía de la corteza terrestre y la concentra contra los oponentes, dañándolos.","target":"all_enemies"},
+  "laser-focus": {"id":"move_laser_focus","name":"Aguzar","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"El usuario se concentra para que el siguiente ataque propine un golpe crítico.","target":"self"},
+  "last-resort": {"id":"move_last_resort","name":"Última Baza","type":"Normal","category":"physical","power":140,"accuracy":100,"pp":5,"maxPp":5,"description":"Este movimiento solo puede utilizarse tras haber usado al menos una vez todos los demás conocidos por el Pokémon."},
+  "last-respects": {"id":"move_last_respects","name":"Homenaje Póstumo","type":"Fantasma","category":"physical","power":50,"accuracy":100,"pp":10,"maxPp":10,"description":"Homenaje Póstumo"},
+  "lava-plume": {"id":"move_lava_plume","name":"Humareda","type":"Fuego","category":"special","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Un infierno de llamas daña a los Pokémon adyacentes en combate. Puede quemar.","statusEffect":"burn","statusChance":30,"target":"all_enemies"},
+  "leaf-blade": {"id":"move_leaf_blade","name":"Hoja Aguda","type":"Planta","category":"physical","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"Acuchilla con una hoja fina. Suele dar un golpe crítico."},
+  "leaf-storm": {"id":"move_leaf_storm","name":"Lluevehojas","type":"Planta","category":"special","power":130,"accuracy":90,"pp":5,"maxPp":5,"description":"Envuelve al objetivo con una lluvia de hojas afiladas, pero reduce mucho su Ataque Especial.","statChanges":[{"stat":"spAttack","stages":-2}],"statTarget":"target","statChance":100},
+  "leaf-tornado": {"id":"move_leaf_tornado","name":"Ciclón de Hojas","type":"Planta","category":"special","power":65,"accuracy":90,"pp":10,"maxPp":10,"description":"Tritura con afiladas hojas y puede bajar la Precisión del objetivo.","statChanges":[{"stat":"accuracy","stages":-1}],"statTarget":"target","statChance":50},
+  "leafage": {"id":"move_leafage","name":"Follaje","type":"Planta","category":"physical","power":40,"accuracy":100,"pp":40,"maxPp":40,"description":"Ataca al oponente lanzando hojas."},
+  "leech-life": {"id":"move_leech_life","name":"Chupavidas","type":"Bicho","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Restaura al usuario la mitad del daño causado al objetivo."},
+  "leech-seed": {"id":"move_leech_seed","name":"Drenadoras","type":"Planta","category":"status","power":0,"accuracy":90,"pp":10,"maxPp":10,"description":"Planta semillas que absorben PS del objetivo en cada turno y que le sirven para recuperarse."},
+  "leer": {"id":"move_leer","name":"Malicioso","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Intimida a los rivales para bajar su Defensa.","target":"all_enemies","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":100},
+  "lick": {"id":"move_lick","name":"Lengüetazo","type":"Fantasma","category":"physical","power":30,"accuracy":100,"pp":30,"maxPp":30,"description":"Una lengua ataca al objetivo. Puede causar parálisis.","statusEffect":"paralysis","statusChance":30},
+  "life-dew": {"id":"move_life_dew","name":"Gota Vital","type":"Agua","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Vierte un agua misteriosa y balsámica que restaura tanto sus propios PS como los de aquellos aliados presentes en el terreno de combate.","healPercent":25,"target":"self"},
+  "light-screen": {"id":"move_light_screen","name":"Pantalla de Luz","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Pared de luz que reduce durante cinco turnos el daño producido por los ataques especiales.","target":"self"},
+  "liquidation": {"id":"move_liquidation","name":"Hidroariete","type":"Agua","category":"physical","power":85,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca golpeando gracias a la fuerza del agua. También puede reducir la Defensa del objetivo.","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":20},
+  "lock-on": {"id":"move_lock_on","name":"Fijar Blanco","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Fija el blanco para que el siguiente ataque no falle."},
+  "lovely-kiss": {"id":"move_lovely_kiss","name":"Beso Amoroso","type":"Normal","category":"status","power":0,"accuracy":75,"pp":10,"maxPp":10,"description":"Intimida al objetivo con una cara que asusta y le da un beso que lo deja dormido.","statusEffect":"sleep","statusChance":100},
+  "low-kick": {"id":"move_low_kick","name":"Patada Baja","type":"Lucha","category":"physical","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Patada baja que derriba al oponente. Cuanto más pesa el objetivo, más daño le causa."},
+  "low-sweep": {"id":"move_low_sweep","name":"Puntapié","type":"Lucha","category":"physical","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataque rápido dirigido a los pies del objetivo que le hace perder Velocidad.","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "lumina-crash": {"id":"move_lumina_crash","name":"Fotocolisión","type":"Psíquico","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Fotocolisión","statChanges":[{"stat":"spDefense","stages":-2}],"statTarget":"target","statChance":100},
+  "lunar-blessing": {"id":"move_lunar_blessing","name":"Plegaria Lunar","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Plegaria Lunar","target":"self"},
+  "lunar-dance": {"id":"move_lunar_dance","name":"Danza Lunar","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario se debilita, pero el Pokémon que lo sustituye recupera su estado, los PS y los PP.","target":"self"},
+  "lunge": {"id":"move_lunge","name":"Plancha","type":"Bicho","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca al oponente abalanzándose sobre él con todas sus fuerzas y reduce su Ataque.","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":100},
+  "luster-purge": {"id":"move_luster_purge","name":"Resplandor","type":"Psíquico","category":"special","power":95,"accuracy":100,"pp":5,"maxPp":5,"description":"Fogonazo de luz que puede bajar la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":50},
+  "mach-punch": {"id":"move_mach_punch","name":"Ultrapuño","type":"Lucha","category":"physical","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"Puñetazo de velocidad fulminante. Este movimiento tiene prioridad alta."},
+  "magic-coat": {"id":"move_magic_coat","name":"Capa Mágica","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Barrera capaz de devolver al agresor movimientos como Drenadoras y otros que alteran el estado o las características.","target":"self"},
+  "magic-powder": {"id":"move_magic_powder","name":"Polvo Mágico","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Cubre al objetivo con unos polvos mágicos que le hacen adquirir el tipo Psíquico."},
+  "magic-room": {"id":"move_magic_room","name":"Zona Mágica","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Crea un espacio misterioso que inutiliza todos los objetos de los Pokémon durante cinco turnos."},
+  "magical-leaf": {"id":"move_magical_leaf","name":"Hoja Mágica","type":"Planta","category":"special","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Esparce extrañas hojas que persiguen al objetivo. No se puede esquivar."},
+  "magma-storm": {"id":"move_magma_storm","name":"Lluvia Ígnea","type":"Fuego","category":"special","power":100,"accuracy":75,"pp":5,"maxPp":5,"description":"El objetivo queda atrapado en una tormenta de fuego que dura de cuatro a cinco turnos."},
+  "magnet-rise": {"id":"move_magnet_rise","name":"Levitón","type":"Eléctrico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Levita gracias a un campo magnético generado por electricidad durante cinco turnos.","target":"self"},
+  "magnetic-flux": {"id":"move_magnetic_flux","name":"Aura Magnética","type":"Eléctrico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Manipula el campo magnético y logra aumentar la Defensa y la Defensa Especial de los Pokémon aliados que cuenten con las habilidades Más y Menos.","target":"self","statChanges":[{"stat":"defense","stages":1},{"stat":"spDefense","stages":1}],"statTarget":"self","statChance":100},
+  "make-it-rain": {"id":"move_make_it_rain","name":"Fiebre Dorada","type":"Acero","category":"special","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Fiebre Dorada","target":"all_enemies","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "malignant-chain": {"id":"move_malignant_chain","name":"Cadena Virulenta","type":"Veneno","category":"special","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Cadena Virulenta"},
+  "matcha-gotcha": {"id":"move_matcha_gotcha","name":"Cañón Batidor","type":"Planta","category":"special","power":80,"accuracy":90,"pp":15,"maxPp":15,"description":"Cañón Batidor"},
+  "mean-look": {"id":"move_mean_look","name":"Mal de Ojo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Mal de ojo que impide al objetivo huir del combate."},
+  "mega-drain": {"id":"move_mega_drain","name":"Megaagotar","type":"Planta","category":"special","power":40,"accuracy":100,"pp":15,"maxPp":15,"description":"Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."},
+  "mega-kick": {"id":"move_mega_kick","name":"Megapatada","type":"Normal","category":"physical","power":120,"accuracy":75,"pp":5,"maxPp":5,"description":"Patada de extrema fuerza."},
+  "mega-punch": {"id":"move_mega_punch","name":"Megapuño","type":"Normal","category":"physical","power":80,"accuracy":85,"pp":20,"maxPp":20,"description":"Un puñetazo de gran potencia."},
+  "megahorn": {"id":"move_megahorn","name":"Megacuerno","type":"Bicho","category":"physical","power":120,"accuracy":85,"pp":10,"maxPp":10,"description":"Violenta embestida con cuernos imponentes."},
+  "memento": {"id":"move_memento","name":"Legado","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario se debilita, pero baja mucho tanto el Ataque como el Ataque Especial del objetivo.","statChanges":[{"stat":"attack","stages":-2},{"stat":"spAttack","stages":-2}],"statTarget":"target","statChance":100},
+  "metal-burst": {"id":"move_metal_burst","name":"Represión Metal","type":"Acero","category":"physical","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Devuelve al rival el último ataque recibido, pero con mucha más fuerza."},
+  "metal-claw": {"id":"move_metal_claw","name":"Garra Metal","type":"Acero","category":"physical","power":50,"accuracy":95,"pp":35,"maxPp":35,"description":"Ataque con garras de acero que puede aumentar el Ataque del usuario.","statChanges":[{"stat":"attack","stages":1}],"statTarget":"target","statChance":10},
+  "metal-sound": {"id":"move_metal_sound","name":"Eco Metálico","type":"Acero","category":"status","power":0,"accuracy":85,"pp":40,"maxPp":40,"description":"Horrible chirrido metálico que baja mucho la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-2}],"statTarget":"target","statChance":100},
+  "meteor-assault": {"id":"move_meteor_assault","name":"Asalto Estelar","type":"Lucha","category":"physical","power":150,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario agita violentamente su grueso puerro para atacar, pero el mareo que le provocan las sacudidas le impide moverse en el turno siguiente."},
+  "meteor-mash": {"id":"move_meteor_mash","name":"Puño Meteoro","type":"Acero","category":"physical","power":90,"accuracy":90,"pp":10,"maxPp":10,"description":"Puñetazo que impacta como un meteorito y puede subir el Ataque del agresor.","statChanges":[{"stat":"attack","stages":1}],"statTarget":"target","statChance":20},
+  "metronome": {"id":"move_metronome","name":"Metrónomo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Mueve un dedo y estimula su cerebro para usar al azar casi cualquier movimiento.","target":"self"},
+  "mighty-cleave": {"id":"move_mighty_cleave","name":"Filo Potente","type":"Roca","category":"physical","power":95,"accuracy":100,"pp":5,"maxPp":5,"description":"Filo Potente"},
+  "milk-drink": {"id":"move_milk_drink","name":"Batido","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Restaura la mitad de los PS máximos del usuario.","healPercent":50,"target":"self"},
+  "mimic": {"id":"move_mimic","name":"Mimético","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Copia el último movimiento usado por el objetivo, y puede utilizarlo mientras esté en el combate."},
+  "mind-blown": {"id":"move_mind_blown","name":"Cabeza Sorpresa","type":"Fuego","category":"special","power":150,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario hace explotar su cabeza para atacar a todos los Pokémon que se hallan a su alrededor, aunque también se hiere a sí mismo.","target":"all_enemies"},
+  "mind-reader": {"id":"move_mind_reader","name":"Telépata","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario adivina los movimientos del objetivo para hacer que su siguiente ataque no falle."},
+  "minimize": {"id":"move_minimize","name":"Reducción","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario mengua para aumentar mucho la Evasión.","target":"self","statChanges":[{"stat":"evasion","stages":2}],"statTarget":"self","statChance":100},
+  "mirror-coat": {"id":"move_mirror_coat","name":"Manto Espejo","type":"Psíquico","category":"special","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Responde a un ataque especial ocasionando el doble del daño recibido."},
+  "mirror-move": {"id":"move_mirror_move","name":"Espejo","type":"Volador","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "mist": {"id":"move_mist","name":"Neblina","type":"Hielo","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Rodea de fina niebla al usuario y protege las características de su equipo durante cinco turnos.","target":"self"},
+  "mist-ball": {"id":"move_mist_ball","name":"Bola Neblina","type":"Psíquico","category":"special","power":95,"accuracy":100,"pp":5,"maxPp":5,"description":"Banco de niebla que puede bajar el Ataque Especial del objetivo.","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":50},
+  "misty-terrain": {"id":"move_misty_terrain","name":"Campo de Niebla","type":"Hada","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Durante cinco turnos, los Pokémon que están en el suelo no sufren problemas de estado y se reduce a la mitad el daño de los movimientos de tipo Dragón."},
+  "moonblast": {"id":"move_moonblast","name":"Fuerza Lunar","type":"Hada","category":"special","power":95,"accuracy":100,"pp":15,"maxPp":15,"description":"Invoca el poder de la luna para atacar al objetivo. Puede disminuir el Ataque Especial del objetivo.","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":30},
+  "moongeist-beam": {"id":"move_moongeist_beam","name":"Rayo Umbrío","type":"Fantasma","category":"special","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Ataca con un rayo misterioso que ignora la habilidad del objetivo."},
+  "moonlight": {"id":"move_moonlight","name":"Luz Lunar","type":"Hada","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Restaura PS del usuario. La cantidad varía según el tiempo que haga.","healPercent":50,"target":"self"},
+  "morning-sun": {"id":"move_morning_sun","name":"Sol Matinal","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Restaura PS del usuario. La cantidad varía según el tiempo que haga.","healPercent":50,"target":"self"},
+  "mortal-spin": {"id":"move_mortal_spin","name":"Giro Mortífero","type":"Veneno","category":"physical","power":30,"accuracy":100,"pp":15,"maxPp":15,"description":"Giro Mortífero","target":"all_enemies"},
+  "mud-shot": {"id":"move_mud_shot","name":"Disparo Lodo","type":"Tierra","category":"special","power":55,"accuracy":95,"pp":15,"maxPp":15,"description":"El usuario lanza lodo al objetivo y reduce su Velocidad.","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "mud-slap": {"id":"move_mud_slap","name":"Bofetón Lodo","type":"Tierra","category":"special","power":20,"accuracy":100,"pp":10,"maxPp":10,"description":"Echa lodo en la cara para bajar la Precisión.","statChanges":[{"stat":"accuracy","stages":-1}],"statTarget":"target","statChance":100},
+  "muddy-water": {"id":"move_muddy_water","name":"Agua Lodosa","type":"Agua","category":"special","power":90,"accuracy":85,"pp":10,"maxPp":10,"description":"Ataque con agua lodosa que puede bajar la Precisión del equipo rival.","target":"all_enemies","statChanges":[{"stat":"accuracy","stages":-1}],"statTarget":"target","statChance":30},
+  "multi-attack": {"id":"move_multi_attack","name":"Multiataque","type":"Normal","category":"physical","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"El Pokémon se rodea de una potente energía con la que golpea al rival. El tipo del movimiento depende del disco que lleva el usuario."},
+  "mystical-fire": {"id":"move_mystical_fire","name":"Llama Embrujada","type":"Fuego","category":"special","power":75,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario lanza por la boca una singular llama a gran temperatura con la que ataca a su oponente y baja su Ataque Especial.","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "mystical-power": {"id":"move_mystical_power","name":"Poder Místico","type":"Psíquico","category":"special","power":70,"accuracy":90,"pp":10,"maxPp":10,"description":"Poder Místico"},
+  "nasty-plot": {"id":"move_nasty_plot","name":"Maquinación","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Estimula su cerebro pensando en cosas malas. Aumenta mucho el Ataque Especial.","target":"self","statChanges":[{"stat":"spAttack","stages":2}],"statTarget":"self","statChance":100},
+  "natural-gift": {"id":"move_natural_gift","name":"Don Natural","type":"Normal","category":"physical","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "nature-power": {"id":"move_nature_power","name":"Adaptación","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Usa el poder de la naturaleza para atacar. Su efecto varía según el entorno de combate."},
+  "natures-madness": {"id":"move_natures_madness","name":"Furia Natural","type":"Hada","category":"special","power":0,"accuracy":90,"pp":10,"maxPp":10,"description":"Golpea al objetivo con la furia de la naturaleza y reduce sus PS a la mitad."},
+  "night-daze": {"id":"move_night_daze","name":"Pulso Noche","type":"Siniestro","category":"special","power":85,"accuracy":95,"pp":10,"maxPp":10,"description":"Ataca al objetivo con una onda siniestra. Puede bajar su Precisión.","statChanges":[{"stat":"accuracy","stages":-1}],"statTarget":"target","statChance":40},
+  "night-shade": {"id":"move_night_shade","name":"Tinieblas","type":"Fantasma","category":"special","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Produce un espejismo ante el objetivo, que pierde tantos PS como nivel tenga el usuario."},
+  "night-slash": {"id":"move_night_slash","name":"Tajo Umbrío","type":"Siniestro","category":"physical","power":70,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca al objetivo a la primera oportunidad. Suele ser crítico."},
+  "no-retreat": {"id":"move_no_retreat","name":"Bastión Final","type":"Lucha","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario aumenta todas sus características, pero ya no puede huir ni ser cambiado por otro.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"defense","stages":1},{"stat":"spAttack","stages":1},{"stat":"spDefense","stages":1},{"stat":"speed","stages":1}],"statTarget":"self","statChance":100},
+  "noble-roar": {"id":"move_noble_roar","name":"Rugido de Guerra","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Intimida a su oponente con un rugido de guerra, lo que hace que disminuyan tanto su Ataque como su Ataque Especial.","statChanges":[{"stat":"attack","stages":-1},{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "nuzzle": {"id":"move_nuzzle","name":"Moflete Estático","type":"Eléctrico","category":"physical","power":20,"accuracy":100,"pp":20,"maxPp":20,"description":"Quien lo usa frota sus mofletes cargados de electricidad contra el objetivo y consigue paralizarlo.","statusEffect":"paralysis","statusChance":100},
+  "oblivion-wing": {"id":"move_oblivion_wing","name":"Ala Mortífera","type":"Volador","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario absorbe energía del objetivo y aumenta sus PS en una cantidad igual o superior a la mitad del daño infligido."},
+  "obstruct": {"id":"move_obstruct","name":"Obstrucción","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Frena todos los ataques, pero puede fallar si se usa repetidamente. Reduce mucho la Defensa de quien ejecute un movimiento de contacto contra el usuario.","target":"self"},
+  "octazooka": {"id":"move_octazooka","name":"Pulpocañón","type":"Agua","category":"special","power":65,"accuracy":85,"pp":10,"maxPp":10,"description":"Dispara tinta a la cara. Puede bajar la Precisión.","statChanges":[{"stat":"accuracy","stages":-1}],"statTarget":"target","statChance":50},
+  "octolock": {"id":"move_octolock","name":"Octopresa","type":"Lucha","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Retiene al objetivo para impedir su huida, a la vez que reduce su Defensa y Defensa Especial cada turno."},
+  "odor-sleuth": {"id":"move_odor_sleuth","name":"Rastreo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "order-up": {"id":"move_order_up","name":"Oído Cocina","type":"Dragón","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Oído Cocina"},
+  "origin-pulse": {"id":"move_origin_pulse","name":"Pulso Primigenio","type":"Agua","category":"special","power":110,"accuracy":85,"pp":10,"maxPp":10,"description":"Ataca al objetivo con una infinidad de rayos de luz azulada.","target":"all_enemies"},
+  "outrage": {"id":"move_outrage","name":"Enfado","type":"Dragón","category":"physical","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca de dos a tres turnos y acaba confundiendo al agresor."},
+  "overdrive": {"id":"move_overdrive","name":"Amplificador","type":"Eléctrico","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario rasguea la guitarra o el bajo para generar enormes vibraciones de intensa reverberación con las que ataca al objetivo.","target":"all_enemies"},
+  "overheat": {"id":"move_overheat","name":"Sofoco","type":"Fuego","category":"special","power":130,"accuracy":90,"pp":5,"maxPp":5,"description":"Ataque en toda regla que baja mucho el Ataque Especial de quien lo usa.","statChanges":[{"stat":"spAttack","stages":-2}],"statTarget":"target","statChance":100},
+  "pain-split": {"id":"move_pain_split","name":"Divide Dolor","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Suma los PS del usuario a los del objetivo y los reparte a partes iguales."},
+  "parabolic-charge": {"id":"move_parabolic_charge","name":"Carga Parábola","type":"Eléctrico","category":"special","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Inflige daño a todos los Pokémon a su alrededor. El usuario absorbe la mitad del daño producido para restaurar sus propios PS.","target":"all_enemies"},
+  "parting-shot": {"id":"move_parting_shot","name":"Última Palabra","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"El usuario se cambia por otro Pokémon de su equipo, pero antes amedrenta a su oponente y hace que disminuyan su Ataque y Ataque Especial.","statChanges":[{"stat":"attack","stages":-1},{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "pay-day": {"id":"move_pay_day","name":"Día de Pago","type":"Normal","category":"physical","power":40,"accuracy":100,"pp":20,"maxPp":20,"description":"Arroja monedas al objetivo y las recupera al final del combate."},
+  "payback": {"id":"move_payback","name":"Vendetta","type":"Siniestro","category":"physical","power":50,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario contraataca con el doble de fuerza si el objetivo usa un movimiento antes."},
+  "peck": {"id":"move_peck","name":"Picotazo","type":"Volador","category":"physical","power":35,"accuracy":100,"pp":35,"maxPp":35,"description":"Ensarta al objetivo con un cuerno o pico punzante."},
+  "perish-song": {"id":"move_perish_song","name":"Canto Mortal","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Si un Pokémon escucha este canto y no es cambiado por otro en tres turnos, acaba debilitándose."},
+  "petal-blizzard": {"id":"move_petal_blizzard","name":"Tormenta Floral","type":"Planta","category":"physical","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario desata un intenso vendaval de pétalos que daña a los Pokémon a su alrededor.","target":"all_enemies"},
+  "petal-dance": {"id":"move_petal_dance","name":"Danza Pétalo","type":"Planta","category":"special","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"Lanza pétalos de dos a tres turnos y acaba confundiendo al atacante."},
+  "phantom-force": {"id":"move_phantom_force","name":"Golpe Fantasma","type":"Fantasma","category":"physical","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario desaparece en el primer turno y ataca a su objetivo en el segundo. Permite acertar aunque el objetivo esté protegiéndose."},
+  "photon-geyser": {"id":"move_photon_geyser","name":"Géiser Fotónico","type":"Psíquico","category":"special","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario ataca con una gran columna de luz. Compara sus valores de Ataque y Ataque Especial para infligir daño con el más alto de los dos."},
+  "pin-missile": {"id":"move_pin_missile","name":"Pin Misil","type":"Bicho","category":"physical","power":25,"accuracy":95,"pp":20,"maxPp":20,"description":"Lanza finas púas que hieren de dos a cinco veces."},
+  "plasma-fists": {"id":"move_plasma_fists","name":"Puños Plasma","type":"Eléctrico","category":"physical","power":100,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario ataca con puños cargados de electricidad. Convierte los movimientos de tipo Normal en movimientos de tipo Eléctrico."},
+  "play-nice": {"id":"move_play_nice","name":"Camaradería","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Se hace amigo de su oponente y consigue que a este se le quiten las ganas de combatir. Además, reduce su Ataque.","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":100},
+  "play-rough": {"id":"move_play_rough","name":"Carantoña","type":"Hada","category":"physical","power":90,"accuracy":90,"pp":10,"maxPp":10,"description":"El Pokémon que lo usa le hace cucamonas al objetivo y lo ataca. Puede disminuir el Ataque del objetivo.","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":10},
+  "pluck": {"id":"move_pluck","name":"Picoteo","type":"Volador","category":"physical","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Picotea al objetivo. Si este sostiene una baya, la picotea también y obtiene sus efectos."},
+  "poison-fang": {"id":"move_poison_fang","name":"Colmillo Veneno","type":"Veneno","category":"physical","power":50,"accuracy":100,"pp":15,"maxPp":15,"description":"Colmillos tóxicos que pueden envenenar gravemente al objetivo.","statusEffect":"poison","statusChance":50},
+  "poison-gas": {"id":"move_poison_gas","name":"Gas Venenoso","type":"Veneno","category":"status","power":0,"accuracy":90,"pp":40,"maxPp":40,"description":"Lanza una nube de gas tóxico al objetivo. Produce envenenamiento.","statusEffect":"poison","statusChance":100,"target":"all_enemies"},
+  "poison-jab": {"id":"move_poison_jab","name":"Puya Nociva","type":"Veneno","category":"physical","power":80,"accuracy":100,"pp":20,"maxPp":20,"description":"Pincha al objetivo con un tentáculo o brazo envenenado. Puede llegar a envenenar al objetivo.","statusEffect":"poison","statusChance":30},
+  "poison-powder": {"id":"move_poison_powder","name":"Polvo Veneno","type":"Veneno","category":"status","power":0,"accuracy":75,"pp":35,"maxPp":35,"description":"Polvo tóxico que envenena al objetivo.","statusEffect":"poison","statusChance":100},
+  "poison-sting": {"id":"move_poison_sting","name":"Picotazo Veneno","type":"Veneno","category":"physical","power":15,"accuracy":100,"pp":35,"maxPp":35,"description":"Lanza un aguijón tóxico que puede envenenar al objetivo.","statusEffect":"poison","statusChance":30},
+  "poison-tail": {"id":"move_poison_tail","name":"Cola Veneno","type":"Veneno","category":"physical","power":50,"accuracy":100,"pp":25,"maxPp":25,"description":"Puede envenenar y dar un golpe crítico.","statusEffect":"poison","statusChance":10},
+  "pollen-puff": {"id":"move_pollen_puff","name":"Bola de Polen","type":"Bicho","category":"special","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca al oponente con una bola explosiva. Si esta alcanza a un aliado, le hará recuperar PS."},
+  "population-bomb": {"id":"move_population_bomb","name":"Proliferación","type":"Normal","category":"physical","power":20,"accuracy":90,"pp":10,"maxPp":10,"description":"Proliferación"},
+  "pound": {"id":"move_pound","name":"Destructor","type":"Normal","category":"physical","power":40,"accuracy":100,"pp":35,"maxPp":35,"description":"Golpea con las patas o la cola."},
+  "powder-snow": {"id":"move_powder_snow","name":"Nieve Polvo","type":"Hielo","category":"special","power":40,"accuracy":100,"pp":25,"maxPp":25,"description":"Lanza nieve que puede llegar a congelar.","statusEffect":"freeze","statusChance":10,"target":"all_enemies"},
+  "power-gem": {"id":"move_power_gem","name":"Joya de Luz","type":"Roca","category":"special","power":80,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca con un rayo de luz que centellea como si lo formaran miles de joyas."},
+  "power-split": {"id":"move_power_split","name":"Isofuerza","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario emplea sus poderes para hacer la media de su Ataque y Ataque Especial con los de su objetivo y compartirlos."},
+  "power-swap": {"id":"move_power_swap","name":"Cambiafuerza","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario emplea su poder mental para intercambiar los cambios en el Ataque y Ataque Especial con el objetivo."},
+  "power-trick": {"id":"move_power_trick","name":"Truco Fuerza","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Usa sus poderes mentales para intercambiar sus características de Ataque y Defensa.","target":"self"},
+  "power-trip": {"id":"move_power_trip","name":"Chulería","type":"Siniestro","category":"physical","power":20,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca al oponente presumiendo de su fuerza. Cuanto más hayan subido las características del usuario, mayor será el daño."},
+  "power-up-punch": {"id":"move_power_up_punch","name":"Puño Incremento","type":"Lucha","category":"physical","power":40,"accuracy":100,"pp":20,"maxPp":20,"description":"Cada vez que golpea a un oponente se endurecen sus puños. Si acierta al objetivo, el Ataque del usuario aumenta.","statChanges":[{"stat":"attack","stages":1}],"statTarget":"target","statChance":100},
+  "power-whip": {"id":"move_power_whip","name":"Latigazo","type":"Planta","category":"physical","power":120,"accuracy":85,"pp":10,"maxPp":10,"description":"El usuario agita violentamente sus lianas o tentáculos para golpear al objetivo."},
+  "precipice-blades": {"id":"move_precipice_blades","name":"Filo del Abismo","type":"Tierra","category":"physical","power":120,"accuracy":85,"pp":10,"maxPp":10,"description":"Hace que el poder latente de la tierra se manifieste en forma de hojas afiladas y ataca al objetivo con ellas.","target":"all_enemies"},
+  "present": {"id":"move_present","name":"Presente","type":"Normal","category":"physical","power":0,"accuracy":90,"pp":15,"maxPp":15,"description":"Quien lo usa ataca al objetivo dándole un regalo con una bomba trampa. Sin embargo, a veces restaura sus PS."},
+  "prismatic-laser": {"id":"move_prismatic_laser","name":"Láser Prisma","type":"Psíquico","category":"special","power":160,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario utiliza un prisma para emitir un rayo de gran potencia, pero no puede moverse en el turno siguiente."},
+  "protect": {"id":"move_protect","name":"Protección","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Frena todos los ataques, pero puede fallar si se usa repetidamente.","target":"self"},
+  "psybeam": {"id":"move_psybeam","name":"Psicorrayo","type":"Psíquico","category":"special","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Extraño rayo que puede causar confusión."},
+  "psyblade": {"id":"move_psyblade","name":"Psicohojas","type":"Psíquico","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Psicohojas"},
+  "psych-up": {"id":"move_psych_up","name":"Autosugestión","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Quien lo usa se sume en un trance y copia cualquier cambio que haya en las características de su objetivo."},
+  "psychic": {"id":"move_psychic","name":"Psíquico","type":"Psíquico","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Fuerte ataque telequinético que puede bajar la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":10},
+  "psychic-fangs": {"id":"move_psychic_fangs","name":"Psicocolmillo","type":"Psíquico","category":"physical","power":85,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca a sus rivales con poderes psíquicos que además destruyen barreras como Pantalla de Luz y Reflejo."},
+  "psychic-terrain": {"id":"move_psychic_terrain","name":"Campo Psíquico","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Durante cinco turnos, se potencian los movimientos de tipo Psíquico y los Pokémon que están en el suelo quedan protegidos contra movimientos con prioridad."},
+  "psycho-boost": {"id":"move_psycho_boost","name":"Psicoataque","type":"Psíquico","category":"special","power":140,"accuracy":90,"pp":5,"maxPp":5,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","statChanges":[{"stat":"spAttack","stages":-2}],"statTarget":"target","statChance":100},
+  "psycho-cut": {"id":"move_psycho_cut","name":"Psicocorte","type":"Psíquico","category":"physical","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca al objetivo con cuchillas formadas por energía psíquica. Suele ser crítico."},
+  "psycho-shift": {"id":"move_psycho_shift","name":"Psicocambio","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Usa su poder mental para transferir al objetivo sus problemas de estado."},
+  "psyshield-bash": {"id":"move_psyshield_bash","name":"Asalto Barrera","type":"Psíquico","category":"physical","power":70,"accuracy":90,"pp":10,"maxPp":10,"description":"Asalto Barrera"},
+  "psyshock": {"id":"move_psyshock","name":"Psicocarga","type":"Psíquico","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Crea una onda psíquica que causa daño físico al objetivo."},
+  "psystrike": {"id":"move_psystrike","name":"Onda Mental","type":"Psíquico","category":"special","power":100,"accuracy":100,"pp":10,"maxPp":10,"description":"Crea una onda psíquica que causa daño físico al objetivo."},
+  "purify": {"id":"move_purify","name":"Purificación","type":"Veneno","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Cura los problemas de estado del Pokémon rival y a cambio recupera PS propios.","healPercent":50},
+  "pursuit": {"id":"move_pursuit","name":"Persecución","type":"Siniestro","category":"physical","power":40,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "pyro-ball": {"id":"move_pyro_ball","name":"Balón Ígneo","type":"Fuego","category":"physical","power":120,"accuracy":90,"pp":5,"maxPp":5,"description":"El usuario prende una pequeña piedra para crear una bola de fuego con la que ataca al rival. Puede causar quemaduras.","statusEffect":"burn","statusChance":10},
+  "quash": {"id":"move_quash","name":"Último Lugar","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Consigue que el objetivo sea el último en moverse."},
+  "quick-attack": {"id":"move_quick_attack","name":"Ataque Rápido","type":"Normal","category":"physical","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"Ataca al objetivo a gran velocidad. Este movimiento tiene prioridad alta."},
+  "quick-guard": {"id":"move_quick_guard","name":"Anticipo","type":"Lucha","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Se protege a sí mismo y a sus aliados de movimientos con prioridad.","target":"self"},
+  "quiver-dance": {"id":"move_quiver_dance","name":"Danza Aleteo","type":"Bicho","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Danza mística que sube el Ataque Especial, la Defensa Especial y la Velocidad.","target":"self","statChanges":[{"stat":"spAttack","stages":1},{"stat":"spDefense","stages":1},{"stat":"speed","stages":1}],"statTarget":"self","statChance":100},
+  "rage": {"id":"move_rage","name":"Furia","type":"Normal","category":"physical","power":20,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "rage-fist": {"id":"move_rage_fist","name":"Puño Furia","type":"Fantasma","category":"physical","power":50,"accuracy":100,"pp":10,"maxPp":10,"description":"Puño Furia"},
+  "rage-powder": {"id":"move_rage_powder","name":"Polvo Ira","type":"Bicho","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Usa un polvo que irrita y centra en el usuario la atención y los ataques de los rivales.","target":"self"},
+  "raging-bull": {"id":"move_raging_bull","name":"Furia Taurina","type":"Normal","category":"physical","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Furia Taurina"},
+  "raging-fury": {"id":"move_raging_fury","name":"Erupción de Ira","type":"Fuego","category":"physical","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"Erupción de Ira"},
+  "rain-dance": {"id":"move_rain_dance","name":"Danza Lluvia","type":"Agua","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Genera una fuerte lluvia que refuerza los movimientos de tipo Agua durante cinco turnos y debilita los de tipo Fuego."},
+  "rapid-spin": {"id":"move_rapid_spin","name":"Giro Rápido","type":"Normal","category":"physical","power":50,"accuracy":100,"pp":40,"maxPp":40,"description":"Ataque giratorio que puede eliminar movimientos como Atadura, Constricción y Drenadoras. También aumenta la Velocidad del usuario.","statChanges":[{"stat":"speed","stages":1}],"statTarget":"target","statChance":100},
+  "razor-leaf": {"id":"move_razor_leaf","name":"Hoja Afilada","type":"Planta","category":"physical","power":55,"accuracy":95,"pp":25,"maxPp":25,"description":"Corta con hojas afiladas. Un ataque que suele ser crítico.","target":"all_enemies"},
+  "razor-shell": {"id":"move_razor_shell","name":"Concha Filo","type":"Agua","category":"physical","power":75,"accuracy":95,"pp":10,"maxPp":10,"description":"Una afilada vieira ataca al objetivo. También puede hacer disminuir su Defensa.","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":50},
+  "recover": {"id":"move_recover","name":"Recuperación","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Restaura hasta la mitad de los PS máximos.","healPercent":50,"target":"self"},
+  "recycle": {"id":"move_recycle","name":"Reciclaje","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Recicla y así recupera un objeto equipado de un solo uso que ya haya sido empleado durante el combate.","target":"self"},
+  "reflect": {"id":"move_reflect","name":"Reflejo","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Pared de luz que reduce durante cinco turnos el daño producido por los ataques físicos.","target":"self"},
+  "reflect-type": {"id":"move_reflect_type","name":"Clonatipo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Cambia el tipo del Pokémon al mismo tipo que el del objetivo."},
+  "relic-song": {"id":"move_relic_song","name":"Canto Arcaico","type":"Normal","category":"special","power":75,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca conmoviendo a los rivales de alrededor con un antiguo canto. Puede dormirlos.","statusEffect":"sleep","statusChance":10,"target":"all_enemies"},
+  "rest": {"id":"move_rest","name":"Descanso","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Restaura todos los PS y cura todos los problemas de estado del usuario, que se duerme los dos turnos siguientes.","target":"self"},
+  "retaliate": {"id":"move_retaliate","name":"Represalia","type":"Normal","category":"physical","power":70,"accuracy":100,"pp":5,"maxPp":5,"description":"Venga a los amigos caídos. Si en el turno anterior han derrotado a alguno, la potencia del ataque aumentará."},
+  "revelation-dance": {"id":"move_revelation_dance","name":"Danza Despertar","type":"Normal","category":"special","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataque que consiste en un baile muy enérgico. El tipo de este ataque se corresponde con el del Pokémon que lo ejecuta."},
+  "revenge": {"id":"move_revenge","name":"Desquite","type":"Lucha","category":"physical","power":60,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataque que produce el doble de daño si el usuario resulta herido en el mismo turno."},
+  "reversal": {"id":"move_reversal","name":"Inversión","type":"Lucha","category":"physical","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataque desesperado que causa más daño cuantos menos PS tenga el usuario."},
+  "revival-blessing": {"id":"move_revival_blessing","name":"Plegaria Vital","type":"Normal","category":"status","power":0,"accuracy":100,"pp":1,"maxPp":1,"description":"Plegaria Vital"},
+  "rising-voltage": {"id":"move_rising_voltage","name":"Alto Voltaje","type":"Eléctrico","category":"special","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca con una descarga eléctrica que surge del terreno de combate. La potencia del movimiento se duplica si el rival se ve afectado por un campo eléctrico."},
+  "roar": {"id":"move_roar","name":"Rugido","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Se lleva al objetivo, que es cambiado por otro Pokémon. Si es un Pokémon salvaje, acaba el combate."},
+  "roar-of-time": {"id":"move_roar_of_time","name":"Distorsión","type":"Dragón","category":"special","power":150,"accuracy":90,"pp":5,"maxPp":5,"description":"Ataca al objetivo usando tal energía que el tiempo se distorsiona. El usuario descansa el siguiente turno."},
+  "rock-blast": {"id":"move_rock_blast","name":"Pedrada","type":"Roca","category":"physical","power":25,"accuracy":90,"pp":10,"maxPp":10,"description":"Lanza pedruscos al objetivo de dos a cinco veces consecutivas."},
+  "rock-polish": {"id":"move_rock_polish","name":"Pulimento","type":"Roca","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Reduce la resistencia puliendo su cuerpo. Aumenta mucho la Velocidad.","target":"self","statChanges":[{"stat":"speed","stages":2}],"statTarget":"self","statChance":100},
+  "rock-slide": {"id":"move_rock_slide","name":"Avalancha","type":"Roca","category":"physical","power":75,"accuracy":90,"pp":10,"maxPp":10,"description":"Lanza grandes pedruscos. Puede amedrentar al objetivo.","target":"all_enemies"},
+  "rock-smash": {"id":"move_rock_smash","name":"Golpe Roca","type":"Lucha","category":"physical","power":40,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataque con los puños. Puede bajar la Defensa del objetivo.","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":50},
+  "rock-throw": {"id":"move_rock_throw","name":"Lanzarrocas","type":"Roca","category":"physical","power":50,"accuracy":90,"pp":15,"maxPp":15,"description":"Tira una pequeña roca al objetivo."},
+  "rock-tomb": {"id":"move_rock_tomb","name":"Tumba Rocas","type":"Roca","category":"physical","power":60,"accuracy":95,"pp":15,"maxPp":15,"description":"Tira rocas que detienen al objetivo y bajan su Velocidad.","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "rock-wrecker": {"id":"move_rock_wrecker","name":"Romperrocas","type":"Roca","category":"physical","power":150,"accuracy":90,"pp":5,"maxPp":5,"description":"Lanza una piedra enorme contra el objetivo, pero tiene que descansar el siguiente turno."},
+  "role-play": {"id":"move_role_play","name":"Imitación","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Imita al objetivo por completo y copia su habilidad."},
+  "rollout": {"id":"move_rollout","name":"Rodar","type":"Roca","category":"physical","power":30,"accuracy":90,"pp":20,"maxPp":20,"description":"El atacante rueda contra el objetivo durante cinco turnos, cada vez con mayor fuerza."},
+  "roost": {"id":"move_roost","name":"Respiro","type":"Volador","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Aterriza sobre la superficie para descansar. Recupera hasta la mitad del total de sus PS.","healPercent":50,"target":"self"},
+  "rototiller": {"id":"move_rototiller","name":"Fertilizante","type":"Tierra","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","statChanges":[{"stat":"attack","stages":1},{"stat":"spAttack","stages":1}],"statTarget":"target","statChance":100},
+  "round": {"id":"move_round","name":"Canon","type":"Normal","category":"special","power":60,"accuracy":100,"pp":15,"maxPp":15,"description":"Un canto que ataca al objetivo. Cuantos más Pokémon lo usan, más aumenta de potencia."},
+  "ruination": {"id":"move_ruination","name":"Calamidad","type":"Siniestro","category":"special","power":1,"accuracy":90,"pp":10,"maxPp":10,"description":"Calamidad"},
+  "sacred-fire": {"id":"move_sacred_fire","name":"Fuego Sagrado","type":"Fuego","category":"physical","power":100,"accuracy":95,"pp":5,"maxPp":5,"description":"Fuego místico de gran intensidad que puede causar quemaduras.","statusEffect":"burn","statusChance":50},
+  "sacred-sword": {"id":"move_sacred_sword","name":"Espada Santa","type":"Lucha","category":"physical","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario ataca con una espada, ignorando cualquier cambio en las características del objetivo."},
+  "safeguard": {"id":"move_safeguard","name":"Velo Sagrado","type":"Normal","category":"status","power":0,"accuracy":100,"pp":25,"maxPp":25,"description":"Un escudo que protege de problemas de estado, como el sueño o la parálisis, durante cinco turnos.","target":"self"},
+  "salt-cure": {"id":"move_salt_cure","name":"Salazón","type":"Roca","category":"physical","power":40,"accuracy":100,"pp":15,"maxPp":15,"description":"Salazón"},
+  "sand-attack": {"id":"move_sand_attack","name":"Ataque Arena","type":"Tierra","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Arroja arena a la cara y baja la Precisión.","statChanges":[{"stat":"accuracy","stages":-1}],"statTarget":"target","statChance":100},
+  "sand-tomb": {"id":"move_sand_tomb","name":"Bucle Arena","type":"Tierra","category":"physical","power":35,"accuracy":85,"pp":15,"maxPp":15,"description":"Enreda al objetivo en un remolino de arena de cuatro a cinco turnos."},
+  "sandsear-storm": {"id":"move_sandsear_storm","name":"Simún de Arena","type":"Tierra","category":"special","power":100,"accuracy":80,"pp":10,"maxPp":10,"description":"Simún de Arena","target":"all_enemies"},
+  "sandstorm": {"id":"move_sandstorm","name":"Tormenta de Arena","type":"Roca","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Tormenta de arena que dura cinco turnos y hiere a todos, excepto a los de tipo Roca, Tierra y Acero, y aumenta la Defensa Especial de los de tipo Roca."},
+  "scald": {"id":"move_scald","name":"Escaldar","type":"Agua","category":"special","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca arrojando agua hirviendo al objetivo. Puede causar quemaduras.","statusEffect":"burn","statusChance":30},
+  "scary-face": {"id":"move_scary_face","name":"Cara Susto","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Asusta al objetivo para reducir mucho su Velocidad.","statChanges":[{"stat":"speed","stages":-2}],"statTarget":"target","statChance":100},
+  "scratch": {"id":"move_scratch","name":"Arañazo","type":"Normal","category":"physical","power":40,"accuracy":100,"pp":35,"maxPp":35,"description":"Araña con afiladas garras."},
+  "screech": {"id":"move_screech","name":"Chirrido","type":"Normal","category":"status","power":0,"accuracy":85,"pp":40,"maxPp":40,"description":"Alarido agudo que reduce mucho la Defensa del objetivo.","statChanges":[{"stat":"defense","stages":-2}],"statTarget":"target","statChance":100},
+  "searing-shot": {"id":"move_searing_shot","name":"Bomba Ígnea","type":"Fuego","category":"special","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Un infierno de llamas daña a los Pokémon adyacentes en combate. Puede quemar.","statusEffect":"burn","statusChance":30,"target":"all_enemies"},
+  "secret-sword": {"id":"move_secret_sword","name":"Sable Místico","type":"Lucha","category":"special","power":85,"accuracy":100,"pp":10,"maxPp":10,"description":"Ensarta al objetivo con un largo cuerno dotado de un poder místico que provoca daño físico."},
+  "seed-bomb": {"id":"move_seed_bomb","name":"Bomba Germen","type":"Planta","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Lanza al objetivo una descarga de semillas explosivas desde arriba."},
+  "seed-flare": {"id":"move_seed_flare","name":"Fulgor Semilla","type":"Planta","category":"special","power":120,"accuracy":85,"pp":5,"maxPp":5,"description":"Una onda de choque se libera del cuerpo. Puede bajar mucho la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-2}],"statTarget":"target","statChance":40},
+  "seismic-toss": {"id":"move_seismic_toss","name":"Sísmico","type":"Lucha","category":"physical","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Aprovecha la gravedad para derribar al objetivo. Le resta tantos PS como nivel tenga el usuario."},
+  "self-destruct": {"id":"move_self_destruct","name":"Autodestrucción","type":"Normal","category":"physical","power":200,"accuracy":100,"pp":5,"maxPp":5,"description":"El atacante explota y hiere a todos a su alrededor. El usuario se debilita de inmediato.","target":"all_enemies"},
+  "shadow-ball": {"id":"move_shadow_ball","name":"Bola Sombra","type":"Fantasma","category":"special","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Lanza una bola oscura que puede bajar la Defensa Especial del objetivo.","statChanges":[{"stat":"spDefense","stages":-1}],"statTarget":"target","statChance":20},
+  "shadow-claw": {"id":"move_shadow_claw","name":"Garra Umbría","type":"Fantasma","category":"physical","power":70,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca con una garra afilada hecha de sombras. Suele ser crítico."},
+  "shadow-force": {"id":"move_shadow_force","name":"Golpe Umbrío","type":"Fantasma","category":"physical","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"En el primer turno, desaparece. En el segundo, golpea al objetivo aunque se esté protegiendo."},
+  "shadow-punch": {"id":"move_shadow_punch","name":"Puño Sombra","type":"Fantasma","category":"physical","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Puñetazo ineludible procedente de las sombras."},
+  "shadow-sneak": {"id":"move_shadow_sneak","name":"Sombra Vil","type":"Fantasma","category":"physical","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"Extiende su sombra y ataca al objetivo por la espalda. Este movimiento tiene prioridad alta."},
+  "shed-tail": {"id":"move_shed_tail","name":"Autotomía","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Autotomía","target":"self"},
+  "sheer-cold": {"id":"move_sheer_cold","name":"Frío Polar","type":"Hielo","category":"special","power":0,"accuracy":30,"pp":5,"maxPp":5,"description":"Debilita al objetivo de un solo golpe. Si lo usa un Pokémon que no sea de tipo Hielo, es difícil que acierte."},
+  "shell-smash": {"id":"move_shell_smash","name":"Rompecoraza","type":"Normal","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario rompe su coraza y baja su Defensa y Defensa Especial, pero aumenta mucho su Ataque, Ataque Especial y Velocidad.","target":"self","statChanges":[{"stat":"defense","stages":-1},{"stat":"spDefense","stages":-1},{"stat":"attack","stages":2},{"stat":"spAttack","stages":2},{"stat":"speed","stages":2}],"statTarget":"self","statChance":100},
+  "shell-trap": {"id":"move_shell_trap","name":"Coraza Trampa","type":"Fuego","category":"special","power":150,"accuracy":100,"pp":5,"maxPp":5,"description":"El caparazón del Pokémon se convierte en una trampa. Si le alcanza un ataque físico, la trampa estalla y los oponentes sufren daño.","target":"all_enemies"},
+  "shift-gear": {"id":"move_shift_gear","name":"Cambio de Marcha","type":"Acero","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Al hacer girar los engranajes, el usuario mejora su Ataque y aumenta mucho su Velocidad.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"speed","stages":2}],"statTarget":"self","statChance":100},
+  "shock-wave": {"id":"move_shock_wave","name":"Onda Voltio","type":"Eléctrico","category":"special","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataque eléctrico muy rápido e ineludible."},
+  "shore-up": {"id":"move_shore_up","name":"Recogearena","type":"Tierra","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Restaura la mitad de los PS máximos del usuario. Durante las tormentas de arena, restaura aún más PS.","healPercent":50,"target":"self"},
+  "silk-trap": {"id":"move_silk_trap","name":"Telatrampa","type":"Bicho","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Telatrampa","target":"self","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"self","statChance":100},
+  "silver-wind": {"id":"move_silver_wind","name":"Viento Plata","type":"Bicho","category":"special","power":60,"accuracy":100,"pp":5,"maxPp":5,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","statChanges":[{"stat":"attack","stages":1},{"stat":"defense","stages":1},{"stat":"spAttack","stages":1},{"stat":"spDefense","stages":1},{"stat":"speed","stages":1}],"statTarget":"target","statChance":10},
+  "simple-beam": {"id":"move_simple_beam","name":"Onda Simple","type":"Normal","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Lanza una onda psíquica que hace que la habilidad del objetivo pase a ser Simple."},
+  "sing": {"id":"move_sing","name":"Canto","type":"Normal","category":"status","power":0,"accuracy":55,"pp":15,"maxPp":15,"description":"Cancioncilla que hace dormir profundamente al objetivo.","statusEffect":"sleep","statusChance":100},
+  "sketch": {"id":"move_sketch","name":"Esquema","type":"Normal","category":"status","power":0,"accuracy":100,"pp":1,"maxPp":1,"description":"Aprende de forma permanente el último movimiento utilizado por el objetivo. Es de un solo uso."},
+  "skill-swap": {"id":"move_skill_swap","name":"Intercambio","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Usa el poder psíquico para intercambiar habilidades con el objetivo."},
+  "skitter-smack": {"id":"move_skitter_smack","name":"Golpe Rastrero","type":"Bicho","category":"physical","power":70,"accuracy":90,"pp":10,"maxPp":10,"description":"Ataca al objetivo por la espalda de forma subrepticia y además reduce su Ataque Especial.","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "skull-bash": {"id":"move_skull_bash","name":"Cabezazo","type":"Normal","category":"physical","power":130,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario se prepara y sube su Defensa en el primer turno y en el segundo arremete con un cabezazo."},
+  "sky-attack": {"id":"move_sky_attack","name":"Ataque Aéreo","type":"Volador","category":"physical","power":140,"accuracy":90,"pp":5,"maxPp":5,"description":"Ataca durante dos turnos y suele asestar un golpe crítico. También puede amedrentar al objetivo."},
+  "slack-off": {"id":"move_slack_off","name":"Relajo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario se relaja y restaura la mitad de sus PS máximos.","healPercent":50,"target":"self"},
+  "slam": {"id":"move_slam","name":"Atizar","type":"Normal","category":"physical","power":80,"accuracy":75,"pp":20,"maxPp":20,"description":"Golpea con la cola o con lianas, por ejemplo, para causar daño al objetivo."},
+  "slash": {"id":"move_slash","name":"Cuchillada","type":"Normal","category":"physical","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca con cuchillas o con pinzas. Suele asestar un golpe crítico."},
+  "sleep-powder": {"id":"move_sleep_powder","name":"Somnífero","type":"Planta","category":"status","power":0,"accuracy":75,"pp":15,"maxPp":15,"description":"Esparce polvo que duerme al objetivo.","statusEffect":"sleep","statusChance":100},
+  "sleep-talk": {"id":"move_sleep_talk","name":"Sonámbulo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Mientras duerme, usa uno de sus movimientos elegido al azar.","target":"self"},
+  "sludge": {"id":"move_sludge","name":"Residuos","type":"Veneno","category":"special","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Arroja residuos al objetivo. Puede llegar a envenenar.","statusEffect":"poison","statusChance":30},
+  "sludge-bomb": {"id":"move_sludge_bomb","name":"Bomba Lodo","type":"Veneno","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Arroja residuos al objetivo. Puede llegar a envenenar.","statusEffect":"poison","statusChance":30},
+  "sludge-wave": {"id":"move_sludge_wave","name":"Onda Tóxica","type":"Veneno","category":"special","power":95,"accuracy":100,"pp":10,"maxPp":10,"description":"Una onda tóxica que daña a los Pokémon de alrededor. Puede envenenar.","statusEffect":"poison","statusChance":10,"target":"all_enemies"},
+  "smack-down": {"id":"move_smack_down","name":"Antiaéreo","type":"Roca","category":"physical","power":50,"accuracy":100,"pp":15,"maxPp":15,"description":"Ataca lanzando una piedra o un proyectil. Si el objetivo está en el aire, lo estrella contra el suelo."},
+  "smart-strike": {"id":"move_smart_strike","name":"Cuerno Certero","type":"Acero","category":"physical","power":70,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ensarta al adversario con su afilada cornamenta. Este movimiento acierta siempre."},
+  "smog": {"id":"move_smog","name":"Polución","type":"Veneno","category":"special","power":30,"accuracy":70,"pp":20,"maxPp":20,"description":"Lanza un ataque con gases tóxicos que pueden llegar a envenenar.","statusEffect":"poison","statusChance":40},
+  "smokescreen": {"id":"move_smokescreen","name":"Pantalla de Humo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Baja la Precisión del objetivo con una nube de humo o tinta.","statChanges":[{"stat":"accuracy","stages":-1}],"statTarget":"target","statChance":100},
+  "snarl": {"id":"move_snarl","name":"Alarido","type":"Siniestro","category":"special","power":55,"accuracy":95,"pp":15,"maxPp":15,"description":"Chillido desagradable que baja el Ataque Especial del rival.","target":"all_enemies","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "snipe-shot": {"id":"move_snipe_shot","name":"Disparo Certero","type":"Agua","category":"special","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Permite atacar al objetivo seleccionado ignorando las habilidades o movimientos que permiten a un rival centrar la atención sobre sí."},
+  "snore": {"id":"move_snore","name":"Ronquido","type":"Normal","category":"special","power":50,"accuracy":100,"pp":15,"maxPp":15,"description":"Fuerte ronquido que solo puede usarse dormido. Puede amedrentar al objetivo."},
+  "snowscape": {"id":"move_snowscape","name":"Paisaje Nevado","type":"Hielo","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Paisaje Nevado"},
+  "soak": {"id":"move_soak","name":"Empapar","type":"Agua","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Potente lluvia que transforma al objetivo en un Pokémon de tipo Agua."},
+  "soft-boiled": {"id":"move_soft_boiled","name":"Ovocuración","type":"Normal","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Restaura la mitad de los PS máximos del usuario.","healPercent":50,"target":"self"},
+  "solar-beam": {"id":"move_solar_beam","name":"Rayo Solar","type":"Planta","category":"special","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario absorbe luz en el primer turno y en el segundo lanza un potente rayo de energía."},
+  "solar-blade": {"id":"move_solar_blade","name":"Cuchilla Solar","type":"Planta","category":"physical","power":125,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario dedica un turno a absorber energía lumínica y concentrarla en forma de cuchilla con la que ataca al rival en el siguiente turno."},
+  "spacial-rend": {"id":"move_spacial_rend","name":"Corte Vacío","type":"Dragón","category":"special","power":100,"accuracy":95,"pp":5,"maxPp":5,"description":"Desgarra al objetivo y el espacio a su alrededor. Suele ser crítico."},
+  "spark": {"id":"move_spark","name":"Chispa","type":"Eléctrico","category":"physical","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataque eléctrico que puede llegar a paralizar.","statusEffect":"paralysis","statusChance":30},
+  "sparkling-aria": {"id":"move_sparkling_aria","name":"Aria Burbuja","type":"Agua","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Libera burbujas al cantar. Este movimiento cura las quemaduras de los Pokémon que reciban daño.","target":"all_enemies"},
+  "spectral-thief": {"id":"move_spectral_thief","name":"Robasombra","type":"Fantasma","category":"physical","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario se esconde en la sombra del objetivo y lo ataca tras robarle las mejoras en sus características."},
+  "speed-swap": {"id":"move_speed_swap","name":"Cambiavelocidad","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Intercambia su Velocidad por la del oponente."},
+  "spicy-extract": {"id":"move_spicy_extract","name":"Extracto Picante","type":"Planta","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Extracto Picante","statChanges":[{"stat":"attack","stages":2},{"stat":"defense","stages":-2}],"statTarget":"target","statChance":100},
+  "spikes": {"id":"move_spikes","name":"Púas","type":"Tierra","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Esparce púas alrededor del equipo rival que hieren a los Pokémon rivales que entran en combate.","target":"all_enemies"},
+  "spiky-shield": {"id":"move_spiky_shield","name":"Barrera Espinosa","type":"Planta","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Protege al usuario de ataques, e inflige daño a quien se los lance si entra en contacto con él.","target":"self"},
+  "spin-out": {"id":"move_spin_out","name":"Quemarrueda","type":"Acero","category":"physical","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Quemarrueda","statChanges":[{"stat":"speed","stages":-2}],"statTarget":"target","statChance":100},
+  "spirit-break": {"id":"move_spirit_break","name":"Choque Anímico","type":"Hada","category":"physical","power":75,"accuracy":100,"pp":15,"maxPp":15,"description":"El usuario ataca al objetivo con tal ímpetu que acaba minando su moral y, en consecuencia, reduce su Ataque Especial.","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "spirit-shackle": {"id":"move_spirit_shackle","name":"Puntada Sombría","type":"Fantasma","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca al oponente y, al mismo tiempo, fija su sombra al terreno para impedir su huida."},
+  "spit-up": {"id":"move_spit_up","name":"Escupir","type":"Normal","category":"special","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Libera de una vez la energía acumulada con Reserva. La potencia del ataque será proporcional a la cantidad de energía acumulada."},
+  "spite": {"id":"move_spite","name":"Rencor","type":"Fantasma","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Da rienda suelta a su rencor para reducir cuatro PP del último movimiento usado por el objetivo."},
+  "splash": {"id":"move_splash","name":"Salpicadura","type":"Normal","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"No tiene ningún efecto. Solo salpica.","target":"self"},
+  "spore": {"id":"move_spore","name":"Espora","type":"Planta","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Esparce esporas que inducen al sueño.","statusEffect":"sleep","statusChance":100},
+  "springtide-storm": {"id":"move_springtide_storm","name":"Ciclón Primavera","type":"Hada","category":"special","power":100,"accuracy":80,"pp":5,"maxPp":5,"description":"Ciclón Primavera","target":"all_enemies"},
+  "stealth-rock": {"id":"move_stealth_rock","name":"Trampa Rocas","type":"Roca","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Una trampa de rocas que flota en el aire y daña a los objetivos que entran en combate.","target":"all_enemies"},
+  "steam-eruption": {"id":"move_steam_eruption","name":"Chorro de Vapor","type":"Agua","category":"special","power":110,"accuracy":95,"pp":5,"maxPp":5,"description":"Envuelve al Pokémon oponente con vapor extremadamente caliente que puede llegar a quemarlo.","statusEffect":"burn","statusChance":30},
+  "steel-roller": {"id":"move_steel_roller","name":"Allanador Férreo","type":"Acero","category":"physical","power":130,"accuracy":100,"pp":5,"maxPp":5,"description":"El usuario lanza su ataque y destruye el campo activo en el terreno de combate, y falla si no hay ninguno en ese momento."},
+  "steel-wing": {"id":"move_steel_wing","name":"Ala de Acero","type":"Acero","category":"physical","power":70,"accuracy":90,"pp":25,"maxPp":25,"description":"Alas macizas que golpean al objetivo y pueden subir la Defensa del usuario.","statChanges":[{"stat":"defense","stages":1}],"statTarget":"target","statChance":10},
+  "sticky-web": {"id":"move_sticky_web","name":"Red Viscosa","type":"Bicho","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Coloca una red pegajosa alrededor del equipo rival que baja la Velocidad de cualquier adversario que entre a combatir.","target":"all_enemies"},
+  "stockpile": {"id":"move_stockpile","name":"Reserva","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Acumula energía y sube la Defensa y la Defensa Especial. Puede utilizarse hasta tres veces.","target":"self","statChanges":[{"stat":"defense","stages":1},{"stat":"spDefense","stages":1}],"statTarget":"self","statChance":100},
+  "stomp": {"id":"move_stomp","name":"Pisotón","type":"Normal","category":"physical","power":65,"accuracy":100,"pp":20,"maxPp":20,"description":"Tremendo pisotón que puede hacer que el objetivo se amedrente."},
+  "stomping-tantrum": {"id":"move_stomping_tantrum","name":"Pataleta","type":"Tierra","category":"physical","power":75,"accuracy":100,"pp":10,"maxPp":10,"description":"Usa la frustración como revulsivo para atacar. La potencia de Pataleta se duplica si el usuario ha fallado el último movimiento usado."},
+  "stone-axe": {"id":"move_stone_axe","name":"Hachazo Pétreo","type":"Roca","category":"physical","power":65,"accuracy":90,"pp":15,"maxPp":15,"description":"Hachazo Pétreo"},
+  "stone-edge": {"id":"move_stone_edge","name":"Roca Afilada","type":"Roca","category":"physical","power":100,"accuracy":80,"pp":5,"maxPp":5,"description":"Clava piedras muy afiladas al objetivo. Suele ser crítico."},
+  "stored-power": {"id":"move_stored_power","name":"Poder Reserva","type":"Psíquico","category":"special","power":20,"accuracy":100,"pp":10,"maxPp":10,"description":"Acumula poder para golpear. Cuanto más suban las características del usuario, mayor será el daño."},
+  "storm-throw": {"id":"move_storm_throw","name":"Llave Corsé","type":"Lucha","category":"physical","power":60,"accuracy":100,"pp":10,"maxPp":10,"description":"Lanza un golpe devastador. Siempre asesta un golpe crítico."},
+  "strength": {"id":"move_strength","name":"Fuerza","type":"Normal","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Propina un potente puñetazo con todas sus fuerzas."},
+  "strength-sap": {"id":"move_strength_sap","name":"Absorbefuerza","type":"Planta","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Restaura una cantidad de PS equivalente al valor de Ataque del rival, que además verá reducida esta característica.","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":100},
+  "string-shot": {"id":"move_string_shot","name":"Disparo Demora","type":"Bicho","category":"status","power":0,"accuracy":95,"pp":40,"maxPp":40,"description":"Lanza seda a los rivales y reduce mucho su Velocidad.","target":"all_enemies","statChanges":[{"stat":"speed","stages":-2}],"statTarget":"target","statChance":100},
+  "struggle-bug": {"id":"move_struggle_bug","name":"Estoicismo","type":"Bicho","category":"special","power":50,"accuracy":100,"pp":20,"maxPp":20,"description":"El usuario opone resistencia y ataca a los oponentes. También reduce su Ataque Especial.","target":"all_enemies","statChanges":[{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "stuff-cheeks": {"id":"move_stuff_cheeks","name":"Atiborramiento","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ingiere la baya que lleva equipada para aumentar mucho su Defensa.","target":"self","statChanges":[{"stat":"defense","stages":2}],"statTarget":"self","statChance":100},
+  "stun-spore": {"id":"move_stun_spore","name":"Paralizador","type":"Planta","category":"status","power":0,"accuracy":75,"pp":30,"maxPp":30,"description":"Esparce polvo que paraliza al objetivo.","statusEffect":"paralysis","statusChance":100},
+  "submission": {"id":"move_submission","name":"Sumisión","type":"Lucha","category":"physical","power":80,"accuracy":80,"pp":20,"maxPp":20,"description":"El usuario se lanza al suelo con el oponente en brazos y también se hace un poco de daño."},
+  "substitute": {"id":"move_substitute","name":"Sustituto","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Utiliza parte de los PS propios para crear un sustituto que actúa como señuelo.","target":"self"},
+  "sucker-punch": {"id":"move_sucker_punch","name":"Golpe Bajo","type":"Siniestro","category":"physical","power":70,"accuracy":100,"pp":5,"maxPp":5,"description":"Permite atacar con prioridad. Falla si el objetivo no está preparando ningún ataque."},
+  "sunny-day": {"id":"move_sunny_day","name":"Día Soleado","type":"Fuego","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Hace que se intensifique el efecto del sol durante cinco turnos, lo que potencia los movimientos de tipo Fuego y debilita los de tipo Agua."},
+  "sunsteel-strike": {"id":"move_sunsteel_strike","name":"Meteoimpacto","type":"Acero","category":"physical","power":100,"accuracy":100,"pp":5,"maxPp":5,"description":"Ataca al objetivo con la potencia de un meteoro, ignorando su habilidad."},
+  "super-fang": {"id":"move_super_fang","name":"Superdiente","type":"Normal","category":"physical","power":0,"accuracy":90,"pp":10,"maxPp":10,"description":"Finos colmillos que reducen a la mitad los PS del objetivo."},
+  "superpower": {"id":"move_superpower","name":"Fuerza Bruta","type":"Lucha","category":"physical","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Ataque de gran potencia, pero que reduce el Ataque y la Defensa del agresor.","statChanges":[{"stat":"attack","stages":-1},{"stat":"defense","stages":-1}],"statTarget":"target","statChance":100},
+  "supersonic": {"id":"move_supersonic","name":"Supersónico","type":"Normal","category":"status","power":0,"accuracy":55,"pp":20,"maxPp":20,"description":"Raras ondas sónicas que confunden al objetivo."},
+  "surf": {"id":"move_surf","name":"Surf","type":"Agua","category":"special","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"Inunda el terreno de combate con una ola gigante.","target":"all_enemies"},
+  "swagger": {"id":"move_swagger","name":"Fanfarronear","type":"Normal","category":"status","power":0,"accuracy":85,"pp":15,"maxPp":15,"description":"Provoca confusión en el objetivo, pero también sube mucho su Ataque.","statChanges":[{"stat":"attack","stages":2}],"statTarget":"target","statChance":100},
+  "swallow": {"id":"move_swallow","name":"Tragar","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Absorbe la energía acumulada con Reserva para recobrar salud. Cuanta más se haya acumulado, mayor será el número de PS que se recuperen.","healPercent":25,"target":"self"},
+  "sweet-kiss": {"id":"move_sweet_kiss","name":"Beso Dulce","type":"Hada","category":"status","power":0,"accuracy":75,"pp":10,"maxPp":10,"description":"Da un beso con tal dulzura que causa confusión."},
+  "sweet-scent": {"id":"move_sweet_scent","name":"Dulce Aroma","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Un dulce aroma engatusa al objetivo, por lo que se reduce mucho su Evasión.","target":"all_enemies","statChanges":[{"stat":"evasion","stages":-2}],"statTarget":"target","statChance":100},
+  "swift": {"id":"move_swift","name":"Meteoros","type":"Normal","category":"special","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Lanza rayos en forma de estrella que no fallan nunca.","target":"all_enemies"},
+  "switcheroo": {"id":"move_switcheroo","name":"Trapicheo","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Intercambia con el objetivo los objetos que llevan tan rápido que es imposible verlo a simple vista."},
+  "swords-dance": {"id":"move_swords_dance","name":"Danza Espada","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Baile frenético que aumenta mucho el Ataque.","target":"self","statChanges":[{"stat":"attack","stages":2}],"statTarget":"self","statChance":100},
+  "synchronoise": {"id":"move_synchronoise","name":"Sincrorruido","type":"Psíquico","category":"special","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","target":"all_enemies"},
+  "synthesis": {"id":"move_synthesis","name":"Fotosíntesis","type":"Planta","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Restaura PS del usuario. La cantidad varía según el tiempo que haga.","healPercent":50,"target":"self"},
+  "syrup-bomb": {"id":"move_syrup_bomb","name":"Bomba Caramelo","type":"Planta","category":"special","power":60,"accuracy":85,"pp":10,"maxPp":10,"description":"Bomba Caramelo","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "tachyon-cutter": {"id":"move_tachyon_cutter","name":"Tajo Taquión","type":"Acero","category":"special","power":50,"accuracy":0,"pp":10,"maxPp":10,"description":"Tajo Taquión"},
+  "tackle": {"id":"move_tackle","name":"Placaje","type":"Normal","category":"physical","power":40,"accuracy":100,"pp":35,"maxPp":35,"description":"Embestida con todo el cuerpo."},
+  "tail-glow": {"id":"move_tail_glow","name":"Luminicola","type":"Bicho","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","target":"self","statChanges":[{"stat":"spAttack","stages":3}],"statTarget":"self","statChance":100},
+  "tail-slap": {"id":"move_tail_slap","name":"Plumerazo","type":"Normal","category":"physical","power":25,"accuracy":85,"pp":10,"maxPp":10,"description":"Golpea con la cola de dos a cinco veces seguidas."},
+  "tail-whip": {"id":"move_tail_whip","name":"Agitacola","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Agita la cola para bajar la Defensa del equipo rival.","target":"all_enemies","statChanges":[{"stat":"defense","stages":-1}],"statTarget":"target","statChance":100},
+  "tailwind": {"id":"move_tailwind","name":"Viento Afín","type":"Volador","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Crea un fuerte remolino que aumenta la Velocidad de los Pokémon de tu equipo durante cuatro turnos.","target":"self"},
+  "take-down": {"id":"move_take_down","name":"Derribo","type":"Normal","category":"physical","power":90,"accuracy":85,"pp":20,"maxPp":20,"description":"Carga desmedida que también hiere al agresor."},
+  "take-heart": {"id":"move_take_heart","name":"Bálsamo Osado","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Bálsamo Osado","target":"self"},
+  "tar-shot": {"id":"move_tar_shot","name":"Alquitranazo","type":"Roca","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Cubre al objetivo de un alquitrán pegajoso que reduce su Velocidad y lo vuelve débil contra el fuego.","statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "taunt": {"id":"move_taunt","name":"Mofa","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Enfurece al objetivo para que solo use movimientos de ataque durante tres turnos."},
+  "tearful-look": {"id":"move_tearful_look","name":"Ojos Llorosos","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Mira al objetivo con ojos llorosos para hacerle perder su espíritu combativo y reduce su Ataque y Ataque Especial.","statChanges":[{"stat":"attack","stages":-1},{"stat":"spAttack","stages":-1}],"statTarget":"target","statChance":100},
+  "teatime": {"id":"move_teatime","name":"Hora del Té","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario invita a tomar el té a todos los presentes en el terreno de combate, lo que hace que ingieran las bayas que lleven equipadas."},
+  "techno-blast": {"id":"move_techno_blast","name":"Tecno Shock","type":"Normal","category":"special","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Ataca al objetivo con un gran láser. El tipo del ataque lo determina el cartucho que porta el usuario."},
+  "teeter-dance": {"id":"move_teeter_dance","name":"Danza Caos","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Danza histérica que confunde a los Pokémon que están alrededor del usuario.","target":"all_enemies"},
+  "teleport": {"id":"move_teleport","name":"Teletransporte","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Permite al usuario cambiarse por otro Pokémon del equipo, si es posible. Si un Pokémon salvaje usa este movimiento, huye del combate.","target":"self"},
+  "tera-starstorm": {"id":"move_tera_starstorm","name":"Teraclúster","type":"Normal","category":"special","power":120,"accuracy":100,"pp":5,"maxPp":5,"description":"Teraclúster","target":"all_enemies"},
+  "terrain-pulse": {"id":"move_terrain_pulse","name":"Pulso de Campo","type":"Normal","category":"special","power":50,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ataca aprovechando la energía del campo activo, que determina tanto el tipo como la potencia del movimiento."},
+  "thief": {"id":"move_thief","name":"Ladrón","type":"Siniestro","category":"physical","power":60,"accuracy":100,"pp":25,"maxPp":25,"description":"El agresor ataca y le quita el objeto al objetivo siempre y cuando no lleve ninguno."},
+  "thousand-arrows": {"id":"move_thousand_arrows","name":"Mil Flechas","type":"Tierra","category":"physical","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Acierta incluso a Pokémon que estén en el aire y los hace caer al suelo.","target":"all_enemies"},
+  "thousand-waves": {"id":"move_thousand_waves","name":"Mil Temblores","type":"Tierra","category":"physical","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario genera ondas sísmicas que se propagan por el suelo y sacuden a los oponentes. Los Pokémon alcanzados no podrán huir del combate.","target":"all_enemies"},
+  "thrash": {"id":"move_thrash","name":"Saña","type":"Normal","category":"physical","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataque de dos a tres turnos que acaba confundiendo al agresor."},
+  "throat-chop": {"id":"move_throat_chop","name":"Golpe Mordaza","type":"Siniestro","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Inflige al rival un dolor tan abrumador que le impide utilizar durante dos turnos ataques que se sirven del sonido."},
+  "thunder": {"id":"move_thunder","name":"Trueno","type":"Eléctrico","category":"special","power":110,"accuracy":70,"pp":10,"maxPp":10,"description":"Un poderoso rayo que daña al objetivo y puede paralizarlo.","statusEffect":"paralysis","statusChance":30},
+  "thunder-cage": {"id":"move_thunder_cage","name":"Electrojaula","type":"Eléctrico","category":"special","power":80,"accuracy":90,"pp":15,"maxPp":15,"description":"El objetivo queda atrapado en una jaula electrificada que permanece en el terreno de cuatro a cinco turnos."},
+  "thunder-fang": {"id":"move_thunder_fang","name":"Colmillo Rayo","type":"Eléctrico","category":"physical","power":65,"accuracy":95,"pp":15,"maxPp":15,"description":"El usuario muerde al objetivo con colmillos electrificados y puede hacer que se amedrente o se paralice.","statusEffect":"paralysis","statusChance":10},
+  "thunder-punch": {"id":"move_thunder_punch","name":"Puño Trueno","type":"Eléctrico","category":"physical","power":75,"accuracy":100,"pp":15,"maxPp":15,"description":"Puñetazo eléctrico que puede paralizar al adversario.","statusEffect":"paralysis","statusChance":10},
+  "thunder-shock": {"id":"move_thunder_shock","name":"Impactrueno","type":"Eléctrico","category":"special","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"Ataque eléctrico que puede paralizar al objetivo.","statusEffect":"paralysis","statusChance":10},
+  "thunder-wave": {"id":"move_thunder_wave","name":"Onda Trueno","type":"Eléctrico","category":"status","power":0,"accuracy":90,"pp":20,"maxPp":20,"description":"Una ligera descarga que paraliza al objetivo si lo alcanza.","statusEffect":"paralysis","statusChance":100},
+  "thunderbolt": {"id":"move_thunderbolt","name":"Rayo","type":"Eléctrico","category":"special","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"Potente ataque eléctrico que puede paralizar al objetivo.","statusEffect":"paralysis","statusChance":10},
+  "thunderclap": {"id":"move_thunderclap","name":"Relámpago Súbito","type":"Eléctrico","category":"special","power":70,"accuracy":100,"pp":5,"maxPp":5,"description":"Relámpago Súbito"},
+  "tickle": {"id":"move_tickle","name":"Cosquillas","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Hace reír al objetivo para bajar su Ataque y Defensa.","statChanges":[{"stat":"attack","stages":-1},{"stat":"defense","stages":-1}],"statTarget":"target","statChance":100},
+  "tidy-up": {"id":"move_tidy_up","name":"Limpieza General","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Limpieza General","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"speed","stages":1}],"statTarget":"self","statChance":100},
+  "topsy-turvy": {"id":"move_topsy_turvy","name":"Reversión","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Invierte por completo los cambios en las características del objetivo."},
+  "torch-song": {"id":"move_torch_song","name":"Canto Ardiente","type":"Fuego","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Canto Ardiente","statChanges":[{"stat":"spAttack","stages":1}],"statTarget":"target","statChance":100},
+  "torment": {"id":"move_torment","name":"Tormento","type":"Siniestro","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Atormenta y enfurece al objetivo, que no puede usar dos veces seguidas el mismo movimiento."},
+  "toxic": {"id":"move_toxic","name":"Tóxico","type":"Veneno","category":"status","power":0,"accuracy":90,"pp":10,"maxPp":10,"description":"Envenena gravemente al objetivo y causa un daño mayor en cada turno.","statusEffect":"poison","statusChance":100},
+  "toxic-spikes": {"id":"move_toxic_spikes","name":"Púas Tóxicas","type":"Veneno","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Lanza una trampa de púas tóxicas a los pies del objetivo. El veneno afecta a los Pokémon oponentes que entran en combate.","target":"all_enemies"},
+  "toxic-thread": {"id":"move_toxic_thread","name":"Hilo Venenoso","type":"Veneno","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca al oponente con hilillos venenosos que reducen su Velocidad y lo envenenan.","statusEffect":"poison","statusChance":100,"statChanges":[{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "transform": {"id":"move_transform","name":"Transformación","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario se transforma en una copia del objetivo, con los mismos movimientos."},
+  "tri-attack": {"id":"move_tri_attack","name":"Triataque","type":"Normal","category":"special","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataque triple que puede paralizar, quemar o congelar al objetivo."},
+  "trick": {"id":"move_trick","name":"Truco","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Engaña al objetivo desprevenido e intercambia objetos."},
+  "trick-or-treat": {"id":"move_trick_or_treat","name":"Halloween","type":"Fantasma","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Invita al objetivo a celebrar Halloween, lo que añade el tipo Fantasma a los tipos de este."},
+  "trick-room": {"id":"move_trick_room","name":"Espacio Raro","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Crea un espacio extraño en el que los Pokémon lentos se mueven primero durante cinco turnos."},
+  "triple-dive": {"id":"move_triple_dive","name":"Triple Inmersión","type":"Agua","category":"physical","power":30,"accuracy":95,"pp":10,"maxPp":10,"description":"Triple Inmersión"},
+  "triple-kick": {"id":"move_triple_kick","name":"Triple Patada","type":"Lucha","category":"physical","power":10,"accuracy":90,"pp":10,"maxPp":10,"description":"Patea hasta tres veces seguidas y cada vez más fuerte."},
+  "trop-kick": {"id":"move_trop_kick","name":"Patada Tropical","type":"Planta","category":"physical","power":70,"accuracy":100,"pp":15,"maxPp":15,"description":"Lanza una patada con la fuerza del trópico que golpea al rival y reduce su Ataque.","statChanges":[{"stat":"attack","stages":-1}],"statTarget":"target","statChance":100},
+  "twin-beam": {"id":"move_twin_beam","name":"Láser Doble","type":"Psíquico","category":"special","power":40,"accuracy":100,"pp":10,"maxPp":10,"description":"Láser Doble"},
+  "twineedle": {"id":"move_twineedle","name":"Doble Ataque","type":"Bicho","category":"physical","power":25,"accuracy":100,"pp":20,"maxPp":20,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.","statusEffect":"poison","statusChance":20},
+  "twister": {"id":"move_twister","name":"Ciclón","type":"Dragón","category":"special","power":40,"accuracy":100,"pp":20,"maxPp":20,"description":"Crea un violento tornado para hacer trizas al objetivo. Puede amedrentarlo.","target":"all_enemies"},
+  "u-turn": {"id":"move_u_turn","name":"Ida y Vuelta","type":"Bicho","category":"physical","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Tras atacar, el usuario vuelve a toda prisa para dar paso a otro Pokémon del equipo."},
+  "uproar": {"id":"move_uproar","name":"Alboroto","type":"Normal","category":"special","power":90,"accuracy":100,"pp":10,"maxPp":10,"description":"Ataca de forma alborotada durante tres turnos. Mantiene despiertos a todos."},
+  "v-create": {"id":"move_v_create","name":"V de Fuego","type":"Fuego","category":"physical","power":180,"accuracy":95,"pp":5,"maxPp":5,"description":"Golpea con una V de llamas al objetivo. Baja la Defensa, la Defensa Especial y la Velocidad de quien lo usa.","statChanges":[{"stat":"defense","stages":-1},{"stat":"spDefense","stages":-1},{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "vacuum-wave": {"id":"move_vacuum_wave","name":"Onda Vacío","type":"Lucha","category":"special","power":40,"accuracy":100,"pp":30,"maxPp":30,"description":"Gira los puños y libera una onda de vacío contra el objetivo. Este movimiento tiene prioridad alta."},
+  "venom-drench": {"id":"move_venom_drench","name":"Trampa Venenosa","type":"Veneno","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Impregna a su objetivo con un líquido venenoso que disminuye el Ataque, el Ataque Especial y la Velocidad. Solo afecta a Pokémon ya envenenados.","target":"all_enemies","statChanges":[{"stat":"attack","stages":-1},{"stat":"spAttack","stages":-1},{"stat":"speed","stages":-1}],"statTarget":"target","statChance":100},
+  "venoshock": {"id":"move_venoshock","name":"Carga Tóxica","type":"Veneno","category":"special","power":65,"accuracy":100,"pp":10,"maxPp":10,"description":"Cubre al objetivo con un líquido venenoso. El daño será doble si este ya está envenenado."},
+  "vice-grip": {"id":"move_vice_grip","name":"Agarre","type":"Normal","category":"physical","power":55,"accuracy":100,"pp":30,"maxPp":30,"description":"Atrapa y atenaza al objetivo."},
+  "vine-whip": {"id":"move_vine_whip","name":"Látigo Cepa","type":"Planta","category":"physical","power":45,"accuracy":100,"pp":25,"maxPp":25,"description":"Azota al objetivo con ramas finas."},
+  "vital-throw": {"id":"move_vital_throw","name":"Llave Vital","type":"Lucha","category":"physical","power":70,"accuracy":100,"pp":10,"maxPp":10,"description":"El usuario ataca el último, pero no falla."},
+  "volt-switch": {"id":"move_volt_switch","name":"Voltiocambio","type":"Eléctrico","category":"special","power":70,"accuracy":100,"pp":20,"maxPp":20,"description":"Tras atacar, el usuario vuelve a toda prisa para dar paso a otro Pokémon del equipo."},
+  "wake-up-slap": {"id":"move_wake_up_slap","name":"Espabila","type":"Lucha","category":"physical","power":70,"accuracy":100,"pp":10,"maxPp":10,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "water-gun": {"id":"move_water_gun","name":"Pistola Agua","type":"Agua","category":"special","power":40,"accuracy":100,"pp":25,"maxPp":25,"description":"Ataca disparando agua con gran potencia."},
+  "water-pulse": {"id":"move_water_pulse","name":"Hidropulso","type":"Agua","category":"special","power":60,"accuracy":100,"pp":20,"maxPp":20,"description":"Ataca con un potente chorro de agua. Puede confundir al objetivo."},
+  "water-shuriken": {"id":"move_water_shuriken","name":"Shuriken de Agua","type":"Agua","category":"special","power":15,"accuracy":100,"pp":20,"maxPp":20,"description":"Golpea al oponente de dos a cinco veces con estrellas arrojadizas hechas de mucosidad. Este movimiento tiene prioridad alta."},
+  "water-sport": {"id":"move_water_sport","name":"Hidrochorro","type":"Agua","category":"status","power":0,"accuracy":100,"pp":15,"maxPp":15,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "water-spout": {"id":"move_water_spout","name":"Salpicar","type":"Agua","category":"special","power":150,"accuracy":100,"pp":5,"maxPp":5,"description":"Chorro de agua. Cuantos menos PS tenga el usuario, menos dañino será.","target":"all_enemies"},
+  "waterfall": {"id":"move_waterfall","name":"Cascada","type":"Agua","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Embiste con un gran impulso que puede llegar a amedrentar."},
+  "wave-crash": {"id":"move_wave_crash","name":"Envite Acuático","type":"Agua","category":"physical","power":120,"accuracy":100,"pp":10,"maxPp":10,"description":"Envite Acuático"},
+  "weather-ball": {"id":"move_weather_ball","name":"Meteorobola","type":"Normal","category":"special","power":50,"accuracy":100,"pp":10,"maxPp":10,"description":"El tipo y fuerza del ataque varían según el tiempo que haga."},
+  "whirlpool": {"id":"move_whirlpool","name":"Torbellino","type":"Agua","category":"special","power":35,"accuracy":85,"pp":15,"maxPp":15,"description":"Una tromba de agua atrapa al objetivo durante cuatro o cinco turnos."},
+  "whirlwind": {"id":"move_whirlwind","name":"Remolino","type":"Normal","category":"status","power":0,"accuracy":100,"pp":20,"maxPp":20,"description":"Se lleva al objetivo, que es cambiado por otro Pokémon. Si es un Pokémon salvaje, acaba el combate."},
+  "wicked-blow": {"id":"move_wicked_blow","name":"Golpe Oscuro","type":"Siniestro","category":"physical","power":75,"accuracy":100,"pp":5,"maxPp":5,"description":"Golpe devastador que requiere un absoluto dominio de las artes siniestras. Siempre asesta un golpe crítico."},
+  "wide-guard": {"id":"move_wide_guard","name":"Vasta Guardia","type":"Roca","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Bloquea los ataques de objetivo múltiple lanzados contra tu equipo durante un turno.","target":"self"},
+  "wild-charge": {"id":"move_wild_charge","name":"Voltio Cruel","type":"Eléctrico","category":"physical","power":90,"accuracy":100,"pp":15,"maxPp":15,"description":"Carga eléctrica muy potente que también hiere ligeramente a quien la usa."},
+  "wildbolt-storm": {"id":"move_wildbolt_storm","name":"Electormenta","type":"Eléctrico","category":"special","power":100,"accuracy":80,"pp":10,"maxPp":10,"description":"Electormenta","target":"all_enemies"},
+  "will-o-wisp": {"id":"move_will_o_wisp","name":"Fuego Fatuo","type":"Fuego","category":"status","power":0,"accuracy":85,"pp":15,"maxPp":15,"description":"Siniestra llama morada que produce quemaduras.","statusEffect":"burn","statusChance":100},
+  "wing-attack": {"id":"move_wing_attack","name":"Ataque Ala","type":"Volador","category":"physical","power":60,"accuracy":100,"pp":35,"maxPp":35,"description":"Golpea al objetivo con unas grandes alas."},
+  "wish": {"id":"move_wish","name":"Deseo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Restaura en el siguiente turno la mitad de los PS máximos del usuario o se los pasa al Pokémon que lo sustituye.","target":"self"},
+  "withdraw": {"id":"move_withdraw","name":"Refugio","type":"Agua","category":"status","power":0,"accuracy":100,"pp":40,"maxPp":40,"description":"El usuario se resguarda en su coraza, por lo que le sube la Defensa.","target":"self","statChanges":[{"stat":"defense","stages":1}],"statTarget":"self","statChance":100},
+  "wonder-room": {"id":"move_wonder_room","name":"Zona Extraña","type":"Psíquico","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Crea una zona misteriosa donde se intercambian la Defensa y la Defensa Especial de todos los Pokémon durante cinco turnos."},
+  "wood-hammer": {"id":"move_wood_hammer","name":"Mazazo","type":"Planta","category":"physical","power":120,"accuracy":100,"pp":15,"maxPp":15,"description":"Arremete contra el objetivo con su robusto cuerpo. El agresor también sufre bastante daño."},
+  "work-up": {"id":"move_work_up","name":"Avivar","type":"Normal","category":"status","power":0,"accuracy":100,"pp":30,"maxPp":30,"description":"Quien lo usa se concentra y potencia su Ataque y su Ataque Especial.","target":"self","statChanges":[{"stat":"attack","stages":1},{"stat":"spAttack","stages":1}],"statTarget":"self","statChance":100},
+  "worry-seed": {"id":"move_worry_seed","name":"Abatidoras","type":"Planta","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Planta una semilla en el objetivo que le causa pesar. Sustituye la habilidad del objetivo por Insomnio y le impide dormirse."},
+  "wrap": {"id":"move_wrap","name":"Constricción","type":"Normal","category":"physical","power":15,"accuracy":90,"pp":20,"maxPp":20,"description":"Oprime al objetivo de cuatro a cinco turnos con ramas o con su cuerpo."},
+  "wring-out": {"id":"move_wring_out","name":"Estrujón","type":"Normal","category":"special","power":0,"accuracy":100,"pp":5,"maxPp":5,"description":"Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."},
+  "x-scissor": {"id":"move_x_scissor","name":"Tijera X","type":"Bicho","category":"physical","power":80,"accuracy":100,"pp":15,"maxPp":15,"description":"Cruza las guadañas o las garras para atacar al objetivo como si fueran unas tijeras."},
+  "yawn": {"id":"move_yawn","name":"Bostezo","type":"Normal","category":"status","power":0,"accuracy":100,"pp":10,"maxPp":10,"description":"Gran bostezo que induce al sueño al objetivo en el siguiente turno."},
+  "zap-cannon": {"id":"move_zap_cannon","name":"Electrocañón","type":"Eléctrico","category":"special","power":120,"accuracy":50,"pp":5,"maxPp":5,"description":"Dispara una descarga eléctrica que causa daño y parálisis.","statusEffect":"paralysis","statusChance":100},
+  "zen-headbutt": {"id":"move_zen_headbutt","name":"Cabezazo Zen","type":"Psíquico","category":"physical","power":80,"accuracy":90,"pp":15,"maxPp":15,"description":"Concentra su energía psíquica en la cabeza para golpear. Puede hacer que el objetivo se amedrente."},
+  "zing-zap": {"id":"move_zing_zap","name":"Electropunzada","type":"Eléctrico","category":"physical","power":80,"accuracy":100,"pp":10,"maxPp":10,"description":"Se lanza contra el objetivo y le suelta una potente descarga eléctrica que puede hacer que se amedrente."}
 };
 
 /** Official level-up learnsets by Pokédex number. Level 0 = learned on evolution. */
 export const LEARNSETS: Record<number, { level: number; move: string }[]> = {
-  "1": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 3,
-      "move": "vine-whip"
-    },
-    {
-      "level": 6,
-      "move": "growth"
-    },
-    {
-      "level": 9,
-      "move": "leech-seed"
-    },
-    {
-      "level": 12,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 15,
-      "move": "poison-powder"
-    },
-    {
-      "level": 15,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 18,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 21,
-      "move": "take-down"
-    },
-    {
-      "level": 24,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 27,
-      "move": "synthesis"
-    },
-    {
-      "level": 30,
-      "move": "worry-seed"
-    },
-    {
-      "level": 33,
-      "move": "power-whip"
-    },
-    {
-      "level": 36,
-      "move": "solar-beam"
-    }
-  ],
-  "2": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 9,
-      "move": "leech-seed"
-    },
-    {
-      "level": 12,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 15,
-      "move": "poison-powder"
-    },
-    {
-      "level": 15,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 20,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 25,
-      "move": "take-down"
-    },
-    {
-      "level": 30,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 35,
-      "move": "synthesis"
-    },
-    {
-      "level": 40,
-      "move": "worry-seed"
-    },
-    {
-      "level": 45,
-      "move": "power-whip"
-    },
-    {
-      "level": 50,
-      "move": "solar-beam"
-    }
-  ],
-  "3": [
-    {
-      "level": 0,
-      "move": "petal-blizzard"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 1,
-      "move": "petal-dance"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 9,
-      "move": "leech-seed"
-    },
-    {
-      "level": 12,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 15,
-      "move": "poison-powder"
-    },
-    {
-      "level": 15,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 20,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 25,
-      "move": "take-down"
-    },
-    {
-      "level": 30,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 37,
-      "move": "synthesis"
-    },
-    {
-      "level": 44,
-      "move": "worry-seed"
-    },
-    {
-      "level": 51,
-      "move": "power-whip"
-    },
-    {
-      "level": 58,
-      "move": "solar-beam"
-    }
-  ],
-  "4": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 4,
-      "move": "ember"
-    },
-    {
-      "level": 8,
-      "move": "smokescreen"
-    },
-    {
-      "level": 12,
-      "move": "dragon-breath"
-    },
-    {
-      "level": 17,
-      "move": "fire-fang"
-    },
-    {
-      "level": 20,
-      "move": "slash"
-    },
-    {
-      "level": 24,
-      "move": "flamethrower"
-    },
-    {
-      "level": 28,
-      "move": "scary-face"
-    },
-    {
-      "level": 32,
-      "move": "fire-spin"
-    },
-    {
-      "level": 36,
-      "move": "inferno"
-    },
-    {
-      "level": 40,
-      "move": "flare-blitz"
-    }
-  ],
-  "5": [
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "smokescreen"
-    },
-    {
-      "level": 12,
-      "move": "dragon-breath"
-    },
-    {
-      "level": 19,
-      "move": "fire-fang"
-    },
-    {
-      "level": 24,
-      "move": "slash"
-    },
-    {
-      "level": 30,
-      "move": "flamethrower"
-    },
-    {
-      "level": 37,
-      "move": "scary-face"
-    },
-    {
-      "level": 48,
-      "move": "inferno"
-    },
-    {
-      "level": 54,
-      "move": "flare-blitz"
-    }
-  ],
-  "6": [
-    {
-      "level": 0,
-      "move": "air-slash"
-    },
-    {
-      "level": 1,
-      "move": "dragon-claw"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "heat-wave"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "smokescreen"
-    },
-    {
-      "level": 12,
-      "move": "dragon-breath"
-    },
-    {
-      "level": 19,
-      "move": "fire-fang"
-    },
-    {
-      "level": 24,
-      "move": "slash"
-    },
-    {
-      "level": 30,
-      "move": "flamethrower"
-    },
-    {
-      "level": 39,
-      "move": "scary-face"
-    },
-    {
-      "level": 46,
-      "move": "fire-spin"
-    },
-    {
-      "level": 54,
-      "move": "inferno"
-    },
-    {
-      "level": 62,
-      "move": "flare-blitz"
-    }
-  ],
-  "7": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 3,
-      "move": "water-gun"
-    },
-    {
-      "level": 6,
-      "move": "withdraw"
-    },
-    {
-      "level": 9,
-      "move": "rapid-spin"
-    },
-    {
-      "level": 12,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "water-pulse"
-    },
-    {
-      "level": 18,
-      "move": "protect"
-    },
-    {
-      "level": 21,
-      "move": "rain-dance"
-    },
-    {
-      "level": 24,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 27,
-      "move": "shell-smash"
-    },
-    {
-      "level": 30,
-      "move": "iron-defense"
-    },
-    {
-      "level": 33,
-      "move": "hydro-pump"
-    },
-    {
-      "level": 36,
-      "move": "wave-crash"
-    }
-  ],
-  "8": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 1,
-      "move": "withdraw"
-    },
-    {
-      "level": 9,
-      "move": "rapid-spin"
-    },
-    {
-      "level": 12,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "water-pulse"
-    },
-    {
-      "level": 20,
-      "move": "protect"
-    },
-    {
-      "level": 25,
-      "move": "rain-dance"
-    },
-    {
-      "level": 30,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 35,
-      "move": "shell-smash"
-    },
-    {
-      "level": 40,
-      "move": "iron-defense"
-    },
-    {
-      "level": 45,
-      "move": "hydro-pump"
-    },
-    {
-      "level": 50,
-      "move": "wave-crash"
-    }
-  ],
-  "9": [
-    {
-      "level": 0,
-      "move": "flash-cannon"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 1,
-      "move": "withdraw"
-    },
-    {
-      "level": 9,
-      "move": "rapid-spin"
-    },
-    {
-      "level": 12,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "water-pulse"
-    },
-    {
-      "level": 20,
-      "move": "protect"
-    },
-    {
-      "level": 25,
-      "move": "rain-dance"
-    },
-    {
-      "level": 30,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 35,
-      "move": "shell-smash"
-    },
-    {
-      "level": 42,
-      "move": "iron-defense"
-    },
-    {
-      "level": 49,
-      "move": "hydro-pump"
-    },
-    {
-      "level": 56,
-      "move": "wave-crash"
-    }
-  ],
-  "10": [
-    {
-      "level": 1,
-      "move": "string-shot"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 9,
-      "move": "bug-bite"
-    }
-  ],
-  "11": [
-    {
-      "level": 0,
-      "move": "harden"
-    },
-    {
-      "level": 1,
-      "move": "harden"
-    }
-  ],
-  "12": [
-    {
-      "level": 0,
-      "move": "gust"
-    },
-    {
-      "level": 1,
-      "move": "bug-bite"
-    },
-    {
-      "level": 1,
-      "move": "gust"
-    },
-    {
-      "level": 1,
-      "move": "harden"
-    },
-    {
-      "level": 1,
-      "move": "string-shot"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 4,
-      "move": "supersonic"
-    },
-    {
-      "level": 8,
-      "move": "confusion"
-    },
-    {
-      "level": 12,
-      "move": "poison-powder"
-    },
-    {
-      "level": 12,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 12,
-      "move": "stun-spore"
-    },
-    {
-      "level": 16,
-      "move": "psybeam"
-    },
-    {
-      "level": 20,
-      "move": "whirlwind"
-    },
-    {
-      "level": 24,
-      "move": "air-slash"
-    },
-    {
-      "level": 28,
-      "move": "safeguard"
-    },
-    {
-      "level": 32,
-      "move": "bug-buzz"
-    },
-    {
-      "level": 36,
-      "move": "tailwind"
-    },
-    {
-      "level": 40,
-      "move": "rage-powder"
-    },
-    {
-      "level": 44,
-      "move": "quiver-dance"
-    }
-  ],
-  "13": [
-    {
-      "level": 1,
-      "move": "poison-sting"
-    },
-    {
-      "level": 1,
-      "move": "string-shot"
-    },
-    {
-      "level": 9,
-      "move": "bug-bite"
-    }
-  ],
-  "14": [
-    {
-      "level": 0,
-      "move": "harden"
-    },
-    {
-      "level": 1,
-      "move": "harden"
-    }
-  ],
-  "15": [
-    {
-      "level": 0,
-      "move": "twineedle"
-    },
-    {
-      "level": 1,
-      "move": "fury-attack"
-    },
-    {
-      "level": 1,
-      "move": "twineedle"
-    },
-    {
-      "level": 11,
-      "move": "fury-attack"
-    },
-    {
-      "level": 14,
-      "move": "rage"
-    },
-    {
-      "level": 17,
-      "move": "pursuit"
-    },
-    {
-      "level": 20,
-      "move": "focus-energy"
-    },
-    {
-      "level": 23,
-      "move": "venoshock"
-    },
-    {
-      "level": 26,
-      "move": "assurance"
-    },
-    {
-      "level": 29,
-      "move": "toxic-spikes"
-    },
-    {
-      "level": 32,
-      "move": "pin-missile"
-    },
-    {
-      "level": 35,
-      "move": "poison-jab"
-    },
-    {
-      "level": 38,
-      "move": "agility"
-    },
-    {
-      "level": 41,
-      "move": "endeavor"
-    },
-    {
-      "level": 44,
-      "move": "fell-stinger"
-    }
-  ],
-  "16": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 9,
-      "move": "gust"
-    },
-    {
-      "level": 13,
-      "move": "quick-attack"
-    },
-    {
-      "level": 17,
-      "move": "whirlwind"
-    },
-    {
-      "level": 21,
-      "move": "twister"
-    },
-    {
-      "level": 25,
-      "move": "feather-dance"
-    },
-    {
-      "level": 29,
-      "move": "agility"
-    },
-    {
-      "level": 33,
-      "move": "wing-attack"
-    },
-    {
-      "level": 37,
-      "move": "roost"
-    },
-    {
-      "level": 41,
-      "move": "tailwind"
-    },
-    {
-      "level": 45,
-      "move": "mirror-move"
-    },
-    {
-      "level": 49,
-      "move": "air-slash"
-    },
-    {
-      "level": 53,
-      "move": "hurricane"
-    }
-  ],
-  "17": [
-    {
-      "level": 1,
-      "move": "gust"
-    },
-    {
-      "level": 1,
-      "move": "sand-attack"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 9,
-      "move": "gust"
-    },
-    {
-      "level": 13,
-      "move": "quick-attack"
-    },
-    {
-      "level": 17,
-      "move": "whirlwind"
-    },
-    {
-      "level": 22,
-      "move": "twister"
-    },
-    {
-      "level": 27,
-      "move": "feather-dance"
-    },
-    {
-      "level": 32,
-      "move": "agility"
-    },
-    {
-      "level": 37,
-      "move": "wing-attack"
-    },
-    {
-      "level": 42,
-      "move": "roost"
-    },
-    {
-      "level": 47,
-      "move": "tailwind"
-    },
-    {
-      "level": 52,
-      "move": "mirror-move"
-    },
-    {
-      "level": 57,
-      "move": "air-slash"
-    },
-    {
-      "level": 62,
-      "move": "hurricane"
-    }
-  ],
-  "18": [
-    {
-      "level": 1,
-      "move": "gust"
-    },
-    {
-      "level": 1,
-      "move": "hurricane"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "sand-attack"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 9,
-      "move": "gust"
-    },
-    {
-      "level": 13,
-      "move": "quick-attack"
-    },
-    {
-      "level": 17,
-      "move": "whirlwind"
-    },
-    {
-      "level": 22,
-      "move": "twister"
-    },
-    {
-      "level": 27,
-      "move": "feather-dance"
-    },
-    {
-      "level": 32,
-      "move": "agility"
-    },
-    {
-      "level": 38,
-      "move": "wing-attack"
-    },
-    {
-      "level": 44,
-      "move": "roost"
-    },
-    {
-      "level": 50,
-      "move": "tailwind"
-    },
-    {
-      "level": 56,
-      "move": "mirror-move"
-    },
-    {
-      "level": 62,
-      "move": "air-slash"
-    },
-    {
-      "level": 68,
-      "move": "hurricane"
-    }
-  ],
-  "19": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 4,
-      "move": "quick-attack"
-    },
-    {
-      "level": 7,
-      "move": "focus-energy"
-    },
-    {
-      "level": 10,
-      "move": "bite"
-    },
-    {
-      "level": 13,
-      "move": "pursuit"
-    },
-    {
-      "level": 16,
-      "move": "hyper-fang"
-    },
-    {
-      "level": 19,
-      "move": "assurance"
-    },
-    {
-      "level": 22,
-      "move": "crunch"
-    },
-    {
-      "level": 25,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 28,
-      "move": "super-fang"
-    },
-    {
-      "level": 31,
-      "move": "double-edge"
-    },
-    {
-      "level": 34,
-      "move": "endeavor"
-    }
-  ],
-  "20": [
-    {
-      "level": 0,
-      "move": "scary-face"
-    },
-    {
-      "level": 1,
-      "move": "focus-energy"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "scary-face"
-    },
-    {
-      "level": 1,
-      "move": "swords-dance"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 4,
-      "move": "quick-attack"
-    },
-    {
-      "level": 7,
-      "move": "focus-energy"
-    },
-    {
-      "level": 10,
-      "move": "bite"
-    },
-    {
-      "level": 13,
-      "move": "pursuit"
-    },
-    {
-      "level": 16,
-      "move": "hyper-fang"
-    },
-    {
-      "level": 19,
-      "move": "assurance"
-    },
-    {
-      "level": 24,
-      "move": "crunch"
-    },
-    {
-      "level": 29,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 34,
-      "move": "super-fang"
-    },
-    {
-      "level": 39,
-      "move": "double-edge"
-    },
-    {
-      "level": 44,
-      "move": "endeavor"
-    }
-  ],
-  "21": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "peck"
-    },
-    {
-      "level": 4,
-      "move": "leer"
-    },
-    {
-      "level": 8,
-      "move": "pursuit"
-    },
-    {
-      "level": 11,
-      "move": "fury-attack"
-    },
-    {
-      "level": 15,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 18,
-      "move": "mirror-move"
-    },
-    {
-      "level": 22,
-      "move": "assurance"
-    },
-    {
-      "level": 25,
-      "move": "agility"
-    },
-    {
-      "level": 29,
-      "move": "focus-energy"
-    },
-    {
-      "level": 32,
-      "move": "roost"
-    },
-    {
-      "level": 36,
-      "move": "drill-peck"
-    }
-  ],
-  "22": [
-    {
-      "level": 1,
-      "move": "drill-run"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "peck"
-    },
-    {
-      "level": 1,
-      "move": "pluck"
-    },
-    {
-      "level": 1,
-      "move": "pursuit"
-    },
-    {
-      "level": 4,
-      "move": "leer"
-    },
-    {
-      "level": 8,
-      "move": "pursuit"
-    },
-    {
-      "level": 11,
-      "move": "fury-attack"
-    },
-    {
-      "level": 15,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 18,
-      "move": "mirror-move"
-    },
-    {
-      "level": 23,
-      "move": "assurance"
-    },
-    {
-      "level": 27,
-      "move": "agility"
-    },
-    {
-      "level": 32,
-      "move": "focus-energy"
-    },
-    {
-      "level": 36,
-      "move": "roost"
-    },
-    {
-      "level": 41,
-      "move": "drill-peck"
-    },
-    {
-      "level": 45,
-      "move": "drill-run"
-    }
-  ],
-  "25": [
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 1,
-      "move": "nuzzle"
-    },
-    {
-      "level": 1,
-      "move": "play-nice"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "sweet-kiss"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 4,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 8,
-      "move": "double-team"
-    },
-    {
-      "level": 12,
-      "move": "electro-ball"
-    },
-    {
-      "level": 16,
-      "move": "feint"
-    },
-    {
-      "level": 20,
-      "move": "spark"
-    },
-    {
-      "level": 24,
-      "move": "agility"
-    },
-    {
-      "level": 28,
-      "move": "iron-tail"
-    },
-    {
-      "level": 32,
-      "move": "discharge"
-    },
-    {
-      "level": 36,
-      "move": "thunderbolt"
-    },
-    {
-      "level": 40,
-      "move": "light-screen"
-    },
-    {
-      "level": 44,
-      "move": "thunder"
-    }
-  ],
-  "26": [
-    {
-      "level": 0,
-      "move": "thunder-punch"
-    },
-    {
-      "level": 1,
-      "move": "agility"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "discharge"
-    },
-    {
-      "level": 1,
-      "move": "double-team"
-    },
-    {
-      "level": 1,
-      "move": "electro-ball"
-    },
-    {
-      "level": 1,
-      "move": "feint"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "iron-tail"
-    },
-    {
-      "level": 1,
-      "move": "light-screen"
-    },
-    {
-      "level": 1,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 1,
-      "move": "nuzzle"
-    },
-    {
-      "level": 1,
-      "move": "play-nice"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "spark"
-    },
-    {
-      "level": 1,
-      "move": "sweet-kiss"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "thunder"
-    },
-    {
-      "level": 1,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 1,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 5,
-      "move": "thunderbolt"
-    }
-  ],
-  "35": [
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "defense-curl"
-    },
-    {
-      "level": 1,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "sing"
-    },
-    {
-      "level": 1,
-      "move": "splash"
-    },
-    {
-      "level": 1,
-      "move": "sweet-kiss"
-    },
-    {
-      "level": 4,
-      "move": "stored-power"
-    },
-    {
-      "level": 8,
-      "move": "encore"
-    },
-    {
-      "level": 12,
-      "move": "after-you"
-    },
-    {
-      "level": 16,
-      "move": "life-dew"
-    },
-    {
-      "level": 20,
-      "move": "metronome"
-    },
-    {
-      "level": 24,
-      "move": "moonlight"
-    },
-    {
-      "level": 28,
-      "move": "gravity"
-    },
-    {
-      "level": 32,
-      "move": "meteor-mash"
-    },
-    {
-      "level": 36,
-      "move": "follow-me"
-    },
-    {
-      "level": 40,
-      "move": "cosmic-power"
-    },
-    {
-      "level": 44,
-      "move": "moonblast"
-    },
-    {
-      "level": 48,
-      "move": "healing-wish"
-    }
-  ],
-  "36": [
-    {
-      "level": 1,
-      "move": "life-dew"
-    },
-    {
-      "level": 1,
-      "move": "meteor-mash"
-    },
-    {
-      "level": 1,
-      "move": "metronome"
-    },
-    {
-      "level": 1,
-      "move": "moonblast"
-    }
-  ],
-  "39": [
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "defense-curl"
-    },
-    {
-      "level": 1,
-      "move": "disable"
-    },
-    {
-      "level": 1,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "sing"
-    },
-    {
-      "level": 1,
-      "move": "sweet-kiss"
-    },
-    {
-      "level": 4,
-      "move": "echoed-voice"
-    },
-    {
-      "level": 8,
-      "move": "covet"
-    },
-    {
-      "level": 12,
-      "move": "spit-up"
-    },
-    {
-      "level": 12,
-      "move": "stockpile"
-    },
-    {
-      "level": 12,
-      "move": "swallow"
-    },
-    {
-      "level": 16,
-      "move": "round"
-    },
-    {
-      "level": 20,
-      "move": "rest"
-    },
-    {
-      "level": 24,
-      "move": "body-slam"
-    },
-    {
-      "level": 28,
-      "move": "mimic"
-    },
-    {
-      "level": 32,
-      "move": "gyro-ball"
-    },
-    {
-      "level": 36,
-      "move": "hyper-voice"
-    },
-    {
-      "level": 44,
-      "move": "double-edge"
-    }
-  ],
-  "40": [
-    {
-      "level": 1,
-      "move": "body-slam"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "defense-curl"
-    },
-    {
-      "level": 1,
-      "move": "disable"
-    },
-    {
-      "level": 1,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "echoed-voice"
-    },
-    {
-      "level": 1,
-      "move": "gyro-ball"
-    },
-    {
-      "level": 1,
-      "move": "hyper-voice"
-    },
-    {
-      "level": 1,
-      "move": "mimic"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "rest"
-    },
-    {
-      "level": 1,
-      "move": "round"
-    },
-    {
-      "level": 1,
-      "move": "sing"
-    },
-    {
-      "level": 1,
-      "move": "spit-up"
-    },
-    {
-      "level": 1,
-      "move": "stockpile"
-    },
-    {
-      "level": 1,
-      "move": "swallow"
-    },
-    {
-      "level": 1,
-      "move": "sweet-kiss"
-    },
-    {
-      "level": 5,
-      "move": "play-rough"
-    }
-  ],
-  "41": [
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "supersonic"
-    },
-    {
-      "level": 5,
-      "move": "astonish"
-    },
-    {
-      "level": 10,
-      "move": "mean-look"
-    },
-    {
-      "level": 15,
-      "move": "poison-fang"
-    },
-    {
-      "level": 20,
-      "move": "quick-guard"
-    },
-    {
-      "level": 25,
-      "move": "air-cutter"
-    },
-    {
-      "level": 30,
-      "move": "bite"
-    },
-    {
-      "level": 35,
-      "move": "haze"
-    },
-    {
-      "level": 40,
-      "move": "venoshock"
-    },
-    {
-      "level": 45,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 50,
-      "move": "air-slash"
-    },
-    {
-      "level": 55,
-      "move": "leech-life"
-    }
-  ],
-  "42": [
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "astonish"
-    },
-    {
-      "level": 1,
-      "move": "mean-look"
-    },
-    {
-      "level": 1,
-      "move": "screech"
-    },
-    {
-      "level": 1,
-      "move": "supersonic"
-    },
-    {
-      "level": 15,
-      "move": "poison-fang"
-    },
-    {
-      "level": 20,
-      "move": "quick-guard"
-    },
-    {
-      "level": 27,
-      "move": "air-cutter"
-    },
-    {
-      "level": 34,
-      "move": "bite"
-    },
-    {
-      "level": 41,
-      "move": "haze"
-    },
-    {
-      "level": 48,
-      "move": "venoshock"
-    },
-    {
-      "level": 55,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 62,
-      "move": "air-slash"
-    },
-    {
-      "level": 69,
-      "move": "leech-life"
-    }
-  ],
-  "43": [
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 4,
-      "move": "acid"
-    },
-    {
-      "level": 8,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 12,
-      "move": "mega-drain"
-    },
-    {
-      "level": 14,
-      "move": "poison-powder"
-    },
-    {
-      "level": 16,
-      "move": "stun-spore"
-    },
-    {
-      "level": 18,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 20,
-      "move": "giga-drain"
-    },
-    {
-      "level": 24,
-      "move": "toxic"
-    },
-    {
-      "level": 28,
-      "move": "moonblast"
-    },
-    {
-      "level": 32,
-      "move": "grassy-terrain"
-    },
-    {
-      "level": 36,
-      "move": "moonlight"
-    },
-    {
-      "level": 40,
-      "move": "petal-dance"
-    }
-  ],
-  "44": [
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "acid"
-    },
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 1,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 12,
-      "move": "mega-drain"
-    },
-    {
-      "level": 14,
-      "move": "poison-powder"
-    },
-    {
-      "level": 16,
-      "move": "stun-spore"
-    },
-    {
-      "level": 18,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 20,
-      "move": "giga-drain"
-    },
-    {
-      "level": 26,
-      "move": "toxic"
-    },
-    {
-      "level": 32,
-      "move": "moonblast"
-    },
-    {
-      "level": 38,
-      "move": "grassy-terrain"
-    },
-    {
-      "level": 44,
-      "move": "moonlight"
-    },
-    {
-      "level": 50,
-      "move": "petal-dance"
-    }
-  ],
-  "45": [
-    {
-      "level": 0,
-      "move": "petal-blizzard"
-    },
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "acid"
-    },
-    {
-      "level": 1,
-      "move": "giga-drain"
-    },
-    {
-      "level": 1,
-      "move": "grassy-terrain"
-    },
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 1,
-      "move": "mega-drain"
-    },
-    {
-      "level": 1,
-      "move": "moonblast"
-    },
-    {
-      "level": 1,
-      "move": "moonlight"
-    },
-    {
-      "level": 1,
-      "move": "petal-dance"
-    },
-    {
-      "level": 1,
-      "move": "poison-powder"
-    },
-    {
-      "level": 1,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 1,
-      "move": "stun-spore"
-    },
-    {
-      "level": 1,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 1,
-      "move": "toxic"
-    }
-  ],
-  "50": [
-    {
-      "level": 1,
-      "move": "sand-attack"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 4,
-      "move": "growl"
-    },
-    {
-      "level": 8,
-      "move": "astonish"
-    },
-    {
-      "level": 12,
-      "move": "mud-slap"
-    },
-    {
-      "level": 16,
-      "move": "bulldoze"
-    },
-    {
-      "level": 20,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 24,
-      "move": "slash"
-    },
-    {
-      "level": 28,
-      "move": "sandstorm"
-    },
-    {
-      "level": 32,
-      "move": "dig"
-    },
-    {
-      "level": 36,
-      "move": "earth-power"
-    },
-    {
-      "level": 40,
-      "move": "earthquake"
-    },
-    {
-      "level": 44,
-      "move": "fissure"
-    }
-  ],
-  "51": [
-    {
-      "level": 0,
-      "move": "sand-tomb"
-    },
-    {
-      "level": 1,
-      "move": "astonish"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "night-slash"
-    },
-    {
-      "level": 1,
-      "move": "sand-attack"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "tri-attack"
-    },
-    {
-      "level": 12,
-      "move": "mud-slap"
-    },
-    {
-      "level": 16,
-      "move": "bulldoze"
-    },
-    {
-      "level": 20,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 24,
-      "move": "slash"
-    },
-    {
-      "level": 30,
-      "move": "sandstorm"
-    },
-    {
-      "level": 36,
-      "move": "dig"
-    },
-    {
-      "level": 42,
-      "move": "earth-power"
-    },
-    {
-      "level": 48,
-      "move": "earthquake"
-    },
-    {
-      "level": 54,
-      "move": "fissure"
-    }
-  ],
-  "54": [
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 3,
-      "move": "water-gun"
-    },
-    {
-      "level": 6,
-      "move": "confusion"
-    },
-    {
-      "level": 9,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 12,
-      "move": "water-pulse"
-    },
-    {
-      "level": 15,
-      "move": "disable"
-    },
-    {
-      "level": 18,
-      "move": "zen-headbutt"
-    },
-    {
-      "level": 21,
-      "move": "screech"
-    },
-    {
-      "level": 24,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 27,
-      "move": "soak"
-    },
-    {
-      "level": 30,
-      "move": "psych-up"
-    },
-    {
-      "level": 34,
-      "move": "amnesia"
-    },
-    {
-      "level": 39,
-      "move": "wonder-room"
-    }
-  ],
-  "55": [
-    {
-      "level": 1,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 1,
-      "move": "confusion"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 9,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 12,
-      "move": "water-pulse"
-    },
-    {
-      "level": 15,
-      "move": "disable"
-    },
-    {
-      "level": 18,
-      "move": "zen-headbutt"
-    },
-    {
-      "level": 21,
-      "move": "screech"
-    },
-    {
-      "level": 24,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 27,
-      "move": "soak"
-    },
-    {
-      "level": 30,
-      "move": "psych-up"
-    },
-    {
-      "level": 36,
-      "move": "amnesia"
-    },
-    {
-      "level": 40,
-      "move": "hydro-pump"
-    },
-    {
-      "level": 45,
-      "move": "wonder-room"
-    }
-  ],
-  "66": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "low-kick"
-    },
-    {
-      "level": 4,
-      "move": "focus-energy"
-    },
-    {
-      "level": 8,
-      "move": "revenge"
-    },
-    {
-      "level": 12,
-      "move": "low-sweep"
-    },
-    {
-      "level": 16,
-      "move": "knock-off"
-    },
-    {
-      "level": 20,
-      "move": "scary-face"
-    },
-    {
-      "level": 24,
-      "move": "vital-throw"
-    },
-    {
-      "level": 29,
-      "move": "strength"
-    },
-    {
-      "level": 32,
-      "move": "dual-chop"
-    },
-    {
-      "level": 36,
-      "move": "bulk-up"
-    },
-    {
-      "level": 40,
-      "move": "seismic-toss"
-    },
-    {
-      "level": 44,
-      "move": "dynamic-punch"
-    },
-    {
-      "level": 48,
-      "move": "cross-chop"
-    },
-    {
-      "level": 52,
-      "move": "double-edge"
-    }
-  ],
-  "67": [
-    {
-      "level": 1,
-      "move": "focus-energy"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "low-kick"
-    },
-    {
-      "level": 1,
-      "move": "revenge"
-    },
-    {
-      "level": 12,
-      "move": "low-sweep"
-    },
-    {
-      "level": 16,
-      "move": "knock-off"
-    },
-    {
-      "level": 20,
-      "move": "scary-face"
-    },
-    {
-      "level": 24,
-      "move": "vital-throw"
-    },
-    {
-      "level": 31,
-      "move": "strength"
-    },
-    {
-      "level": 36,
-      "move": "dual-chop"
-    },
-    {
-      "level": 42,
-      "move": "bulk-up"
-    },
-    {
-      "level": 48,
-      "move": "seismic-toss"
-    },
-    {
-      "level": 54,
-      "move": "dynamic-punch"
-    },
-    {
-      "level": 60,
-      "move": "cross-chop"
-    },
-    {
-      "level": 66,
-      "move": "double-edge"
-    }
-  ],
-  "68": [
-    {
-      "level": 1,
-      "move": "focus-energy"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "low-kick"
-    },
-    {
-      "level": 1,
-      "move": "revenge"
-    },
-    {
-      "level": 1,
-      "move": "wide-guard"
-    },
-    {
-      "level": 12,
-      "move": "low-sweep"
-    },
-    {
-      "level": 16,
-      "move": "knock-off"
-    },
-    {
-      "level": 20,
-      "move": "scary-face"
-    },
-    {
-      "level": 24,
-      "move": "vital-throw"
-    },
-    {
-      "level": 31,
-      "move": "strength"
-    },
-    {
-      "level": 36,
-      "move": "dual-chop"
-    },
-    {
-      "level": 42,
-      "move": "bulk-up"
-    },
-    {
-      "level": 48,
-      "move": "seismic-toss"
-    },
-    {
-      "level": 54,
-      "move": "dynamic-punch"
-    },
-    {
-      "level": 60,
-      "move": "cross-chop"
-    },
-    {
-      "level": 66,
-      "move": "double-edge"
-    }
-  ],
-  "69": [
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 7,
-      "move": "growth"
-    },
-    {
-      "level": 11,
-      "move": "wrap"
-    },
-    {
-      "level": 13,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 15,
-      "move": "poison-powder"
-    },
-    {
-      "level": 17,
-      "move": "stun-spore"
-    },
-    {
-      "level": 23,
-      "move": "acid"
-    },
-    {
-      "level": 27,
-      "move": "knock-off"
-    },
-    {
-      "level": 29,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 35,
-      "move": "gastro-acid"
-    },
-    {
-      "level": 39,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 41,
-      "move": "poison-jab"
-    },
-    {
-      "level": 47,
-      "move": "slam"
-    },
-    {
-      "level": 52,
-      "move": "power-whip"
-    }
-  ],
-  "70": [
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 1,
-      "move": "wrap"
-    },
-    {
-      "level": 13,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 15,
-      "move": "poison-powder"
-    },
-    {
-      "level": 17,
-      "move": "stun-spore"
-    },
-    {
-      "level": 24,
-      "move": "acid"
-    },
-    {
-      "level": 29,
-      "move": "knock-off"
-    },
-    {
-      "level": 32,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 39,
-      "move": "gastro-acid"
-    },
-    {
-      "level": 44,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 47,
-      "move": "poison-jab"
-    },
-    {
-      "level": 54,
-      "move": "slam"
-    },
-    {
-      "level": 58,
-      "move": "power-whip"
-    }
-  ],
-  "71": [
-    {
-      "level": 0,
-      "move": "leaf-storm"
-    },
-    {
-      "level": 1,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 1,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 1,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 44,
-      "move": "leaf-blade"
-    }
-  ],
-  "74": [
-    {
-      "level": 1,
-      "move": "defense-curl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 6,
-      "move": "rock-polish"
-    },
-    {
-      "level": 10,
-      "move": "rollout"
-    },
-    {
-      "level": 12,
-      "move": "bulldoze"
-    },
-    {
-      "level": 16,
-      "move": "rock-throw"
-    },
-    {
-      "level": 18,
-      "move": "smack-down"
-    },
-    {
-      "level": 24,
-      "move": "self-destruct"
-    },
-    {
-      "level": 28,
-      "move": "stealth-rock"
-    },
-    {
-      "level": 30,
-      "move": "rock-blast"
-    },
-    {
-      "level": 34,
-      "move": "earthquake"
-    },
-    {
-      "level": 36,
-      "move": "explosion"
-    },
-    {
-      "level": 40,
-      "move": "double-edge"
-    },
-    {
-      "level": 42,
-      "move": "stone-edge"
-    }
-  ],
-  "75": [
-    {
-      "level": 1,
-      "move": "defense-curl"
-    },
-    {
-      "level": 1,
-      "move": "rock-polish"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 10,
-      "move": "rollout"
-    },
-    {
-      "level": 12,
-      "move": "bulldoze"
-    },
-    {
-      "level": 16,
-      "move": "rock-throw"
-    },
-    {
-      "level": 18,
-      "move": "smack-down"
-    },
-    {
-      "level": 24,
-      "move": "self-destruct"
-    },
-    {
-      "level": 30,
-      "move": "stealth-rock"
-    },
-    {
-      "level": 34,
-      "move": "rock-blast"
-    },
-    {
-      "level": 40,
-      "move": "earthquake"
-    },
-    {
-      "level": 44,
-      "move": "explosion"
-    },
-    {
-      "level": 50,
-      "move": "double-edge"
-    },
-    {
-      "level": 54,
-      "move": "stone-edge"
-    }
-  ],
-  "76": [
-    {
-      "level": 1,
-      "move": "defense-curl"
-    },
-    {
-      "level": 1,
-      "move": "heavy-slam"
-    },
-    {
-      "level": 1,
-      "move": "rock-polish"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 16,
-      "move": "rock-throw"
-    },
-    {
-      "level": 18,
-      "move": "smack-down"
-    },
-    {
-      "level": 22,
-      "move": "bulldoze"
-    },
-    {
-      "level": 24,
-      "move": "self-destruct"
-    },
-    {
-      "level": 30,
-      "move": "stealth-rock"
-    },
-    {
-      "level": 34,
-      "move": "rock-blast"
-    },
-    {
-      "level": 40,
-      "move": "earthquake"
-    },
-    {
-      "level": 44,
-      "move": "explosion"
-    },
-    {
-      "level": 50,
-      "move": "double-edge"
-    },
-    {
-      "level": 54,
-      "move": "stone-edge"
-    }
-  ],
-  "81": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 4,
-      "move": "supersonic"
-    },
-    {
-      "level": 8,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 12,
-      "move": "electro-ball"
-    },
-    {
-      "level": 16,
-      "move": "gyro-ball"
-    },
-    {
-      "level": 20,
-      "move": "spark"
-    },
-    {
-      "level": 24,
-      "move": "screech"
-    },
-    {
-      "level": 28,
-      "move": "magnet-rise"
-    },
-    {
-      "level": 32,
-      "move": "flash-cannon"
-    },
-    {
-      "level": 36,
-      "move": "discharge"
-    },
-    {
-      "level": 40,
-      "move": "metal-sound"
-    },
-    {
-      "level": 44,
-      "move": "light-screen"
-    },
-    {
-      "level": 48,
-      "move": "lock-on"
-    },
-    {
-      "level": 52,
-      "move": "zap-cannon"
-    }
-  ],
-  "82": [
-    {
-      "level": 0,
-      "move": "tri-attack"
-    },
-    {
-      "level": 1,
-      "move": "electric-terrain"
-    },
-    {
-      "level": 1,
-      "move": "supersonic"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 1,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 12,
-      "move": "electro-ball"
-    },
-    {
-      "level": 16,
-      "move": "gyro-ball"
-    },
-    {
-      "level": 20,
-      "move": "spark"
-    },
-    {
-      "level": 24,
-      "move": "screech"
-    },
-    {
-      "level": 28,
-      "move": "magnet-rise"
-    },
-    {
-      "level": 34,
-      "move": "flash-cannon"
-    },
-    {
-      "level": 40,
-      "move": "discharge"
-    },
-    {
-      "level": 46,
-      "move": "metal-sound"
-    },
-    {
-      "level": 52,
-      "move": "light-screen"
-    },
-    {
-      "level": 58,
-      "move": "lock-on"
-    },
-    {
-      "level": 64,
-      "move": "zap-cannon"
-    }
-  ],
-  "92": [
-    {
-      "level": 1,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 1,
-      "move": "lick"
-    },
-    {
-      "level": 4,
-      "move": "hypnosis"
-    },
-    {
-      "level": 8,
-      "move": "mean-look"
-    },
-    {
-      "level": 12,
-      "move": "payback"
-    },
-    {
-      "level": 16,
-      "move": "spite"
-    },
-    {
-      "level": 20,
-      "move": "curse"
-    },
-    {
-      "level": 24,
-      "move": "hex"
-    },
-    {
-      "level": 28,
-      "move": "night-shade"
-    },
-    {
-      "level": 32,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 36,
-      "move": "dark-pulse"
-    },
-    {
-      "level": 40,
-      "move": "shadow-ball"
-    },
-    {
-      "level": 44,
-      "move": "destiny-bond"
-    },
-    {
-      "level": 48,
-      "move": "dream-eater"
-    }
-  ],
-  "93": [
-    {
-      "level": 0,
-      "move": "shadow-punch"
-    },
-    {
-      "level": 1,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 1,
-      "move": "hypnosis"
-    },
-    {
-      "level": 1,
-      "move": "lick"
-    },
-    {
-      "level": 1,
-      "move": "mean-look"
-    },
-    {
-      "level": 12,
-      "move": "payback"
-    },
-    {
-      "level": 16,
-      "move": "spite"
-    },
-    {
-      "level": 20,
-      "move": "curse"
-    },
-    {
-      "level": 24,
-      "move": "hex"
-    },
-    {
-      "level": 30,
-      "move": "night-shade"
-    },
-    {
-      "level": 36,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 42,
-      "move": "dark-pulse"
-    },
-    {
-      "level": 48,
-      "move": "shadow-ball"
-    },
-    {
-      "level": 54,
-      "move": "destiny-bond"
-    },
-    {
-      "level": 60,
-      "move": "dream-eater"
-    }
-  ],
-  "94": [
-    {
-      "level": 1,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 1,
-      "move": "hypnosis"
-    },
-    {
-      "level": 1,
-      "move": "lick"
-    },
-    {
-      "level": 1,
-      "move": "mean-look"
-    },
-    {
-      "level": 1,
-      "move": "perish-song"
-    },
-    {
-      "level": 1,
-      "move": "reflect-type"
-    },
-    {
-      "level": 1,
-      "move": "shadow-punch"
-    },
-    {
-      "level": 12,
-      "move": "payback"
-    },
-    {
-      "level": 16,
-      "move": "spite"
-    },
-    {
-      "level": 20,
-      "move": "curse"
-    },
-    {
-      "level": 24,
-      "move": "hex"
-    },
-    {
-      "level": 30,
-      "move": "night-shade"
-    },
-    {
-      "level": 36,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 42,
-      "move": "dark-pulse"
-    },
-    {
-      "level": 48,
-      "move": "shadow-ball"
-    },
-    {
-      "level": 54,
-      "move": "destiny-bond"
-    },
-    {
-      "level": 60,
-      "move": "dream-eater"
-    }
-  ],
-  "95": [
-    {
-      "level": 1,
-      "move": "bind"
-    },
-    {
-      "level": 1,
-      "move": "harden"
-    },
-    {
-      "level": 1,
-      "move": "rock-throw"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 4,
-      "move": "smack-down"
-    },
-    {
-      "level": 8,
-      "move": "rock-polish"
-    },
-    {
-      "level": 12,
-      "move": "dragon-breath"
-    },
-    {
-      "level": 16,
-      "move": "curse"
-    },
-    {
-      "level": 20,
-      "move": "rock-slide"
-    },
-    {
-      "level": 24,
-      "move": "screech"
-    },
-    {
-      "level": 28,
-      "move": "sand-tomb"
-    },
-    {
-      "level": 32,
-      "move": "stealth-rock"
-    },
-    {
-      "level": 36,
-      "move": "slam"
-    },
-    {
-      "level": 40,
-      "move": "sandstorm"
-    },
-    {
-      "level": 44,
-      "move": "dig"
-    },
-    {
-      "level": 48,
-      "move": "iron-tail"
-    },
-    {
-      "level": 52,
-      "move": "stone-edge"
-    },
-    {
-      "level": 56,
-      "move": "double-edge"
-    }
-  ],
-  "125": [
-    {
-      "level": 1,
-      "move": "charge"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 12,
-      "move": "swift"
-    },
-    {
-      "level": 16,
-      "move": "shock-wave"
-    },
-    {
-      "level": 20,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 24,
-      "move": "screech"
-    },
-    {
-      "level": 28,
-      "move": "thunder-punch"
-    },
-    {
-      "level": 34,
-      "move": "discharge"
-    },
-    {
-      "level": 40,
-      "move": "low-kick"
-    },
-    {
-      "level": 46,
-      "move": "thunderbolt"
-    },
-    {
-      "level": 52,
-      "move": "light-screen"
-    },
-    {
-      "level": 58,
-      "move": "thunder"
-    },
-    {
-      "level": 64,
-      "move": "giga-impact"
-    }
-  ],
-  "129": [
-    {
-      "level": 1,
-      "move": "splash"
-    },
-    {
-      "level": 15,
-      "move": "tackle"
-    },
-    {
-      "level": 25,
-      "move": "flail"
-    }
-  ],
-  "130": [
-    {
-      "level": 0,
-      "move": "bite"
-    },
-    {
-      "level": 1,
-      "move": "flail"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "splash"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "twister"
-    },
-    {
-      "level": 4,
-      "move": "whirlpool"
-    },
-    {
-      "level": 8,
-      "move": "ice-fang"
-    },
-    {
-      "level": 12,
-      "move": "brine"
-    },
-    {
-      "level": 16,
-      "move": "scary-face"
-    },
-    {
-      "level": 21,
-      "move": "waterfall"
-    },
-    {
-      "level": 24,
-      "move": "crunch"
-    },
-    {
-      "level": 28,
-      "move": "rain-dance"
-    },
-    {
-      "level": 32,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 36,
-      "move": "dragon-dance"
-    },
-    {
-      "level": 40,
-      "move": "hydro-pump"
-    },
-    {
-      "level": 44,
-      "move": "hurricane"
-    },
-    {
-      "level": 48,
-      "move": "thrash"
-    },
-    {
-      "level": 52,
-      "move": "hyper-beam"
-    }
-  ],
-  "133": [
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "swift"
-    },
-    {
-      "level": 25,
-      "move": "bite"
-    },
-    {
-      "level": 30,
-      "move": "copycat"
-    },
-    {
-      "level": 35,
-      "move": "baton-pass"
-    },
-    {
-      "level": 40,
-      "move": "take-down"
-    },
-    {
-      "level": 45,
-      "move": "charm"
-    },
-    {
-      "level": 50,
-      "move": "double-edge"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "134": [
-    {
-      "level": 0,
-      "move": "water-gun"
-    },
-    {
-      "level": 1,
-      "move": "baton-pass"
-    },
-    {
-      "level": 1,
-      "move": "bite"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "swift"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "take-down"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "haze"
-    },
-    {
-      "level": 25,
-      "move": "water-pulse"
-    },
-    {
-      "level": 30,
-      "move": "aurora-beam"
-    },
-    {
-      "level": 35,
-      "move": "aqua-ring"
-    },
-    {
-      "level": 40,
-      "move": "muddy-water"
-    },
-    {
-      "level": 45,
-      "move": "acid-armor"
-    },
-    {
-      "level": 50,
-      "move": "hydro-pump"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "135": [
-    {
-      "level": 0,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 1,
-      "move": "baton-pass"
-    },
-    {
-      "level": 1,
-      "move": "bite"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "swift"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "take-down"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 25,
-      "move": "double-kick"
-    },
-    {
-      "level": 30,
-      "move": "thunder-fang"
-    },
-    {
-      "level": 35,
-      "move": "pin-missile"
-    },
-    {
-      "level": 40,
-      "move": "discharge"
-    },
-    {
-      "level": 45,
-      "move": "agility"
-    },
-    {
-      "level": 50,
-      "move": "thunder"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "136": [
-    {
-      "level": 0,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "baton-pass"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "swift"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "take-down"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "smog"
-    },
-    {
-      "level": 25,
-      "move": "bite"
-    },
-    {
-      "level": 30,
-      "move": "fire-fang"
-    },
-    {
-      "level": 35,
-      "move": "fire-spin"
-    },
-    {
-      "level": 40,
-      "move": "lava-plume"
-    },
-    {
-      "level": 45,
-      "move": "scary-face"
-    },
-    {
-      "level": 50,
-      "move": "flare-blitz"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "145": [
-    {
-      "level": 1,
-      "move": "peck"
-    },
-    {
-      "level": 1,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 5,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 10,
-      "move": "light-screen"
-    },
-    {
-      "level": 15,
-      "move": "pluck"
-    },
-    {
-      "level": 20,
-      "move": "agility"
-    },
-    {
-      "level": 25,
-      "move": "ancient-power"
-    },
-    {
-      "level": 30,
-      "move": "charge"
-    },
-    {
-      "level": 35,
-      "move": "drill-peck"
-    },
-    {
-      "level": 40,
-      "move": "roost"
-    },
-    {
-      "level": 45,
-      "move": "discharge"
-    },
-    {
-      "level": 50,
-      "move": "rain-dance"
-    },
-    {
-      "level": 55,
-      "move": "thunder"
-    },
-    {
-      "level": 60,
-      "move": "detect"
-    },
-    {
-      "level": 65,
-      "move": "magnetic-flux"
-    },
-    {
-      "level": 70,
-      "move": "zap-cannon"
-    }
-  ],
-  "152": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 6,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 9,
-      "move": "poison-powder"
-    },
-    {
-      "level": 12,
-      "move": "synthesis"
-    },
-    {
-      "level": 17,
-      "move": "reflect"
-    },
-    {
-      "level": 20,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 23,
-      "move": "leech-seed"
-    },
-    {
-      "level": 28,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 31,
-      "move": "light-screen"
-    },
-    {
-      "level": 34,
-      "move": "body-slam"
-    },
-    {
-      "level": 39,
-      "move": "safeguard"
-    },
-    {
-      "level": 42,
-      "move": "giga-drain"
-    },
-    {
-      "level": 45,
-      "move": "solar-beam"
-    }
-  ],
-  "153": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "poison-powder"
-    },
-    {
-      "level": 1,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 12,
-      "move": "synthesis"
-    },
-    {
-      "level": 18,
-      "move": "reflect"
-    },
-    {
-      "level": 22,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 26,
-      "move": "leech-seed"
-    },
-    {
-      "level": 32,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 36,
-      "move": "light-screen"
-    },
-    {
-      "level": 40,
-      "move": "body-slam"
-    },
-    {
-      "level": 46,
-      "move": "safeguard"
-    },
-    {
-      "level": 50,
-      "move": "giga-drain"
-    },
-    {
-      "level": 54,
-      "move": "solar-beam"
-    }
-  ],
-  "154": [
-    {
-      "level": 0,
-      "move": "petal-dance"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "petal-blizzard"
-    },
-    {
-      "level": 1,
-      "move": "poison-powder"
-    },
-    {
-      "level": 1,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 12,
-      "move": "synthesis"
-    },
-    {
-      "level": 18,
-      "move": "reflect"
-    },
-    {
-      "level": 22,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 26,
-      "move": "leech-seed"
-    },
-    {
-      "level": 34,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 40,
-      "move": "light-screen"
-    },
-    {
-      "level": 46,
-      "move": "body-slam"
-    },
-    {
-      "level": 54,
-      "move": "safeguard"
-    },
-    {
-      "level": 60,
-      "move": "giga-drain"
-    },
-    {
-      "level": 65,
-      "move": "solar-beam"
-    }
-  ],
-  "155": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 6,
-      "move": "smokescreen"
-    },
-    {
-      "level": 10,
-      "move": "ember"
-    },
-    {
-      "level": 13,
-      "move": "quick-attack"
-    },
-    {
-      "level": 19,
-      "move": "flame-wheel"
-    },
-    {
-      "level": 22,
-      "move": "defense-curl"
-    },
-    {
-      "level": 28,
-      "move": "flame-charge"
-    },
-    {
-      "level": 31,
-      "move": "swift"
-    },
-    {
-      "level": 37,
-      "move": "lava-plume"
-    },
-    {
-      "level": 40,
-      "move": "flamethrower"
-    },
-    {
-      "level": 46,
-      "move": "inferno"
-    },
-    {
-      "level": 49,
-      "move": "rollout"
-    },
-    {
-      "level": 55,
-      "move": "double-edge"
-    },
-    {
-      "level": 58,
-      "move": "overheat"
-    },
-    {
-      "level": 64,
-      "move": "eruption"
-    }
-  ],
-  "156": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "smokescreen"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 10,
-      "move": "ember"
-    },
-    {
-      "level": 13,
-      "move": "quick-attack"
-    },
-    {
-      "level": 20,
-      "move": "flame-wheel"
-    },
-    {
-      "level": 24,
-      "move": "defense-curl"
-    },
-    {
-      "level": 31,
-      "move": "swift"
-    },
-    {
-      "level": 35,
-      "move": "flame-charge"
-    },
-    {
-      "level": 42,
-      "move": "lava-plume"
-    },
-    {
-      "level": 46,
-      "move": "flamethrower"
-    },
-    {
-      "level": 53,
-      "move": "inferno"
-    },
-    {
-      "level": 57,
-      "move": "rollout"
-    },
-    {
-      "level": 64,
-      "move": "double-edge"
-    },
-    {
-      "level": 68,
-      "move": "overheat"
-    },
-    {
-      "level": 75,
-      "move": "eruption"
-    }
-  ],
-  "157": [
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "eruption"
-    },
-    {
-      "level": 1,
-      "move": "gyro-ball"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "smokescreen"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 13,
-      "move": "quick-attack"
-    },
-    {
-      "level": 20,
-      "move": "flame-wheel"
-    },
-    {
-      "level": 24,
-      "move": "defense-curl"
-    },
-    {
-      "level": 31,
-      "move": "swift"
-    },
-    {
-      "level": 35,
-      "move": "flame-charge"
-    },
-    {
-      "level": 43,
-      "move": "lava-plume"
-    },
-    {
-      "level": 48,
-      "move": "flamethrower"
-    },
-    {
-      "level": 56,
-      "move": "inferno"
-    },
-    {
-      "level": 61,
-      "move": "rollout"
-    },
-    {
-      "level": 74,
-      "move": "overheat"
-    }
-  ],
-  "158": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 6,
-      "move": "water-gun"
-    },
-    {
-      "level": 9,
-      "move": "bite"
-    },
-    {
-      "level": 13,
-      "move": "scary-face"
-    },
-    {
-      "level": 19,
-      "move": "ice-fang"
-    },
-    {
-      "level": 22,
-      "move": "flail"
-    },
-    {
-      "level": 27,
-      "move": "crunch"
-    },
-    {
-      "level": 30,
-      "move": "slash"
-    },
-    {
-      "level": 33,
-      "move": "screech"
-    },
-    {
-      "level": 37,
-      "move": "thrash"
-    },
-    {
-      "level": 41,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 45,
-      "move": "superpower"
-    },
-    {
-      "level": 50,
-      "move": "hydro-pump"
-    }
-  ],
-  "159": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 13,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "scary-face"
-    },
-    {
-      "level": 21,
-      "move": "ice-fang"
-    },
-    {
-      "level": 24,
-      "move": "flail"
-    },
-    {
-      "level": 30,
-      "move": "crunch"
-    },
-    {
-      "level": 34,
-      "move": "slash"
-    },
-    {
-      "level": 37,
-      "move": "screech"
-    },
-    {
-      "level": 42,
-      "move": "thrash"
-    },
-    {
-      "level": 47,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 50,
-      "move": "superpower"
-    },
-    {
-      "level": 55,
-      "move": "hydro-pump"
-    }
-  ],
-  "160": [
-    {
-      "level": 1,
-      "move": "agility"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 13,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "scary-face"
-    },
-    {
-      "level": 21,
-      "move": "ice-fang"
-    },
-    {
-      "level": 24,
-      "move": "flail"
-    },
-    {
-      "level": 32,
-      "move": "crunch"
-    },
-    {
-      "level": 37,
-      "move": "slash"
-    },
-    {
-      "level": 44,
-      "move": "screech"
-    },
-    {
-      "level": 51,
-      "move": "thrash"
-    },
-    {
-      "level": 59,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 65,
-      "move": "superpower"
-    },
-    {
-      "level": 70,
-      "move": "hydro-pump"
-    }
-  ],
-  "161": [
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 4,
-      "move": "defense-curl"
-    },
-    {
-      "level": 7,
-      "move": "quick-attack"
-    },
-    {
-      "level": 13,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 16,
-      "move": "helping-hand"
-    },
-    {
-      "level": 19,
-      "move": "follow-me"
-    },
-    {
-      "level": 25,
-      "move": "slam"
-    },
-    {
-      "level": 28,
-      "move": "rest"
-    },
-    {
-      "level": 31,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 36,
-      "move": "amnesia"
-    },
-    {
-      "level": 39,
-      "move": "baton-pass"
-    },
-    {
-      "level": 42,
-      "move": "double-edge"
-    },
-    {
-      "level": 47,
-      "move": "hyper-voice"
-    }
-  ],
-  "162": [
-    {
-      "level": 0,
-      "move": "agility"
-    },
-    {
-      "level": 1,
-      "move": "coil"
-    },
-    {
-      "level": 1,
-      "move": "defense-curl"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 13,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 17,
-      "move": "helping-hand"
-    },
-    {
-      "level": 21,
-      "move": "follow-me"
-    },
-    {
-      "level": 28,
-      "move": "slam"
-    },
-    {
-      "level": 32,
-      "move": "rest"
-    },
-    {
-      "level": 36,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 42,
-      "move": "amnesia"
-    },
-    {
-      "level": 46,
-      "move": "baton-pass"
-    },
-    {
-      "level": 50,
-      "move": "double-edge"
-    },
-    {
-      "level": 56,
-      "move": "hyper-voice"
-    }
-  ],
-  "165": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "supersonic"
-    },
-    {
-      "level": 8,
-      "move": "swift"
-    },
-    {
-      "level": 12,
-      "move": "light-screen"
-    },
-    {
-      "level": 12,
-      "move": "reflect"
-    },
-    {
-      "level": 12,
-      "move": "safeguard"
-    },
-    {
-      "level": 15,
-      "move": "mach-punch"
-    },
-    {
-      "level": 19,
-      "move": "silver-wind"
-    },
-    {
-      "level": 22,
-      "move": "comet-punch"
-    },
-    {
-      "level": 26,
-      "move": "baton-pass"
-    },
-    {
-      "level": 29,
-      "move": "agility"
-    },
-    {
-      "level": 33,
-      "move": "bug-buzz"
-    },
-    {
-      "level": 36,
-      "move": "air-slash"
-    },
-    {
-      "level": 40,
-      "move": "double-edge"
-    }
-  ],
-  "166": [
-    {
-      "level": 1,
-      "move": "supersonic"
-    },
-    {
-      "level": 1,
-      "move": "swift"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "supersonic"
-    },
-    {
-      "level": 8,
-      "move": "swift"
-    },
-    {
-      "level": 12,
-      "move": "light-screen"
-    },
-    {
-      "level": 12,
-      "move": "reflect"
-    },
-    {
-      "level": 12,
-      "move": "safeguard"
-    },
-    {
-      "level": 15,
-      "move": "mach-punch"
-    },
-    {
-      "level": 20,
-      "move": "silver-wind"
-    },
-    {
-      "level": 24,
-      "move": "comet-punch"
-    },
-    {
-      "level": 29,
-      "move": "baton-pass"
-    },
-    {
-      "level": 33,
-      "move": "agility"
-    },
-    {
-      "level": 38,
-      "move": "bug-buzz"
-    },
-    {
-      "level": 42,
-      "move": "air-slash"
-    },
-    {
-      "level": 47,
-      "move": "double-edge"
-    }
-  ],
-  "169": [
-    {
-      "level": 0,
-      "move": "cross-poison"
-    },
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "astonish"
-    },
-    {
-      "level": 1,
-      "move": "cross-poison"
-    },
-    {
-      "level": 1,
-      "move": "mean-look"
-    },
-    {
-      "level": 1,
-      "move": "screech"
-    },
-    {
-      "level": 1,
-      "move": "supersonic"
-    },
-    {
-      "level": 1,
-      "move": "tailwind"
-    },
-    {
-      "level": 1,
-      "move": "toxic"
-    },
-    {
-      "level": 15,
-      "move": "poison-fang"
-    },
-    {
-      "level": 20,
-      "move": "quick-guard"
-    },
-    {
-      "level": 27,
-      "move": "air-cutter"
-    },
-    {
-      "level": 34,
-      "move": "bite"
-    },
-    {
-      "level": 41,
-      "move": "haze"
-    },
-    {
-      "level": 48,
-      "move": "venoshock"
-    },
-    {
-      "level": 55,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 62,
-      "move": "air-slash"
-    },
-    {
-      "level": 69,
-      "move": "leech-life"
-    }
-  ],
-  "172": [
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 4,
-      "move": "play-nice"
-    },
-    {
-      "level": 8,
-      "move": "sweet-kiss"
-    },
-    {
-      "level": 12,
-      "move": "nuzzle"
-    },
-    {
-      "level": 16,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 20,
-      "move": "charm"
-    }
-  ],
-  "173": [
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "splash"
-    },
-    {
-      "level": 4,
-      "move": "sing"
-    },
-    {
-      "level": 8,
-      "move": "sweet-kiss"
-    },
-    {
-      "level": 12,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 16,
-      "move": "encore"
-    },
-    {
-      "level": 20,
-      "move": "charm"
-    }
-  ],
-  "174": [
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "sing"
-    },
-    {
-      "level": 4,
-      "move": "defense-curl"
-    },
-    {
-      "level": 8,
-      "move": "sweet-kiss"
-    },
-    {
-      "level": 12,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 16,
-      "move": "disable"
-    },
-    {
-      "level": 20,
-      "move": "charm"
-    }
-  ],
-  "182": [
-    {
-      "level": 0,
-      "move": "petal-blizzard"
-    },
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "acid"
-    },
-    {
-      "level": 1,
-      "move": "giga-drain"
-    },
-    {
-      "level": 1,
-      "move": "grassy-terrain"
-    },
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 1,
-      "move": "mega-drain"
-    },
-    {
-      "level": 1,
-      "move": "moonblast"
-    },
-    {
-      "level": 1,
-      "move": "moonlight"
-    },
-    {
-      "level": 1,
-      "move": "petal-dance"
-    },
-    {
-      "level": 1,
-      "move": "poison-powder"
-    },
-    {
-      "level": 1,
-      "move": "quiver-dance"
-    },
-    {
-      "level": 1,
-      "move": "sleep-powder"
-    },
-    {
-      "level": 1,
-      "move": "stun-spore"
-    },
-    {
-      "level": 1,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 1,
-      "move": "toxic"
-    }
-  ],
-  "191": [
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 7,
-      "move": "absorb"
-    },
-    {
-      "level": 10,
-      "move": "mega-drain"
-    },
-    {
-      "level": 16,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 19,
-      "move": "worry-seed"
-    },
-    {
-      "level": 22,
-      "move": "giga-drain"
-    },
-    {
-      "level": 25,
-      "move": "endeavor"
-    },
-    {
-      "level": 28,
-      "move": "synthesis"
-    },
-    {
-      "level": 31,
-      "move": "solar-beam"
-    },
-    {
-      "level": 34,
-      "move": "double-edge"
-    },
-    {
-      "level": 36,
-      "move": "sunny-day"
-    },
-    {
-      "level": 39,
-      "move": "seed-bomb"
-    }
-  ],
-  "192": [
-    {
-      "level": 1,
-      "move": "growth"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 4,
-      "move": "ingrain"
-    },
-    {
-      "level": 7,
-      "move": "absorb"
-    },
-    {
-      "level": 10,
-      "move": "mega-drain"
-    },
-    {
-      "level": 13,
-      "move": "leech-seed"
-    },
-    {
-      "level": 16,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 19,
-      "move": "worry-seed"
-    },
-    {
-      "level": 22,
-      "move": "giga-drain"
-    },
-    {
-      "level": 25,
-      "move": "bullet-seed"
-    },
-    {
-      "level": 28,
-      "move": "petal-dance"
-    },
-    {
-      "level": 31,
-      "move": "solar-beam"
-    },
-    {
-      "level": 34,
-      "move": "double-edge"
-    },
-    {
-      "level": 39,
-      "move": "sunny-day"
-    },
-    {
-      "level": 43,
-      "move": "leaf-storm"
-    },
-    {
-      "level": 50,
-      "move": "petal-blizzard"
-    }
-  ],
-  "194": [
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 4,
-      "move": "rain-dance"
-    },
-    {
-      "level": 8,
-      "move": "mud-shot"
-    },
-    {
-      "level": 12,
-      "move": "haze"
-    },
-    {
-      "level": 12,
-      "move": "mist"
-    },
-    {
-      "level": 16,
-      "move": "slam"
-    },
-    {
-      "level": 21,
-      "move": "yawn"
-    },
-    {
-      "level": 24,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 28,
-      "move": "muddy-water"
-    },
-    {
-      "level": 32,
-      "move": "amnesia"
-    },
-    {
-      "level": 36,
-      "move": "toxic"
-    },
-    {
-      "level": 40,
-      "move": "earthquake"
-    }
-  ],
-  "195": [
-    {
-      "level": 1,
-      "move": "mud-shot"
-    },
-    {
-      "level": 1,
-      "move": "rain-dance"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 12,
-      "move": "haze"
-    },
-    {
-      "level": 12,
-      "move": "mist"
-    },
-    {
-      "level": 16,
-      "move": "slam"
-    },
-    {
-      "level": 23,
-      "move": "yawn"
-    },
-    {
-      "level": 28,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 34,
-      "move": "muddy-water"
-    },
-    {
-      "level": 40,
-      "move": "amnesia"
-    },
-    {
-      "level": 46,
-      "move": "toxic"
-    },
-    {
-      "level": 52,
-      "move": "earthquake"
-    }
-  ],
-  "196": [
-    {
-      "level": 0,
-      "move": "confusion"
-    },
-    {
-      "level": 1,
-      "move": "baton-pass"
-    },
-    {
-      "level": 1,
-      "move": "bite"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "take-down"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "swift"
-    },
-    {
-      "level": 25,
-      "move": "psybeam"
-    },
-    {
-      "level": 30,
-      "move": "morning-sun"
-    },
-    {
-      "level": 35,
-      "move": "power-swap"
-    },
-    {
-      "level": 40,
-      "move": "psychic"
-    },
-    {
-      "level": 45,
-      "move": "psych-up"
-    },
-    {
-      "level": 50,
-      "move": "future-sight"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "197": [
-    {
-      "level": 0,
-      "move": "snarl"
-    },
-    {
-      "level": 1,
-      "move": "baton-pass"
-    },
-    {
-      "level": 1,
-      "move": "bite"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "swift"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "take-down"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 25,
-      "move": "assurance"
-    },
-    {
-      "level": 30,
-      "move": "moonlight"
-    },
-    {
-      "level": 35,
-      "move": "guard-swap"
-    },
-    {
-      "level": 40,
-      "move": "dark-pulse"
-    },
-    {
-      "level": 45,
-      "move": "screech"
-    },
-    {
-      "level": 50,
-      "move": "mean-look"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "208": [
-    {
-      "level": 1,
-      "move": "bind"
-    },
-    {
-      "level": 1,
-      "move": "crunch"
-    },
-    {
-      "level": 1,
-      "move": "fire-fang"
-    },
-    {
-      "level": 1,
-      "move": "harden"
-    },
-    {
-      "level": 1,
-      "move": "ice-fang"
-    },
-    {
-      "level": 1,
-      "move": "rock-polish"
-    },
-    {
-      "level": 1,
-      "move": "rock-throw"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "thunder-fang"
-    },
-    {
-      "level": 4,
-      "move": "smack-down"
-    },
-    {
-      "level": 8,
-      "move": "autotomize"
-    },
-    {
-      "level": 12,
-      "move": "dragon-breath"
-    },
-    {
-      "level": 16,
-      "move": "curse"
-    },
-    {
-      "level": 20,
-      "move": "rock-slide"
-    },
-    {
-      "level": 24,
-      "move": "screech"
-    },
-    {
-      "level": 28,
-      "move": "sand-tomb"
-    },
-    {
-      "level": 32,
-      "move": "stealth-rock"
-    },
-    {
-      "level": 36,
-      "move": "slam"
-    },
-    {
-      "level": 40,
-      "move": "sandstorm"
-    },
-    {
-      "level": 44,
-      "move": "dig"
-    },
-    {
-      "level": 48,
-      "move": "iron-tail"
-    },
-    {
-      "level": 52,
-      "move": "stone-edge"
-    },
-    {
-      "level": 56,
-      "move": "double-edge"
-    },
-    {
-      "level": 60,
-      "move": "magnet-rise"
-    }
-  ],
-  "239": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 4,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 8,
-      "move": "charge"
-    },
-    {
-      "level": 12,
-      "move": "swift"
-    },
-    {
-      "level": 16,
-      "move": "shock-wave"
-    },
-    {
-      "level": 20,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 24,
-      "move": "screech"
-    },
-    {
-      "level": 28,
-      "move": "thunder-punch"
-    },
-    {
-      "level": 32,
-      "move": "discharge"
-    },
-    {
-      "level": 36,
-      "move": "low-kick"
-    },
-    {
-      "level": 40,
-      "move": "thunderbolt"
-    },
-    {
-      "level": 44,
-      "move": "light-screen"
-    },
-    {
-      "level": 48,
-      "move": "thunder"
-    }
-  ],
-  "252": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 3,
-      "move": "leafage"
-    },
-    {
-      "level": 6,
-      "move": "quick-attack"
-    },
-    {
-      "level": 9,
-      "move": "mega-drain"
-    },
-    {
-      "level": 12,
-      "move": "detect"
-    },
-    {
-      "level": 15,
-      "move": "quick-guard"
-    },
-    {
-      "level": 18,
-      "move": "assurance"
-    },
-    {
-      "level": 21,
-      "move": "giga-drain"
-    },
-    {
-      "level": 24,
-      "move": "slam"
-    },
-    {
-      "level": 27,
-      "move": "double-team"
-    },
-    {
-      "level": 30,
-      "move": "energy-ball"
-    },
-    {
-      "level": 33,
-      "move": "screech"
-    },
-    {
-      "level": 36,
-      "move": "endeavor"
-    },
-    {
-      "level": 39,
-      "move": "leaf-storm"
-    }
-  ],
-  "253": [
-    {
-      "level": 1,
-      "move": "leafage"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 9,
-      "move": "mega-drain"
-    },
-    {
-      "level": 12,
-      "move": "detect"
-    },
-    {
-      "level": 15,
-      "move": "quick-guard"
-    },
-    {
-      "level": 20,
-      "move": "assurance"
-    },
-    {
-      "level": 25,
-      "move": "giga-drain"
-    },
-    {
-      "level": 30,
-      "move": "slam"
-    },
-    {
-      "level": 35,
-      "move": "double-team"
-    },
-    {
-      "level": 40,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 45,
-      "move": "screech"
-    },
-    {
-      "level": 50,
-      "move": "endeavor"
-    },
-    {
-      "level": 55,
-      "move": "leaf-storm"
-    }
-  ],
-  "254": [
-    {
-      "level": 0,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 1,
-      "move": "leafage"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 5,
-      "move": "mega-drain"
-    },
-    {
-      "level": 12,
-      "move": "detect"
-    },
-    {
-      "level": 15,
-      "move": "quick-guard"
-    },
-    {
-      "level": 20,
-      "move": "assurance"
-    },
-    {
-      "level": 25,
-      "move": "giga-drain"
-    },
-    {
-      "level": 30,
-      "move": "slam"
-    },
-    {
-      "level": 35,
-      "move": "double-team"
-    },
-    {
-      "level": 42,
-      "move": "screech"
-    },
-    {
-      "level": 49,
-      "move": "endeavor"
-    },
-    {
-      "level": 56,
-      "move": "leaf-storm"
-    }
-  ],
-  "255": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 3,
-      "move": "ember"
-    },
-    {
-      "level": 6,
-      "move": "quick-attack"
-    },
-    {
-      "level": 9,
-      "move": "flame-charge"
-    },
-    {
-      "level": 12,
-      "move": "detect"
-    },
-    {
-      "level": 15,
-      "move": "sand-attack"
-    },
-    {
-      "level": 18,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 21,
-      "move": "slash"
-    },
-    {
-      "level": 24,
-      "move": "bounce"
-    },
-    {
-      "level": 27,
-      "move": "focus-energy"
-    },
-    {
-      "level": 30,
-      "move": "flamethrower"
-    },
-    {
-      "level": 33,
-      "move": "feather-dance"
-    },
-    {
-      "level": 36,
-      "move": "reversal"
-    },
-    {
-      "level": 39,
-      "move": "flare-blitz"
-    }
-  ],
-  "256": [
-    {
-      "level": 0,
-      "move": "double-kick"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 9,
-      "move": "flame-charge"
-    },
-    {
-      "level": 12,
-      "move": "detect"
-    },
-    {
-      "level": 15,
-      "move": "sand-attack"
-    },
-    {
-      "level": 20,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 25,
-      "move": "slash"
-    },
-    {
-      "level": 30,
-      "move": "bounce"
-    },
-    {
-      "level": 35,
-      "move": "focus-energy"
-    },
-    {
-      "level": 40,
-      "move": "blaze-kick"
-    },
-    {
-      "level": 45,
-      "move": "bulk-up"
-    },
-    {
-      "level": 50,
-      "move": "reversal"
-    },
-    {
-      "level": 55,
-      "move": "flare-blitz"
-    }
-  ],
-  "257": [
-    {
-      "level": 0,
-      "move": "blaze-kick"
-    },
-    {
-      "level": 1,
-      "move": "double-kick"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 9,
-      "move": "flame-charge"
-    },
-    {
-      "level": 12,
-      "move": "detect"
-    },
-    {
-      "level": 15,
-      "move": "sand-attack"
-    },
-    {
-      "level": 20,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 25,
-      "move": "slash"
-    },
-    {
-      "level": 30,
-      "move": "bounce"
-    },
-    {
-      "level": 35,
-      "move": "focus-energy"
-    },
-    {
-      "level": 42,
-      "move": "bulk-up"
-    },
-    {
-      "level": 49,
-      "move": "reversal"
-    },
-    {
-      "level": 56,
-      "move": "flare-blitz"
-    },
-    {
-      "level": 63,
-      "move": "brave-bird"
-    }
-  ],
-  "258": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 3,
-      "move": "water-gun"
-    },
-    {
-      "level": 6,
-      "move": "rock-smash"
-    },
-    {
-      "level": 9,
-      "move": "rock-throw"
-    },
-    {
-      "level": 12,
-      "move": "protect"
-    },
-    {
-      "level": 15,
-      "move": "supersonic"
-    },
-    {
-      "level": 18,
-      "move": "water-pulse"
-    },
-    {
-      "level": 21,
-      "move": "rock-slide"
-    },
-    {
-      "level": 24,
-      "move": "take-down"
-    },
-    {
-      "level": 27,
-      "move": "amnesia"
-    },
-    {
-      "level": 30,
-      "move": "surf"
-    },
-    {
-      "level": 33,
-      "move": "screech"
-    },
-    {
-      "level": 36,
-      "move": "endeavor"
-    },
-    {
-      "level": 39,
-      "move": "hydro-pump"
-    }
-  ],
-  "259": [
-    {
-      "level": 0,
-      "move": "mud-shot"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 9,
-      "move": "rock-throw"
-    },
-    {
-      "level": 12,
-      "move": "protect"
-    },
-    {
-      "level": 15,
-      "move": "supersonic"
-    },
-    {
-      "level": 20,
-      "move": "water-pulse"
-    },
-    {
-      "level": 25,
-      "move": "rock-slide"
-    },
-    {
-      "level": 30,
-      "move": "take-down"
-    },
-    {
-      "level": 35,
-      "move": "amnesia"
-    },
-    {
-      "level": 40,
-      "move": "muddy-water"
-    },
-    {
-      "level": 45,
-      "move": "screech"
-    },
-    {
-      "level": 50,
-      "move": "endeavor"
-    },
-    {
-      "level": 55,
-      "move": "hydro-pump"
-    }
-  ],
-  "260": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "mud-shot"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 9,
-      "move": "rock-throw"
-    },
-    {
-      "level": 12,
-      "move": "protect"
-    },
-    {
-      "level": 15,
-      "move": "supersonic"
-    },
-    {
-      "level": 20,
-      "move": "water-pulse"
-    },
-    {
-      "level": 25,
-      "move": "rock-slide"
-    },
-    {
-      "level": 30,
-      "move": "take-down"
-    },
-    {
-      "level": 35,
-      "move": "amnesia"
-    },
-    {
-      "level": 42,
-      "move": "muddy-water"
-    },
-    {
-      "level": 49,
-      "move": "screech"
-    },
-    {
-      "level": 56,
-      "move": "endeavor"
-    },
-    {
-      "level": 63,
-      "move": "hydro-pump"
-    }
-  ],
-  "270": [
-    {
-      "level": 1,
-      "move": "astonish"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 3,
-      "move": "absorb"
-    },
-    {
-      "level": 6,
-      "move": "water-gun"
-    },
-    {
-      "level": 9,
-      "move": "mist"
-    },
-    {
-      "level": 12,
-      "move": "mega-drain"
-    },
-    {
-      "level": 16,
-      "move": "flail"
-    },
-    {
-      "level": 20,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 24,
-      "move": "leech-seed"
-    },
-    {
-      "level": 28,
-      "move": "giga-drain"
-    },
-    {
-      "level": 33,
-      "move": "rain-dance"
-    },
-    {
-      "level": 38,
-      "move": "zen-headbutt"
-    },
-    {
-      "level": 43,
-      "move": "energy-ball"
-    }
-  ],
-  "271": [
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "astonish"
-    },
-    {
-      "level": 1,
-      "move": "fake-out"
-    },
-    {
-      "level": 1,
-      "move": "flail"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "knock-off"
-    },
-    {
-      "level": 1,
-      "move": "teeter-dance"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 9,
-      "move": "mist"
-    },
-    {
-      "level": 12,
-      "move": "mega-drain"
-    },
-    {
-      "level": 18,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 24,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 30,
-      "move": "leech-seed"
-    },
-    {
-      "level": 36,
-      "move": "giga-drain"
-    },
-    {
-      "level": 50,
-      "move": "zen-headbutt"
-    },
-    {
-      "level": 57,
-      "move": "energy-ball"
-    },
-    {
-      "level": 64,
-      "move": "hydro-pump"
-    }
-  ],
-  "272": [
-    {
-      "level": 1,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 1,
-      "move": "fake-out"
-    },
-    {
-      "level": 1,
-      "move": "rain-dance"
-    }
-  ],
-  "283": [
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 6,
-      "move": "quick-attack"
-    },
-    {
-      "level": 9,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 14,
-      "move": "soak"
-    },
-    {
-      "level": 17,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 22,
-      "move": "agility"
-    },
-    {
-      "level": 25,
-      "move": "haze"
-    },
-    {
-      "level": 25,
-      "move": "mist"
-    },
-    {
-      "level": 35,
-      "move": "baton-pass"
-    },
-    {
-      "level": 38,
-      "move": "sticky-web"
-    }
-  ],
-  "284": [
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "soak"
-    },
-    {
-      "level": 1,
-      "move": "sweet-scent"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 1,
-      "move": "whirlwind"
-    },
-    {
-      "level": 17,
-      "move": "gust"
-    },
-    {
-      "level": 22,
-      "move": "air-cutter"
-    },
-    {
-      "level": 22,
-      "move": "scary-face"
-    },
-    {
-      "level": 26,
-      "move": "stun-spore"
-    },
-    {
-      "level": 32,
-      "move": "air-slash"
-    },
-    {
-      "level": 38,
-      "move": "giga-drain"
-    },
-    {
-      "level": 44,
-      "move": "bug-buzz"
-    },
-    {
-      "level": 52,
-      "move": "quiver-dance"
-    }
-  ],
-  "387": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "withdraw"
-    },
-    {
-      "level": 9,
-      "move": "absorb"
-    },
-    {
-      "level": 13,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 17,
-      "move": "curse"
-    },
-    {
-      "level": 21,
-      "move": "bite"
-    },
-    {
-      "level": 25,
-      "move": "mega-drain"
-    },
-    {
-      "level": 29,
-      "move": "leech-seed"
-    },
-    {
-      "level": 33,
-      "move": "synthesis"
-    },
-    {
-      "level": 37,
-      "move": "crunch"
-    },
-    {
-      "level": 41,
-      "move": "giga-drain"
-    },
-    {
-      "level": 45,
-      "move": "leaf-storm"
-    }
-  ],
-  "388": [
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "withdraw"
-    },
-    {
-      "level": 13,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 17,
-      "move": "curse"
-    },
-    {
-      "level": 22,
-      "move": "bite"
-    },
-    {
-      "level": 27,
-      "move": "mega-drain"
-    },
-    {
-      "level": 32,
-      "move": "leech-seed"
-    },
-    {
-      "level": 37,
-      "move": "synthesis"
-    },
-    {
-      "level": 42,
-      "move": "crunch"
-    },
-    {
-      "level": 47,
-      "move": "giga-drain"
-    },
-    {
-      "level": 52,
-      "move": "leaf-storm"
-    }
-  ],
-  "389": [
-    {
-      "level": 0,
-      "move": "earthquake"
-    },
-    {
-      "level": 1,
-      "move": "absorb"
-    },
-    {
-      "level": 1,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "withdraw"
-    },
-    {
-      "level": 1,
-      "move": "wood-hammer"
-    },
-    {
-      "level": 17,
-      "move": "curse"
-    },
-    {
-      "level": 22,
-      "move": "bite"
-    },
-    {
-      "level": 27,
-      "move": "mega-drain"
-    },
-    {
-      "level": 33,
-      "move": "leech-seed"
-    },
-    {
-      "level": 39,
-      "move": "synthesis"
-    },
-    {
-      "level": 45,
-      "move": "crunch"
-    },
-    {
-      "level": 51,
-      "move": "giga-drain"
-    },
-    {
-      "level": 57,
-      "move": "leaf-storm"
-    },
-    {
-      "level": 63,
-      "move": "headlong-rush"
-    }
-  ],
-  "390": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 7,
-      "move": "ember"
-    },
-    {
-      "level": 9,
-      "move": "taunt"
-    },
-    {
-      "level": 15,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 17,
-      "move": "flame-wheel"
-    },
-    {
-      "level": 23,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 25,
-      "move": "torment"
-    },
-    {
-      "level": 31,
-      "move": "facade"
-    },
-    {
-      "level": 33,
-      "move": "fire-spin"
-    },
-    {
-      "level": 39,
-      "move": "acrobatics"
-    },
-    {
-      "level": 41,
-      "move": "slack-off"
-    },
-    {
-      "level": 47,
-      "move": "flamethrower"
-    }
-  ],
-  "391": [
-    {
-      "level": 0,
-      "move": "mach-punch"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 9,
-      "move": "taunt"
-    },
-    {
-      "level": 16,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 19,
-      "move": "flame-wheel"
-    },
-    {
-      "level": 26,
-      "move": "feint"
-    },
-    {
-      "level": 29,
-      "move": "torment"
-    },
-    {
-      "level": 36,
-      "move": "close-combat"
-    },
-    {
-      "level": 39,
-      "move": "fire-spin"
-    },
-    {
-      "level": 46,
-      "move": "acrobatics"
-    },
-    {
-      "level": 49,
-      "move": "slack-off"
-    },
-    {
-      "level": 56,
-      "move": "flare-blitz"
-    }
-  ],
-  "392": [
-    {
-      "level": 0,
-      "move": "close-combat"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "mach-punch"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 16,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 19,
-      "move": "flame-wheel"
-    },
-    {
-      "level": 26,
-      "move": "feint"
-    },
-    {
-      "level": 29,
-      "move": "torment"
-    },
-    {
-      "level": 42,
-      "move": "fire-spin"
-    },
-    {
-      "level": 47,
-      "move": "flare-blitz"
-    },
-    {
-      "level": 52,
-      "move": "acrobatics"
-    },
-    {
-      "level": 58,
-      "move": "calm-mind"
-    },
-    {
-      "level": 65,
-      "move": "raging-fury"
-    }
-  ],
-  "393": [
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 4,
-      "move": "growl"
-    },
-    {
-      "level": 8,
-      "move": "water-gun"
-    },
-    {
-      "level": 11,
-      "move": "charm"
-    },
-    {
-      "level": 15,
-      "move": "peck"
-    },
-    {
-      "level": 18,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 22,
-      "move": "swagger"
-    },
-    {
-      "level": 25,
-      "move": "fury-attack"
-    },
-    {
-      "level": 29,
-      "move": "brine"
-    },
-    {
-      "level": 32,
-      "move": "whirlpool"
-    },
-    {
-      "level": 36,
-      "move": "mist"
-    },
-    {
-      "level": 39,
-      "move": "drill-peck"
-    },
-    {
-      "level": 43,
-      "move": "hydro-pump"
-    }
-  ],
-  "394": [
-    {
-      "level": 0,
-      "move": "metal-claw"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 15,
-      "move": "peck"
-    },
-    {
-      "level": 19,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 24,
-      "move": "swagger"
-    },
-    {
-      "level": 28,
-      "move": "fury-attack"
-    },
-    {
-      "level": 33,
-      "move": "brine"
-    },
-    {
-      "level": 37,
-      "move": "whirlpool"
-    },
-    {
-      "level": 42,
-      "move": "mist"
-    },
-    {
-      "level": 46,
-      "move": "drill-peck"
-    },
-    {
-      "level": 50,
-      "move": "hydro-pump"
-    }
-  ],
-  "395": [
-    {
-      "level": 0,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "metal-claw"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 11,
-      "move": "swords-dance"
-    },
-    {
-      "level": 15,
-      "move": "peck"
-    },
-    {
-      "level": 19,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 24,
-      "move": "swagger"
-    },
-    {
-      "level": 28,
-      "move": "fury-attack"
-    },
-    {
-      "level": 33,
-      "move": "brine"
-    },
-    {
-      "level": 39,
-      "move": "whirlpool"
-    },
-    {
-      "level": 46,
-      "move": "mist"
-    },
-    {
-      "level": 52,
-      "move": "drill-peck"
-    },
-    {
-      "level": 59,
-      "move": "hydro-pump"
-    },
-    {
-      "level": 66,
-      "move": "wave-crash"
-    }
-  ],
-  "401": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 6,
-      "move": "struggle-bug"
-    },
-    {
-      "level": 16,
-      "move": "bug-bite"
-    }
-  ],
-  "402": [
-    {
-      "level": 0,
-      "move": "fury-cutter"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 14,
-      "move": "absorb"
-    },
-    {
-      "level": 18,
-      "move": "sing"
-    },
-    {
-      "level": 22,
-      "move": "focus-energy"
-    },
-    {
-      "level": 26,
-      "move": "slash"
-    },
-    {
-      "level": 30,
-      "move": "x-scissor"
-    },
-    {
-      "level": 34,
-      "move": "screech"
-    },
-    {
-      "level": 36,
-      "move": "fell-stinger"
-    },
-    {
-      "level": 38,
-      "move": "taunt"
-    },
-    {
-      "level": 42,
-      "move": "night-slash"
-    },
-    {
-      "level": 44,
-      "move": "sticky-web"
-    },
-    {
-      "level": 46,
-      "move": "bug-buzz"
-    },
-    {
-      "level": 50,
-      "move": "perish-song"
-    }
-  ],
-  "462": [
-    {
-      "level": 1,
-      "move": "electric-terrain"
-    },
-    {
-      "level": 1,
-      "move": "magnetic-flux"
-    },
-    {
-      "level": 1,
-      "move": "mirror-coat"
-    },
-    {
-      "level": 1,
-      "move": "supersonic"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 1,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 1,
-      "move": "tri-attack"
-    },
-    {
-      "level": 12,
-      "move": "electro-ball"
-    },
-    {
-      "level": 16,
-      "move": "gyro-ball"
-    },
-    {
-      "level": 20,
-      "move": "spark"
-    },
-    {
-      "level": 24,
-      "move": "screech"
-    },
-    {
-      "level": 28,
-      "move": "magnet-rise"
-    },
-    {
-      "level": 34,
-      "move": "flash-cannon"
-    },
-    {
-      "level": 40,
-      "move": "discharge"
-    },
-    {
-      "level": 46,
-      "move": "metal-sound"
-    },
-    {
-      "level": 52,
-      "move": "light-screen"
-    },
-    {
-      "level": 58,
-      "move": "lock-on"
-    },
-    {
-      "level": 64,
-      "move": "zap-cannon"
-    }
-  ],
-  "466": [
-    {
-      "level": 1,
-      "move": "charge"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "thunder-shock"
-    },
-    {
-      "level": 12,
-      "move": "swift"
-    },
-    {
-      "level": 16,
-      "move": "shock-wave"
-    },
-    {
-      "level": 20,
-      "move": "thunder-wave"
-    },
-    {
-      "level": 24,
-      "move": "screech"
-    },
-    {
-      "level": 28,
-      "move": "thunder-punch"
-    },
-    {
-      "level": 34,
-      "move": "discharge"
-    },
-    {
-      "level": 40,
-      "move": "low-kick"
-    },
-    {
-      "level": 46,
-      "move": "thunderbolt"
-    },
-    {
-      "level": 52,
-      "move": "light-screen"
-    },
-    {
-      "level": 58,
-      "move": "thunder"
-    },
-    {
-      "level": 64,
-      "move": "giga-impact"
-    }
-  ],
-  "470": [
-    {
-      "level": 0,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 1,
-      "move": "baton-pass"
-    },
-    {
-      "level": 1,
-      "move": "bite"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "swift"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "take-down"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "leech-seed"
-    },
-    {
-      "level": 25,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 30,
-      "move": "synthesis"
-    },
-    {
-      "level": 35,
-      "move": "sunny-day"
-    },
-    {
-      "level": 40,
-      "move": "giga-drain"
-    },
-    {
-      "level": 45,
-      "move": "swords-dance"
-    },
-    {
-      "level": 50,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "471": [
-    {
-      "level": 0,
-      "move": "icy-wind"
-    },
-    {
-      "level": 1,
-      "move": "baton-pass"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "swift"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "take-down"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "ice-shard"
-    },
-    {
-      "level": 25,
-      "move": "bite"
-    },
-    {
-      "level": 30,
-      "move": "ice-fang"
-    },
-    {
-      "level": 35,
-      "move": "snowscape"
-    },
-    {
-      "level": 40,
-      "move": "freeze-dry"
-    },
-    {
-      "level": 45,
-      "move": "mirror-coat"
-    },
-    {
-      "level": 50,
-      "move": "blizzard"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "495": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 4,
-      "move": "leer"
-    },
-    {
-      "level": 7,
-      "move": "vine-whip"
-    },
-    {
-      "level": 10,
-      "move": "wrap"
-    },
-    {
-      "level": 13,
-      "move": "growth"
-    },
-    {
-      "level": 16,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 19,
-      "move": "leech-seed"
-    },
-    {
-      "level": 22,
-      "move": "mega-drain"
-    },
-    {
-      "level": 25,
-      "move": "slam"
-    },
-    {
-      "level": 28,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 31,
-      "move": "coil"
-    },
-    {
-      "level": 34,
-      "move": "giga-drain"
-    },
-    {
-      "level": 37,
-      "move": "gastro-acid"
-    },
-    {
-      "level": 40,
-      "move": "leaf-storm"
-    }
-  ],
-  "496": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 1,
-      "move": "wrap"
-    },
-    {
-      "level": 13,
-      "move": "growth"
-    },
-    {
-      "level": 16,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 20,
-      "move": "leech-seed"
-    },
-    {
-      "level": 24,
-      "move": "mega-drain"
-    },
-    {
-      "level": 28,
-      "move": "slam"
-    },
-    {
-      "level": 32,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 36,
-      "move": "coil"
-    },
-    {
-      "level": 40,
-      "move": "giga-drain"
-    },
-    {
-      "level": 44,
-      "move": "gastro-acid"
-    },
-    {
-      "level": 48,
-      "move": "leaf-storm"
-    }
-  ],
-  "497": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 1,
-      "move": "wrap"
-    },
-    {
-      "level": 13,
-      "move": "growth"
-    },
-    {
-      "level": 16,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 20,
-      "move": "leech-seed"
-    },
-    {
-      "level": 24,
-      "move": "mega-drain"
-    },
-    {
-      "level": 28,
-      "move": "slam"
-    },
-    {
-      "level": 32,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 38,
-      "move": "coil"
-    },
-    {
-      "level": 44,
-      "move": "giga-drain"
-    },
-    {
-      "level": 50,
-      "move": "gastro-acid"
-    },
-    {
-      "level": 56,
-      "move": "leaf-storm"
-    }
-  ],
-  "498": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 3,
-      "move": "tail-whip"
-    },
-    {
-      "level": 7,
-      "move": "ember"
-    },
-    {
-      "level": 9,
-      "move": "endure"
-    },
-    {
-      "level": 13,
-      "move": "defense-curl"
-    },
-    {
-      "level": 15,
-      "move": "flame-charge"
-    },
-    {
-      "level": 19,
-      "move": "smog"
-    },
-    {
-      "level": 21,
-      "move": "rollout"
-    },
-    {
-      "level": 25,
-      "move": "take-down"
-    },
-    {
-      "level": 27,
-      "move": "heat-crash"
-    },
-    {
-      "level": 31,
-      "move": "assurance"
-    },
-    {
-      "level": 33,
-      "move": "flamethrower"
-    },
-    {
-      "level": 37,
-      "move": "head-smash"
-    },
-    {
-      "level": 39,
-      "move": "roar"
-    },
-    {
-      "level": 43,
-      "move": "flare-blitz"
-    }
-  ],
-  "499": [
-    {
-      "level": 0,
-      "move": "arm-thrust"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "endure"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 13,
-      "move": "defense-curl"
-    },
-    {
-      "level": 15,
-      "move": "flame-charge"
-    },
-    {
-      "level": 20,
-      "move": "smog"
-    },
-    {
-      "level": 23,
-      "move": "rollout"
-    },
-    {
-      "level": 28,
-      "move": "take-down"
-    },
-    {
-      "level": 31,
-      "move": "heat-crash"
-    },
-    {
-      "level": 36,
-      "move": "assurance"
-    },
-    {
-      "level": 39,
-      "move": "flamethrower"
-    },
-    {
-      "level": 44,
-      "move": "head-smash"
-    },
-    {
-      "level": 47,
-      "move": "roar"
-    },
-    {
-      "level": 52,
-      "move": "flare-blitz"
-    }
-  ],
-  "500": [
-    {
-      "level": 1,
-      "move": "arm-thrust"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 13,
-      "move": "defense-curl"
-    },
-    {
-      "level": 15,
-      "move": "flame-charge"
-    },
-    {
-      "level": 20,
-      "move": "smog"
-    },
-    {
-      "level": 23,
-      "move": "rollout"
-    },
-    {
-      "level": 28,
-      "move": "take-down"
-    },
-    {
-      "level": 31,
-      "move": "heat-crash"
-    },
-    {
-      "level": 38,
-      "move": "assurance"
-    },
-    {
-      "level": 43,
-      "move": "flamethrower"
-    },
-    {
-      "level": 50,
-      "move": "head-smash"
-    },
-    {
-      "level": 55,
-      "move": "roar"
-    },
-    {
-      "level": 62,
-      "move": "flare-blitz"
-    }
-  ],
-  "501": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "tail-whip"
-    },
-    {
-      "level": 7,
-      "move": "water-gun"
-    },
-    {
-      "level": 11,
-      "move": "soak"
-    },
-    {
-      "level": 13,
-      "move": "focus-energy"
-    },
-    {
-      "level": 17,
-      "move": "razor-shell"
-    },
-    {
-      "level": 19,
-      "move": "fury-cutter"
-    },
-    {
-      "level": 23,
-      "move": "water-pulse"
-    },
-    {
-      "level": 25,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 29,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 31,
-      "move": "encore"
-    },
-    {
-      "level": 35,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 37,
-      "move": "retaliate"
-    },
-    {
-      "level": 41,
-      "move": "swords-dance"
-    },
-    {
-      "level": 43,
-      "move": "hydro-pump"
-    }
-  ],
-  "502": [
-    {
-      "level": 1,
-      "move": "soak"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 13,
-      "move": "focus-energy"
-    },
-    {
-      "level": 18,
-      "move": "razor-shell"
-    },
-    {
-      "level": 21,
-      "move": "fury-cutter"
-    },
-    {
-      "level": 26,
-      "move": "water-pulse"
-    },
-    {
-      "level": 29,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 34,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 37,
-      "move": "encore"
-    },
-    {
-      "level": 42,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 45,
-      "move": "retaliate"
-    },
-    {
-      "level": 50,
-      "move": "swords-dance"
-    },
-    {
-      "level": 53,
-      "move": "hydro-pump"
-    }
-  ],
-  "503": [
-    {
-      "level": 0,
-      "move": "slash"
-    },
-    {
-      "level": 1,
-      "move": "megahorn"
-    },
-    {
-      "level": 1,
-      "move": "soak"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 13,
-      "move": "focus-energy"
-    },
-    {
-      "level": 18,
-      "move": "razor-shell"
-    },
-    {
-      "level": 21,
-      "move": "fury-cutter"
-    },
-    {
-      "level": 25,
-      "move": "water-pulse"
-    },
-    {
-      "level": 29,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 34,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 39,
-      "move": "encore"
-    },
-    {
-      "level": 46,
-      "move": "aqua-tail"
-    },
-    {
-      "level": 51,
-      "move": "retaliate"
-    },
-    {
-      "level": 58,
-      "move": "swords-dance"
-    },
-    {
-      "level": 63,
-      "move": "hydro-pump"
-    }
-  ],
-  "504": [
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 3,
-      "move": "leer"
-    },
-    {
-      "level": 6,
-      "move": "bite"
-    },
-    {
-      "level": 8,
-      "move": "bide"
-    },
-    {
-      "level": 11,
-      "move": "detect"
-    },
-    {
-      "level": 13,
-      "move": "sand-attack"
-    },
-    {
-      "level": 16,
-      "move": "crunch"
-    },
-    {
-      "level": 18,
-      "move": "hypnosis"
-    },
-    {
-      "level": 21,
-      "move": "super-fang"
-    },
-    {
-      "level": 23,
-      "move": "after-you"
-    },
-    {
-      "level": 26,
-      "move": "focus-energy"
-    },
-    {
-      "level": 28,
-      "move": "work-up"
-    },
-    {
-      "level": 31,
-      "move": "hyper-fang"
-    },
-    {
-      "level": 33,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 36,
-      "move": "mean-look"
-    },
-    {
-      "level": 38,
-      "move": "baton-pass"
-    },
-    {
-      "level": 41,
-      "move": "slam"
-    }
-  ],
-  "505": [
-    {
-      "level": 0,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 1,
-      "move": "bite"
-    },
-    {
-      "level": 1,
-      "move": "confuse-ray"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "low-kick"
-    },
-    {
-      "level": 1,
-      "move": "rototiller"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 3,
-      "move": "leer"
-    },
-    {
-      "level": 6,
-      "move": "bite"
-    },
-    {
-      "level": 8,
-      "move": "bide"
-    },
-    {
-      "level": 11,
-      "move": "detect"
-    },
-    {
-      "level": 13,
-      "move": "sand-attack"
-    },
-    {
-      "level": 16,
-      "move": "crunch"
-    },
-    {
-      "level": 18,
-      "move": "hypnosis"
-    },
-    {
-      "level": 22,
-      "move": "super-fang"
-    },
-    {
-      "level": 25,
-      "move": "after-you"
-    },
-    {
-      "level": 29,
-      "move": "focus-energy"
-    },
-    {
-      "level": 32,
-      "move": "psych-up"
-    },
-    {
-      "level": 36,
-      "move": "hyper-fang"
-    },
-    {
-      "level": 39,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 43,
-      "move": "mean-look"
-    },
-    {
-      "level": 46,
-      "move": "baton-pass"
-    },
-    {
-      "level": 50,
-      "move": "slam"
-    }
-  ],
-  "650": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 8,
-      "move": "rollout"
-    },
-    {
-      "level": 11,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "leech-seed"
-    },
-    {
-      "level": 18,
-      "move": "pin-missile"
-    },
-    {
-      "level": 27,
-      "move": "take-down"
-    },
-    {
-      "level": 32,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 35,
-      "move": "mud-shot"
-    },
-    {
-      "level": 42,
-      "move": "body-slam"
-    },
-    {
-      "level": 45,
-      "move": "pain-split"
-    },
-    {
-      "level": 48,
-      "move": "wood-hammer"
-    }
-  ],
-  "651": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 8,
-      "move": "rollout"
-    },
-    {
-      "level": 11,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "leech-seed"
-    },
-    {
-      "level": 20,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 24,
-      "move": "pin-missile"
-    },
-    {
-      "level": 29,
-      "move": "take-down"
-    },
-    {
-      "level": 34,
-      "move": "mud-shot"
-    },
-    {
-      "level": 38,
-      "move": "bulk-up"
-    },
-    {
-      "level": 43,
-      "move": "body-slam"
-    },
-    {
-      "level": 47,
-      "move": "pain-split"
-    },
-    {
-      "level": 53,
-      "move": "wood-hammer"
-    }
-  ],
-  "652": [
-    {
-      "level": 0,
-      "move": "spiky-shield"
-    },
-    {
-      "level": 1,
-      "move": "feint"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "hammer-arm"
-    },
-    {
-      "level": 1,
-      "move": "rollout"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "vine-whip"
-    },
-    {
-      "level": 11,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "leech-seed"
-    },
-    {
-      "level": 19,
-      "move": "pin-missile"
-    },
-    {
-      "level": 29,
-      "move": "take-down"
-    },
-    {
-      "level": 35,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 41,
-      "move": "mud-shot"
-    },
-    {
-      "level": 48,
-      "move": "bulk-up"
-    },
-    {
-      "level": 54,
-      "move": "body-slam"
-    },
-    {
-      "level": 60,
-      "move": "pain-split"
-    },
-    {
-      "level": 66,
-      "move": "wood-hammer"
-    },
-    {
-      "level": 78,
-      "move": "giga-impact"
-    }
-  ],
-  "653": [
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 5,
-      "move": "ember"
-    },
-    {
-      "level": 11,
-      "move": "howl"
-    },
-    {
-      "level": 14,
-      "move": "flame-charge"
-    },
-    {
-      "level": 17,
-      "move": "psybeam"
-    },
-    {
-      "level": 20,
-      "move": "fire-spin"
-    },
-    {
-      "level": 25,
-      "move": "light-screen"
-    },
-    {
-      "level": 31,
-      "move": "psyshock"
-    },
-    {
-      "level": 35,
-      "move": "flamethrower"
-    },
-    {
-      "level": 38,
-      "move": "will-o-wisp"
-    },
-    {
-      "level": 41,
-      "move": "psychic"
-    },
-    {
-      "level": 43,
-      "move": "sunny-day"
-    },
-    {
-      "level": 48,
-      "move": "fire-blast"
-    }
-  ],
-  "654": [
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 11,
-      "move": "howl"
-    },
-    {
-      "level": 14,
-      "move": "flame-charge"
-    },
-    {
-      "level": 18,
-      "move": "psybeam"
-    },
-    {
-      "level": 22,
-      "move": "fire-spin"
-    },
-    {
-      "level": 28,
-      "move": "light-screen"
-    },
-    {
-      "level": 36,
-      "move": "psyshock"
-    },
-    {
-      "level": 41,
-      "move": "flamethrower"
-    },
-    {
-      "level": 45,
-      "move": "will-o-wisp"
-    },
-    {
-      "level": 49,
-      "move": "psychic"
-    },
-    {
-      "level": 52,
-      "move": "sunny-day"
-    },
-    {
-      "level": 56,
-      "move": "magic-room"
-    },
-    {
-      "level": 59,
-      "move": "fire-blast"
-    }
-  ],
-  "655": [
-    {
-      "level": 0,
-      "move": "mystical-fire"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "future-sight"
-    },
-    {
-      "level": 1,
-      "move": "howl"
-    },
-    {
-      "level": 1,
-      "move": "role-play"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "shadow-ball"
-    },
-    {
-      "level": 1,
-      "move": "switcheroo"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 14,
-      "move": "flame-charge"
-    },
-    {
-      "level": 18,
-      "move": "psybeam"
-    },
-    {
-      "level": 22,
-      "move": "fire-spin"
-    },
-    {
-      "level": 28,
-      "move": "light-screen"
-    },
-    {
-      "level": 38,
-      "move": "psyshock"
-    },
-    {
-      "level": 45,
-      "move": "flamethrower"
-    },
-    {
-      "level": 51,
-      "move": "will-o-wisp"
-    },
-    {
-      "level": 57,
-      "move": "psychic"
-    },
-    {
-      "level": 62,
-      "move": "sunny-day"
-    },
-    {
-      "level": 68,
-      "move": "magic-room"
-    },
-    {
-      "level": 74,
-      "move": "fire-blast"
-    }
-  ],
-  "656": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 5,
-      "move": "water-gun"
-    },
-    {
-      "level": 8,
-      "move": "quick-attack"
-    },
-    {
-      "level": 10,
-      "move": "lick"
-    },
-    {
-      "level": 14,
-      "move": "water-pulse"
-    },
-    {
-      "level": 18,
-      "move": "smokescreen"
-    },
-    {
-      "level": 21,
-      "move": "round"
-    },
-    {
-      "level": 25,
-      "move": "fling"
-    },
-    {
-      "level": 29,
-      "move": "smack-down"
-    },
-    {
-      "level": 35,
-      "move": "substitute"
-    },
-    {
-      "level": 39,
-      "move": "bounce"
-    },
-    {
-      "level": 43,
-      "move": "double-team"
-    },
-    {
-      "level": 48,
-      "move": "hydro-pump"
-    }
-  ],
-  "657": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 8,
-      "move": "quick-attack"
-    },
-    {
-      "level": 10,
-      "move": "lick"
-    },
-    {
-      "level": 14,
-      "move": "water-pulse"
-    },
-    {
-      "level": 19,
-      "move": "smokescreen"
-    },
-    {
-      "level": 23,
-      "move": "round"
-    },
-    {
-      "level": 28,
-      "move": "fling"
-    },
-    {
-      "level": 33,
-      "move": "smack-down"
-    },
-    {
-      "level": 40,
-      "move": "substitute"
-    },
-    {
-      "level": 45,
-      "move": "bounce"
-    },
-    {
-      "level": 50,
-      "move": "double-team"
-    },
-    {
-      "level": 56,
-      "move": "hydro-pump"
-    }
-  ],
-  "658": [
-    {
-      "level": 0,
-      "move": "water-shuriken"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "haze"
-    },
-    {
-      "level": 1,
-      "move": "night-slash"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "role-play"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 10,
-      "move": "lick"
-    },
-    {
-      "level": 14,
-      "move": "water-pulse"
-    },
-    {
-      "level": 19,
-      "move": "smokescreen"
-    },
-    {
-      "level": 23,
-      "move": "shadow-sneak"
-    },
-    {
-      "level": 28,
-      "move": "spikes"
-    },
-    {
-      "level": 33,
-      "move": "aerial-ace"
-    },
-    {
-      "level": 42,
-      "move": "substitute"
-    },
-    {
-      "level": 49,
-      "move": "extrasensory"
-    },
-    {
-      "level": 56,
-      "move": "double-team"
-    },
-    {
-      "level": 68,
-      "move": "hydro-pump"
-    }
-  ],
-  "700": [
-    {
-      "level": 0,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 1,
-      "move": "baton-pass"
-    },
-    {
-      "level": 1,
-      "move": "bite"
-    },
-    {
-      "level": 1,
-      "move": "charm"
-    },
-    {
-      "level": 1,
-      "move": "copycat"
-    },
-    {
-      "level": 1,
-      "move": "covet"
-    },
-    {
-      "level": 1,
-      "move": "double-edge"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "helping-hand"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 1,
-      "move": "take-down"
-    },
-    {
-      "level": 5,
-      "move": "sand-attack"
-    },
-    {
-      "level": 10,
-      "move": "quick-attack"
-    },
-    {
-      "level": 15,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 20,
-      "move": "swift"
-    },
-    {
-      "level": 25,
-      "move": "light-screen"
-    },
-    {
-      "level": 30,
-      "move": "draining-kiss"
-    },
-    {
-      "level": 35,
-      "move": "misty-terrain"
-    },
-    {
-      "level": 40,
-      "move": "skill-swap"
-    },
-    {
-      "level": 45,
-      "move": "psych-up"
-    },
-    {
-      "level": 50,
-      "move": "moonblast"
-    },
-    {
-      "level": 55,
-      "move": "last-resort"
-    }
-  ],
-  "722": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 3,
-      "move": "leafage"
-    },
-    {
-      "level": 6,
-      "move": "astonish"
-    },
-    {
-      "level": 9,
-      "move": "peck"
-    },
-    {
-      "level": 12,
-      "move": "shadow-sneak"
-    },
-    {
-      "level": 15,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 18,
-      "move": "synthesis"
-    },
-    {
-      "level": 21,
-      "move": "pluck"
-    },
-    {
-      "level": 24,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 27,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 30,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 33,
-      "move": "feather-dance"
-    },
-    {
-      "level": 36,
-      "move": "brave-bird"
-    }
-  ],
-  "723": [
-    {
-      "level": 1,
-      "move": "astonish"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "leafage"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 9,
-      "move": "peck"
-    },
-    {
-      "level": 12,
-      "move": "shadow-sneak"
-    },
-    {
-      "level": 15,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 20,
-      "move": "synthesis"
-    },
-    {
-      "level": 25,
-      "move": "pluck"
-    },
-    {
-      "level": 30,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 35,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 40,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 45,
-      "move": "feather-dance"
-    },
-    {
-      "level": 50,
-      "move": "brave-bird"
-    }
-  ],
-  "724": [
-    {
-      "level": 0,
-      "move": "spirit-shackle"
-    },
-    {
-      "level": 1,
-      "move": "astonish"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "leaf-storm"
-    },
-    {
-      "level": 1,
-      "move": "leafage"
-    },
-    {
-      "level": 1,
-      "move": "phantom-force"
-    },
-    {
-      "level": 1,
-      "move": "spite"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 1,
-      "move": "u-turn"
-    },
-    {
-      "level": 9,
-      "move": "peck"
-    },
-    {
-      "level": 12,
-      "move": "shadow-sneak"
-    },
-    {
-      "level": 15,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 20,
-      "move": "synthesis"
-    },
-    {
-      "level": 25,
-      "move": "pluck"
-    },
-    {
-      "level": 30,
-      "move": "nasty-plot"
-    },
-    {
-      "level": 37,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 44,
-      "move": "leaf-blade"
-    },
-    {
-      "level": 51,
-      "move": "feather-dance"
-    },
-    {
-      "level": 58,
-      "move": "brave-bird"
-    }
-  ],
-  "725": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 3,
-      "move": "ember"
-    },
-    {
-      "level": 6,
-      "move": "lick"
-    },
-    {
-      "level": 9,
-      "move": "roar"
-    },
-    {
-      "level": 12,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 15,
-      "move": "bite"
-    },
-    {
-      "level": 18,
-      "move": "double-kick"
-    },
-    {
-      "level": 21,
-      "move": "fire-fang"
-    },
-    {
-      "level": 24,
-      "move": "scary-face"
-    },
-    {
-      "level": 27,
-      "move": "swagger"
-    },
-    {
-      "level": 30,
-      "move": "flamethrower"
-    },
-    {
-      "level": 33,
-      "move": "thrash"
-    },
-    {
-      "level": 36,
-      "move": "flare-blitz"
-    }
-  ],
-  "726": [
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "lick"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 9,
-      "move": "roar"
-    },
-    {
-      "level": 12,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 15,
-      "move": "bite"
-    },
-    {
-      "level": 20,
-      "move": "double-kick"
-    },
-    {
-      "level": 25,
-      "move": "fire-fang"
-    },
-    {
-      "level": 30,
-      "move": "scary-face"
-    },
-    {
-      "level": 35,
-      "move": "swagger"
-    },
-    {
-      "level": 40,
-      "move": "flamethrower"
-    },
-    {
-      "level": 45,
-      "move": "thrash"
-    },
-    {
-      "level": 50,
-      "move": "flare-blitz"
-    }
-  ],
-  "727": [
-    {
-      "level": 0,
-      "move": "darkest-lariat"
-    },
-    {
-      "level": 1,
-      "move": "bulk-up"
-    },
-    {
-      "level": 1,
-      "move": "cross-chop"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "lick"
-    },
-    {
-      "level": 9,
-      "move": "roar"
-    },
-    {
-      "level": 12,
-      "move": "fury-swipes"
-    },
-    {
-      "level": 15,
-      "move": "bite"
-    },
-    {
-      "level": 20,
-      "move": "double-kick"
-    },
-    {
-      "level": 25,
-      "move": "fire-fang"
-    },
-    {
-      "level": 30,
-      "move": "scary-face"
-    },
-    {
-      "level": 32,
-      "move": "swagger"
-    },
-    {
-      "level": 44,
-      "move": "flamethrower"
-    },
-    {
-      "level": 51,
-      "move": "thrash"
-    },
-    {
-      "level": 58,
-      "move": "flare-blitz"
-    }
-  ],
-  "728": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 3,
-      "move": "water-gun"
-    },
-    {
-      "level": 6,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 9,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 12,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 15,
-      "move": "icy-wind"
-    },
-    {
-      "level": 18,
-      "move": "sing"
-    },
-    {
-      "level": 21,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 24,
-      "move": "encore"
-    },
-    {
-      "level": 27,
-      "move": "misty-terrain"
-    },
-    {
-      "level": 30,
-      "move": "hyper-voice"
-    },
-    {
-      "level": 33,
-      "move": "moonblast"
-    },
-    {
-      "level": 36,
-      "move": "hydro-pump"
-    }
-  ],
-  "729": [
-    {
-      "level": 1,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 9,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 12,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 15,
-      "move": "icy-wind"
-    },
-    {
-      "level": 20,
-      "move": "sing"
-    },
-    {
-      "level": 25,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 30,
-      "move": "encore"
-    },
-    {
-      "level": 35,
-      "move": "misty-terrain"
-    },
-    {
-      "level": 40,
-      "move": "hyper-voice"
-    },
-    {
-      "level": 45,
-      "move": "moonblast"
-    },
-    {
-      "level": 50,
-      "move": "hydro-pump"
-    }
-  ],
-  "730": [
-    {
-      "level": 0,
-      "move": "sparkling-aria"
-    },
-    {
-      "level": 1,
-      "move": "disarming-voice"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 9,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 12,
-      "move": "baby-doll-eyes"
-    },
-    {
-      "level": 15,
-      "move": "icy-wind"
-    },
-    {
-      "level": 20,
-      "move": "sing"
-    },
-    {
-      "level": 25,
-      "move": "bubble-beam"
-    },
-    {
-      "level": 30,
-      "move": "encore"
-    },
-    {
-      "level": 37,
-      "move": "misty-terrain"
-    },
-    {
-      "level": 44,
-      "move": "hyper-voice"
-    },
-    {
-      "level": 51,
-      "move": "moonblast"
-    },
-    {
-      "level": 58,
-      "move": "hydro-pump"
-    }
-  ],
-  "810": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 6,
-      "move": "branch-poke"
-    },
-    {
-      "level": 8,
-      "move": "taunt"
-    },
-    {
-      "level": 12,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 17,
-      "move": "screech"
-    },
-    {
-      "level": 20,
-      "move": "knock-off"
-    },
-    {
-      "level": 24,
-      "move": "slam"
-    },
-    {
-      "level": 28,
-      "move": "uproar"
-    },
-    {
-      "level": 32,
-      "move": "wood-hammer"
-    },
-    {
-      "level": 36,
-      "move": "endeavor"
-    }
-  ],
-  "811": [
-    {
-      "level": 0,
-      "move": "double-hit"
-    },
-    {
-      "level": 1,
-      "move": "branch-poke"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "taunt"
-    },
-    {
-      "level": 12,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 19,
-      "move": "screech"
-    },
-    {
-      "level": 24,
-      "move": "knock-off"
-    },
-    {
-      "level": 30,
-      "move": "slam"
-    },
-    {
-      "level": 36,
-      "move": "uproar"
-    },
-    {
-      "level": 42,
-      "move": "wood-hammer"
-    },
-    {
-      "level": 48,
-      "move": "endeavor"
-    }
-  ],
-  "812": [
-    {
-      "level": 0,
-      "move": "drum-beating"
-    },
-    {
-      "level": 1,
-      "move": "branch-poke"
-    },
-    {
-      "level": 1,
-      "move": "double-hit"
-    },
-    {
-      "level": 1,
-      "move": "grassy-terrain"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "noble-roar"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "taunt"
-    },
-    {
-      "level": 12,
-      "move": "razor-leaf"
-    },
-    {
-      "level": 19,
-      "move": "screech"
-    },
-    {
-      "level": 24,
-      "move": "knock-off"
-    },
-    {
-      "level": 30,
-      "move": "slam"
-    },
-    {
-      "level": 38,
-      "move": "uproar"
-    },
-    {
-      "level": 46,
-      "move": "wood-hammer"
-    },
-    {
-      "level": 54,
-      "move": "endeavor"
-    },
-    {
-      "level": 62,
-      "move": "boomburst"
-    }
-  ],
-  "813": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 6,
-      "move": "ember"
-    },
-    {
-      "level": 8,
-      "move": "quick-attack"
-    },
-    {
-      "level": 12,
-      "move": "double-kick"
-    },
-    {
-      "level": 17,
-      "move": "flame-charge"
-    },
-    {
-      "level": 20,
-      "move": "agility"
-    },
-    {
-      "level": 24,
-      "move": "headbutt"
-    },
-    {
-      "level": 28,
-      "move": "counter"
-    },
-    {
-      "level": 32,
-      "move": "bounce"
-    },
-    {
-      "level": 36,
-      "move": "double-edge"
-    }
-  ],
-  "814": [
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 12,
-      "move": "double-kick"
-    },
-    {
-      "level": 19,
-      "move": "flame-charge"
-    },
-    {
-      "level": 24,
-      "move": "agility"
-    },
-    {
-      "level": 30,
-      "move": "headbutt"
-    },
-    {
-      "level": 36,
-      "move": "counter"
-    },
-    {
-      "level": 42,
-      "move": "bounce"
-    },
-    {
-      "level": 48,
-      "move": "double-edge"
-    }
-  ],
-  "815": [
-    {
-      "level": 0,
-      "move": "pyro-ball"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "feint"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "quick-attack"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 12,
-      "move": "double-kick"
-    },
-    {
-      "level": 19,
-      "move": "flame-charge"
-    },
-    {
-      "level": 24,
-      "move": "agility"
-    },
-    {
-      "level": 30,
-      "move": "headbutt"
-    },
-    {
-      "level": 38,
-      "move": "counter"
-    },
-    {
-      "level": 46,
-      "move": "bounce"
-    },
-    {
-      "level": 54,
-      "move": "double-edge"
-    },
-    {
-      "level": 62,
-      "move": "court-change"
-    }
-  ],
-  "816": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 6,
-      "move": "water-gun"
-    },
-    {
-      "level": 8,
-      "move": "bind"
-    },
-    {
-      "level": 12,
-      "move": "water-pulse"
-    },
-    {
-      "level": 17,
-      "move": "tearful-look"
-    },
-    {
-      "level": 20,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 24,
-      "move": "u-turn"
-    },
-    {
-      "level": 28,
-      "move": "liquidation"
-    },
-    {
-      "level": 32,
-      "move": "soak"
-    },
-    {
-      "level": 36,
-      "move": "rain-dance"
-    }
-  ],
-  "817": [
-    {
-      "level": 1,
-      "move": "bind"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 12,
-      "move": "water-pulse"
-    },
-    {
-      "level": 19,
-      "move": "tearful-look"
-    },
-    {
-      "level": 24,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 30,
-      "move": "u-turn"
-    },
-    {
-      "level": 36,
-      "move": "liquidation"
-    },
-    {
-      "level": 42,
-      "move": "soak"
-    },
-    {
-      "level": 48,
-      "move": "rain-dance"
-    }
-  ],
-  "818": [
-    {
-      "level": 0,
-      "move": "snipe-shot"
-    },
-    {
-      "level": 1,
-      "move": "acrobatics"
-    },
-    {
-      "level": 1,
-      "move": "bind"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 12,
-      "move": "water-pulse"
-    },
-    {
-      "level": 19,
-      "move": "tearful-look"
-    },
-    {
-      "level": 24,
-      "move": "sucker-punch"
-    },
-    {
-      "level": 30,
-      "move": "u-turn"
-    },
-    {
-      "level": 38,
-      "move": "liquidation"
-    },
-    {
-      "level": 46,
-      "move": "soak"
-    },
-    {
-      "level": 54,
-      "move": "rain-dance"
-    },
-    {
-      "level": 62,
-      "move": "hydro-pump"
-    }
-  ],
-  "906": [
-    {
-      "level": 1,
-      "move": "leafage"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 7,
-      "move": "bite"
-    },
-    {
-      "level": 10,
-      "move": "hone-claws"
-    },
-    {
-      "level": 13,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 15,
-      "move": "quick-attack"
-    },
-    {
-      "level": 17,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 21,
-      "move": "u-turn"
-    },
-    {
-      "level": 25,
-      "move": "worry-seed"
-    },
-    {
-      "level": 28,
-      "move": "slash"
-    },
-    {
-      "level": 32,
-      "move": "energy-ball"
-    },
-    {
-      "level": 36,
-      "move": "play-rough"
-    }
-  ],
-  "907": [
-    {
-      "level": 1,
-      "move": "leafage"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 7,
-      "move": "bite"
-    },
-    {
-      "level": 10,
-      "move": "hone-claws"
-    },
-    {
-      "level": 13,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 15,
-      "move": "quick-attack"
-    },
-    {
-      "level": 20,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 24,
-      "move": "u-turn"
-    },
-    {
-      "level": 28,
-      "move": "worry-seed"
-    },
-    {
-      "level": 33,
-      "move": "slash"
-    },
-    {
-      "level": 38,
-      "move": "energy-ball"
-    },
-    {
-      "level": 42,
-      "move": "play-rough"
-    },
-    {
-      "level": 46,
-      "move": "leaf-storm"
-    }
-  ],
-  "908": [
-    {
-      "level": 0,
-      "move": "flower-trick"
-    },
-    {
-      "level": 1,
-      "move": "leafage"
-    },
-    {
-      "level": 1,
-      "move": "scratch"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 7,
-      "move": "bite"
-    },
-    {
-      "level": 10,
-      "move": "hone-claws"
-    },
-    {
-      "level": 13,
-      "move": "magical-leaf"
-    },
-    {
-      "level": 15,
-      "move": "quick-attack"
-    },
-    {
-      "level": 20,
-      "move": "seed-bomb"
-    },
-    {
-      "level": 24,
-      "move": "u-turn"
-    },
-    {
-      "level": 29,
-      "move": "worry-seed"
-    },
-    {
-      "level": 33,
-      "move": "slash"
-    },
-    {
-      "level": 38,
-      "move": "night-slash"
-    },
-    {
-      "level": 42,
-      "move": "energy-ball"
-    },
-    {
-      "level": 47,
-      "move": "play-rough"
-    },
-    {
-      "level": 52,
-      "move": "knock-off"
-    },
-    {
-      "level": 58,
-      "move": "grassy-terrain"
-    },
-    {
-      "level": 64,
-      "move": "leaf-storm"
-    }
-  ],
-  "909": [
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 7,
-      "move": "round"
-    },
-    {
-      "level": 12,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "incinerate"
-    },
-    {
-      "level": 17,
-      "move": "yawn"
-    },
-    {
-      "level": 21,
-      "move": "snarl"
-    },
-    {
-      "level": 25,
-      "move": "roar"
-    },
-    {
-      "level": 28,
-      "move": "flamethrower"
-    },
-    {
-      "level": 32,
-      "move": "hyper-voice"
-    },
-    {
-      "level": 36,
-      "move": "fire-blast"
-    }
-  ],
-  "910": [
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 7,
-      "move": "lick"
-    },
-    {
-      "level": 10,
-      "move": "round"
-    },
-    {
-      "level": 12,
-      "move": "bite"
-    },
-    {
-      "level": 15,
-      "move": "yawn"
-    },
-    {
-      "level": 17,
-      "move": "incinerate"
-    },
-    {
-      "level": 24,
-      "move": "snarl"
-    },
-    {
-      "level": 28,
-      "move": "roar"
-    },
-    {
-      "level": 32,
-      "move": "flamethrower"
-    },
-    {
-      "level": 38,
-      "move": "hyper-voice"
-    },
-    {
-      "level": 42,
-      "move": "will-o-wisp"
-    },
-    {
-      "level": 47,
-      "move": "fire-blast"
-    }
-  ],
-  "911": [
-    {
-      "level": 0,
-      "move": "torch-song"
-    },
-    {
-      "level": 1,
-      "move": "ember"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 7,
-      "move": "lick"
-    },
-    {
-      "level": 10,
-      "move": "round"
-    },
-    {
-      "level": 12,
-      "move": "scary-face"
-    },
-    {
-      "level": 15,
-      "move": "bite"
-    },
-    {
-      "level": 17,
-      "move": "incinerate"
-    },
-    {
-      "level": 24,
-      "move": "snarl"
-    },
-    {
-      "level": 28,
-      "move": "roar"
-    },
-    {
-      "level": 32,
-      "move": "flamethrower"
-    },
-    {
-      "level": 38,
-      "move": "shadow-ball"
-    },
-    {
-      "level": 42,
-      "move": "hyper-voice"
-    },
-    {
-      "level": 47,
-      "move": "hex"
-    },
-    {
-      "level": 47,
-      "move": "will-o-wisp"
-    },
-    {
-      "level": 58,
-      "move": "fire-blast"
-    },
-    {
-      "level": 64,
-      "move": "overheat"
-    }
-  ],
-  "912": [
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 7,
-      "move": "work-up"
-    },
-    {
-      "level": 10,
-      "move": "wing-attack"
-    },
-    {
-      "level": 13,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 17,
-      "move": "double-hit"
-    },
-    {
-      "level": 21,
-      "move": "aqua-cutter"
-    },
-    {
-      "level": 24,
-      "move": "air-slash"
-    },
-    {
-      "level": 28,
-      "move": "focus-energy"
-    },
-    {
-      "level": 31,
-      "move": "acrobatics"
-    },
-    {
-      "level": 35,
-      "move": "liquidation"
-    }
-  ],
-  "913": [
-    {
-      "level": 1,
-      "move": "double-hit"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 7,
-      "move": "work-up"
-    },
-    {
-      "level": 10,
-      "move": "wing-attack"
-    },
-    {
-      "level": 13,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 17,
-      "move": "water-pulse"
-    },
-    {
-      "level": 19,
-      "move": "low-sweep"
-    },
-    {
-      "level": 23,
-      "move": "aqua-cutter"
-    },
-    {
-      "level": 27,
-      "move": "air-slash"
-    },
-    {
-      "level": 32,
-      "move": "focus-energy"
-    },
-    {
-      "level": 38,
-      "move": "acrobatics"
-    },
-    {
-      "level": 43,
-      "move": "liquidation"
-    },
-    {
-      "level": 48,
-      "move": "feather-dance"
-    }
-  ],
-  "914": [
-    {
-      "level": 0,
-      "move": "aqua-step"
-    },
-    {
-      "level": 1,
-      "move": "double-hit"
-    },
-    {
-      "level": 1,
-      "move": "growl"
-    },
-    {
-      "level": 1,
-      "move": "pound"
-    },
-    {
-      "level": 1,
-      "move": "water-gun"
-    },
-    {
-      "level": 7,
-      "move": "work-up"
-    },
-    {
-      "level": 10,
-      "move": "wing-attack"
-    },
-    {
-      "level": 13,
-      "move": "aqua-jet"
-    },
-    {
-      "level": 17,
-      "move": "low-sweep"
-    },
-    {
-      "level": 17,
-      "move": "water-pulse"
-    },
-    {
-      "level": 21,
-      "move": "aqua-cutter"
-    },
-    {
-      "level": 27,
-      "move": "air-slash"
-    },
-    {
-      "level": 32,
-      "move": "focus-energy"
-    },
-    {
-      "level": 38,
-      "move": "mega-kick"
-    },
-    {
-      "level": 43,
-      "move": "acrobatics"
-    },
-    {
-      "level": 47,
-      "move": "liquidation"
-    },
-    {
-      "level": 52,
-      "move": "feather-dance"
-    },
-    {
-      "level": 58,
-      "move": "close-combat"
-    },
-    {
-      "level": 64,
-      "move": "wave-crash"
-    }
-  ],
-  "917": [
-    {
-      "level": 1,
-      "move": "string-shot"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "struggle-bug"
-    },
-    {
-      "level": 8,
-      "move": "assurance"
-    },
-    {
-      "level": 11,
-      "move": "feint"
-    },
-    {
-      "level": 14,
-      "move": "bug-bite"
-    },
-    {
-      "level": 18,
-      "move": "block"
-    },
-    {
-      "level": 22,
-      "move": "counter"
-    },
-    {
-      "level": 25,
-      "move": "headbutt"
-    },
-    {
-      "level": 29,
-      "move": "sticky-web"
-    },
-    {
-      "level": 33,
-      "move": "gastro-acid"
-    },
-    {
-      "level": 36,
-      "move": "circle-throw"
-    },
-    {
-      "level": 40,
-      "move": "throat-chop"
-    },
-    {
-      "level": 44,
-      "move": "skitter-smack"
-    }
-  ],
-  "918": [
-    {
-      "level": 0,
-      "move": "silk-trap"
-    },
-    {
-      "level": 1,
-      "move": "string-shot"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 5,
-      "move": "struggle-bug"
-    },
-    {
-      "level": 8,
-      "move": "assurance"
-    },
-    {
-      "level": 11,
-      "move": "feint"
-    },
-    {
-      "level": 14,
-      "move": "bug-bite"
-    },
-    {
-      "level": 19,
-      "move": "block"
-    },
-    {
-      "level": 24,
-      "move": "counter"
-    },
-    {
-      "level": 28,
-      "move": "headbutt"
-    },
-    {
-      "level": 33,
-      "move": "sticky-web"
-    },
-    {
-      "level": 37,
-      "move": "gastro-acid"
-    },
-    {
-      "level": 41,
-      "move": "circle-throw"
-    },
-    {
-      "level": 45,
-      "move": "throat-chop"
-    },
-    {
-      "level": 49,
-      "move": "skitter-smack"
-    }
-  ],
-  "942": [
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "scary-face"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 4,
-      "move": "lick"
-    },
-    {
-      "level": 7,
-      "move": "snarl"
-    },
-    {
-      "level": 10,
-      "move": "hone-claws"
-    },
-    {
-      "level": 14,
-      "move": "bite"
-    },
-    {
-      "level": 18,
-      "move": "roar"
-    },
-    {
-      "level": 22,
-      "move": "headbutt"
-    },
-    {
-      "level": 26,
-      "move": "payback"
-    },
-    {
-      "level": 31,
-      "move": "crunch"
-    },
-    {
-      "level": 35,
-      "move": "swagger"
-    },
-    {
-      "level": 39,
-      "move": "reversal"
-    },
-    {
-      "level": 43,
-      "move": "jaw-lock"
-    },
-    {
-      "level": 49,
-      "move": "double-edge"
-    }
-  ],
-  "943": [
-    {
-      "level": 0,
-      "move": "comeuppance"
-    },
-    {
-      "level": 1,
-      "move": "leer"
-    },
-    {
-      "level": 1,
-      "move": "scary-face"
-    },
-    {
-      "level": 1,
-      "move": "tackle"
-    },
-    {
-      "level": 4,
-      "move": "lick"
-    },
-    {
-      "level": 7,
-      "move": "snarl"
-    },
-    {
-      "level": 10,
-      "move": "hone-claws"
-    },
-    {
-      "level": 14,
-      "move": "bite"
-    },
-    {
-      "level": 18,
-      "move": "roar"
-    },
-    {
-      "level": 22,
-      "move": "headbutt"
-    },
-    {
-      "level": 26,
-      "move": "payback"
-    },
-    {
-      "level": 34,
-      "move": "crunch"
-    },
-    {
-      "level": 39,
-      "move": "swagger"
-    },
-    {
-      "level": 43,
-      "move": "reversal"
-    },
-    {
-      "level": 48,
-      "move": "jaw-lock"
-    },
-    {
-      "level": 55,
-      "move": "double-edge"
-    },
-    {
-      "level": 60,
-      "move": "outrage"
-    }
-  ],
-  "980": [
-    {
-      "level": 0,
-      "move": "amnesia"
-    },
-    {
-      "level": 1,
-      "move": "poison-sting"
-    },
-    {
-      "level": 1,
-      "move": "tail-whip"
-    },
-    {
-      "level": 4,
-      "move": "toxic-spikes"
-    },
-    {
-      "level": 8,
-      "move": "mud-shot"
-    },
-    {
-      "level": 12,
-      "move": "poison-tail"
-    },
-    {
-      "level": 16,
-      "move": "slam"
-    },
-    {
-      "level": 21,
-      "move": "yawn"
-    },
-    {
-      "level": 24,
-      "move": "poison-jab"
-    },
-    {
-      "level": 30,
-      "move": "sludge-wave"
-    },
-    {
-      "level": 36,
-      "move": "megahorn"
-    },
-    {
-      "level": 40,
-      "move": "toxic"
-    },
-    {
-      "level": 48,
-      "move": "earthquake"
-    }
-  ]
+  "1": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":3,"move":"vine-whip"},{"level":6,"move":"growth"},{"level":9,"move":"leech-seed"},{"level":12,"move":"razor-leaf"},{"level":15,"move":"poison-powder"},{"level":15,"move":"sleep-powder"},{"level":18,"move":"seed-bomb"},{"level":21,"move":"take-down"},{"level":24,"move":"sweet-scent"},{"level":27,"move":"synthesis"},{"level":30,"move":"worry-seed"},{"level":33,"move":"power-whip"},{"level":36,"move":"solar-beam"}],
+  "2": [{"level":1,"move":"growl"},{"level":1,"move":"growth"},{"level":1,"move":"tackle"},{"level":1,"move":"vine-whip"},{"level":9,"move":"leech-seed"},{"level":12,"move":"razor-leaf"},{"level":15,"move":"poison-powder"},{"level":15,"move":"sleep-powder"},{"level":20,"move":"seed-bomb"},{"level":25,"move":"take-down"},{"level":30,"move":"sweet-scent"},{"level":35,"move":"synthesis"},{"level":40,"move":"worry-seed"},{"level":45,"move":"power-whip"},{"level":50,"move":"solar-beam"}],
+  "3": [{"level":0,"move":"petal-blizzard"},{"level":1,"move":"growl"},{"level":1,"move":"growth"},{"level":1,"move":"petal-dance"},{"level":1,"move":"tackle"},{"level":1,"move":"vine-whip"},{"level":9,"move":"leech-seed"},{"level":12,"move":"razor-leaf"},{"level":15,"move":"poison-powder"},{"level":15,"move":"sleep-powder"},{"level":20,"move":"seed-bomb"},{"level":25,"move":"take-down"},{"level":30,"move":"sweet-scent"},{"level":37,"move":"synthesis"},{"level":44,"move":"worry-seed"},{"level":51,"move":"power-whip"},{"level":58,"move":"solar-beam"}],
+  "4": [{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":4,"move":"ember"},{"level":8,"move":"smokescreen"},{"level":12,"move":"dragon-breath"},{"level":17,"move":"fire-fang"},{"level":20,"move":"slash"},{"level":24,"move":"flamethrower"},{"level":28,"move":"scary-face"},{"level":32,"move":"fire-spin"},{"level":36,"move":"inferno"},{"level":40,"move":"flare-blitz"}],
+  "5": [{"level":1,"move":"ember"},{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":1,"move":"smokescreen"},{"level":12,"move":"dragon-breath"},{"level":19,"move":"fire-fang"},{"level":24,"move":"slash"},{"level":30,"move":"flamethrower"},{"level":37,"move":"scary-face"},{"level":48,"move":"inferno"},{"level":54,"move":"flare-blitz"}],
+  "6": [{"level":0,"move":"air-slash"},{"level":1,"move":"dragon-claw"},{"level":1,"move":"ember"},{"level":1,"move":"growl"},{"level":1,"move":"heat-wave"},{"level":1,"move":"scratch"},{"level":1,"move":"smokescreen"},{"level":12,"move":"dragon-breath"},{"level":19,"move":"fire-fang"},{"level":24,"move":"slash"},{"level":30,"move":"flamethrower"},{"level":39,"move":"scary-face"},{"level":46,"move":"fire-spin"},{"level":54,"move":"inferno"},{"level":62,"move":"flare-blitz"}],
+  "7": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":3,"move":"water-gun"},{"level":6,"move":"withdraw"},{"level":9,"move":"rapid-spin"},{"level":12,"move":"bite"},{"level":15,"move":"water-pulse"},{"level":18,"move":"protect"},{"level":21,"move":"rain-dance"},{"level":24,"move":"aqua-tail"},{"level":27,"move":"shell-smash"},{"level":30,"move":"iron-defense"},{"level":33,"move":"hydro-pump"},{"level":36,"move":"wave-crash"}],
+  "8": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":1,"move":"withdraw"},{"level":9,"move":"rapid-spin"},{"level":12,"move":"bite"},{"level":15,"move":"water-pulse"},{"level":20,"move":"protect"},{"level":25,"move":"rain-dance"},{"level":30,"move":"aqua-tail"},{"level":35,"move":"shell-smash"},{"level":40,"move":"iron-defense"},{"level":45,"move":"hydro-pump"},{"level":50,"move":"wave-crash"}],
+  "9": [{"level":0,"move":"flash-cannon"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":1,"move":"withdraw"},{"level":9,"move":"rapid-spin"},{"level":12,"move":"bite"},{"level":15,"move":"water-pulse"},{"level":20,"move":"protect"},{"level":25,"move":"rain-dance"},{"level":30,"move":"aqua-tail"},{"level":35,"move":"shell-smash"},{"level":42,"move":"iron-defense"},{"level":49,"move":"hydro-pump"},{"level":56,"move":"wave-crash"}],
+  "10": [{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":9,"move":"bug-bite"}],
+  "11": [{"level":0,"move":"harden"},{"level":1,"move":"harden"}],
+  "12": [{"level":0,"move":"gust"},{"level":1,"move":"bug-bite"},{"level":1,"move":"gust"},{"level":1,"move":"harden"},{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":4,"move":"supersonic"},{"level":8,"move":"confusion"},{"level":12,"move":"poison-powder"},{"level":12,"move":"sleep-powder"},{"level":12,"move":"stun-spore"},{"level":16,"move":"psybeam"},{"level":20,"move":"whirlwind"},{"level":24,"move":"air-slash"},{"level":28,"move":"safeguard"},{"level":32,"move":"bug-buzz"},{"level":36,"move":"tailwind"},{"level":40,"move":"rage-powder"},{"level":44,"move":"quiver-dance"}],
+  "13": [{"level":1,"move":"poison-sting"},{"level":1,"move":"string-shot"},{"level":9,"move":"bug-bite"}],
+  "14": [{"level":0,"move":"harden"},{"level":1,"move":"harden"}],
+  "15": [{"level":0,"move":"twineedle"},{"level":1,"move":"fury-attack"},{"level":1,"move":"twineedle"},{"level":11,"move":"fury-attack"},{"level":14,"move":"rage"},{"level":17,"move":"pursuit"},{"level":20,"move":"focus-energy"},{"level":23,"move":"venoshock"},{"level":26,"move":"assurance"},{"level":29,"move":"toxic-spikes"},{"level":32,"move":"pin-missile"},{"level":35,"move":"poison-jab"},{"level":38,"move":"agility"},{"level":41,"move":"endeavor"},{"level":44,"move":"fell-stinger"}],
+  "16": [{"level":1,"move":"tackle"},{"level":5,"move":"sand-attack"},{"level":9,"move":"gust"},{"level":13,"move":"quick-attack"},{"level":17,"move":"whirlwind"},{"level":21,"move":"twister"},{"level":25,"move":"feather-dance"},{"level":29,"move":"agility"},{"level":33,"move":"wing-attack"},{"level":37,"move":"roost"},{"level":41,"move":"tailwind"},{"level":45,"move":"mirror-move"},{"level":49,"move":"air-slash"},{"level":53,"move":"hurricane"}],
+  "17": [{"level":1,"move":"gust"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":5,"move":"sand-attack"},{"level":9,"move":"gust"},{"level":13,"move":"quick-attack"},{"level":17,"move":"whirlwind"},{"level":22,"move":"twister"},{"level":27,"move":"feather-dance"},{"level":32,"move":"agility"},{"level":37,"move":"wing-attack"},{"level":42,"move":"roost"},{"level":47,"move":"tailwind"},{"level":52,"move":"mirror-move"},{"level":57,"move":"air-slash"},{"level":62,"move":"hurricane"}],
+  "18": [{"level":1,"move":"gust"},{"level":1,"move":"hurricane"},{"level":1,"move":"quick-attack"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":5,"move":"sand-attack"},{"level":9,"move":"gust"},{"level":13,"move":"quick-attack"},{"level":17,"move":"whirlwind"},{"level":22,"move":"twister"},{"level":27,"move":"feather-dance"},{"level":32,"move":"agility"},{"level":38,"move":"wing-attack"},{"level":44,"move":"roost"},{"level":50,"move":"tailwind"},{"level":56,"move":"mirror-move"},{"level":62,"move":"air-slash"},{"level":68,"move":"hurricane"}],
+  "19": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":4,"move":"quick-attack"},{"level":7,"move":"focus-energy"},{"level":10,"move":"bite"},{"level":13,"move":"pursuit"},{"level":16,"move":"hyper-fang"},{"level":19,"move":"assurance"},{"level":22,"move":"crunch"},{"level":25,"move":"sucker-punch"},{"level":28,"move":"super-fang"},{"level":31,"move":"double-edge"},{"level":34,"move":"endeavor"}],
+  "20": [{"level":0,"move":"scary-face"},{"level":1,"move":"focus-energy"},{"level":1,"move":"quick-attack"},{"level":1,"move":"scary-face"},{"level":1,"move":"swords-dance"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":4,"move":"quick-attack"},{"level":7,"move":"focus-energy"},{"level":10,"move":"bite"},{"level":13,"move":"pursuit"},{"level":16,"move":"hyper-fang"},{"level":19,"move":"assurance"},{"level":24,"move":"crunch"},{"level":29,"move":"sucker-punch"},{"level":34,"move":"super-fang"},{"level":39,"move":"double-edge"},{"level":44,"move":"endeavor"}],
+  "21": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":4,"move":"leer"},{"level":8,"move":"pursuit"},{"level":11,"move":"fury-attack"},{"level":15,"move":"aerial-ace"},{"level":18,"move":"mirror-move"},{"level":22,"move":"assurance"},{"level":25,"move":"agility"},{"level":29,"move":"focus-energy"},{"level":32,"move":"roost"},{"level":36,"move":"drill-peck"}],
+  "22": [{"level":1,"move":"drill-run"},{"level":1,"move":"growl"},{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":1,"move":"pluck"},{"level":1,"move":"pursuit"},{"level":4,"move":"leer"},{"level":8,"move":"pursuit"},{"level":11,"move":"fury-attack"},{"level":15,"move":"aerial-ace"},{"level":18,"move":"mirror-move"},{"level":23,"move":"assurance"},{"level":27,"move":"agility"},{"level":32,"move":"focus-energy"},{"level":36,"move":"roost"},{"level":41,"move":"drill-peck"},{"level":45,"move":"drill-run"}],
+  "23": [{"level":1,"move":"leer"},{"level":1,"move":"wrap"},{"level":4,"move":"poison-sting"},{"level":9,"move":"bite"},{"level":12,"move":"glare"},{"level":17,"move":"screech"},{"level":20,"move":"acid"},{"level":25,"move":"spit-up"},{"level":25,"move":"stockpile"},{"level":25,"move":"swallow"},{"level":28,"move":"acid-spray"},{"level":33,"move":"sludge-bomb"},{"level":36,"move":"gastro-acid"},{"level":38,"move":"belch"},{"level":41,"move":"haze"},{"level":44,"move":"coil"},{"level":49,"move":"gunk-shot"}],
+  "24": [{"level":0,"move":"crunch"},{"level":1,"move":"bite"},{"level":1,"move":"fire-fang"},{"level":1,"move":"ice-fang"},{"level":1,"move":"leer"},{"level":1,"move":"poison-sting"},{"level":1,"move":"thunder-fang"},{"level":1,"move":"wrap"},{"level":12,"move":"glare"},{"level":17,"move":"screech"},{"level":20,"move":"acid"},{"level":27,"move":"spit-up"},{"level":27,"move":"stockpile"},{"level":27,"move":"swallow"},{"level":32,"move":"acid-spray"},{"level":39,"move":"sludge-bomb"},{"level":44,"move":"gastro-acid"},{"level":48,"move":"belch"},{"level":51,"move":"haze"},{"level":56,"move":"coil"},{"level":63,"move":"gunk-shot"}],
+  "25": [{"level":1,"move":"charm"},{"level":1,"move":"growl"},{"level":1,"move":"nasty-plot"},{"level":1,"move":"nuzzle"},{"level":1,"move":"play-nice"},{"level":1,"move":"quick-attack"},{"level":1,"move":"sweet-kiss"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder-shock"},{"level":4,"move":"thunder-wave"},{"level":8,"move":"double-team"},{"level":12,"move":"electro-ball"},{"level":16,"move":"feint"},{"level":20,"move":"spark"},{"level":24,"move":"agility"},{"level":28,"move":"iron-tail"},{"level":32,"move":"discharge"},{"level":36,"move":"thunderbolt"},{"level":40,"move":"light-screen"},{"level":44,"move":"thunder"}],
+  "26": [{"level":0,"move":"thunder-punch"},{"level":1,"move":"agility"},{"level":1,"move":"charm"},{"level":1,"move":"discharge"},{"level":1,"move":"double-team"},{"level":1,"move":"electro-ball"},{"level":1,"move":"feint"},{"level":1,"move":"growl"},{"level":1,"move":"iron-tail"},{"level":1,"move":"light-screen"},{"level":1,"move":"nasty-plot"},{"level":1,"move":"nuzzle"},{"level":1,"move":"play-nice"},{"level":1,"move":"quick-attack"},{"level":1,"move":"spark"},{"level":1,"move":"sweet-kiss"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"thunder-wave"},{"level":5,"move":"thunderbolt"}],
+  "27": [{"level":1,"move":"defense-curl"},{"level":1,"move":"scratch"},{"level":3,"move":"poison-sting"},{"level":6,"move":"sand-attack"},{"level":9,"move":"rollout"},{"level":12,"move":"fury-cutter"},{"level":15,"move":"rapid-spin"},{"level":18,"move":"bulldoze"},{"level":21,"move":"swift"},{"level":24,"move":"fury-swipes"},{"level":27,"move":"agility"},{"level":30,"move":"slash"},{"level":33,"move":"dig"},{"level":36,"move":"gyro-ball"},{"level":39,"move":"swords-dance"},{"level":42,"move":"sandstorm"},{"level":45,"move":"earthquake"}],
+  "28": [{"level":1,"move":"crush-claw"},{"level":1,"move":"defense-curl"},{"level":1,"move":"poison-sting"},{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":9,"move":"rollout"},{"level":12,"move":"fury-cutter"},{"level":15,"move":"rapid-spin"},{"level":18,"move":"bulldoze"},{"level":21,"move":"swift"},{"level":26,"move":"fury-swipes"},{"level":31,"move":"sand-tomb"},{"level":36,"move":"slash"},{"level":41,"move":"dig"},{"level":46,"move":"gyro-ball"},{"level":51,"move":"swords-dance"},{"level":56,"move":"sandstorm"},{"level":61,"move":"earthquake"}],
+  "29": [{"level":1,"move":"growl"},{"level":1,"move":"poison-sting"},{"level":5,"move":"scratch"},{"level":10,"move":"tail-whip"},{"level":15,"move":"fury-swipes"},{"level":20,"move":"toxic-spikes"},{"level":25,"move":"double-kick"},{"level":30,"move":"bite"},{"level":35,"move":"helping-hand"},{"level":40,"move":"toxic"},{"level":45,"move":"flatter"},{"level":50,"move":"crunch"},{"level":55,"move":"earth-power"}],
+  "30": [{"level":1,"move":"growl"},{"level":1,"move":"poison-sting"},{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":15,"move":"fury-swipes"},{"level":22,"move":"toxic-spikes"},{"level":29,"move":"double-kick"},{"level":36,"move":"bite"},{"level":43,"move":"helping-hand"},{"level":50,"move":"toxic"},{"level":57,"move":"flatter"},{"level":64,"move":"crunch"},{"level":71,"move":"earth-power"}],
+  "31": [{"level":0,"move":"superpower"},{"level":1,"move":"bite"},{"level":1,"move":"crunch"},{"level":1,"move":"double-kick"},{"level":1,"move":"earth-power"},{"level":1,"move":"flatter"},{"level":1,"move":"fury-swipes"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"poison-sting"},{"level":1,"move":"scratch"},{"level":1,"move":"superpower"},{"level":1,"move":"tail-whip"},{"level":1,"move":"toxic"},{"level":1,"move":"toxic-spikes"}],
+  "32": [{"level":1,"move":"leer"},{"level":1,"move":"poison-sting"},{"level":5,"move":"peck"},{"level":10,"move":"focus-energy"},{"level":15,"move":"fury-attack"},{"level":20,"move":"toxic-spikes"},{"level":25,"move":"double-kick"},{"level":30,"move":"horn-attack"},{"level":35,"move":"helping-hand"},{"level":40,"move":"toxic"},{"level":45,"move":"flatter"},{"level":50,"move":"poison-jab"},{"level":55,"move":"earth-power"}],
+  "33": [{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":1,"move":"poison-sting"},{"level":15,"move":"fury-attack"},{"level":22,"move":"toxic-spikes"},{"level":29,"move":"double-kick"},{"level":36,"move":"horn-attack"},{"level":43,"move":"helping-hand"},{"level":50,"move":"toxic"},{"level":57,"move":"flatter"},{"level":64,"move":"poison-jab"},{"level":71,"move":"earth-power"}],
+  "34": [{"level":0,"move":"megahorn"},{"level":1,"move":"double-kick"},{"level":1,"move":"earth-power"},{"level":1,"move":"flatter"},{"level":1,"move":"focus-energy"},{"level":1,"move":"fury-attack"},{"level":1,"move":"helping-hand"},{"level":1,"move":"horn-attack"},{"level":1,"move":"leer"},{"level":1,"move":"megahorn"},{"level":1,"move":"peck"},{"level":1,"move":"poison-jab"},{"level":1,"move":"poison-sting"},{"level":1,"move":"toxic"},{"level":1,"move":"toxic-spikes"}],
+  "35": [{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"defense-curl"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"sing"},{"level":1,"move":"splash"},{"level":1,"move":"sweet-kiss"},{"level":4,"move":"stored-power"},{"level":8,"move":"encore"},{"level":12,"move":"after-you"},{"level":16,"move":"life-dew"},{"level":20,"move":"metronome"},{"level":24,"move":"moonlight"},{"level":28,"move":"gravity"},{"level":32,"move":"meteor-mash"},{"level":36,"move":"follow-me"},{"level":40,"move":"cosmic-power"},{"level":44,"move":"moonblast"},{"level":48,"move":"healing-wish"}],
+  "36": [{"level":1,"move":"life-dew"},{"level":1,"move":"meteor-mash"},{"level":1,"move":"metronome"},{"level":1,"move":"moonblast"}],
+  "37": [{"level":1,"move":"ember"},{"level":1,"move":"tail-whip"},{"level":4,"move":"disable"},{"level":8,"move":"quick-attack"},{"level":12,"move":"spite"},{"level":16,"move":"incinerate"},{"level":20,"move":"confuse-ray"},{"level":24,"move":"will-o-wisp"},{"level":28,"move":"extrasensory"},{"level":32,"move":"flamethrower"},{"level":36,"move":"imprison"},{"level":40,"move":"fire-spin"},{"level":44,"move":"safeguard"},{"level":48,"move":"inferno"},{"level":52,"move":"fire-blast"}],
+  "38": [{"level":1,"move":"flamethrower"},{"level":1,"move":"quick-attack"},{"level":1,"move":"tail-whip"}],
+  "39": [{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"defense-curl"},{"level":1,"move":"disable"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"pound"},{"level":1,"move":"sing"},{"level":1,"move":"sweet-kiss"},{"level":4,"move":"echoed-voice"},{"level":8,"move":"covet"},{"level":12,"move":"spit-up"},{"level":12,"move":"stockpile"},{"level":12,"move":"swallow"},{"level":16,"move":"round"},{"level":20,"move":"rest"},{"level":24,"move":"body-slam"},{"level":28,"move":"mimic"},{"level":32,"move":"gyro-ball"},{"level":36,"move":"hyper-voice"},{"level":44,"move":"double-edge"}],
+  "40": [{"level":1,"move":"body-slam"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"defense-curl"},{"level":1,"move":"disable"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"double-edge"},{"level":1,"move":"echoed-voice"},{"level":1,"move":"gyro-ball"},{"level":1,"move":"hyper-voice"},{"level":1,"move":"mimic"},{"level":1,"move":"pound"},{"level":1,"move":"rest"},{"level":1,"move":"round"},{"level":1,"move":"sing"},{"level":1,"move":"spit-up"},{"level":1,"move":"stockpile"},{"level":1,"move":"swallow"},{"level":1,"move":"sweet-kiss"},{"level":5,"move":"play-rough"}],
+  "41": [{"level":1,"move":"absorb"},{"level":1,"move":"supersonic"},{"level":5,"move":"astonish"},{"level":10,"move":"mean-look"},{"level":15,"move":"poison-fang"},{"level":20,"move":"quick-guard"},{"level":25,"move":"air-cutter"},{"level":30,"move":"bite"},{"level":35,"move":"haze"},{"level":40,"move":"venoshock"},{"level":45,"move":"confuse-ray"},{"level":50,"move":"air-slash"},{"level":55,"move":"leech-life"}],
+  "42": [{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":1,"move":"mean-look"},{"level":1,"move":"screech"},{"level":1,"move":"supersonic"},{"level":15,"move":"poison-fang"},{"level":20,"move":"quick-guard"},{"level":27,"move":"air-cutter"},{"level":34,"move":"bite"},{"level":41,"move":"haze"},{"level":48,"move":"venoshock"},{"level":55,"move":"confuse-ray"},{"level":62,"move":"air-slash"},{"level":69,"move":"leech-life"}],
+  "43": [{"level":1,"move":"absorb"},{"level":1,"move":"growth"},{"level":4,"move":"acid"},{"level":8,"move":"sweet-scent"},{"level":12,"move":"mega-drain"},{"level":14,"move":"poison-powder"},{"level":16,"move":"stun-spore"},{"level":18,"move":"sleep-powder"},{"level":20,"move":"giga-drain"},{"level":24,"move":"toxic"},{"level":28,"move":"moonblast"},{"level":32,"move":"grassy-terrain"},{"level":36,"move":"moonlight"},{"level":40,"move":"petal-dance"}],
+  "44": [{"level":1,"move":"absorb"},{"level":1,"move":"acid"},{"level":1,"move":"growth"},{"level":1,"move":"sweet-scent"},{"level":12,"move":"mega-drain"},{"level":14,"move":"poison-powder"},{"level":16,"move":"stun-spore"},{"level":18,"move":"sleep-powder"},{"level":20,"move":"giga-drain"},{"level":26,"move":"toxic"},{"level":32,"move":"moonblast"},{"level":38,"move":"grassy-terrain"},{"level":44,"move":"moonlight"},{"level":50,"move":"petal-dance"}],
+  "45": [{"level":0,"move":"petal-blizzard"},{"level":1,"move":"absorb"},{"level":1,"move":"acid"},{"level":1,"move":"giga-drain"},{"level":1,"move":"grassy-terrain"},{"level":1,"move":"growth"},{"level":1,"move":"mega-drain"},{"level":1,"move":"moonblast"},{"level":1,"move":"moonlight"},{"level":1,"move":"petal-dance"},{"level":1,"move":"poison-powder"},{"level":1,"move":"sleep-powder"},{"level":1,"move":"stun-spore"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"toxic"}],
+  "46": [{"level":1,"move":"scratch"},{"level":6,"move":"poison-powder"},{"level":6,"move":"stun-spore"},{"level":11,"move":"absorb"},{"level":17,"move":"fury-cutter"},{"level":22,"move":"spore"},{"level":27,"move":"slash"},{"level":33,"move":"growth"},{"level":38,"move":"giga-drain"},{"level":43,"move":"aromatherapy"},{"level":49,"move":"rage-powder"},{"level":54,"move":"x-scissor"}],
+  "47": [{"level":1,"move":"absorb"},{"level":1,"move":"cross-poison"},{"level":1,"move":"poison-powder"},{"level":1,"move":"scratch"},{"level":1,"move":"stun-spore"},{"level":6,"move":"poison-powder"},{"level":6,"move":"stun-spore"},{"level":11,"move":"absorb"},{"level":17,"move":"fury-cutter"},{"level":22,"move":"spore"},{"level":29,"move":"slash"},{"level":37,"move":"growth"},{"level":44,"move":"giga-drain"},{"level":51,"move":"aromatherapy"},{"level":59,"move":"rage-powder"},{"level":66,"move":"x-scissor"}],
+  "48": [{"level":1,"move":"disable"},{"level":1,"move":"tackle"},{"level":5,"move":"supersonic"},{"level":11,"move":"confusion"},{"level":13,"move":"poison-powder"},{"level":17,"move":"psybeam"},{"level":23,"move":"stun-spore"},{"level":25,"move":"bug-buzz"},{"level":29,"move":"sleep-powder"},{"level":35,"move":"leech-life"},{"level":37,"move":"zen-headbutt"},{"level":41,"move":"poison-fang"},{"level":47,"move":"psychic"}],
+  "49": [{"level":0,"move":"air-slash"},{"level":1,"move":"disable"},{"level":1,"move":"quiver-dance"},{"level":1,"move":"supersonic"},{"level":1,"move":"tackle"},{"level":11,"move":"confusion"},{"level":13,"move":"poison-powder"},{"level":17,"move":"psybeam"},{"level":23,"move":"stun-spore"},{"level":25,"move":"bug-buzz"},{"level":29,"move":"sleep-powder"},{"level":37,"move":"leech-life"},{"level":41,"move":"zen-headbutt"},{"level":47,"move":"poison-fang"},{"level":55,"move":"psychic"}],
+  "50": [{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":4,"move":"growl"},{"level":8,"move":"astonish"},{"level":12,"move":"mud-slap"},{"level":16,"move":"bulldoze"},{"level":20,"move":"sucker-punch"},{"level":24,"move":"slash"},{"level":28,"move":"sandstorm"},{"level":32,"move":"dig"},{"level":36,"move":"earth-power"},{"level":40,"move":"earthquake"},{"level":44,"move":"fissure"}],
+  "51": [{"level":0,"move":"sand-tomb"},{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":1,"move":"night-slash"},{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":1,"move":"tri-attack"},{"level":12,"move":"mud-slap"},{"level":16,"move":"bulldoze"},{"level":20,"move":"sucker-punch"},{"level":24,"move":"slash"},{"level":30,"move":"sandstorm"},{"level":36,"move":"dig"},{"level":42,"move":"earth-power"},{"level":48,"move":"earthquake"},{"level":54,"move":"fissure"}],
+  "52": [{"level":1,"move":"fake-out"},{"level":1,"move":"growl"},{"level":4,"move":"feint"},{"level":8,"move":"scratch"},{"level":12,"move":"pay-day"},{"level":16,"move":"bite"},{"level":20,"move":"taunt"},{"level":24,"move":"assurance"},{"level":29,"move":"fury-swipes"},{"level":32,"move":"screech"},{"level":36,"move":"slash"},{"level":40,"move":"nasty-plot"},{"level":44,"move":"play-rough"}],
+  "53": [{"level":0,"move":"power-gem"},{"level":1,"move":"fake-out"},{"level":1,"move":"feint"},{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":1,"move":"switcheroo"},{"level":12,"move":"pay-day"},{"level":16,"move":"bite"},{"level":20,"move":"taunt"},{"level":24,"move":"assurance"},{"level":31,"move":"fury-swipes"},{"level":36,"move":"screech"},{"level":42,"move":"slash"},{"level":48,"move":"nasty-plot"},{"level":54,"move":"play-rough"}],
+  "54": [{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":3,"move":"water-gun"},{"level":6,"move":"confusion"},{"level":9,"move":"fury-swipes"},{"level":12,"move":"water-pulse"},{"level":15,"move":"disable"},{"level":18,"move":"zen-headbutt"},{"level":21,"move":"screech"},{"level":24,"move":"aqua-tail"},{"level":27,"move":"soak"},{"level":30,"move":"psych-up"},{"level":34,"move":"amnesia"},{"level":39,"move":"wonder-room"}],
+  "55": [{"level":1,"move":"aqua-jet"},{"level":1,"move":"confusion"},{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":9,"move":"fury-swipes"},{"level":12,"move":"water-pulse"},{"level":15,"move":"disable"},{"level":18,"move":"zen-headbutt"},{"level":21,"move":"screech"},{"level":24,"move":"aqua-tail"},{"level":27,"move":"soak"},{"level":30,"move":"psych-up"},{"level":36,"move":"amnesia"},{"level":40,"move":"hydro-pump"},{"level":45,"move":"wonder-room"}],
+  "56": [{"level":1,"move":"covet"},{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":5,"move":"fury-swipes"},{"level":8,"move":"low-kick"},{"level":12,"move":"seismic-toss"},{"level":17,"move":"swagger"},{"level":22,"move":"cross-chop"},{"level":26,"move":"assurance"},{"level":29,"move":"thrash"},{"level":33,"move":"close-combat"},{"level":36,"move":"screech"},{"level":40,"move":"stomping-tantrum"},{"level":44,"move":"outrage"},{"level":48,"move":"final-gambit"}],
+  "57": [{"level":1,"move":"fling"},{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":5,"move":"fury-swipes"},{"level":8,"move":"low-kick"},{"level":15,"move":"seismic-toss"},{"level":17,"move":"swagger"},{"level":22,"move":"cross-chop"},{"level":26,"move":"assurance"},{"level":30,"move":"thrash"},{"level":35,"move":"rage-fist"},{"level":39,"move":"close-combat"},{"level":44,"move":"screech"},{"level":48,"move":"stomping-tantrum"},{"level":53,"move":"outrage"},{"level":57,"move":"final-gambit"}],
+  "58": [{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":4,"move":"howl"},{"level":8,"move":"bite"},{"level":12,"move":"flame-wheel"},{"level":16,"move":"helping-hand"},{"level":20,"move":"agility"},{"level":24,"move":"fire-fang"},{"level":28,"move":"retaliate"},{"level":32,"move":"crunch"},{"level":36,"move":"take-down"},{"level":40,"move":"flamethrower"},{"level":44,"move":"roar"},{"level":48,"move":"play-rough"},{"level":52,"move":"reversal"},{"level":56,"move":"flare-blitz"}],
+  "59": [{"level":0,"move":"extreme-speed"},{"level":1,"move":"agility"},{"level":1,"move":"bite"},{"level":1,"move":"crunch"},{"level":1,"move":"ember"},{"level":1,"move":"fire-fang"},{"level":1,"move":"flame-wheel"},{"level":1,"move":"flare-blitz"},{"level":1,"move":"helping-hand"},{"level":1,"move":"howl"},{"level":1,"move":"leer"},{"level":1,"move":"play-rough"},{"level":1,"move":"retaliate"},{"level":1,"move":"reversal"},{"level":1,"move":"roar"},{"level":1,"move":"take-down"},{"level":5,"move":"flamethrower"}],
+  "60": [{"level":1,"move":"hypnosis"},{"level":1,"move":"water-gun"},{"level":6,"move":"pound"},{"level":12,"move":"mud-shot"},{"level":18,"move":"bubble-beam"},{"level":24,"move":"rain-dance"},{"level":30,"move":"body-slam"},{"level":36,"move":"earth-power"},{"level":42,"move":"hydro-pump"},{"level":48,"move":"belly-drum"},{"level":54,"move":"double-edge"}],
+  "61": [{"level":1,"move":"hypnosis"},{"level":1,"move":"mud-shot"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":18,"move":"bubble-beam"},{"level":24,"move":"rain-dance"},{"level":32,"move":"body-slam"},{"level":40,"move":"earth-power"},{"level":48,"move":"hydro-pump"},{"level":56,"move":"belly-drum"},{"level":66,"move":"double-edge"}],
+  "62": [{"level":0,"move":"dynamic-punch"},{"level":1,"move":"body-slam"},{"level":1,"move":"bubble-beam"},{"level":1,"move":"hypnosis"}],
+  "63": [{"level":1,"move":"teleport"}],
+  "64": [{"level":0,"move":"confusion"},{"level":1,"move":"confusion"},{"level":1,"move":"disable"},{"level":1,"move":"kinesis"},{"level":1,"move":"teleport"},{"level":5,"move":"psybeam"},{"level":10,"move":"reflect"},{"level":15,"move":"ally-switch"},{"level":20,"move":"psycho-cut"},{"level":25,"move":"recover"},{"level":30,"move":"psyshock"},{"level":35,"move":"psychic"},{"level":40,"move":"role-play"},{"level":45,"move":"future-sight"},{"level":50,"move":"calm-mind"}],
+  "65": [{"level":1,"move":"confusion"},{"level":1,"move":"disable"},{"level":1,"move":"kinesis"},{"level":1,"move":"teleport"},{"level":5,"move":"psybeam"},{"level":10,"move":"reflect"},{"level":15,"move":"ally-switch"},{"level":20,"move":"psycho-cut"},{"level":25,"move":"recover"},{"level":30,"move":"psyshock"},{"level":35,"move":"psychic"},{"level":40,"move":"role-play"},{"level":45,"move":"future-sight"},{"level":50,"move":"calm-mind"}],
+  "66": [{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":4,"move":"focus-energy"},{"level":8,"move":"revenge"},{"level":12,"move":"low-sweep"},{"level":16,"move":"knock-off"},{"level":20,"move":"scary-face"},{"level":24,"move":"vital-throw"},{"level":29,"move":"strength"},{"level":32,"move":"dual-chop"},{"level":36,"move":"bulk-up"},{"level":40,"move":"seismic-toss"},{"level":44,"move":"dynamic-punch"},{"level":48,"move":"cross-chop"},{"level":52,"move":"double-edge"}],
+  "67": [{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":1,"move":"revenge"},{"level":12,"move":"low-sweep"},{"level":16,"move":"knock-off"},{"level":20,"move":"scary-face"},{"level":24,"move":"vital-throw"},{"level":31,"move":"strength"},{"level":36,"move":"dual-chop"},{"level":42,"move":"bulk-up"},{"level":48,"move":"seismic-toss"},{"level":54,"move":"dynamic-punch"},{"level":60,"move":"cross-chop"},{"level":66,"move":"double-edge"}],
+  "68": [{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":1,"move":"revenge"},{"level":1,"move":"wide-guard"},{"level":12,"move":"low-sweep"},{"level":16,"move":"knock-off"},{"level":20,"move":"scary-face"},{"level":24,"move":"vital-throw"},{"level":31,"move":"strength"},{"level":36,"move":"dual-chop"},{"level":42,"move":"bulk-up"},{"level":48,"move":"seismic-toss"},{"level":54,"move":"dynamic-punch"},{"level":60,"move":"cross-chop"},{"level":66,"move":"double-edge"}],
+  "69": [{"level":1,"move":"vine-whip"},{"level":7,"move":"growth"},{"level":11,"move":"wrap"},{"level":13,"move":"sleep-powder"},{"level":15,"move":"poison-powder"},{"level":17,"move":"stun-spore"},{"level":23,"move":"acid"},{"level":27,"move":"knock-off"},{"level":29,"move":"sweet-scent"},{"level":35,"move":"gastro-acid"},{"level":39,"move":"razor-leaf"},{"level":41,"move":"poison-jab"},{"level":47,"move":"slam"},{"level":52,"move":"power-whip"}],
+  "70": [{"level":1,"move":"growth"},{"level":1,"move":"vine-whip"},{"level":1,"move":"wrap"},{"level":13,"move":"sleep-powder"},{"level":15,"move":"poison-powder"},{"level":17,"move":"stun-spore"},{"level":24,"move":"acid"},{"level":29,"move":"knock-off"},{"level":32,"move":"sweet-scent"},{"level":39,"move":"gastro-acid"},{"level":44,"move":"razor-leaf"},{"level":47,"move":"poison-jab"},{"level":54,"move":"slam"},{"level":58,"move":"power-whip"}],
+  "71": [{"level":0,"move":"leaf-storm"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"sleep-powder"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"vine-whip"},{"level":44,"move":"leaf-blade"}],
+  "72": [{"level":1,"move":"poison-sting"},{"level":1,"move":"water-gun"},{"level":4,"move":"acid"},{"level":8,"move":"wrap"},{"level":12,"move":"supersonic"},{"level":16,"move":"water-pulse"},{"level":20,"move":"screech"},{"level":24,"move":"bubble-beam"},{"level":28,"move":"hex"},{"level":32,"move":"acid-armor"},{"level":36,"move":"poison-jab"},{"level":40,"move":"surf"},{"level":44,"move":"sludge-wave"},{"level":48,"move":"hydro-pump"}],
+  "73": [{"level":1,"move":"acid"},{"level":1,"move":"poison-sting"},{"level":1,"move":"reflect-type"},{"level":1,"move":"water-gun"},{"level":1,"move":"wrap"},{"level":12,"move":"supersonic"},{"level":16,"move":"water-pulse"},{"level":20,"move":"screech"},{"level":24,"move":"bubble-beam"},{"level":28,"move":"hex"},{"level":34,"move":"acid-armor"},{"level":40,"move":"poison-jab"},{"level":46,"move":"surf"},{"level":52,"move":"sludge-wave"},{"level":58,"move":"hydro-pump"}],
+  "74": [{"level":1,"move":"defense-curl"},{"level":1,"move":"tackle"},{"level":6,"move":"rock-polish"},{"level":10,"move":"rollout"},{"level":12,"move":"bulldoze"},{"level":16,"move":"rock-throw"},{"level":18,"move":"smack-down"},{"level":24,"move":"self-destruct"},{"level":28,"move":"stealth-rock"},{"level":30,"move":"rock-blast"},{"level":34,"move":"earthquake"},{"level":36,"move":"explosion"},{"level":40,"move":"double-edge"},{"level":42,"move":"stone-edge"}],
+  "75": [{"level":1,"move":"defense-curl"},{"level":1,"move":"rock-polish"},{"level":1,"move":"tackle"},{"level":10,"move":"rollout"},{"level":12,"move":"bulldoze"},{"level":16,"move":"rock-throw"},{"level":18,"move":"smack-down"},{"level":24,"move":"self-destruct"},{"level":30,"move":"stealth-rock"},{"level":34,"move":"rock-blast"},{"level":40,"move":"earthquake"},{"level":44,"move":"explosion"},{"level":50,"move":"double-edge"},{"level":54,"move":"stone-edge"}],
+  "76": [{"level":1,"move":"defense-curl"},{"level":1,"move":"heavy-slam"},{"level":1,"move":"rock-polish"},{"level":1,"move":"tackle"},{"level":16,"move":"rock-throw"},{"level":18,"move":"smack-down"},{"level":22,"move":"bulldoze"},{"level":24,"move":"self-destruct"},{"level":30,"move":"stealth-rock"},{"level":34,"move":"rock-blast"},{"level":40,"move":"earthquake"},{"level":44,"move":"explosion"},{"level":50,"move":"double-edge"},{"level":54,"move":"stone-edge"}],
+  "77": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":5,"move":"tail-whip"},{"level":10,"move":"ember"},{"level":15,"move":"flame-charge"},{"level":20,"move":"agility"},{"level":25,"move":"flame-wheel"},{"level":30,"move":"stomp"},{"level":35,"move":"fire-spin"},{"level":41,"move":"take-down"},{"level":45,"move":"inferno"},{"level":50,"move":"fire-blast"},{"level":55,"move":"flare-blitz"}],
+  "78": [{"level":0,"move":"smart-strike"},{"level":1,"move":"ember"},{"level":1,"move":"growl"},{"level":1,"move":"megahorn"},{"level":1,"move":"poison-jab"},{"level":1,"move":"quick-attack"},{"level":1,"move":"smart-strike"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":15,"move":"flame-charge"},{"level":20,"move":"agility"},{"level":25,"move":"flame-wheel"},{"level":30,"move":"stomp"},{"level":35,"move":"fire-spin"},{"level":43,"move":"take-down"},{"level":49,"move":"inferno"},{"level":56,"move":"fire-blast"},{"level":63,"move":"flare-blitz"}],
+  "79": [{"level":1,"move":"curse"},{"level":1,"move":"tackle"},{"level":3,"move":"growl"},{"level":6,"move":"water-gun"},{"level":9,"move":"yawn"},{"level":12,"move":"confusion"},{"level":15,"move":"disable"},{"level":18,"move":"water-pulse"},{"level":21,"move":"headbutt"},{"level":24,"move":"zen-headbutt"},{"level":27,"move":"amnesia"},{"level":30,"move":"surf"},{"level":33,"move":"slack-off"},{"level":36,"move":"psychic"},{"level":39,"move":"psych-up"},{"level":42,"move":"rain-dance"},{"level":45,"move":"heal-pulse"}],
+  "80": [{"level":1,"move":"curse"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":1,"move":"withdraw"},{"level":9,"move":"yawn"},{"level":12,"move":"confusion"},{"level":15,"move":"disable"},{"level":18,"move":"water-pulse"},{"level":21,"move":"headbutt"},{"level":24,"move":"zen-headbutt"},{"level":27,"move":"amnesia"},{"level":30,"move":"surf"},{"level":33,"move":"slack-off"},{"level":36,"move":"psychic"},{"level":41,"move":"psych-up"},{"level":46,"move":"rain-dance"},{"level":51,"move":"heal-pulse"}],
+  "81": [{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":4,"move":"supersonic"},{"level":8,"move":"thunder-wave"},{"level":12,"move":"electro-ball"},{"level":16,"move":"gyro-ball"},{"level":20,"move":"spark"},{"level":24,"move":"screech"},{"level":28,"move":"magnet-rise"},{"level":32,"move":"flash-cannon"},{"level":36,"move":"discharge"},{"level":40,"move":"metal-sound"},{"level":44,"move":"light-screen"},{"level":48,"move":"lock-on"},{"level":52,"move":"zap-cannon"}],
+  "82": [{"level":0,"move":"tri-attack"},{"level":1,"move":"electric-terrain"},{"level":1,"move":"supersonic"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"thunder-wave"},{"level":12,"move":"electro-ball"},{"level":16,"move":"gyro-ball"},{"level":20,"move":"spark"},{"level":24,"move":"screech"},{"level":28,"move":"magnet-rise"},{"level":34,"move":"flash-cannon"},{"level":40,"move":"discharge"},{"level":46,"move":"metal-sound"},{"level":52,"move":"light-screen"},{"level":58,"move":"lock-on"},{"level":64,"move":"zap-cannon"}],
+  "83": [{"level":1,"move":"peck"},{"level":1,"move":"sand-attack"},{"level":5,"move":"leer"},{"level":10,"move":"fury-cutter"},{"level":15,"move":"cut"},{"level":20,"move":"aerial-ace"},{"level":25,"move":"air-cutter"},{"level":30,"move":"knock-off"},{"level":35,"move":"false-swipe"},{"level":40,"move":"slash"},{"level":45,"move":"swords-dance"},{"level":50,"move":"air-slash"},{"level":55,"move":"leaf-blade"},{"level":60,"move":"agility"},{"level":65,"move":"brave-bird"}],
+  "84": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":5,"move":"quick-attack"},{"level":9,"move":"fury-attack"},{"level":14,"move":"pluck"},{"level":19,"move":"double-hit"},{"level":23,"move":"agility"},{"level":27,"move":"uproar"},{"level":30,"move":"acupressure"},{"level":33,"move":"swords-dance"},{"level":36,"move":"drill-peck"},{"level":39,"move":"endeavor"},{"level":43,"move":"thrash"}],
+  "85": [{"level":0,"move":"tri-attack"},{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":1,"move":"quick-attack"},{"level":12,"move":"fury-attack"},{"level":15,"move":"pluck"},{"level":19,"move":"double-hit"},{"level":23,"move":"agility"},{"level":26,"move":"uproar"},{"level":30,"move":"acupressure"},{"level":34,"move":"swords-dance"},{"level":38,"move":"drill-peck"},{"level":43,"move":"endeavor"},{"level":50,"move":"thrash"}],
+  "86": [{"level":1,"move":"headbutt"},{"level":3,"move":"growl"},{"level":7,"move":"charm"},{"level":11,"move":"icy-wind"},{"level":13,"move":"encore"},{"level":17,"move":"ice-shard"},{"level":21,"move":"rest"},{"level":23,"move":"aqua-ring"},{"level":27,"move":"aurora-beam"},{"level":31,"move":"aqua-jet"},{"level":33,"move":"brine"},{"level":37,"move":"take-down"},{"level":41,"move":"dive"},{"level":43,"move":"aqua-tail"},{"level":47,"move":"ice-beam"},{"level":51,"move":"safeguard"},{"level":53,"move":"snowscape"}],
+  "87": [{"level":0,"move":"sheer-cold"},{"level":1,"move":"growl"},{"level":1,"move":"headbutt"},{"level":1,"move":"icy-wind"},{"level":13,"move":"encore"},{"level":17,"move":"ice-shard"},{"level":21,"move":"rest"},{"level":23,"move":"aqua-ring"},{"level":27,"move":"aurora-beam"},{"level":31,"move":"aqua-jet"},{"level":33,"move":"brine"},{"level":39,"move":"take-down"},{"level":45,"move":"dive"},{"level":49,"move":"aqua-tail"},{"level":55,"move":"ice-beam"},{"level":61,"move":"safeguard"},{"level":65,"move":"snowscape"}],
+  "88": [{"level":1,"move":"poison-gas"},{"level":1,"move":"pound"},{"level":4,"move":"harden"},{"level":7,"move":"mud-slap"},{"level":12,"move":"disable"},{"level":15,"move":"sludge"},{"level":18,"move":"mud-shot"},{"level":21,"move":"minimize"},{"level":26,"move":"toxic"},{"level":29,"move":"sludge-bomb"},{"level":32,"move":"sludge-wave"},{"level":37,"move":"screech"},{"level":40,"move":"gunk-shot"},{"level":43,"move":"acid-armor"},{"level":46,"move":"belch"},{"level":48,"move":"memento"}],
+  "89": [{"level":1,"move":"harden"},{"level":1,"move":"mud-slap"},{"level":1,"move":"poison-gas"},{"level":1,"move":"pound"},{"level":12,"move":"disable"},{"level":15,"move":"sludge"},{"level":18,"move":"mud-shot"},{"level":21,"move":"minimize"},{"level":26,"move":"toxic"},{"level":29,"move":"sludge-bomb"},{"level":32,"move":"sludge-wave"},{"level":37,"move":"screech"},{"level":40,"move":"gunk-shot"},{"level":46,"move":"acid-armor"},{"level":52,"move":"belch"},{"level":57,"move":"memento"}],
+  "90": [{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":4,"move":"withdraw"},{"level":8,"move":"ice-shard"},{"level":12,"move":"leer"},{"level":16,"move":"whirlpool"},{"level":20,"move":"supersonic"},{"level":24,"move":"aurora-beam"},{"level":28,"move":"protect"},{"level":32,"move":"razor-shell"},{"level":36,"move":"iron-defense"},{"level":40,"move":"ice-beam"},{"level":44,"move":"shell-smash"},{"level":48,"move":"hydro-pump"}],
+  "91": [{"level":0,"move":"icicle-spear"},{"level":1,"move":"aurora-beam"},{"level":1,"move":"hydro-pump"},{"level":1,"move":"ice-beam"},{"level":1,"move":"ice-shard"},{"level":1,"move":"icicle-crash"},{"level":1,"move":"iron-defense"},{"level":1,"move":"leer"},{"level":1,"move":"protect"},{"level":1,"move":"shell-smash"},{"level":1,"move":"spikes"},{"level":1,"move":"supersonic"},{"level":1,"move":"tackle"},{"level":1,"move":"toxic-spikes"},{"level":1,"move":"water-gun"},{"level":1,"move":"whirlpool"},{"level":1,"move":"withdraw"},{"level":5,"move":"razor-shell"}],
+  "92": [{"level":1,"move":"confuse-ray"},{"level":1,"move":"lick"},{"level":4,"move":"hypnosis"},{"level":8,"move":"mean-look"},{"level":12,"move":"payback"},{"level":16,"move":"spite"},{"level":20,"move":"curse"},{"level":24,"move":"hex"},{"level":28,"move":"night-shade"},{"level":32,"move":"sucker-punch"},{"level":36,"move":"dark-pulse"},{"level":40,"move":"shadow-ball"},{"level":44,"move":"destiny-bond"},{"level":48,"move":"dream-eater"}],
+  "93": [{"level":0,"move":"shadow-punch"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"hypnosis"},{"level":1,"move":"lick"},{"level":1,"move":"mean-look"},{"level":12,"move":"payback"},{"level":16,"move":"spite"},{"level":20,"move":"curse"},{"level":24,"move":"hex"},{"level":30,"move":"night-shade"},{"level":36,"move":"sucker-punch"},{"level":42,"move":"dark-pulse"},{"level":48,"move":"shadow-ball"},{"level":54,"move":"destiny-bond"},{"level":60,"move":"dream-eater"}],
+  "94": [{"level":1,"move":"confuse-ray"},{"level":1,"move":"hypnosis"},{"level":1,"move":"lick"},{"level":1,"move":"mean-look"},{"level":1,"move":"perish-song"},{"level":1,"move":"reflect-type"},{"level":1,"move":"shadow-punch"},{"level":12,"move":"payback"},{"level":16,"move":"spite"},{"level":20,"move":"curse"},{"level":24,"move":"hex"},{"level":30,"move":"night-shade"},{"level":36,"move":"sucker-punch"},{"level":42,"move":"dark-pulse"},{"level":48,"move":"shadow-ball"},{"level":54,"move":"destiny-bond"},{"level":60,"move":"dream-eater"}],
+  "95": [{"level":1,"move":"bind"},{"level":1,"move":"harden"},{"level":1,"move":"rock-throw"},{"level":1,"move":"tackle"},{"level":4,"move":"smack-down"},{"level":8,"move":"rock-polish"},{"level":12,"move":"dragon-breath"},{"level":16,"move":"curse"},{"level":20,"move":"rock-slide"},{"level":24,"move":"screech"},{"level":28,"move":"sand-tomb"},{"level":32,"move":"stealth-rock"},{"level":36,"move":"slam"},{"level":40,"move":"sandstorm"},{"level":44,"move":"dig"},{"level":48,"move":"iron-tail"},{"level":52,"move":"stone-edge"},{"level":56,"move":"double-edge"}],
+  "96": [{"level":1,"move":"hypnosis"},{"level":1,"move":"pound"},{"level":5,"move":"disable"},{"level":9,"move":"confusion"},{"level":13,"move":"headbutt"},{"level":17,"move":"poison-gas"},{"level":21,"move":"psybeam"},{"level":25,"move":"psych-up"},{"level":29,"move":"zen-headbutt"},{"level":33,"move":"swagger"},{"level":37,"move":"psychic"},{"level":41,"move":"nasty-plot"},{"level":45,"move":"psyshock"},{"level":49,"move":"future-sight"}],
+  "97": [{"level":1,"move":"confusion"},{"level":1,"move":"disable"},{"level":1,"move":"hypnosis"},{"level":1,"move":"pound"},{"level":1,"move":"switcheroo"},{"level":13,"move":"headbutt"},{"level":17,"move":"poison-gas"},{"level":21,"move":"psybeam"},{"level":25,"move":"psych-up"},{"level":32,"move":"zen-headbutt"},{"level":37,"move":"swagger"},{"level":42,"move":"psychic"},{"level":47,"move":"nasty-plot"},{"level":51,"move":"psyshock"},{"level":56,"move":"future-sight"}],
+  "98": [{"level":1,"move":"leer"},{"level":1,"move":"water-gun"},{"level":4,"move":"harden"},{"level":8,"move":"metal-claw"},{"level":12,"move":"mud-shot"},{"level":16,"move":"protect"},{"level":20,"move":"bubble-beam"},{"level":24,"move":"stomp"},{"level":29,"move":"flail"},{"level":32,"move":"razor-shell"},{"level":36,"move":"slam"},{"level":40,"move":"swords-dance"},{"level":44,"move":"crabhammer"},{"level":48,"move":"guillotine"}],
+  "99": [{"level":1,"move":"hammer-arm"},{"level":1,"move":"harden"},{"level":1,"move":"leer"},{"level":1,"move":"metal-claw"},{"level":1,"move":"water-gun"},{"level":1,"move":"wide-guard"},{"level":12,"move":"mud-shot"},{"level":16,"move":"protect"},{"level":20,"move":"bubble-beam"},{"level":24,"move":"stomp"},{"level":31,"move":"flail"},{"level":36,"move":"razor-shell"},{"level":42,"move":"slam"},{"level":48,"move":"swords-dance"},{"level":54,"move":"crabhammer"},{"level":60,"move":"guillotine"}],
+  "100": [{"level":1,"move":"charge"},{"level":1,"move":"tackle"},{"level":4,"move":"thunder-shock"},{"level":6,"move":"eerie-impulse"},{"level":9,"move":"spark"},{"level":11,"move":"rollout"},{"level":13,"move":"screech"},{"level":16,"move":"charge-beam"},{"level":20,"move":"swift"},{"level":22,"move":"electro-ball"},{"level":26,"move":"self-destruct"},{"level":29,"move":"light-screen"},{"level":34,"move":"magnet-rise"},{"level":37,"move":"discharge"},{"level":41,"move":"explosion"},{"level":46,"move":"gyro-ball"},{"level":50,"move":"mirror-coat"}],
+  "101": [{"level":1,"move":"charge"},{"level":1,"move":"eerie-impulse"},{"level":1,"move":"magnetic-flux"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":9,"move":"spark"},{"level":11,"move":"rollout"},{"level":13,"move":"screech"},{"level":16,"move":"charge-beam"},{"level":20,"move":"swift"},{"level":22,"move":"electro-ball"},{"level":26,"move":"self-destruct"},{"level":29,"move":"light-screen"},{"level":36,"move":"magnet-rise"},{"level":41,"move":"discharge"},{"level":47,"move":"explosion"},{"level":54,"move":"gyro-ball"},{"level":58,"move":"mirror-coat"}],
+  "102": [{"level":1,"move":"absorb"},{"level":1,"move":"hypnosis"},{"level":5,"move":"reflect"},{"level":10,"move":"leech-seed"},{"level":15,"move":"mega-drain"},{"level":20,"move":"confusion"},{"level":25,"move":"synthesis"},{"level":30,"move":"bullet-seed"},{"level":35,"move":"giga-drain"},{"level":40,"move":"extrasensory"},{"level":45,"move":"uproar"},{"level":50,"move":"worry-seed"},{"level":55,"move":"solar-beam"}],
+  "103": [{"level":0,"move":"stomp"},{"level":1,"move":"absorb"},{"level":1,"move":"bullet-seed"},{"level":1,"move":"confusion"},{"level":1,"move":"extrasensory"},{"level":1,"move":"giga-drain"},{"level":1,"move":"hypnosis"},{"level":1,"move":"leaf-storm"},{"level":1,"move":"leech-seed"},{"level":1,"move":"mega-drain"},{"level":1,"move":"psyshock"},{"level":1,"move":"reflect"},{"level":1,"move":"seed-bomb"},{"level":1,"move":"solar-beam"},{"level":1,"move":"synthesis"},{"level":1,"move":"uproar"},{"level":1,"move":"wood-hammer"},{"level":1,"move":"worry-seed"}],
+  "104": [{"level":1,"move":"growl"},{"level":1,"move":"mud-slap"},{"level":4,"move":"tail-whip"},{"level":8,"move":"false-swipe"},{"level":12,"move":"headbutt"},{"level":16,"move":"retaliate"},{"level":20,"move":"fling"},{"level":24,"move":"stomping-tantrum"},{"level":29,"move":"bone-rush"},{"level":32,"move":"focus-energy"},{"level":36,"move":"endeavor"},{"level":40,"move":"bonemerang"},{"level":44,"move":"thrash"},{"level":48,"move":"double-edge"}],
+  "105": [{"level":1,"move":"false-swipe"},{"level":1,"move":"growl"},{"level":1,"move":"mud-slap"},{"level":1,"move":"tail-whip"},{"level":12,"move":"headbutt"},{"level":16,"move":"retaliate"},{"level":20,"move":"fling"},{"level":24,"move":"stomping-tantrum"},{"level":31,"move":"bone-rush"},{"level":36,"move":"focus-energy"},{"level":42,"move":"endeavor"},{"level":48,"move":"bonemerang"},{"level":54,"move":"thrash"},{"level":60,"move":"double-edge"}],
+  "106": [{"level":0,"move":"brick-break"},{"level":1,"move":"fake-out"},{"level":1,"move":"focus-energy"},{"level":1,"move":"helping-hand"},{"level":1,"move":"low-sweep"},{"level":1,"move":"tackle"},{"level":4,"move":"double-kick"},{"level":8,"move":"low-kick"},{"level":12,"move":"endure"},{"level":16,"move":"sucker-punch"},{"level":21,"move":"wide-guard"},{"level":24,"move":"blaze-kick"},{"level":28,"move":"feint"},{"level":32,"move":"mega-kick"},{"level":36,"move":"close-combat"},{"level":40,"move":"reversal"},{"level":44,"move":"high-jump-kick"},{"level":50,"move":"axe-kick"}],
+  "107": [{"level":0,"move":"drain-punch"},{"level":1,"move":"fake-out"},{"level":1,"move":"feint"},{"level":1,"move":"focus-energy"},{"level":1,"move":"helping-hand"},{"level":1,"move":"tackle"},{"level":4,"move":"mach-punch"},{"level":8,"move":"vacuum-wave"},{"level":12,"move":"detect"},{"level":16,"move":"bullet-punch"},{"level":21,"move":"quick-guard"},{"level":24,"move":"fire-punch"},{"level":24,"move":"ice-punch"},{"level":24,"move":"thunder-punch"},{"level":28,"move":"agility"},{"level":32,"move":"mega-punch"},{"level":36,"move":"close-combat"},{"level":40,"move":"counter"},{"level":44,"move":"focus-punch"}],
+  "108": [{"level":1,"move":"defense-curl"},{"level":1,"move":"lick"},{"level":6,"move":"rollout"},{"level":12,"move":"supersonic"},{"level":18,"move":"wrap"},{"level":24,"move":"disable"},{"level":30,"move":"stomp"},{"level":36,"move":"knock-off"},{"level":42,"move":"screech"},{"level":48,"move":"slam"},{"level":54,"move":"power-whip"},{"level":60,"move":"belly-drum"}],
+  "109": [{"level":1,"move":"poison-gas"},{"level":1,"move":"tackle"},{"level":4,"move":"smog"},{"level":8,"move":"smokescreen"},{"level":12,"move":"clear-smog"},{"level":16,"move":"assurance"},{"level":20,"move":"sludge"},{"level":24,"move":"haze"},{"level":28,"move":"self-destruct"},{"level":32,"move":"sludge-bomb"},{"level":36,"move":"toxic"},{"level":40,"move":"belch"},{"level":44,"move":"explosion"},{"level":48,"move":"memento"},{"level":52,"move":"destiny-bond"}],
+  "110": [{"level":0,"move":"double-hit"},{"level":1,"move":"heat-wave"},{"level":1,"move":"poison-gas"},{"level":1,"move":"smog"},{"level":1,"move":"smokescreen"},{"level":1,"move":"tackle"},{"level":12,"move":"clear-smog"},{"level":16,"move":"assurance"},{"level":20,"move":"sludge"},{"level":24,"move":"haze"},{"level":28,"move":"self-destruct"},{"level":32,"move":"sludge-bomb"},{"level":38,"move":"toxic"},{"level":44,"move":"belch"},{"level":50,"move":"explosion"},{"level":56,"move":"memento"},{"level":62,"move":"destiny-bond"}],
+  "111": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"smack-down"},{"level":10,"move":"bulldoze"},{"level":15,"move":"horn-attack"},{"level":20,"move":"scary-face"},{"level":25,"move":"stomp"},{"level":30,"move":"rock-blast"},{"level":35,"move":"drill-run"},{"level":40,"move":"take-down"},{"level":45,"move":"earthquake"},{"level":50,"move":"stone-edge"},{"level":55,"move":"megahorn"},{"level":60,"move":"horn-drill"}],
+  "112": [{"level":0,"move":"hammer-arm"},{"level":1,"move":"bulldoze"},{"level":1,"move":"smack-down"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":15,"move":"horn-attack"},{"level":20,"move":"scary-face"},{"level":25,"move":"stomp"},{"level":30,"move":"rock-blast"},{"level":35,"move":"drill-run"},{"level":40,"move":"take-down"},{"level":47,"move":"earthquake"},{"level":54,"move":"stone-edge"},{"level":61,"move":"megahorn"},{"level":68,"move":"horn-drill"}],
+  "113": [{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"defense-curl"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"pound"},{"level":1,"move":"sweet-kiss"},{"level":4,"move":"tail-whip"},{"level":8,"move":"echoed-voice"},{"level":12,"move":"life-dew"},{"level":16,"move":"sing"},{"level":20,"move":"fling"},{"level":24,"move":"take-down"},{"level":28,"move":"heal-pulse"},{"level":32,"move":"helping-hand"},{"level":36,"move":"light-screen"},{"level":40,"move":"double-edge"},{"level":44,"move":"soft-boiled"},{"level":48,"move":"last-resort"},{"level":52,"move":"healing-wish"}],
+  "114": [{"level":1,"move":"absorb"},{"level":1,"move":"bind"},{"level":4,"move":"stun-spore"},{"level":8,"move":"growth"},{"level":12,"move":"mega-drain"},{"level":16,"move":"vine-whip"},{"level":20,"move":"poison-powder"},{"level":24,"move":"ancient-power"},{"level":28,"move":"knock-off"},{"level":32,"move":"giga-drain"},{"level":36,"move":"sleep-powder"},{"level":40,"move":"slam"},{"level":44,"move":"tickle"},{"level":48,"move":"power-whip"},{"level":52,"move":"ingrain"},{"level":56,"move":"grassy-terrain"}],
+  "115": [{"level":1,"move":"pound"},{"level":1,"move":"tail-whip"},{"level":4,"move":"growl"},{"level":8,"move":"fake-out"},{"level":12,"move":"bite"},{"level":16,"move":"stomp"},{"level":20,"move":"focus-energy"},{"level":24,"move":"headbutt"},{"level":28,"move":"sucker-punch"},{"level":32,"move":"double-hit"},{"level":36,"move":"crunch"},{"level":40,"move":"endure"},{"level":44,"move":"reversal"},{"level":48,"move":"outrage"},{"level":52,"move":"last-resort"}],
+  "116": [{"level":1,"move":"leer"},{"level":1,"move":"water-gun"},{"level":5,"move":"smokescreen"},{"level":10,"move":"twister"},{"level":15,"move":"focus-energy"},{"level":20,"move":"dragon-breath"},{"level":25,"move":"bubble-beam"},{"level":30,"move":"agility"},{"level":35,"move":"water-pulse"},{"level":40,"move":"dragon-pulse"},{"level":45,"move":"hydro-pump"},{"level":50,"move":"dragon-dance"},{"level":55,"move":"rain-dance"}],
+  "117": [{"level":1,"move":"leer"},{"level":1,"move":"smokescreen"},{"level":1,"move":"twister"},{"level":1,"move":"water-gun"},{"level":15,"move":"focus-energy"},{"level":20,"move":"dragon-breath"},{"level":25,"move":"bubble-beam"},{"level":30,"move":"agility"},{"level":37,"move":"water-pulse"},{"level":44,"move":"dragon-pulse"},{"level":51,"move":"hydro-pump"},{"level":58,"move":"dragon-dance"},{"level":65,"move":"rain-dance"}],
+  "118": [{"level":1,"move":"peck"},{"level":1,"move":"tail-whip"},{"level":5,"move":"supersonic"},{"level":10,"move":"water-pulse"},{"level":15,"move":"horn-attack"},{"level":20,"move":"agility"},{"level":25,"move":"aqua-ring"},{"level":30,"move":"flail"},{"level":35,"move":"waterfall"},{"level":40,"move":"soak"},{"level":45,"move":"megahorn"},{"level":50,"move":"horn-drill"}],
+  "119": [{"level":1,"move":"peck"},{"level":1,"move":"supersonic"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-pulse"},{"level":15,"move":"horn-attack"},{"level":20,"move":"agility"},{"level":25,"move":"aqua-ring"},{"level":30,"move":"flail"},{"level":37,"move":"waterfall"},{"level":44,"move":"soak"},{"level":51,"move":"megahorn"},{"level":58,"move":"horn-drill"}],
+  "120": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":4,"move":"water-gun"},{"level":8,"move":"confuse-ray"},{"level":12,"move":"rapid-spin"},{"level":16,"move":"minimize"},{"level":20,"move":"swift"},{"level":24,"move":"psybeam"},{"level":28,"move":"brine"},{"level":32,"move":"light-screen"},{"level":36,"move":"power-gem"},{"level":40,"move":"psychic"},{"level":44,"move":"surf"},{"level":48,"move":"recover"},{"level":52,"move":"cosmic-power"},{"level":56,"move":"hydro-pump"}],
+  "121": [{"level":1,"move":"brine"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"cosmic-power"},{"level":1,"move":"harden"},{"level":1,"move":"hydro-pump"},{"level":1,"move":"light-screen"},{"level":1,"move":"minimize"},{"level":1,"move":"power-gem"},{"level":1,"move":"psybeam"},{"level":1,"move":"psychic"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"recover"},{"level":1,"move":"surf"},{"level":1,"move":"swift"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"}],
+  "122": [{"level":1,"move":"baton-pass"},{"level":1,"move":"copycat"},{"level":1,"move":"encore"},{"level":1,"move":"guard-swap"},{"level":1,"move":"pound"},{"level":1,"move":"power-swap"},{"level":1,"move":"quick-guard"},{"level":1,"move":"wide-guard"},{"level":12,"move":"confusion"},{"level":16,"move":"role-play"},{"level":20,"move":"protect"},{"level":24,"move":"recycle"},{"level":28,"move":"psybeam"},{"level":32,"move":"mimic"},{"level":36,"move":"light-screen"},{"level":36,"move":"reflect"},{"level":36,"move":"safeguard"},{"level":40,"move":"sucker-punch"},{"level":44,"move":"dazzling-gleam"},{"level":48,"move":"psychic"},{"level":52,"move":"teeter-dance"}],
+  "123": [{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":4,"move":"fury-cutter"},{"level":8,"move":"false-swipe"},{"level":12,"move":"wing-attack"},{"level":16,"move":"double-team"},{"level":20,"move":"double-hit"},{"level":24,"move":"slash"},{"level":28,"move":"focus-energy"},{"level":32,"move":"agility"},{"level":36,"move":"air-slash"},{"level":40,"move":"x-scissor"},{"level":44,"move":"swords-dance"}],
+  "124": [{"level":1,"move":"copycat"},{"level":1,"move":"lick"},{"level":1,"move":"pound"},{"level":1,"move":"powder-snow"},{"level":1,"move":"sweet-kiss"},{"level":12,"move":"confusion"},{"level":16,"move":"covet"},{"level":20,"move":"sing"},{"level":24,"move":"fake-tears"},{"level":28,"move":"ice-punch"},{"level":34,"move":"psychic"},{"level":40,"move":"lovely-kiss"},{"level":46,"move":"mean-look"},{"level":52,"move":"perish-song"},{"level":58,"move":"blizzard"}],
+  "125": [{"level":1,"move":"charge"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"thunder-shock"},{"level":12,"move":"swift"},{"level":16,"move":"shock-wave"},{"level":20,"move":"thunder-wave"},{"level":24,"move":"screech"},{"level":28,"move":"thunder-punch"},{"level":34,"move":"discharge"},{"level":40,"move":"low-kick"},{"level":46,"move":"thunderbolt"},{"level":52,"move":"light-screen"},{"level":58,"move":"thunder"},{"level":64,"move":"giga-impact"}],
+  "126": [{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"smog"},{"level":1,"move":"smokescreen"},{"level":12,"move":"clear-smog"},{"level":16,"move":"flame-wheel"},{"level":20,"move":"confuse-ray"},{"level":24,"move":"scary-face"},{"level":28,"move":"fire-punch"},{"level":34,"move":"lava-plume"},{"level":40,"move":"low-kick"},{"level":46,"move":"flamethrower"},{"level":52,"move":"sunny-day"},{"level":58,"move":"fire-blast"},{"level":64,"move":"hyper-beam"}],
+  "127": [{"level":1,"move":"harden"},{"level":1,"move":"vice-grip"},{"level":4,"move":"focus-energy"},{"level":8,"move":"bind"},{"level":12,"move":"seismic-toss"},{"level":16,"move":"bug-bite"},{"level":20,"move":"storm-throw"},{"level":24,"move":"double-hit"},{"level":28,"move":"vital-throw"},{"level":32,"move":"x-scissor"},{"level":36,"move":"strength"},{"level":40,"move":"swords-dance"},{"level":44,"move":"submission"},{"level":48,"move":"guillotine"},{"level":52,"move":"superpower"}],
+  "128": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"work-up"},{"level":10,"move":"payback"},{"level":15,"move":"assurance"},{"level":20,"move":"horn-attack"},{"level":25,"move":"scary-face"},{"level":30,"move":"zen-headbutt"},{"level":35,"move":"raging-bull"},{"level":40,"move":"rest"},{"level":45,"move":"swagger"},{"level":50,"move":"thrash"},{"level":55,"move":"double-edge"},{"level":60,"move":"giga-impact"}],
+  "129": [{"level":1,"move":"splash"},{"level":15,"move":"tackle"},{"level":25,"move":"flail"}],
+  "130": [{"level":0,"move":"bite"},{"level":1,"move":"flail"},{"level":1,"move":"leer"},{"level":1,"move":"splash"},{"level":1,"move":"tackle"},{"level":1,"move":"twister"},{"level":4,"move":"whirlpool"},{"level":8,"move":"ice-fang"},{"level":12,"move":"brine"},{"level":16,"move":"scary-face"},{"level":21,"move":"waterfall"},{"level":24,"move":"crunch"},{"level":28,"move":"rain-dance"},{"level":32,"move":"aqua-tail"},{"level":36,"move":"dragon-dance"},{"level":40,"move":"hydro-pump"},{"level":44,"move":"hurricane"},{"level":48,"move":"thrash"},{"level":52,"move":"hyper-beam"}],
+  "131": [{"level":1,"move":"growl"},{"level":1,"move":"water-gun"},{"level":5,"move":"sing"},{"level":10,"move":"mist"},{"level":15,"move":"life-dew"},{"level":20,"move":"ice-shard"},{"level":25,"move":"confuse-ray"},{"level":30,"move":"water-pulse"},{"level":35,"move":"brine"},{"level":40,"move":"body-slam"},{"level":45,"move":"ice-beam"},{"level":50,"move":"rain-dance"},{"level":55,"move":"hydro-pump"},{"level":60,"move":"perish-song"},{"level":65,"move":"sheer-cold"}],
+  "132": [{"level":1,"move":"transform"}],
+  "133": [{"level":1,"move":"covet"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"swift"},{"level":25,"move":"bite"},{"level":30,"move":"copycat"},{"level":35,"move":"baton-pass"},{"level":40,"move":"take-down"},{"level":45,"move":"charm"},{"level":50,"move":"double-edge"},{"level":55,"move":"last-resort"}],
+  "134": [{"level":0,"move":"water-gun"},{"level":1,"move":"baton-pass"},{"level":1,"move":"bite"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"double-edge"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"swift"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"take-down"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"haze"},{"level":25,"move":"water-pulse"},{"level":30,"move":"aurora-beam"},{"level":35,"move":"aqua-ring"},{"level":40,"move":"muddy-water"},{"level":45,"move":"acid-armor"},{"level":50,"move":"hydro-pump"},{"level":55,"move":"last-resort"}],
+  "135": [{"level":0,"move":"thunder-shock"},{"level":1,"move":"baton-pass"},{"level":1,"move":"bite"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"double-edge"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"swift"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"take-down"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"thunder-wave"},{"level":25,"move":"double-kick"},{"level":30,"move":"thunder-fang"},{"level":35,"move":"pin-missile"},{"level":40,"move":"discharge"},{"level":45,"move":"agility"},{"level":50,"move":"thunder"},{"level":55,"move":"last-resort"}],
+  "136": [{"level":0,"move":"ember"},{"level":1,"move":"baton-pass"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"double-edge"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"swift"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"take-down"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"smog"},{"level":25,"move":"bite"},{"level":30,"move":"fire-fang"},{"level":35,"move":"fire-spin"},{"level":40,"move":"lava-plume"},{"level":45,"move":"scary-face"},{"level":50,"move":"flare-blitz"},{"level":55,"move":"last-resort"}],
+  "137": [{"level":1,"move":"conversion"},{"level":1,"move":"tackle"},{"level":5,"move":"recycle"},{"level":10,"move":"magnet-rise"},{"level":15,"move":"thunder-shock"},{"level":20,"move":"psybeam"},{"level":25,"move":"conversion-2"},{"level":30,"move":"agility"},{"level":35,"move":"recover"},{"level":40,"move":"discharge"},{"level":45,"move":"tri-attack"},{"level":50,"move":"double-edge"},{"level":55,"move":"lock-on"},{"level":60,"move":"zap-cannon"}],
+  "138": [{"level":1,"move":"bind"},{"level":1,"move":"withdraw"},{"level":5,"move":"rollout"},{"level":10,"move":"sand-attack"},{"level":15,"move":"water-gun"},{"level":20,"move":"leer"},{"level":25,"move":"mud-shot"},{"level":30,"move":"ancient-power"},{"level":35,"move":"brine"},{"level":41,"move":"protect"},{"level":45,"move":"rock-blast"},{"level":50,"move":"surf"},{"level":55,"move":"shell-smash"},{"level":60,"move":"hydro-pump"}],
+  "139": [{"level":0,"move":"crunch"},{"level":1,"move":"bind"},{"level":1,"move":"crunch"},{"level":1,"move":"rollout"},{"level":1,"move":"sand-attack"},{"level":1,"move":"withdraw"},{"level":15,"move":"water-gun"},{"level":20,"move":"leer"},{"level":25,"move":"mud-shot"},{"level":30,"move":"ancient-power"},{"level":35,"move":"brine"},{"level":43,"move":"protect"},{"level":49,"move":"rock-blast"},{"level":56,"move":"surf"},{"level":63,"move":"shell-smash"},{"level":70,"move":"hydro-pump"}],
+  "140": [{"level":1,"move":"absorb"},{"level":1,"move":"harden"},{"level":5,"move":"scratch"},{"level":10,"move":"sand-attack"},{"level":15,"move":"aqua-jet"},{"level":20,"move":"leer"},{"level":25,"move":"mud-shot"},{"level":30,"move":"ancient-power"},{"level":35,"move":"brine"},{"level":41,"move":"protect"},{"level":45,"move":"leech-life"},{"level":50,"move":"liquidation"},{"level":55,"move":"metal-sound"},{"level":60,"move":"stone-edge"}],
+  "141": [{"level":0,"move":"slash"},{"level":1,"move":"absorb"},{"level":1,"move":"feint"},{"level":1,"move":"harden"},{"level":1,"move":"night-slash"},{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":1,"move":"slash"},{"level":15,"move":"aqua-jet"},{"level":20,"move":"leer"},{"level":25,"move":"mud-shot"},{"level":30,"move":"ancient-power"},{"level":35,"move":"brine"},{"level":43,"move":"protect"},{"level":49,"move":"leech-life"},{"level":56,"move":"liquidation"},{"level":63,"move":"metal-sound"},{"level":70,"move":"stone-edge"}],
+  "142": [{"level":1,"move":"ancient-power"},{"level":1,"move":"bite"},{"level":5,"move":"supersonic"},{"level":10,"move":"wing-attack"},{"level":15,"move":"scary-face"},{"level":20,"move":"rock-slide"},{"level":25,"move":"roar"},{"level":30,"move":"crunch"},{"level":35,"move":"iron-head"},{"level":40,"move":"take-down"},{"level":45,"move":"stone-edge"},{"level":50,"move":"agility"},{"level":55,"move":"hyper-beam"},{"level":60,"move":"giga-impact"}],
+  "143": [{"level":1,"move":"block"},{"level":1,"move":"covet"},{"level":1,"move":"defense-curl"},{"level":1,"move":"flail"},{"level":1,"move":"fling"},{"level":1,"move":"last-resort"},{"level":1,"move":"lick"},{"level":1,"move":"metronome"},{"level":1,"move":"recycle"},{"level":1,"move":"screech"},{"level":1,"move":"stockpile"},{"level":1,"move":"swallow"},{"level":1,"move":"tackle"},{"level":12,"move":"yawn"},{"level":16,"move":"bite"},{"level":20,"move":"rest"},{"level":20,"move":"sleep-talk"},{"level":20,"move":"snore"},{"level":24,"move":"crunch"},{"level":28,"move":"body-slam"},{"level":32,"move":"heavy-slam"},{"level":36,"move":"amnesia"},{"level":40,"move":"high-horsepower"},{"level":44,"move":"hammer-arm"},{"level":48,"move":"belly-drum"},{"level":52,"move":"belch"},{"level":56,"move":"giga-impact"}],
+  "144": [{"level":1,"move":"gust"},{"level":1,"move":"mist"},{"level":5,"move":"powder-snow"},{"level":10,"move":"reflect"},{"level":15,"move":"ice-shard"},{"level":20,"move":"agility"},{"level":25,"move":"ancient-power"},{"level":30,"move":"tailwind"},{"level":35,"move":"freeze-dry"},{"level":40,"move":"roost"},{"level":45,"move":"ice-beam"},{"level":50,"move":"snowscape"},{"level":55,"move":"hurricane"},{"level":60,"move":"haze"},{"level":65,"move":"blizzard"},{"level":70,"move":"sheer-cold"}],
+  "145": [{"level":1,"move":"peck"},{"level":1,"move":"thunder-wave"},{"level":5,"move":"thunder-shock"},{"level":10,"move":"light-screen"},{"level":15,"move":"pluck"},{"level":20,"move":"agility"},{"level":25,"move":"ancient-power"},{"level":30,"move":"charge"},{"level":35,"move":"drill-peck"},{"level":40,"move":"roost"},{"level":45,"move":"discharge"},{"level":50,"move":"rain-dance"},{"level":55,"move":"thunder"},{"level":60,"move":"detect"},{"level":65,"move":"magnetic-flux"},{"level":70,"move":"zap-cannon"}],
+  "146": [{"level":1,"move":"gust"},{"level":1,"move":"leer"},{"level":5,"move":"ember"},{"level":10,"move":"safeguard"},{"level":15,"move":"wing-attack"},{"level":20,"move":"agility"},{"level":25,"move":"ancient-power"},{"level":30,"move":"incinerate"},{"level":35,"move":"air-slash"},{"level":40,"move":"roost"},{"level":45,"move":"heat-wave"},{"level":50,"move":"sunny-day"},{"level":55,"move":"hurricane"},{"level":60,"move":"endure"},{"level":65,"move":"overheat"},{"level":70,"move":"sky-attack"}],
+  "147": [{"level":1,"move":"leer"},{"level":1,"move":"wrap"},{"level":5,"move":"twister"},{"level":10,"move":"thunder-wave"},{"level":15,"move":"dragon-tail"},{"level":20,"move":"agility"},{"level":25,"move":"slam"},{"level":31,"move":"aqua-tail"},{"level":35,"move":"dragon-rush"},{"level":40,"move":"safeguard"},{"level":45,"move":"rain-dance"},{"level":50,"move":"dragon-dance"},{"level":55,"move":"outrage"},{"level":60,"move":"hyper-beam"}],
+  "148": [{"level":1,"move":"leer"},{"level":1,"move":"thunder-wave"},{"level":1,"move":"twister"},{"level":1,"move":"wrap"},{"level":15,"move":"dragon-tail"},{"level":20,"move":"agility"},{"level":25,"move":"slam"},{"level":33,"move":"aqua-tail"},{"level":39,"move":"dragon-rush"},{"level":46,"move":"safeguard"},{"level":53,"move":"rain-dance"},{"level":60,"move":"dragon-dance"},{"level":67,"move":"outrage"},{"level":74,"move":"hyper-beam"}],
+  "149": [{"level":0,"move":"hurricane"},{"level":1,"move":"extreme-speed"},{"level":1,"move":"fire-punch"},{"level":1,"move":"leer"},{"level":1,"move":"roost"},{"level":1,"move":"thunder-punch"},{"level":1,"move":"thunder-wave"},{"level":1,"move":"twister"},{"level":1,"move":"wing-attack"},{"level":1,"move":"wrap"},{"level":15,"move":"dragon-tail"},{"level":20,"move":"agility"},{"level":25,"move":"slam"},{"level":33,"move":"aqua-tail"},{"level":39,"move":"dragon-rush"},{"level":41,"move":"outrage"},{"level":46,"move":"safeguard"},{"level":53,"move":"rain-dance"},{"level":62,"move":"dragon-dance"},{"level":80,"move":"hyper-beam"}],
+  "150": [{"level":1,"move":"confusion"},{"level":1,"move":"disable"},{"level":1,"move":"life-dew"},{"level":1,"move":"swift"},{"level":8,"move":"ancient-power"},{"level":16,"move":"psycho-cut"},{"level":24,"move":"safeguard"},{"level":32,"move":"amnesia"},{"level":40,"move":"aura-sphere"},{"level":48,"move":"psychic"},{"level":56,"move":"guard-swap"},{"level":56,"move":"power-swap"},{"level":64,"move":"mist"},{"level":72,"move":"psystrike"},{"level":80,"move":"recover"},{"level":88,"move":"future-sight"}],
+  "151": [{"level":1,"move":"pound"},{"level":1,"move":"reflect-type"},{"level":10,"move":"amnesia"},{"level":20,"move":"baton-pass"},{"level":30,"move":"ancient-power"},{"level":40,"move":"life-dew"},{"level":50,"move":"nasty-plot"},{"level":60,"move":"metronome"},{"level":70,"move":"imprison"},{"level":80,"move":"transform"},{"level":90,"move":"aura-sphere"},{"level":100,"move":"psychic"}],
+  "152": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":6,"move":"razor-leaf"},{"level":9,"move":"poison-powder"},{"level":12,"move":"synthesis"},{"level":17,"move":"reflect"},{"level":20,"move":"magical-leaf"},{"level":23,"move":"leech-seed"},{"level":28,"move":"sweet-scent"},{"level":31,"move":"light-screen"},{"level":34,"move":"body-slam"},{"level":39,"move":"safeguard"},{"level":42,"move":"giga-drain"},{"level":45,"move":"solar-beam"}],
+  "153": [{"level":1,"move":"growl"},{"level":1,"move":"poison-powder"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"tackle"},{"level":12,"move":"synthesis"},{"level":18,"move":"reflect"},{"level":22,"move":"magical-leaf"},{"level":26,"move":"leech-seed"},{"level":32,"move":"sweet-scent"},{"level":36,"move":"light-screen"},{"level":40,"move":"body-slam"},{"level":46,"move":"safeguard"},{"level":50,"move":"giga-drain"},{"level":54,"move":"solar-beam"}],
+  "154": [{"level":0,"move":"petal-dance"},{"level":1,"move":"growl"},{"level":1,"move":"petal-blizzard"},{"level":1,"move":"poison-powder"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"tackle"},{"level":12,"move":"synthesis"},{"level":18,"move":"reflect"},{"level":22,"move":"magical-leaf"},{"level":26,"move":"leech-seed"},{"level":34,"move":"sweet-scent"},{"level":40,"move":"light-screen"},{"level":46,"move":"body-slam"},{"level":54,"move":"safeguard"},{"level":60,"move":"giga-drain"},{"level":65,"move":"solar-beam"}],
+  "155": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":6,"move":"smokescreen"},{"level":10,"move":"ember"},{"level":13,"move":"quick-attack"},{"level":19,"move":"flame-wheel"},{"level":22,"move":"defense-curl"},{"level":28,"move":"flame-charge"},{"level":31,"move":"swift"},{"level":37,"move":"lava-plume"},{"level":40,"move":"flamethrower"},{"level":46,"move":"inferno"},{"level":49,"move":"rollout"},{"level":55,"move":"double-edge"},{"level":58,"move":"overheat"},{"level":64,"move":"eruption"}],
+  "156": [{"level":1,"move":"leer"},{"level":1,"move":"smokescreen"},{"level":1,"move":"tackle"},{"level":10,"move":"ember"},{"level":13,"move":"quick-attack"},{"level":20,"move":"flame-wheel"},{"level":24,"move":"defense-curl"},{"level":31,"move":"swift"},{"level":35,"move":"flame-charge"},{"level":42,"move":"lava-plume"},{"level":46,"move":"flamethrower"},{"level":53,"move":"inferno"},{"level":57,"move":"rollout"},{"level":64,"move":"double-edge"},{"level":68,"move":"overheat"},{"level":75,"move":"eruption"}],
+  "157": [{"level":1,"move":"double-edge"},{"level":1,"move":"ember"},{"level":1,"move":"eruption"},{"level":1,"move":"gyro-ball"},{"level":1,"move":"leer"},{"level":1,"move":"smokescreen"},{"level":1,"move":"tackle"},{"level":13,"move":"quick-attack"},{"level":20,"move":"flame-wheel"},{"level":24,"move":"defense-curl"},{"level":31,"move":"swift"},{"level":35,"move":"flame-charge"},{"level":43,"move":"lava-plume"},{"level":48,"move":"flamethrower"},{"level":56,"move":"inferno"},{"level":61,"move":"rollout"},{"level":74,"move":"overheat"}],
+  "158": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":6,"move":"water-gun"},{"level":9,"move":"bite"},{"level":13,"move":"scary-face"},{"level":19,"move":"ice-fang"},{"level":22,"move":"flail"},{"level":27,"move":"crunch"},{"level":30,"move":"slash"},{"level":33,"move":"screech"},{"level":37,"move":"thrash"},{"level":41,"move":"aqua-tail"},{"level":45,"move":"superpower"},{"level":50,"move":"hydro-pump"}],
+  "159": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":1,"move":"water-gun"},{"level":13,"move":"bite"},{"level":15,"move":"scary-face"},{"level":21,"move":"ice-fang"},{"level":24,"move":"flail"},{"level":30,"move":"crunch"},{"level":34,"move":"slash"},{"level":37,"move":"screech"},{"level":42,"move":"thrash"},{"level":47,"move":"aqua-tail"},{"level":50,"move":"superpower"},{"level":55,"move":"hydro-pump"}],
+  "160": [{"level":1,"move":"agility"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":1,"move":"water-gun"},{"level":13,"move":"bite"},{"level":15,"move":"scary-face"},{"level":21,"move":"ice-fang"},{"level":24,"move":"flail"},{"level":32,"move":"crunch"},{"level":37,"move":"slash"},{"level":44,"move":"screech"},{"level":51,"move":"thrash"},{"level":59,"move":"aqua-tail"},{"level":65,"move":"superpower"},{"level":70,"move":"hydro-pump"}],
+  "161": [{"level":1,"move":"scratch"},{"level":4,"move":"defense-curl"},{"level":7,"move":"quick-attack"},{"level":13,"move":"fury-swipes"},{"level":16,"move":"helping-hand"},{"level":19,"move":"follow-me"},{"level":25,"move":"slam"},{"level":28,"move":"rest"},{"level":31,"move":"sucker-punch"},{"level":36,"move":"amnesia"},{"level":39,"move":"baton-pass"},{"level":42,"move":"double-edge"},{"level":47,"move":"hyper-voice"}],
+  "162": [{"level":0,"move":"agility"},{"level":1,"move":"coil"},{"level":1,"move":"defense-curl"},{"level":1,"move":"quick-attack"},{"level":1,"move":"scratch"},{"level":13,"move":"fury-swipes"},{"level":17,"move":"helping-hand"},{"level":21,"move":"follow-me"},{"level":28,"move":"slam"},{"level":32,"move":"rest"},{"level":36,"move":"sucker-punch"},{"level":42,"move":"amnesia"},{"level":46,"move":"baton-pass"},{"level":50,"move":"double-edge"},{"level":56,"move":"hyper-voice"}],
+  "163": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":3,"move":"tackle"},{"level":6,"move":"echoed-voice"},{"level":9,"move":"confusion"},{"level":12,"move":"reflect"},{"level":15,"move":"defog"},{"level":18,"move":"air-slash"},{"level":21,"move":"extrasensory"},{"level":24,"move":"take-down"},{"level":27,"move":"uproar"},{"level":30,"move":"roost"},{"level":33,"move":"moonblast"},{"level":36,"move":"hypnosis"},{"level":39,"move":"dream-eater"}],
+  "164": [{"level":1,"move":"echoed-voice"},{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":1,"move":"sky-attack"},{"level":1,"move":"tackle"},{"level":9,"move":"confusion"},{"level":12,"move":"reflect"},{"level":18,"move":"air-slash"},{"level":23,"move":"extrasensory"},{"level":28,"move":"take-down"},{"level":33,"move":"uproar"},{"level":38,"move":"roost"},{"level":43,"move":"moonblast"},{"level":48,"move":"hypnosis"},{"level":53,"move":"dream-eater"}],
+  "165": [{"level":1,"move":"tackle"},{"level":5,"move":"supersonic"},{"level":8,"move":"swift"},{"level":12,"move":"light-screen"},{"level":12,"move":"reflect"},{"level":12,"move":"safeguard"},{"level":15,"move":"mach-punch"},{"level":19,"move":"silver-wind"},{"level":22,"move":"comet-punch"},{"level":26,"move":"baton-pass"},{"level":29,"move":"agility"},{"level":33,"move":"bug-buzz"},{"level":36,"move":"air-slash"},{"level":40,"move":"double-edge"}],
+  "166": [{"level":1,"move":"supersonic"},{"level":1,"move":"swift"},{"level":1,"move":"tackle"},{"level":5,"move":"supersonic"},{"level":8,"move":"swift"},{"level":12,"move":"light-screen"},{"level":12,"move":"reflect"},{"level":12,"move":"safeguard"},{"level":15,"move":"mach-punch"},{"level":20,"move":"silver-wind"},{"level":24,"move":"comet-punch"},{"level":29,"move":"baton-pass"},{"level":33,"move":"agility"},{"level":38,"move":"bug-buzz"},{"level":42,"move":"air-slash"},{"level":47,"move":"double-edge"}],
+  "167": [{"level":1,"move":"poison-sting"},{"level":1,"move":"string-shot"},{"level":5,"move":"absorb"},{"level":8,"move":"infestation"},{"level":12,"move":"scary-face"},{"level":15,"move":"night-shade"},{"level":19,"move":"shadow-sneak"},{"level":22,"move":"fury-swipes"},{"level":26,"move":"sucker-punch"},{"level":29,"move":"agility"},{"level":33,"move":"pin-missile"},{"level":36,"move":"psychic"},{"level":40,"move":"poison-jab"},{"level":44,"move":"cross-poison"},{"level":47,"move":"sticky-web"},{"level":51,"move":"toxic-thread"}],
+  "168": [{"level":0,"move":"swords-dance"},{"level":1,"move":"absorb"},{"level":1,"move":"bug-bite"},{"level":1,"move":"fell-stinger"},{"level":1,"move":"focus-energy"},{"level":1,"move":"poison-sting"},{"level":1,"move":"string-shot"},{"level":8,"move":"infestation"},{"level":12,"move":"scary-face"},{"level":15,"move":"night-shade"},{"level":19,"move":"shadow-sneak"},{"level":23,"move":"fury-swipes"},{"level":28,"move":"sucker-punch"},{"level":31,"move":"agility"},{"level":35,"move":"pin-missile"},{"level":41,"move":"psychic"},{"level":46,"move":"poison-jab"},{"level":50,"move":"cross-poison"},{"level":54,"move":"sticky-web"},{"level":59,"move":"toxic-thread"}],
+  "169": [{"level":0,"move":"cross-poison"},{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":1,"move":"cross-poison"},{"level":1,"move":"mean-look"},{"level":1,"move":"screech"},{"level":1,"move":"supersonic"},{"level":1,"move":"tailwind"},{"level":1,"move":"toxic"},{"level":15,"move":"poison-fang"},{"level":20,"move":"quick-guard"},{"level":27,"move":"air-cutter"},{"level":34,"move":"bite"},{"level":41,"move":"haze"},{"level":48,"move":"venoshock"},{"level":55,"move":"confuse-ray"},{"level":62,"move":"air-slash"},{"level":69,"move":"leech-life"}],
+  "170": [{"level":1,"move":"supersonic"},{"level":1,"move":"water-gun"},{"level":4,"move":"electro-ball"},{"level":8,"move":"thunder-wave"},{"level":12,"move":"bubble-beam"},{"level":16,"move":"confuse-ray"},{"level":20,"move":"spark"},{"level":24,"move":"charge"},{"level":28,"move":"discharge"},{"level":32,"move":"aqua-ring"},{"level":36,"move":"flail"},{"level":40,"move":"take-down"},{"level":44,"move":"hydro-pump"}],
+  "171": [{"level":0,"move":"spit-up"},{"level":0,"move":"stockpile"},{"level":0,"move":"swallow"},{"level":1,"move":"eerie-impulse"},{"level":1,"move":"electro-ball"},{"level":1,"move":"supersonic"},{"level":1,"move":"thunder-wave"},{"level":1,"move":"water-gun"},{"level":12,"move":"bubble-beam"},{"level":16,"move":"confuse-ray"},{"level":20,"move":"spark"},{"level":24,"move":"charge"},{"level":30,"move":"discharge"},{"level":36,"move":"aqua-ring"},{"level":42,"move":"flail"},{"level":48,"move":"take-down"},{"level":54,"move":"hydro-pump"}],
+  "172": [{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder-shock"},{"level":4,"move":"play-nice"},{"level":8,"move":"sweet-kiss"},{"level":12,"move":"nuzzle"},{"level":16,"move":"nasty-plot"},{"level":20,"move":"charm"}],
+  "173": [{"level":1,"move":"copycat"},{"level":1,"move":"pound"},{"level":1,"move":"splash"},{"level":4,"move":"sing"},{"level":8,"move":"sweet-kiss"},{"level":12,"move":"disarming-voice"},{"level":16,"move":"encore"},{"level":20,"move":"charm"}],
+  "174": [{"level":1,"move":"copycat"},{"level":1,"move":"pound"},{"level":1,"move":"sing"},{"level":4,"move":"defense-curl"},{"level":8,"move":"sweet-kiss"},{"level":12,"move":"disarming-voice"},{"level":16,"move":"disable"},{"level":20,"move":"charm"}],
+  "175": [{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":4,"move":"sweet-kiss"},{"level":8,"move":"life-dew"},{"level":12,"move":"charm"},{"level":16,"move":"ancient-power"},{"level":20,"move":"yawn"},{"level":24,"move":"metronome"},{"level":28,"move":"after-you"},{"level":32,"move":"double-edge"},{"level":36,"move":"safeguard"},{"level":40,"move":"follow-me"},{"level":44,"move":"baton-pass"},{"level":48,"move":"last-resort"},{"level":52,"move":"wish"}],
+  "176": [{"level":0,"move":"fairy-wind"},{"level":1,"move":"fairy-wind"},{"level":1,"move":"growl"},{"level":1,"move":"life-dew"},{"level":1,"move":"pound"},{"level":1,"move":"sweet-kiss"},{"level":12,"move":"charm"},{"level":16,"move":"ancient-power"},{"level":20,"move":"yawn"},{"level":24,"move":"metronome"},{"level":28,"move":"after-you"},{"level":32,"move":"double-edge"},{"level":36,"move":"safeguard"},{"level":40,"move":"follow-me"},{"level":44,"move":"baton-pass"},{"level":48,"move":"last-resort"},{"level":52,"move":"wish"}],
+  "177": [{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":5,"move":"stored-power"},{"level":10,"move":"teleport"},{"level":15,"move":"confuse-ray"},{"level":20,"move":"night-shade"},{"level":26,"move":"psycho-shift"},{"level":30,"move":"power-swap"},{"level":35,"move":"guard-swap"},{"level":35,"move":"psychic"},{"level":40,"move":"wish"},{"level":45,"move":"future-sight"}],
+  "178": [{"level":0,"move":"air-slash"},{"level":1,"move":"air-slash"},{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":1,"move":"stored-power"},{"level":1,"move":"tailwind"},{"level":1,"move":"teleport"},{"level":15,"move":"confuse-ray"},{"level":20,"move":"night-shade"},{"level":28,"move":"psycho-shift"},{"level":34,"move":"guard-swap"},{"level":34,"move":"power-swap"},{"level":41,"move":"psychic"},{"level":48,"move":"wish"},{"level":55,"move":"future-sight"}],
+  "179": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":4,"move":"thunder-wave"},{"level":8,"move":"thunder-shock"},{"level":11,"move":"cotton-spore"},{"level":15,"move":"charge"},{"level":18,"move":"take-down"},{"level":22,"move":"electro-ball"},{"level":25,"move":"confuse-ray"},{"level":29,"move":"power-gem"},{"level":32,"move":"discharge"},{"level":36,"move":"cotton-guard"},{"level":39,"move":"dazzling-gleam"},{"level":43,"move":"light-screen"},{"level":46,"move":"thunder"}],
+  "180": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":6,"move":"thunder-shock"},{"level":9,"move":"thunder-wave"},{"level":11,"move":"cotton-spore"},{"level":16,"move":"charge"},{"level":20,"move":"take-down"},{"level":25,"move":"electro-ball"},{"level":29,"move":"confuse-ray"},{"level":34,"move":"power-gem"},{"level":38,"move":"discharge"},{"level":43,"move":"cotton-guard"},{"level":47,"move":"dazzling-gleam"},{"level":52,"move":"light-screen"},{"level":56,"move":"thunder"}],
+  "181": [{"level":0,"move":"thunder-punch"},{"level":1,"move":"dragon-pulse"},{"level":1,"move":"fire-punch"},{"level":1,"move":"growl"},{"level":1,"move":"magnetic-flux"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"thunder-wave"},{"level":1,"move":"zap-cannon"},{"level":11,"move":"cotton-spore"},{"level":16,"move":"charge"},{"level":20,"move":"take-down"},{"level":25,"move":"electro-ball"},{"level":29,"move":"confuse-ray"},{"level":35,"move":"power-gem"},{"level":40,"move":"discharge"},{"level":46,"move":"cotton-guard"},{"level":51,"move":"dazzling-gleam"},{"level":57,"move":"light-screen"},{"level":62,"move":"thunder"}],
+  "182": [{"level":0,"move":"petal-blizzard"},{"level":1,"move":"absorb"},{"level":1,"move":"acid"},{"level":1,"move":"giga-drain"},{"level":1,"move":"grassy-terrain"},{"level":1,"move":"growth"},{"level":1,"move":"mega-drain"},{"level":1,"move":"moonblast"},{"level":1,"move":"moonlight"},{"level":1,"move":"petal-dance"},{"level":1,"move":"poison-powder"},{"level":1,"move":"quiver-dance"},{"level":1,"move":"sleep-powder"},{"level":1,"move":"stun-spore"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"toxic"}],
+  "183": [{"level":1,"move":"defense-curl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"rollout"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":6,"move":"bubble-beam"},{"level":9,"move":"charm"},{"level":12,"move":"slam"},{"level":15,"move":"bounce"},{"level":19,"move":"aqua-tail"},{"level":21,"move":"play-rough"},{"level":24,"move":"aqua-ring"},{"level":27,"move":"rain-dance"},{"level":30,"move":"hydro-pump"},{"level":33,"move":"double-edge"},{"level":36,"move":"superpower"}],
+  "184": [{"level":1,"move":"defense-curl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"rollout"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":6,"move":"bubble-beam"},{"level":9,"move":"charm"},{"level":12,"move":"slam"},{"level":15,"move":"bounce"},{"level":21,"move":"aqua-tail"},{"level":25,"move":"play-rough"},{"level":30,"move":"aqua-ring"},{"level":35,"move":"rain-dance"},{"level":40,"move":"hydro-pump"},{"level":45,"move":"double-edge"},{"level":50,"move":"superpower"}],
+  "185": [{"level":0,"move":"slam"},{"level":1,"move":"copycat"},{"level":1,"move":"fake-tears"},{"level":1,"move":"flail"},{"level":1,"move":"hammer-arm"},{"level":1,"move":"rock-throw"},{"level":1,"move":"stone-edge"},{"level":1,"move":"wood-hammer"},{"level":12,"move":"block"},{"level":16,"move":"mimic"},{"level":20,"move":"rock-tomb"},{"level":24,"move":"tearful-look"},{"level":28,"move":"sucker-punch"},{"level":32,"move":"rock-slide"},{"level":36,"move":"low-kick"},{"level":40,"move":"counter"},{"level":44,"move":"double-edge"},{"level":48,"move":"head-smash"}],
+  "186": [{"level":0,"move":"bounce"},{"level":1,"move":"belly-drum"},{"level":1,"move":"hydro-pump"},{"level":1,"move":"pound"},{"level":1,"move":"rain-dance"}],
+  "187": [{"level":1,"move":"splash"},{"level":1,"move":"tackle"},{"level":4,"move":"tail-whip"},{"level":6,"move":"absorb"},{"level":8,"move":"fairy-wind"},{"level":10,"move":"poison-powder"},{"level":10,"move":"sleep-powder"},{"level":10,"move":"stun-spore"},{"level":12,"move":"bullet-seed"},{"level":15,"move":"synthesis"},{"level":19,"move":"leech-seed"},{"level":22,"move":"mega-drain"},{"level":24,"move":"acrobatics"},{"level":27,"move":"cotton-spore"},{"level":29,"move":"u-turn"},{"level":32,"move":"giga-drain"},{"level":35,"move":"bounce"},{"level":38,"move":"memento"}],
+  "188": [{"level":1,"move":"absorb"},{"level":1,"move":"splash"},{"level":1,"move":"synthesis"},{"level":1,"move":"tail-whip"},{"level":8,"move":"tackle"},{"level":10,"move":"fairy-wind"},{"level":12,"move":"poison-powder"},{"level":12,"move":"sleep-powder"},{"level":12,"move":"stun-spore"},{"level":15,"move":"bullet-seed"},{"level":20,"move":"leech-seed"},{"level":24,"move":"mega-drain"},{"level":28,"move":"acrobatics"},{"level":31,"move":"cotton-spore"},{"level":34,"move":"u-turn"},{"level":37,"move":"giga-drain"},{"level":41,"move":"bounce"},{"level":44,"move":"memento"}],
+  "189": [{"level":1,"move":"absorb"},{"level":1,"move":"splash"},{"level":1,"move":"synthesis"},{"level":1,"move":"tail-whip"},{"level":8,"move":"tackle"},{"level":10,"move":"fairy-wind"},{"level":12,"move":"poison-powder"},{"level":12,"move":"sleep-powder"},{"level":12,"move":"stun-spore"},{"level":15,"move":"bullet-seed"},{"level":20,"move":"leech-seed"},{"level":24,"move":"mega-drain"},{"level":30,"move":"acrobatics"},{"level":35,"move":"cotton-spore"},{"level":39,"move":"u-turn"},{"level":43,"move":"giga-drain"},{"level":49,"move":"bounce"},{"level":55,"move":"memento"}],
+  "190": [{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":4,"move":"sand-attack"},{"level":8,"move":"astonish"},{"level":11,"move":"baton-pass"},{"level":15,"move":"tickle"},{"level":18,"move":"fury-swipes"},{"level":22,"move":"swift"},{"level":25,"move":"screech"},{"level":29,"move":"agility"},{"level":32,"move":"double-hit"},{"level":36,"move":"fling"},{"level":39,"move":"nasty-plot"},{"level":43,"move":"last-resort"}],
+  "191": [{"level":1,"move":"growth"},{"level":1,"move":"tackle"},{"level":7,"move":"absorb"},{"level":10,"move":"mega-drain"},{"level":16,"move":"razor-leaf"},{"level":19,"move":"worry-seed"},{"level":22,"move":"giga-drain"},{"level":25,"move":"endeavor"},{"level":28,"move":"synthesis"},{"level":31,"move":"solar-beam"},{"level":34,"move":"double-edge"},{"level":36,"move":"sunny-day"},{"level":39,"move":"seed-bomb"}],
+  "192": [{"level":1,"move":"growth"},{"level":1,"move":"pound"},{"level":1,"move":"tackle"},{"level":4,"move":"ingrain"},{"level":7,"move":"absorb"},{"level":10,"move":"mega-drain"},{"level":13,"move":"leech-seed"},{"level":16,"move":"razor-leaf"},{"level":19,"move":"worry-seed"},{"level":22,"move":"giga-drain"},{"level":25,"move":"bullet-seed"},{"level":28,"move":"petal-dance"},{"level":31,"move":"solar-beam"},{"level":34,"move":"double-edge"},{"level":39,"move":"sunny-day"},{"level":43,"move":"leaf-storm"},{"level":50,"move":"petal-blizzard"}],
+  "193": [{"level":1,"move":"tackle"},{"level":6,"move":"quick-attack"},{"level":11,"move":"double-team"},{"level":14,"move":"air-cutter"},{"level":17,"move":"detect"},{"level":22,"move":"supersonic"},{"level":27,"move":"uproar"},{"level":30,"move":"bug-bite"},{"level":33,"move":"ancient-power"},{"level":38,"move":"hypnosis"},{"level":43,"move":"wing-attack"},{"level":46,"move":"screech"},{"level":49,"move":"u-turn"},{"level":54,"move":"air-slash"},{"level":57,"move":"bug-buzz"}],
+  "194": [{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":4,"move":"rain-dance"},{"level":8,"move":"mud-shot"},{"level":12,"move":"haze"},{"level":12,"move":"mist"},{"level":16,"move":"slam"},{"level":21,"move":"yawn"},{"level":24,"move":"aqua-tail"},{"level":28,"move":"muddy-water"},{"level":32,"move":"amnesia"},{"level":36,"move":"toxic"},{"level":40,"move":"earthquake"}],
+  "195": [{"level":1,"move":"mud-shot"},{"level":1,"move":"rain-dance"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":12,"move":"haze"},{"level":12,"move":"mist"},{"level":16,"move":"slam"},{"level":23,"move":"yawn"},{"level":28,"move":"aqua-tail"},{"level":34,"move":"muddy-water"},{"level":40,"move":"amnesia"},{"level":46,"move":"toxic"},{"level":52,"move":"earthquake"}],
+  "196": [{"level":0,"move":"confusion"},{"level":1,"move":"baton-pass"},{"level":1,"move":"bite"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"double-edge"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"take-down"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"swift"},{"level":25,"move":"psybeam"},{"level":30,"move":"morning-sun"},{"level":35,"move":"power-swap"},{"level":40,"move":"psychic"},{"level":45,"move":"psych-up"},{"level":50,"move":"future-sight"},{"level":55,"move":"last-resort"}],
+  "197": [{"level":0,"move":"snarl"},{"level":1,"move":"baton-pass"},{"level":1,"move":"bite"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"double-edge"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"swift"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"take-down"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"confuse-ray"},{"level":25,"move":"assurance"},{"level":30,"move":"moonlight"},{"level":35,"move":"guard-swap"},{"level":40,"move":"dark-pulse"},{"level":45,"move":"screech"},{"level":50,"move":"mean-look"},{"level":55,"move":"last-resort"}],
+  "198": [{"level":1,"move":"astonish"},{"level":1,"move":"peck"},{"level":5,"move":"gust"},{"level":11,"move":"haze"},{"level":15,"move":"wing-attack"},{"level":21,"move":"night-shade"},{"level":25,"move":"assurance"},{"level":31,"move":"taunt"},{"level":35,"move":"mean-look"},{"level":40,"move":"foul-play"},{"level":50,"move":"sucker-punch"},{"level":55,"move":"torment"},{"level":60,"move":"quash"}],
+  "199": [{"level":1,"move":"curse"},{"level":1,"move":"growl"},{"level":1,"move":"nasty-plot"},{"level":1,"move":"power-gem"},{"level":1,"move":"swagger"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":9,"move":"yawn"},{"level":12,"move":"confusion"},{"level":15,"move":"disable"},{"level":18,"move":"water-pulse"},{"level":21,"move":"headbutt"},{"level":27,"move":"amnesia"},{"level":30,"move":"surf"},{"level":33,"move":"slack-off"},{"level":36,"move":"psychic"},{"level":39,"move":"psych-up"},{"level":42,"move":"rain-dance"},{"level":45,"move":"heal-pulse"}],
+  "200": [{"level":1,"move":"confusion"},{"level":1,"move":"growl"},{"level":10,"move":"astonish"},{"level":14,"move":"confuse-ray"},{"level":19,"move":"mean-look"},{"level":23,"move":"hex"},{"level":28,"move":"psybeam"},{"level":32,"move":"pain-split"},{"level":37,"move":"payback"},{"level":41,"move":"shadow-ball"},{"level":46,"move":"perish-song"},{"level":50,"move":"power-gem"}],
+  "201": [{"level":1,"move":"hidden-power"}],
+  "202": [{"level":0,"move":"counter"},{"level":0,"move":"destiny-bond"},{"level":0,"move":"mirror-coat"},{"level":0,"move":"safeguard"},{"level":1,"move":"amnesia"},{"level":1,"move":"charm"},{"level":1,"move":"counter"},{"level":1,"move":"destiny-bond"},{"level":1,"move":"encore"},{"level":1,"move":"mirror-coat"},{"level":1,"move":"safeguard"},{"level":1,"move":"splash"}],
+  "203": [{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":1,"move":"guard-swap"},{"level":1,"move":"power-swap"},{"level":1,"move":"tackle"},{"level":5,"move":"confusion"},{"level":10,"move":"assurance"},{"level":14,"move":"stomp"},{"level":19,"move":"psybeam"},{"level":23,"move":"agility"},{"level":28,"move":"double-hit"},{"level":32,"move":"twin-beam"},{"level":37,"move":"crunch"},{"level":41,"move":"baton-pass"},{"level":46,"move":"nasty-plot"},{"level":50,"move":"psychic"}],
+  "204": [{"level":1,"move":"protect"},{"level":1,"move":"tackle"},{"level":6,"move":"self-destruct"},{"level":9,"move":"bug-bite"},{"level":12,"move":"take-down"},{"level":17,"move":"rapid-spin"},{"level":20,"move":"rollout"},{"level":23,"move":"curse"},{"level":28,"move":"spikes"},{"level":31,"move":"payback"},{"level":34,"move":"explosion"},{"level":39,"move":"iron-defense"},{"level":42,"move":"gyro-ball"},{"level":45,"move":"double-edge"}],
+  "205": [{"level":0,"move":"heavy-slam"},{"level":1,"move":"bug-bite"},{"level":1,"move":"magnet-rise"},{"level":1,"move":"protect"},{"level":1,"move":"self-destruct"},{"level":1,"move":"tackle"},{"level":1,"move":"toxic-spikes"},{"level":1,"move":"zap-cannon"},{"level":12,"move":"take-down"},{"level":17,"move":"rapid-spin"},{"level":20,"move":"rollout"},{"level":23,"move":"curse"},{"level":28,"move":"spikes"},{"level":32,"move":"payback"},{"level":36,"move":"explosion"},{"level":42,"move":"iron-defense"},{"level":46,"move":"gyro-ball"},{"level":50,"move":"double-edge"}],
+  "206": [{"level":1,"move":"defense-curl"},{"level":1,"move":"flail"},{"level":4,"move":"mud-slap"},{"level":8,"move":"rollout"},{"level":12,"move":"glare"},{"level":16,"move":"screech"},{"level":20,"move":"ancient-power"},{"level":24,"move":"drill-run"},{"level":28,"move":"yawn"},{"level":32,"move":"hyper-drill"},{"level":36,"move":"roost"},{"level":40,"move":"dragon-rush"},{"level":44,"move":"coil"},{"level":48,"move":"double-edge"},{"level":52,"move":"endeavor"}],
+  "207": [{"level":1,"move":"poison-sting"},{"level":4,"move":"sand-attack"},{"level":7,"move":"harden"},{"level":10,"move":"knock-off"},{"level":13,"move":"quick-attack"},{"level":16,"move":"fury-cutter"},{"level":19,"move":"poison-tail"},{"level":22,"move":"acrobatics"},{"level":27,"move":"slash"},{"level":30,"move":"u-turn"},{"level":35,"move":"screech"},{"level":40,"move":"x-scissor"},{"level":45,"move":"crabhammer"},{"level":50,"move":"swords-dance"}],
+  "208": [{"level":1,"move":"bind"},{"level":1,"move":"crunch"},{"level":1,"move":"fire-fang"},{"level":1,"move":"harden"},{"level":1,"move":"ice-fang"},{"level":1,"move":"rock-polish"},{"level":1,"move":"rock-throw"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-fang"},{"level":4,"move":"smack-down"},{"level":8,"move":"autotomize"},{"level":12,"move":"dragon-breath"},{"level":16,"move":"curse"},{"level":20,"move":"rock-slide"},{"level":24,"move":"screech"},{"level":28,"move":"sand-tomb"},{"level":32,"move":"stealth-rock"},{"level":36,"move":"slam"},{"level":40,"move":"sandstorm"},{"level":44,"move":"dig"},{"level":48,"move":"iron-tail"},{"level":52,"move":"stone-edge"},{"level":56,"move":"double-edge"},{"level":60,"move":"magnet-rise"}],
+  "209": [{"level":1,"move":"charm"},{"level":1,"move":"fire-fang"},{"level":1,"move":"growl"},{"level":1,"move":"ice-fang"},{"level":1,"move":"scary-face"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder-fang"},{"level":7,"move":"bite"},{"level":13,"move":"lick"},{"level":19,"move":"headbutt"},{"level":25,"move":"roar"},{"level":31,"move":"last-resort"},{"level":37,"move":"play-rough"},{"level":43,"move":"payback"},{"level":49,"move":"crunch"}],
+  "210": [{"level":1,"move":"charm"},{"level":1,"move":"fire-fang"},{"level":1,"move":"growl"},{"level":1,"move":"ice-fang"},{"level":1,"move":"outrage"},{"level":1,"move":"scary-face"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder-fang"},{"level":7,"move":"bite"},{"level":13,"move":"lick"},{"level":19,"move":"headbutt"},{"level":27,"move":"roar"},{"level":35,"move":"last-resort"},{"level":43,"move":"play-rough"},{"level":51,"move":"payback"},{"level":59,"move":"crunch"}],
+  "211": [{"level":1,"move":"poison-sting"},{"level":1,"move":"tackle"},{"level":4,"move":"harden"},{"level":8,"move":"water-gun"},{"level":12,"move":"fell-stinger"},{"level":16,"move":"minimize"},{"level":20,"move":"spikes"},{"level":24,"move":"brine"},{"level":28,"move":"poison-jab"},{"level":32,"move":"pin-missile"},{"level":36,"move":"toxic-spikes"},{"level":40,"move":"spit-up"},{"level":40,"move":"stockpile"},{"level":44,"move":"toxic"},{"level":48,"move":"aqua-tail"},{"level":52,"move":"acupressure"},{"level":56,"move":"destiny-bond"}],
+  "212": [{"level":0,"move":"bullet-punch"},{"level":1,"move":"agility"},{"level":1,"move":"air-slash"},{"level":1,"move":"false-swipe"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"wing-attack"},{"level":12,"move":"metal-claw"},{"level":16,"move":"double-team"},{"level":20,"move":"double-hit"},{"level":24,"move":"slash"},{"level":28,"move":"focus-energy"},{"level":32,"move":"iron-defense"},{"level":36,"move":"iron-head"},{"level":40,"move":"x-scissor"},{"level":44,"move":"swords-dance"}],
+  "213": [{"level":1,"move":"withdraw"},{"level":1,"move":"wrap"},{"level":5,"move":"rollout"},{"level":10,"move":"struggle-bug"},{"level":15,"move":"rock-throw"},{"level":20,"move":"safeguard"},{"level":25,"move":"rest"},{"level":30,"move":"bug-bite"},{"level":35,"move":"guard-split"},{"level":35,"move":"power-split"},{"level":40,"move":"rock-slide"},{"level":45,"move":"gastro-acid"},{"level":50,"move":"sticky-web"},{"level":55,"move":"power-trick"},{"level":60,"move":"stone-edge"},{"level":65,"move":"shell-smash"}],
+  "214": [{"level":1,"move":"arm-thrust"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":5,"move":"fury-attack"},{"level":10,"move":"endure"},{"level":15,"move":"aerial-ace"},{"level":20,"move":"horn-attack"},{"level":25,"move":"counter"},{"level":30,"move":"brick-break"},{"level":35,"move":"pin-missile"},{"level":40,"move":"throat-chop"},{"level":45,"move":"thrash"},{"level":50,"move":"swords-dance"},{"level":55,"move":"megahorn"},{"level":60,"move":"close-combat"}],
+  "215": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":6,"move":"taunt"},{"level":12,"move":"quick-attack"},{"level":18,"move":"metal-claw"},{"level":24,"move":"icy-wind"},{"level":30,"move":"fury-swipes"},{"level":36,"move":"hone-claws"},{"level":42,"move":"beat-up"},{"level":48,"move":"agility"},{"level":54,"move":"screech"},{"level":60,"move":"slash"}],
+  "216": [{"level":1,"move":"baby-doll-eyes"},{"level":1,"move":"covet"},{"level":1,"move":"fling"},{"level":1,"move":"lick"},{"level":1,"move":"scratch"},{"level":8,"move":"fury-swipes"},{"level":13,"move":"payback"},{"level":17,"move":"sweet-scent"},{"level":22,"move":"slash"},{"level":25,"move":"play-nice"},{"level":29,"move":"play-rough"},{"level":33,"move":"charm"},{"level":37,"move":"rest"},{"level":37,"move":"snore"},{"level":41,"move":"thrash"}],
+  "217": [{"level":1,"move":"covet"},{"level":1,"move":"fake-tears"},{"level":1,"move":"leer"},{"level":1,"move":"lick"},{"level":1,"move":"scratch"},{"level":8,"move":"fury-swipes"},{"level":13,"move":"payback"},{"level":17,"move":"sweet-scent"},{"level":22,"move":"slash"},{"level":25,"move":"play-nice"},{"level":29,"move":"play-rough"},{"level":35,"move":"scary-face"},{"level":41,"move":"rest"},{"level":41,"move":"snore"},{"level":48,"move":"high-horsepower"},{"level":56,"move":"thrash"},{"level":64,"move":"hammer-arm"}],
+  "218": [{"level":1,"move":"smog"},{"level":1,"move":"yawn"},{"level":6,"move":"ember"},{"level":8,"move":"rock-throw"},{"level":13,"move":"harden"},{"level":20,"move":"clear-smog"},{"level":22,"move":"ancient-power"},{"level":27,"move":"incinerate"},{"level":29,"move":"rock-slide"},{"level":34,"move":"lava-plume"},{"level":36,"move":"amnesia"},{"level":41,"move":"body-slam"},{"level":43,"move":"recover"},{"level":48,"move":"flamethrower"},{"level":50,"move":"earth-power"}],
+  "219": [{"level":0,"move":"shell-smash"},{"level":1,"move":"earth-power"},{"level":1,"move":"ember"},{"level":1,"move":"rock-throw"},{"level":1,"move":"smog"},{"level":1,"move":"yawn"},{"level":13,"move":"harden"},{"level":20,"move":"clear-smog"},{"level":22,"move":"ancient-power"},{"level":27,"move":"incinerate"},{"level":29,"move":"rock-slide"},{"level":34,"move":"lava-plume"},{"level":36,"move":"amnesia"},{"level":43,"move":"body-slam"},{"level":47,"move":"recover"},{"level":54,"move":"flamethrower"}],
+  "220": [{"level":1,"move":"mud-slap"},{"level":1,"move":"tackle"},{"level":5,"move":"powder-snow"},{"level":10,"move":"flail"},{"level":15,"move":"ice-shard"},{"level":20,"move":"mist"},{"level":25,"move":"endure"},{"level":30,"move":"icy-wind"},{"level":35,"move":"amnesia"},{"level":40,"move":"take-down"},{"level":45,"move":"earthquake"},{"level":50,"move":"blizzard"}],
+  "221": [{"level":0,"move":"ice-fang"},{"level":1,"move":"ancient-power"},{"level":1,"move":"flail"},{"level":1,"move":"mud-slap"},{"level":1,"move":"powder-snow"},{"level":1,"move":"tackle"},{"level":15,"move":"ice-shard"},{"level":20,"move":"mist"},{"level":25,"move":"endure"},{"level":30,"move":"icy-wind"},{"level":37,"move":"amnesia"},{"level":44,"move":"take-down"},{"level":51,"move":"earthquake"},{"level":58,"move":"blizzard"},{"level":65,"move":"thrash"}],
+  "222": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":5,"move":"water-gun"},{"level":10,"move":"aqua-ring"},{"level":15,"move":"endure"},{"level":20,"move":"ancient-power"},{"level":25,"move":"bubble-beam"},{"level":30,"move":"flail"},{"level":35,"move":"life-dew"},{"level":40,"move":"power-gem"},{"level":45,"move":"earth-power"},{"level":50,"move":"recover"},{"level":55,"move":"mirror-coat"}],
+  "223": [{"level":1,"move":"helping-hand"},{"level":1,"move":"water-gun"},{"level":4,"move":"water-pulse"},{"level":8,"move":"focus-energy"},{"level":12,"move":"psybeam"},{"level":16,"move":"aurora-beam"},{"level":20,"move":"bubble-beam"},{"level":24,"move":"lock-on"},{"level":28,"move":"bullet-seed"},{"level":32,"move":"ice-beam"},{"level":36,"move":"hydro-pump"},{"level":40,"move":"soak"},{"level":44,"move":"hyper-beam"}],
+  "224": [{"level":0,"move":"octazooka"},{"level":1,"move":"focus-energy"},{"level":1,"move":"gunk-shot"},{"level":1,"move":"helping-hand"},{"level":1,"move":"octazooka"},{"level":1,"move":"rock-blast"},{"level":1,"move":"water-gun"},{"level":1,"move":"water-pulse"},{"level":1,"move":"wrap"},{"level":12,"move":"psybeam"},{"level":16,"move":"aurora-beam"},{"level":20,"move":"bubble-beam"},{"level":24,"move":"lock-on"},{"level":30,"move":"bullet-seed"},{"level":36,"move":"ice-beam"},{"level":42,"move":"hydro-pump"},{"level":48,"move":"soak"},{"level":54,"move":"hyper-beam"}],
+  "225": [{"level":1,"move":"present"},{"level":25,"move":"drill-peck"}],
+  "226": [{"level":1,"move":"bullet-seed"},{"level":1,"move":"psybeam"},{"level":1,"move":"roost"},{"level":1,"move":"supersonic"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":1,"move":"wing-attack"},{"level":12,"move":"water-pulse"},{"level":16,"move":"wide-guard"},{"level":20,"move":"agility"},{"level":24,"move":"bubble-beam"},{"level":28,"move":"headbutt"},{"level":32,"move":"air-slash"},{"level":36,"move":"aqua-ring"},{"level":40,"move":"bounce"},{"level":44,"move":"take-down"},{"level":48,"move":"hydro-pump"}],
+  "227": [{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":4,"move":"sand-attack"},{"level":8,"move":"fury-attack"},{"level":12,"move":"metal-claw"},{"level":16,"move":"agility"},{"level":20,"move":"wing-attack"},{"level":24,"move":"slash"},{"level":28,"move":"steel-wing"},{"level":32,"move":"payback"},{"level":36,"move":"drill-peck"},{"level":40,"move":"metal-sound"},{"level":44,"move":"spikes"},{"level":48,"move":"iron-defense"},{"level":52,"move":"brave-bird"}],
+  "228": [{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":4,"move":"howl"},{"level":8,"move":"smog"},{"level":13,"move":"roar"},{"level":16,"move":"bite"},{"level":20,"move":"incinerate"},{"level":25,"move":"beat-up"},{"level":28,"move":"fire-fang"},{"level":32,"move":"torment"},{"level":37,"move":"comeuppance"},{"level":40,"move":"foul-play"},{"level":44,"move":"flamethrower"},{"level":49,"move":"crunch"},{"level":52,"move":"nasty-plot"},{"level":56,"move":"inferno"}],
+  "229": [{"level":1,"move":"ember"},{"level":1,"move":"howl"},{"level":1,"move":"leer"},{"level":1,"move":"nasty-plot"},{"level":1,"move":"smog"},{"level":1,"move":"thunder-fang"},{"level":13,"move":"roar"},{"level":16,"move":"bite"},{"level":20,"move":"incinerate"},{"level":26,"move":"beat-up"},{"level":30,"move":"fire-fang"},{"level":35,"move":"torment"},{"level":41,"move":"comeuppance"},{"level":45,"move":"foul-play"},{"level":50,"move":"flamethrower"},{"level":56,"move":"crunch"},{"level":62,"move":"inferno"}],
+  "230": [{"level":1,"move":"leer"},{"level":1,"move":"smokescreen"},{"level":1,"move":"twister"},{"level":1,"move":"water-gun"},{"level":1,"move":"whirlpool"},{"level":1,"move":"yawn"},{"level":15,"move":"focus-energy"},{"level":20,"move":"dragon-breath"},{"level":25,"move":"bubble-beam"},{"level":30,"move":"agility"},{"level":37,"move":"water-pulse"},{"level":44,"move":"dragon-pulse"},{"level":51,"move":"hydro-pump"},{"level":58,"move":"dragon-dance"},{"level":65,"move":"rain-dance"},{"level":72,"move":"wave-crash"}],
+  "231": [{"level":1,"move":"defense-curl"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":6,"move":"flail"},{"level":10,"move":"rollout"},{"level":15,"move":"bulldoze"},{"level":19,"move":"endure"},{"level":24,"move":"slam"},{"level":28,"move":"take-down"},{"level":33,"move":"charm"},{"level":37,"move":"last-resort"},{"level":42,"move":"double-edge"}],
+  "232": [{"level":0,"move":"fury-attack"},{"level":1,"move":"bulldoze"},{"level":1,"move":"defense-curl"},{"level":1,"move":"fire-fang"},{"level":1,"move":"growl"},{"level":1,"move":"horn-attack"},{"level":1,"move":"thunder-fang"},{"level":6,"move":"rapid-spin"},{"level":10,"move":"rollout"},{"level":15,"move":"assurance"},{"level":19,"move":"knock-off"},{"level":24,"move":"slam"},{"level":30,"move":"stomping-tantrum"},{"level":37,"move":"scary-face"},{"level":43,"move":"earthquake"},{"level":50,"move":"giga-impact"}],
+  "233": [{"level":1,"move":"conversion"},{"level":1,"move":"defense-curl"},{"level":1,"move":"magnet-rise"},{"level":1,"move":"recycle"},{"level":1,"move":"tackle"},{"level":15,"move":"thunder-shock"},{"level":20,"move":"psybeam"},{"level":25,"move":"conversion-2"},{"level":30,"move":"agility"},{"level":35,"move":"recover"},{"level":40,"move":"discharge"},{"level":45,"move":"tri-attack"},{"level":50,"move":"lock-on"},{"level":55,"move":"zap-cannon"},{"level":60,"move":"hyper-beam"}],
+  "234": [{"level":1,"move":"tackle"},{"level":3,"move":"leer"},{"level":7,"move":"astonish"},{"level":10,"move":"hypnosis"},{"level":13,"move":"stomp"},{"level":16,"move":"sand-attack"},{"level":21,"move":"take-down"},{"level":23,"move":"confuse-ray"},{"level":27,"move":"calm-mind"},{"level":32,"move":"role-play"},{"level":37,"move":"zen-headbutt"},{"level":49,"move":"imprison"},{"level":55,"move":"double-edge"}],
+  "235": [{"level":1,"move":"sketch"}],
+  "236": [{"level":1,"move":"fake-out"},{"level":1,"move":"focus-energy"},{"level":1,"move":"helping-hand"},{"level":1,"move":"tackle"}],
+  "237": [{"level":0,"move":"triple-kick"},{"level":1,"move":"fake-out"},{"level":1,"move":"feint"},{"level":1,"move":"focus-energy"},{"level":1,"move":"helping-hand"},{"level":1,"move":"tackle"},{"level":4,"move":"quick-attack"},{"level":8,"move":"gyro-ball"},{"level":12,"move":"detect"},{"level":16,"move":"rapid-spin"},{"level":21,"move":"quick-guard"},{"level":21,"move":"wide-guard"},{"level":24,"move":"sucker-punch"},{"level":28,"move":"agility"},{"level":32,"move":"dig"},{"level":36,"move":"close-combat"},{"level":40,"move":"counter"},{"level":44,"move":"endeavor"}],
+  "238": [{"level":1,"move":"lick"},{"level":1,"move":"pound"},{"level":4,"move":"powder-snow"},{"level":8,"move":"copycat"},{"level":12,"move":"confusion"},{"level":16,"move":"covet"},{"level":20,"move":"sing"},{"level":24,"move":"fake-tears"},{"level":28,"move":"ice-punch"},{"level":32,"move":"psychic"},{"level":36,"move":"sweet-kiss"},{"level":40,"move":"mean-look"},{"level":44,"move":"perish-song"},{"level":48,"move":"blizzard"}],
+  "239": [{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":4,"move":"thunder-shock"},{"level":8,"move":"charge"},{"level":12,"move":"swift"},{"level":16,"move":"shock-wave"},{"level":20,"move":"thunder-wave"},{"level":24,"move":"screech"},{"level":28,"move":"thunder-punch"},{"level":32,"move":"discharge"},{"level":36,"move":"low-kick"},{"level":40,"move":"thunderbolt"},{"level":44,"move":"light-screen"},{"level":48,"move":"thunder"}],
+  "240": [{"level":1,"move":"leer"},{"level":1,"move":"smog"},{"level":4,"move":"ember"},{"level":8,"move":"smokescreen"},{"level":12,"move":"clear-smog"},{"level":16,"move":"flame-wheel"},{"level":20,"move":"confuse-ray"},{"level":24,"move":"scary-face"},{"level":28,"move":"fire-punch"},{"level":32,"move":"lava-plume"},{"level":36,"move":"low-kick"},{"level":40,"move":"flamethrower"},{"level":44,"move":"sunny-day"},{"level":48,"move":"fire-blast"}],
+  "241": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":5,"move":"rollout"},{"level":10,"move":"defense-curl"},{"level":15,"move":"stomp"},{"level":20,"move":"heal-bell"},{"level":25,"move":"headbutt"},{"level":30,"move":"zen-headbutt"},{"level":35,"move":"milk-drink"},{"level":40,"move":"body-slam"},{"level":45,"move":"play-rough"},{"level":50,"move":"charm"},{"level":55,"move":"high-horsepower"}],
+  "242": [{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"defense-curl"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"pound"},{"level":1,"move":"sweet-kiss"},{"level":4,"move":"tail-whip"},{"level":8,"move":"echoed-voice"},{"level":12,"move":"life-dew"},{"level":16,"move":"sing"},{"level":20,"move":"fling"},{"level":24,"move":"take-down"},{"level":28,"move":"heal-pulse"},{"level":32,"move":"helping-hand"},{"level":36,"move":"light-screen"},{"level":40,"move":"double-edge"},{"level":44,"move":"soft-boiled"},{"level":48,"move":"last-resort"},{"level":52,"move":"healing-wish"}],
+  "243": [{"level":1,"move":"charge"},{"level":1,"move":"extreme-speed"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"thunder-shock"},{"level":6,"move":"spark"},{"level":12,"move":"bite"},{"level":18,"move":"calm-mind"},{"level":24,"move":"roar"},{"level":30,"move":"thunder-fang"},{"level":36,"move":"howl"},{"level":42,"move":"crunch"},{"level":48,"move":"extrasensory"},{"level":54,"move":"discharge"},{"level":60,"move":"reflect"},{"level":66,"move":"rain-dance"},{"level":72,"move":"thunder"},{"level":78,"move":"zap-cannon"}],
+  "244": [{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"smokescreen"},{"level":1,"move":"stomp"},{"level":6,"move":"flame-wheel"},{"level":12,"move":"bite"},{"level":18,"move":"calm-mind"},{"level":24,"move":"roar"},{"level":30,"move":"fire-fang"},{"level":36,"move":"scary-face"},{"level":42,"move":"crunch"},{"level":48,"move":"extrasensory"},{"level":54,"move":"lava-plume"},{"level":60,"move":"swagger"},{"level":66,"move":"sunny-day"},{"level":72,"move":"fire-blast"},{"level":78,"move":"eruption"}],
+  "245": [{"level":1,"move":"gust"},{"level":1,"move":"leer"},{"level":1,"move":"mist"},{"level":1,"move":"water-gun"},{"level":6,"move":"water-pulse"},{"level":12,"move":"bite"},{"level":18,"move":"calm-mind"},{"level":24,"move":"roar"},{"level":30,"move":"ice-fang"},{"level":36,"move":"tailwind"},{"level":42,"move":"crunch"},{"level":48,"move":"extrasensory"},{"level":54,"move":"surf"},{"level":60,"move":"mirror-coat"},{"level":66,"move":"rain-dance"},{"level":72,"move":"hydro-pump"},{"level":78,"move":"blizzard"}],
+  "246": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":3,"move":"rock-throw"},{"level":6,"move":"payback"},{"level":9,"move":"bite"},{"level":12,"move":"scary-face"},{"level":15,"move":"rock-slide"},{"level":18,"move":"stomping-tantrum"},{"level":21,"move":"screech"},{"level":24,"move":"smack-down"},{"level":27,"move":"crunch"},{"level":31,"move":"earthquake"},{"level":33,"move":"stone-edge"},{"level":36,"move":"thrash"},{"level":39,"move":"sandstorm"},{"level":42,"move":"hyper-beam"}],
+  "247": [{"level":0,"move":"iron-defense"},{"level":1,"move":"leer"},{"level":1,"move":"payback"},{"level":1,"move":"rock-throw"},{"level":1,"move":"tackle"},{"level":9,"move":"bite"},{"level":12,"move":"scary-face"},{"level":15,"move":"rock-slide"},{"level":18,"move":"stomping-tantrum"},{"level":21,"move":"screech"},{"level":24,"move":"smack-down"},{"level":27,"move":"crunch"},{"level":33,"move":"earthquake"},{"level":37,"move":"stone-edge"},{"level":42,"move":"thrash"},{"level":47,"move":"sandstorm"},{"level":52,"move":"hyper-beam"}],
+  "248": [{"level":1,"move":"dark-pulse"},{"level":1,"move":"fire-fang"},{"level":1,"move":"ice-fang"},{"level":1,"move":"iron-defense"},{"level":1,"move":"leer"},{"level":1,"move":"payback"},{"level":1,"move":"rock-throw"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-fang"},{"level":9,"move":"bite"},{"level":12,"move":"scary-face"},{"level":15,"move":"rock-slide"},{"level":18,"move":"stomping-tantrum"},{"level":21,"move":"screech"},{"level":24,"move":"smack-down"},{"level":27,"move":"crunch"},{"level":33,"move":"earthquake"},{"level":37,"move":"stone-edge"},{"level":42,"move":"thrash"},{"level":47,"move":"sandstorm"},{"level":52,"move":"hyper-beam"},{"level":59,"move":"giga-impact"}],
+  "249": [{"level":1,"move":"ancient-power"},{"level":1,"move":"gust"},{"level":1,"move":"weather-ball"},{"level":1,"move":"whirlwind"},{"level":9,"move":"mist"},{"level":18,"move":"safeguard"},{"level":27,"move":"calm-mind"},{"level":36,"move":"extrasensory"},{"level":45,"move":"recover"},{"level":54,"move":"aeroblast"},{"level":63,"move":"rain-dance"},{"level":72,"move":"hydro-pump"},{"level":81,"move":"future-sight"},{"level":90,"move":"sky-attack"}],
+  "250": [{"level":1,"move":"ancient-power"},{"level":1,"move":"gust"},{"level":1,"move":"weather-ball"},{"level":1,"move":"whirlwind"},{"level":9,"move":"life-dew"},{"level":18,"move":"safeguard"},{"level":27,"move":"calm-mind"},{"level":36,"move":"extrasensory"},{"level":45,"move":"recover"},{"level":54,"move":"sacred-fire"},{"level":63,"move":"sunny-day"},{"level":72,"move":"fire-blast"},{"level":81,"move":"future-sight"},{"level":90,"move":"sky-attack"},{"level":99,"move":"overheat"}],
+  "251": [{"level":1,"move":"confusion"},{"level":1,"move":"heal-bell"},{"level":10,"move":"magical-leaf"},{"level":20,"move":"baton-pass"},{"level":30,"move":"ancient-power"},{"level":40,"move":"life-dew"},{"level":50,"move":"leech-seed"},{"level":60,"move":"recover"},{"level":70,"move":"future-sight"},{"level":80,"move":"healing-wish"},{"level":90,"move":"leaf-storm"},{"level":100,"move":"perish-song"}],
+  "252": [{"level":1,"move":"leer"},{"level":1,"move":"pound"},{"level":3,"move":"leafage"},{"level":6,"move":"quick-attack"},{"level":9,"move":"mega-drain"},{"level":12,"move":"detect"},{"level":15,"move":"quick-guard"},{"level":18,"move":"assurance"},{"level":21,"move":"giga-drain"},{"level":24,"move":"slam"},{"level":27,"move":"double-team"},{"level":30,"move":"energy-ball"},{"level":33,"move":"screech"},{"level":36,"move":"endeavor"},{"level":39,"move":"leaf-storm"}],
+  "253": [{"level":1,"move":"leafage"},{"level":1,"move":"leer"},{"level":1,"move":"pound"},{"level":1,"move":"quick-attack"},{"level":9,"move":"mega-drain"},{"level":12,"move":"detect"},{"level":15,"move":"quick-guard"},{"level":20,"move":"assurance"},{"level":25,"move":"giga-drain"},{"level":30,"move":"slam"},{"level":35,"move":"double-team"},{"level":40,"move":"leaf-blade"},{"level":45,"move":"screech"},{"level":50,"move":"endeavor"},{"level":55,"move":"leaf-storm"}],
+  "254": [{"level":0,"move":"leaf-blade"},{"level":1,"move":"leafage"},{"level":1,"move":"leer"},{"level":1,"move":"pound"},{"level":1,"move":"quick-attack"},{"level":5,"move":"mega-drain"},{"level":12,"move":"detect"},{"level":15,"move":"quick-guard"},{"level":20,"move":"assurance"},{"level":25,"move":"giga-drain"},{"level":30,"move":"slam"},{"level":35,"move":"double-team"},{"level":42,"move":"screech"},{"level":49,"move":"endeavor"},{"level":56,"move":"leaf-storm"}],
+  "255": [{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":3,"move":"ember"},{"level":6,"move":"quick-attack"},{"level":9,"move":"flame-charge"},{"level":12,"move":"detect"},{"level":15,"move":"sand-attack"},{"level":18,"move":"aerial-ace"},{"level":21,"move":"slash"},{"level":24,"move":"bounce"},{"level":27,"move":"focus-energy"},{"level":30,"move":"flamethrower"},{"level":33,"move":"feather-dance"},{"level":36,"move":"reversal"},{"level":39,"move":"flare-blitz"}],
+  "256": [{"level":0,"move":"double-kick"},{"level":1,"move":"ember"},{"level":1,"move":"growl"},{"level":1,"move":"quick-attack"},{"level":1,"move":"scratch"},{"level":9,"move":"flame-charge"},{"level":12,"move":"detect"},{"level":15,"move":"sand-attack"},{"level":20,"move":"aerial-ace"},{"level":25,"move":"slash"},{"level":30,"move":"bounce"},{"level":35,"move":"focus-energy"},{"level":40,"move":"blaze-kick"},{"level":45,"move":"bulk-up"},{"level":50,"move":"reversal"},{"level":55,"move":"flare-blitz"}],
+  "257": [{"level":0,"move":"blaze-kick"},{"level":1,"move":"double-kick"},{"level":1,"move":"growl"},{"level":1,"move":"quick-attack"},{"level":1,"move":"scratch"},{"level":9,"move":"flame-charge"},{"level":12,"move":"detect"},{"level":15,"move":"sand-attack"},{"level":20,"move":"aerial-ace"},{"level":25,"move":"slash"},{"level":30,"move":"bounce"},{"level":35,"move":"focus-energy"},{"level":42,"move":"bulk-up"},{"level":49,"move":"reversal"},{"level":56,"move":"flare-blitz"},{"level":63,"move":"brave-bird"}],
+  "258": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":3,"move":"water-gun"},{"level":6,"move":"rock-smash"},{"level":9,"move":"rock-throw"},{"level":12,"move":"protect"},{"level":15,"move":"supersonic"},{"level":18,"move":"water-pulse"},{"level":21,"move":"rock-slide"},{"level":24,"move":"take-down"},{"level":27,"move":"amnesia"},{"level":30,"move":"surf"},{"level":33,"move":"screech"},{"level":36,"move":"endeavor"},{"level":39,"move":"hydro-pump"}],
+  "259": [{"level":0,"move":"mud-shot"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":9,"move":"rock-throw"},{"level":12,"move":"protect"},{"level":15,"move":"supersonic"},{"level":20,"move":"water-pulse"},{"level":25,"move":"rock-slide"},{"level":30,"move":"take-down"},{"level":35,"move":"amnesia"},{"level":40,"move":"muddy-water"},{"level":45,"move":"screech"},{"level":50,"move":"endeavor"},{"level":55,"move":"hydro-pump"}],
+  "260": [{"level":1,"move":"growl"},{"level":1,"move":"mud-shot"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":9,"move":"rock-throw"},{"level":12,"move":"protect"},{"level":15,"move":"supersonic"},{"level":20,"move":"water-pulse"},{"level":25,"move":"rock-slide"},{"level":30,"move":"take-down"},{"level":35,"move":"amnesia"},{"level":42,"move":"muddy-water"},{"level":49,"move":"screech"},{"level":56,"move":"endeavor"},{"level":63,"move":"hydro-pump"}],
+  "261": [{"level":1,"move":"tackle"},{"level":4,"move":"howl"},{"level":7,"move":"sand-attack"},{"level":10,"move":"bite"},{"level":13,"move":"leer"},{"level":16,"move":"roar"},{"level":19,"move":"swagger"},{"level":22,"move":"assurance"},{"level":25,"move":"scary-face"},{"level":28,"move":"taunt"},{"level":31,"move":"crunch"},{"level":34,"move":"yawn"},{"level":36,"move":"take-down"},{"level":40,"move":"sucker-punch"},{"level":44,"move":"play-rough"}],
+  "262": [{"level":0,"move":"snarl"},{"level":1,"move":"bite"},{"level":1,"move":"crunch"},{"level":1,"move":"fire-fang"},{"level":1,"move":"ice-fang"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":1,"move":"thief"},{"level":1,"move":"thunder-fang"},{"level":13,"move":"howl"},{"level":13,"move":"leer"},{"level":16,"move":"roar"},{"level":20,"move":"swagger"},{"level":24,"move":"assurance"},{"level":28,"move":"scary-face"},{"level":36,"move":"taunt"},{"level":44,"move":"yawn"},{"level":48,"move":"take-down"},{"level":52,"move":"sucker-punch"},{"level":56,"move":"play-rough"}],
+  "263": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":3,"move":"sand-attack"},{"level":6,"move":"tail-whip"},{"level":9,"move":"covet"},{"level":12,"move":"headbutt"},{"level":15,"move":"baby-doll-eyes"},{"level":18,"move":"pin-missile"},{"level":21,"move":"rest"},{"level":24,"move":"take-down"},{"level":27,"move":"fling"},{"level":30,"move":"flail"},{"level":33,"move":"belly-drum"},{"level":36,"move":"double-edge"}],
+  "264": [{"level":0,"move":"slash"},{"level":1,"move":"baby-doll-eyes"},{"level":1,"move":"growl"},{"level":1,"move":"pin-missile"},{"level":1,"move":"sand-attack"},{"level":1,"move":"slash"},{"level":1,"move":"switcheroo"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":9,"move":"covet"},{"level":12,"move":"headbutt"},{"level":15,"move":"hone-claws"},{"level":18,"move":"fury-swipes"},{"level":23,"move":"rest"},{"level":28,"move":"take-down"},{"level":33,"move":"fling"},{"level":38,"move":"flail"},{"level":43,"move":"belly-drum"},{"level":48,"move":"double-edge"}],
+  "265": [{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":5,"move":"poison-sting"},{"level":15,"move":"bug-bite"}],
+  "266": [{"level":0,"move":"harden"},{"level":1,"move":"harden"}],
+  "267": [{"level":0,"move":"gust"},{"level":1,"move":"gust"},{"level":12,"move":"absorb"},{"level":15,"move":"stun-spore"},{"level":17,"move":"morning-sun"},{"level":20,"move":"air-cutter"},{"level":22,"move":"mega-drain"},{"level":25,"move":"silver-wind"},{"level":27,"move":"attract"},{"level":30,"move":"whirlwind"},{"level":32,"move":"giga-drain"},{"level":35,"move":"bug-buzz"},{"level":37,"move":"rage"},{"level":40,"move":"quiver-dance"}],
+  "268": [{"level":0,"move":"harden"},{"level":1,"move":"harden"}],
+  "269": [{"level":0,"move":"gust"},{"level":1,"move":"gust"},{"level":12,"move":"confusion"},{"level":15,"move":"poison-powder"},{"level":17,"move":"moonlight"},{"level":20,"move":"venoshock"},{"level":22,"move":"psybeam"},{"level":25,"move":"silver-wind"},{"level":27,"move":"light-screen"},{"level":30,"move":"whirlwind"},{"level":32,"move":"toxic"},{"level":35,"move":"bug-buzz"},{"level":37,"move":"protect"},{"level":40,"move":"quiver-dance"}],
+  "270": [{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":3,"move":"absorb"},{"level":6,"move":"water-gun"},{"level":9,"move":"mist"},{"level":12,"move":"mega-drain"},{"level":16,"move":"flail"},{"level":20,"move":"bubble-beam"},{"level":24,"move":"leech-seed"},{"level":28,"move":"giga-drain"},{"level":33,"move":"rain-dance"},{"level":38,"move":"zen-headbutt"},{"level":43,"move":"energy-ball"}],
+  "271": [{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":1,"move":"fake-out"},{"level":1,"move":"flail"},{"level":1,"move":"growl"},{"level":1,"move":"knock-off"},{"level":1,"move":"teeter-dance"},{"level":1,"move":"water-gun"},{"level":9,"move":"mist"},{"level":12,"move":"mega-drain"},{"level":18,"move":"fury-swipes"},{"level":24,"move":"bubble-beam"},{"level":30,"move":"leech-seed"},{"level":36,"move":"giga-drain"},{"level":50,"move":"zen-headbutt"},{"level":57,"move":"energy-ball"},{"level":64,"move":"hydro-pump"}],
+  "272": [{"level":1,"move":"bubble-beam"},{"level":1,"move":"fake-out"},{"level":1,"move":"rain-dance"}],
+  "273": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":3,"move":"absorb"},{"level":6,"move":"astonish"},{"level":9,"move":"growth"},{"level":12,"move":"rollout"},{"level":15,"move":"mega-drain"},{"level":18,"move":"payback"},{"level":21,"move":"headbutt"},{"level":24,"move":"sunny-day"},{"level":27,"move":"synthesis"},{"level":30,"move":"sucker-punch"},{"level":33,"move":"explosion"}],
+  "274": [{"level":0,"move":"razor-leaf"},{"level":1,"move":"absorb"},{"level":1,"move":"air-cutter"},{"level":1,"move":"astonish"},{"level":1,"move":"explosion"},{"level":1,"move":"fake-out"},{"level":1,"move":"harden"},{"level":1,"move":"swagger"},{"level":1,"move":"tackle"},{"level":1,"move":"torment"},{"level":9,"move":"growth"},{"level":12,"move":"rollout"},{"level":18,"move":"mega-drain"},{"level":24,"move":"payback"},{"level":30,"move":"synthesis"},{"level":36,"move":"sunny-day"},{"level":43,"move":"extrasensory"},{"level":50,"move":"sucker-punch"},{"level":57,"move":"leaf-blade"}],
+  "275": [{"level":0,"move":"leaf-blade"},{"level":1,"move":"air-cutter"},{"level":1,"move":"hurricane"},{"level":1,"move":"payback"},{"level":1,"move":"sunny-day"}],
+  "276": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":5,"move":"focus-energy"},{"level":9,"move":"quick-attack"},{"level":13,"move":"wing-attack"},{"level":17,"move":"double-team"},{"level":21,"move":"aerial-ace"},{"level":25,"move":"quick-guard"},{"level":29,"move":"agility"},{"level":33,"move":"air-slash"},{"level":37,"move":"endeavor"},{"level":41,"move":"brave-bird"},{"level":45,"move":"reversal"}],
+  "277": [{"level":1,"move":"air-slash"},{"level":1,"move":"brave-bird"},{"level":1,"move":"focus-energy"},{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":1,"move":"pluck"},{"level":1,"move":"quick-attack"},{"level":5,"move":"focus-energy"},{"level":9,"move":"quick-attack"},{"level":13,"move":"wing-attack"},{"level":17,"move":"double-team"},{"level":21,"move":"aerial-ace"},{"level":27,"move":"quick-guard"},{"level":33,"move":"agility"},{"level":39,"move":"air-slash"},{"level":45,"move":"endeavor"},{"level":51,"move":"brave-bird"},{"level":57,"move":"reversal"}],
+  "278": [{"level":1,"move":"growl"},{"level":1,"move":"water-gun"},{"level":5,"move":"quick-attack"},{"level":10,"move":"supersonic"},{"level":15,"move":"wing-attack"},{"level":20,"move":"water-pulse"},{"level":26,"move":"agility"},{"level":30,"move":"air-slash"},{"level":35,"move":"mist"},{"level":40,"move":"roost"},{"level":45,"move":"hurricane"}],
+  "279": [{"level":1,"move":"agility"},{"level":1,"move":"air-slash"},{"level":1,"move":"growl"},{"level":1,"move":"protect"},{"level":1,"move":"quick-attack"},{"level":1,"move":"soak"},{"level":1,"move":"supersonic"},{"level":1,"move":"tailwind"},{"level":1,"move":"water-gun"},{"level":15,"move":"wing-attack"},{"level":20,"move":"water-pulse"},{"level":28,"move":"spit-up"},{"level":28,"move":"stockpile"},{"level":28,"move":"swallow"},{"level":34,"move":"fling"},{"level":41,"move":"mist"},{"level":48,"move":"roost"},{"level":55,"move":"hurricane"},{"level":62,"move":"hydro-pump"}],
+  "280": [{"level":1,"move":"disarming-voice"},{"level":1,"move":"growl"},{"level":3,"move":"double-team"},{"level":6,"move":"confusion"},{"level":9,"move":"hypnosis"},{"level":12,"move":"draining-kiss"},{"level":15,"move":"teleport"},{"level":18,"move":"psybeam"},{"level":21,"move":"life-dew"},{"level":24,"move":"charm"},{"level":27,"move":"calm-mind"},{"level":30,"move":"psychic"},{"level":33,"move":"heal-pulse"},{"level":36,"move":"dream-eater"},{"level":39,"move":"future-sight"}],
+  "281": [{"level":1,"move":"confusion"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"double-team"},{"level":1,"move":"growl"},{"level":9,"move":"hypnosis"},{"level":12,"move":"draining-kiss"},{"level":15,"move":"teleport"},{"level":18,"move":"psybeam"},{"level":23,"move":"life-dew"},{"level":28,"move":"charm"},{"level":33,"move":"calm-mind"},{"level":38,"move":"psychic"},{"level":43,"move":"heal-pulse"},{"level":48,"move":"dream-eater"},{"level":53,"move":"future-sight"}],
+  "282": [{"level":0,"move":"dazzling-gleam"},{"level":1,"move":"charm"},{"level":1,"move":"confusion"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"double-team"},{"level":1,"move":"growl"},{"level":1,"move":"heal-pulse"},{"level":1,"move":"healing-wish"},{"level":1,"move":"misty-terrain"},{"level":1,"move":"mystical-fire"},{"level":9,"move":"hypnosis"},{"level":12,"move":"draining-kiss"},{"level":15,"move":"teleport"},{"level":18,"move":"psybeam"},{"level":23,"move":"life-dew"},{"level":28,"move":"wish"},{"level":35,"move":"calm-mind"},{"level":42,"move":"psychic"},{"level":49,"move":"moonblast"},{"level":56,"move":"dream-eater"},{"level":63,"move":"future-sight"}],
+  "283": [{"level":1,"move":"water-gun"},{"level":6,"move":"quick-attack"},{"level":9,"move":"sweet-scent"},{"level":14,"move":"soak"},{"level":17,"move":"bubble-beam"},{"level":22,"move":"agility"},{"level":25,"move":"haze"},{"level":25,"move":"mist"},{"level":35,"move":"baton-pass"},{"level":38,"move":"sticky-web"}],
+  "284": [{"level":1,"move":"quick-attack"},{"level":1,"move":"soak"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"water-gun"},{"level":1,"move":"whirlwind"},{"level":17,"move":"gust"},{"level":22,"move":"air-cutter"},{"level":22,"move":"scary-face"},{"level":26,"move":"stun-spore"},{"level":32,"move":"air-slash"},{"level":38,"move":"giga-drain"},{"level":44,"move":"bug-buzz"},{"level":52,"move":"quiver-dance"}],
+  "285": [{"level":1,"move":"absorb"},{"level":1,"move":"tackle"},{"level":5,"move":"stun-spore"},{"level":8,"move":"leech-seed"},{"level":12,"move":"mega-drain"},{"level":15,"move":"headbutt"},{"level":19,"move":"poison-powder"},{"level":26,"move":"giga-drain"},{"level":29,"move":"growth"},{"level":33,"move":"toxic"},{"level":36,"move":"seed-bomb"},{"level":40,"move":"spore"}],
+  "286": [{"level":0,"move":"mach-punch"},{"level":1,"move":"absorb"},{"level":1,"move":"growth"},{"level":1,"move":"leech-seed"},{"level":1,"move":"poison-powder"},{"level":1,"move":"stun-spore"},{"level":1,"move":"tackle"},{"level":1,"move":"toxic"},{"level":12,"move":"mega-drain"},{"level":15,"move":"headbutt"},{"level":19,"move":"feint"},{"level":22,"move":"counter"},{"level":28,"move":"force-palm"},{"level":33,"move":"worry-seed"},{"level":39,"move":"brick-break"},{"level":44,"move":"seed-bomb"},{"level":50,"move":"dynamic-punch"},{"level":55,"move":"focus-punch"}],
+  "287": [{"level":1,"move":"scratch"},{"level":1,"move":"yawn"},{"level":6,"move":"encore"},{"level":9,"move":"slack-off"},{"level":14,"move":"headbutt"},{"level":17,"move":"amnesia"},{"level":22,"move":"covet"},{"level":25,"move":"throat-chop"},{"level":30,"move":"counter"},{"level":33,"move":"flail"},{"level":38,"move":"play-rough"}],
+  "288": [{"level":1,"move":"encore"},{"level":1,"move":"focus-energy"},{"level":1,"move":"scratch"},{"level":1,"move":"uproar"},{"level":14,"move":"fury-swipes"},{"level":17,"move":"endure"},{"level":23,"move":"slash"},{"level":27,"move":"throat-chop"},{"level":33,"move":"counter"},{"level":37,"move":"focus-punch"},{"level":43,"move":"reversal"}],
+  "289": [{"level":0,"move":"swagger"},{"level":1,"move":"encore"},{"level":1,"move":"scratch"},{"level":1,"move":"slack-off"},{"level":1,"move":"sucker-punch"},{"level":1,"move":"yawn"},{"level":17,"move":"amnesia"},{"level":23,"move":"covet"},{"level":27,"move":"throat-chop"},{"level":33,"move":"counter"},{"level":39,"move":"flail"},{"level":45,"move":"fling"},{"level":52,"move":"mega-kick"},{"level":63,"move":"hammer-arm"}],
+  "290": [{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":5,"move":"harden"},{"level":10,"move":"false-swipe"},{"level":15,"move":"mud-slap"},{"level":21,"move":"absorb"},{"level":25,"move":"metal-claw"},{"level":30,"move":"fury-swipes"},{"level":35,"move":"mind-reader"},{"level":40,"move":"dig"}],
+  "291": [{"level":0,"move":"double-team"},{"level":0,"move":"fury-cutter"},{"level":0,"move":"screech"},{"level":1,"move":"aerial-ace"},{"level":1,"move":"baton-pass"},{"level":1,"move":"dig"},{"level":1,"move":"double-team"},{"level":1,"move":"false-swipe"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"harden"},{"level":1,"move":"metal-claw"},{"level":1,"move":"mud-slap"},{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":1,"move":"screech"},{"level":15,"move":"agility"},{"level":23,"move":"absorb"},{"level":29,"move":"bug-bite"},{"level":36,"move":"fury-swipes"},{"level":43,"move":"mind-reader"},{"level":50,"move":"slash"},{"level":57,"move":"swords-dance"},{"level":64,"move":"x-scissor"}],
+  "292": [{"level":1,"move":"dig"},{"level":1,"move":"false-swipe"},{"level":1,"move":"grudge"},{"level":1,"move":"harden"},{"level":1,"move":"metal-claw"},{"level":1,"move":"mud-slap"},{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":1,"move":"shadow-claw"},{"level":15,"move":"confuse-ray"},{"level":23,"move":"absorb"},{"level":29,"move":"shadow-sneak"},{"level":36,"move":"fury-swipes"},{"level":43,"move":"mind-reader"},{"level":50,"move":"shadow-ball"},{"level":57,"move":"spite"},{"level":64,"move":"phantom-force"}],
+  "293": [{"level":1,"move":"astonish"},{"level":1,"move":"pound"},{"level":5,"move":"echoed-voice"},{"level":10,"move":"howl"},{"level":15,"move":"rest"},{"level":15,"move":"sleep-talk"},{"level":21,"move":"stomp"},{"level":25,"move":"roar"},{"level":30,"move":"supersonic"},{"level":35,"move":"uproar"},{"level":40,"move":"screech"},{"level":45,"move":"hyper-voice"}],
+  "294": [{"level":0,"move":"bite"},{"level":1,"move":"astonish"},{"level":1,"move":"bite"},{"level":1,"move":"echoed-voice"},{"level":1,"move":"howl"},{"level":1,"move":"pound"},{"level":15,"move":"rest"},{"level":15,"move":"sleep-talk"},{"level":23,"move":"stomp"},{"level":29,"move":"roar"},{"level":36,"move":"supersonic"},{"level":43,"move":"uproar"},{"level":50,"move":"screech"},{"level":57,"move":"hyper-voice"}],
+  "295": [{"level":0,"move":"crunch"},{"level":1,"move":"astonish"},{"level":1,"move":"bite"},{"level":1,"move":"crunch"},{"level":1,"move":"echoed-voice"},{"level":1,"move":"fire-fang"},{"level":1,"move":"howl"},{"level":1,"move":"ice-fang"},{"level":1,"move":"pound"},{"level":1,"move":"thunder-fang"},{"level":15,"move":"rest"},{"level":15,"move":"sleep-talk"},{"level":23,"move":"stomp"},{"level":29,"move":"roar"},{"level":36,"move":"supersonic"},{"level":45,"move":"uproar"},{"level":54,"move":"screech"},{"level":63,"move":"hyper-voice"},{"level":72,"move":"boomburst"},{"level":81,"move":"hyper-beam"}],
+  "296": [{"level":1,"move":"focus-energy"},{"level":1,"move":"tackle"},{"level":4,"move":"sand-attack"},{"level":7,"move":"arm-thrust"},{"level":10,"move":"fake-out"},{"level":13,"move":"force-palm"},{"level":16,"move":"whirlwind"},{"level":19,"move":"knock-off"},{"level":22,"move":"bulk-up"},{"level":25,"move":"belly-drum"},{"level":28,"move":"detect"},{"level":31,"move":"seismic-toss"},{"level":34,"move":"focus-punch"},{"level":37,"move":"endure"},{"level":40,"move":"close-combat"},{"level":43,"move":"reversal"},{"level":46,"move":"heavy-slam"}],
+  "297": [{"level":1,"move":"arm-thrust"},{"level":1,"move":"brine"},{"level":1,"move":"focus-energy"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":10,"move":"fake-out"},{"level":13,"move":"force-palm"},{"level":16,"move":"whirlwind"},{"level":19,"move":"knock-off"},{"level":22,"move":"bulk-up"},{"level":26,"move":"belly-drum"},{"level":30,"move":"detect"},{"level":34,"move":"seismic-toss"},{"level":38,"move":"focus-punch"},{"level":42,"move":"endure"},{"level":46,"move":"close-combat"},{"level":50,"move":"reversal"},{"level":54,"move":"heavy-slam"},{"level":60,"move":"headlong-rush"}],
+  "298": [{"level":1,"move":"splash"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":3,"move":"helping-hand"},{"level":6,"move":"bubble-beam"},{"level":9,"move":"charm"},{"level":12,"move":"slam"},{"level":15,"move":"bounce"}],
+  "299": [{"level":1,"move":"tackle"},{"level":4,"move":"harden"},{"level":7,"move":"block"},{"level":10,"move":"rock-throw"},{"level":13,"move":"thunder-wave"},{"level":16,"move":"rest"},{"level":19,"move":"spark"},{"level":22,"move":"rock-slide"},{"level":25,"move":"power-gem"},{"level":28,"move":"rock-blast"},{"level":31,"move":"discharge"},{"level":34,"move":"sandstorm"},{"level":37,"move":"earth-power"},{"level":40,"move":"stone-edge"},{"level":43,"move":"lock-on"},{"level":43,"move":"zap-cannon"}],
+  "300": [{"level":1,"move":"fake-out"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":4,"move":"foresight"},{"level":7,"move":"sing"},{"level":10,"move":"attract"},{"level":13,"move":"disarming-voice"},{"level":16,"move":"double-slap"},{"level":19,"move":"copycat"},{"level":22,"move":"feint-attack"},{"level":25,"move":"charm"},{"level":28,"move":"wake-up-slap"},{"level":31,"move":"assist"},{"level":34,"move":"covet"},{"level":37,"move":"heal-bell"},{"level":40,"move":"double-edge"},{"level":43,"move":"captivate"},{"level":46,"move":"play-rough"}],
+  "301": [{"level":1,"move":"attract"},{"level":1,"move":"double-slap"},{"level":1,"move":"fake-out"},{"level":1,"move":"sing"}],
+  "302": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":3,"move":"astonish"},{"level":9,"move":"shadow-sneak"},{"level":12,"move":"fake-out"},{"level":15,"move":"disable"},{"level":18,"move":"detect"},{"level":21,"move":"night-shade"},{"level":24,"move":"fury-swipes"},{"level":27,"move":"knock-off"},{"level":30,"move":"quash"},{"level":33,"move":"shadow-claw"},{"level":36,"move":"mean-look"},{"level":39,"move":"power-gem"},{"level":42,"move":"zen-headbutt"},{"level":45,"move":"shadow-ball"},{"level":48,"move":"foul-play"}],
+  "303": [{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":4,"move":"fairy-wind"},{"level":8,"move":"baton-pass"},{"level":12,"move":"bite"},{"level":16,"move":"spit-up"},{"level":16,"move":"stockpile"},{"level":16,"move":"swallow"},{"level":20,"move":"sucker-punch"},{"level":24,"move":"iron-defense"},{"level":28,"move":"crunch"},{"level":32,"move":"sweet-scent"},{"level":36,"move":"iron-head"},{"level":40,"move":"taunt"},{"level":44,"move":"fake-tears"},{"level":48,"move":"play-rough"}],
+  "304": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":4,"move":"metal-claw"},{"level":8,"move":"rock-tomb"},{"level":12,"move":"roar"},{"level":16,"move":"headbutt"},{"level":20,"move":"protect"},{"level":24,"move":"rock-slide"},{"level":28,"move":"iron-head"},{"level":33,"move":"metal-sound"},{"level":36,"move":"take-down"},{"level":40,"move":"autotomize"},{"level":44,"move":"iron-tail"},{"level":48,"move":"iron-defense"},{"level":52,"move":"heavy-slam"},{"level":56,"move":"double-edge"},{"level":60,"move":"metal-burst"}],
+  "305": [{"level":1,"move":"harden"},{"level":1,"move":"metal-claw"},{"level":1,"move":"rock-tomb"},{"level":1,"move":"tackle"},{"level":12,"move":"roar"},{"level":16,"move":"headbutt"},{"level":20,"move":"protect"},{"level":24,"move":"rock-slide"},{"level":28,"move":"iron-head"},{"level":35,"move":"metal-sound"},{"level":40,"move":"take-down"},{"level":46,"move":"autotomize"},{"level":52,"move":"iron-tail"},{"level":58,"move":"iron-defense"},{"level":64,"move":"heavy-slam"},{"level":70,"move":"double-edge"},{"level":76,"move":"metal-burst"}],
+  "306": [{"level":1,"move":"harden"},{"level":1,"move":"metal-claw"},{"level":1,"move":"rock-tomb"},{"level":1,"move":"tackle"},{"level":12,"move":"roar"},{"level":16,"move":"headbutt"},{"level":20,"move":"protect"},{"level":24,"move":"rock-slide"},{"level":28,"move":"iron-head"},{"level":35,"move":"metal-sound"},{"level":40,"move":"take-down"},{"level":48,"move":"autotomize"},{"level":56,"move":"iron-tail"},{"level":64,"move":"iron-defense"},{"level":72,"move":"heavy-slam"},{"level":80,"move":"double-edge"},{"level":88,"move":"metal-burst"}],
+  "307": [{"level":1,"move":"confusion"},{"level":1,"move":"work-up"},{"level":9,"move":"detect"},{"level":12,"move":"endure"},{"level":15,"move":"feint"},{"level":17,"move":"force-palm"},{"level":20,"move":"psybeam"},{"level":23,"move":"calm-mind"},{"level":25,"move":"zen-headbutt"},{"level":28,"move":"high-jump-kick"},{"level":31,"move":"psych-up"},{"level":33,"move":"acupressure"},{"level":36,"move":"power-trick"},{"level":39,"move":"reversal"},{"level":41,"move":"recover"},{"level":44,"move":"counter"}],
+  "308": [{"level":1,"move":"confusion"},{"level":1,"move":"detect"},{"level":1,"move":"fire-punch"},{"level":1,"move":"ice-punch"},{"level":1,"move":"thunder-punch"},{"level":1,"move":"work-up"},{"level":12,"move":"endure"},{"level":15,"move":"feint"},{"level":17,"move":"force-palm"},{"level":20,"move":"psybeam"},{"level":23,"move":"calm-mind"},{"level":25,"move":"zen-headbutt"},{"level":28,"move":"high-jump-kick"},{"level":31,"move":"psych-up"},{"level":33,"move":"acupressure"},{"level":36,"move":"power-trick"},{"level":47,"move":"recover"},{"level":53,"move":"axe-kick"},{"level":53,"move":"counter"}],
+  "309": [{"level":1,"move":"tackle"},{"level":1,"move":"thunder-wave"},{"level":4,"move":"leer"},{"level":8,"move":"howl"},{"level":12,"move":"quick-attack"},{"level":16,"move":"shock-wave"},{"level":20,"move":"bite"},{"level":24,"move":"thunder-fang"},{"level":28,"move":"roar"},{"level":32,"move":"discharge"},{"level":36,"move":"charge"},{"level":40,"move":"wild-charge"},{"level":44,"move":"thunder"}],
+  "310": [{"level":1,"move":"fire-fang"},{"level":1,"move":"howl"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-wave"},{"level":12,"move":"quick-attack"},{"level":16,"move":"shock-wave"},{"level":20,"move":"bite"},{"level":24,"move":"thunder-fang"},{"level":30,"move":"roar"},{"level":36,"move":"discharge"},{"level":42,"move":"charge"},{"level":48,"move":"wild-charge"},{"level":54,"move":"thunder"},{"level":60,"move":"electric-terrain"}],
+  "311": [{"level":1,"move":"growl"},{"level":1,"move":"play-nice"},{"level":1,"move":"quick-attack"},{"level":1,"move":"thunder-wave"},{"level":4,"move":"helping-hand"},{"level":7,"move":"spark"},{"level":10,"move":"encore"},{"level":13,"move":"switcheroo"},{"level":16,"move":"swift"},{"level":19,"move":"electro-ball"},{"level":22,"move":"copycat"},{"level":26,"move":"charge"},{"level":31,"move":"discharge"},{"level":34,"move":"baton-pass"},{"level":37,"move":"agility"},{"level":40,"move":"last-resort"},{"level":43,"move":"thunder"},{"level":46,"move":"nasty-plot"},{"level":49,"move":"entrainment"}],
+  "312": [{"level":1,"move":"growl"},{"level":1,"move":"play-nice"},{"level":1,"move":"quick-attack"},{"level":1,"move":"thunder-wave"},{"level":4,"move":"helping-hand"},{"level":7,"move":"spark"},{"level":10,"move":"encore"},{"level":13,"move":"switcheroo"},{"level":16,"move":"swift"},{"level":19,"move":"electro-ball"},{"level":22,"move":"copycat"},{"level":26,"move":"charge"},{"level":31,"move":"discharge"},{"level":34,"move":"baton-pass"},{"level":37,"move":"agility"},{"level":40,"move":"last-resort"},{"level":43,"move":"thunder"},{"level":46,"move":"nasty-plot"},{"level":49,"move":"entrainment"}],
+  "313": [{"level":1,"move":"tackle"},{"level":5,"move":"double-team"},{"level":8,"move":"confuse-ray"},{"level":12,"move":"quick-attack"},{"level":15,"move":"struggle-bug"},{"level":19,"move":"moonlight"},{"level":22,"move":"tail-glow"},{"level":26,"move":"protect"},{"level":29,"move":"zen-headbutt"},{"level":33,"move":"helping-hand"},{"level":36,"move":"bug-buzz"},{"level":40,"move":"play-rough"},{"level":43,"move":"double-edge"},{"level":47,"move":"infestation"}],
+  "314": [{"level":1,"move":"play-nice"},{"level":1,"move":"tackle"},{"level":5,"move":"sweet-scent"},{"level":9,"move":"charm"},{"level":12,"move":"quick-attack"},{"level":15,"move":"struggle-bug"},{"level":19,"move":"moonlight"},{"level":22,"move":"wish"},{"level":26,"move":"encore"},{"level":29,"move":"flatter"},{"level":33,"move":"zen-headbutt"},{"level":36,"move":"helping-hand"},{"level":40,"move":"bug-buzz"},{"level":43,"move":"play-rough"},{"level":47,"move":"infestation"}],
+  "315": [{"level":0,"move":"poison-sting"},{"level":1,"move":"absorb"},{"level":1,"move":"growth"},{"level":1,"move":"poison-sting"},{"level":1,"move":"stun-spore"},{"level":1,"move":"worry-seed"},{"level":5,"move":"mega-drain"},{"level":10,"move":"leech-seed"},{"level":15,"move":"magical-leaf"},{"level":20,"move":"toxic-spikes"},{"level":25,"move":"sweet-scent"},{"level":30,"move":"giga-drain"},{"level":35,"move":"synthesis"},{"level":40,"move":"toxic"},{"level":45,"move":"petal-blizzard"},{"level":50,"move":"aromatherapy"},{"level":55,"move":"ingrain"},{"level":60,"move":"petal-dance"}],
+  "316": [{"level":1,"move":"pound"},{"level":5,"move":"yawn"},{"level":8,"move":"poison-gas"},{"level":10,"move":"sludge"},{"level":12,"move":"amnesia"},{"level":17,"move":"acid-spray"},{"level":20,"move":"encore"},{"level":25,"move":"toxic"},{"level":28,"move":"spit-up"},{"level":28,"move":"stockpile"},{"level":28,"move":"swallow"},{"level":33,"move":"sludge-bomb"},{"level":36,"move":"gastro-acid"},{"level":41,"move":"belch"},{"level":44,"move":"pain-split"},{"level":49,"move":"gunk-shot"}],
+  "317": [{"level":0,"move":"body-slam"},{"level":1,"move":"gunk-shot"},{"level":1,"move":"poison-gas"},{"level":1,"move":"pound"},{"level":1,"move":"sludge"},{"level":1,"move":"yawn"},{"level":12,"move":"amnesia"},{"level":17,"move":"acid-spray"},{"level":20,"move":"encore"},{"level":25,"move":"toxic"},{"level":30,"move":"spit-up"},{"level":30,"move":"stockpile"},{"level":30,"move":"swallow"},{"level":37,"move":"sludge-bomb"},{"level":42,"move":"gastro-acid"},{"level":49,"move":"belch"}],
+  "318": [{"level":1,"move":"aqua-jet"},{"level":1,"move":"leer"},{"level":4,"move":"poison-fang"},{"level":8,"move":"focus-energy"},{"level":12,"move":"scary-face"},{"level":16,"move":"bite"},{"level":20,"move":"ice-fang"},{"level":24,"move":"screech"},{"level":28,"move":"swagger"},{"level":32,"move":"crunch"},{"level":36,"move":"agility"},{"level":40,"move":"liquidation"},{"level":44,"move":"take-down"}],
+  "319": [{"level":0,"move":"slash"},{"level":1,"move":"aqua-jet"},{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":1,"move":"night-slash"},{"level":1,"move":"poison-fang"},{"level":1,"move":"slash"},{"level":12,"move":"scary-face"},{"level":16,"move":"bite"},{"level":20,"move":"ice-fang"},{"level":24,"move":"screech"},{"level":28,"move":"swagger"},{"level":34,"move":"crunch"},{"level":40,"move":"agility"},{"level":46,"move":"liquidation"},{"level":52,"move":"take-down"}],
+  "320": [{"level":1,"move":"splash"},{"level":3,"move":"growl"},{"level":6,"move":"astonish"},{"level":12,"move":"water-gun"},{"level":15,"move":"mist"},{"level":18,"move":"water-pulse"},{"level":21,"move":"heavy-slam"},{"level":24,"move":"brine"},{"level":27,"move":"whirlpool"},{"level":30,"move":"dive"},{"level":33,"move":"bounce"},{"level":36,"move":"body-slam"},{"level":39,"move":"rest"},{"level":42,"move":"amnesia"},{"level":45,"move":"hydro-pump"},{"level":48,"move":"water-spout"}],
+  "321": [{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":1,"move":"noble-roar"},{"level":1,"move":"soak"},{"level":1,"move":"splash"},{"level":1,"move":"water-gun"},{"level":15,"move":"mist"},{"level":18,"move":"water-pulse"},{"level":21,"move":"heavy-slam"},{"level":24,"move":"brine"},{"level":27,"move":"whirlpool"},{"level":30,"move":"dive"},{"level":33,"move":"bounce"},{"level":36,"move":"body-slam"},{"level":39,"move":"rest"},{"level":44,"move":"amnesia"},{"level":49,"move":"hydro-pump"},{"level":54,"move":"water-spout"}],
+  "322": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":5,"move":"ember"},{"level":8,"move":"focus-energy"},{"level":12,"move":"bulldoze"},{"level":15,"move":"incinerate"},{"level":19,"move":"amnesia"},{"level":22,"move":"lava-plume"},{"level":26,"move":"earth-power"},{"level":29,"move":"curse"},{"level":31,"move":"take-down"},{"level":40,"move":"earthquake"},{"level":43,"move":"flamethrower"},{"level":47,"move":"double-edge"}],
+  "323": [{"level":0,"move":"rock-slide"},{"level":1,"move":"ember"},{"level":1,"move":"eruption"},{"level":1,"move":"fissure"},{"level":1,"move":"focus-energy"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":12,"move":"bulldoze"},{"level":15,"move":"incinerate"},{"level":19,"move":"amnesia"},{"level":22,"move":"lava-plume"},{"level":26,"move":"earth-power"},{"level":29,"move":"curse"},{"level":31,"move":"take-down"},{"level":39,"move":"yawn"},{"level":46,"move":"earthquake"}],
+  "324": [{"level":1,"move":"ember"},{"level":1,"move":"smog"},{"level":4,"move":"withdraw"},{"level":8,"move":"rapid-spin"},{"level":12,"move":"smokescreen"},{"level":16,"move":"clear-smog"},{"level":20,"move":"flame-wheel"},{"level":24,"move":"protect"},{"level":28,"move":"lava-plume"},{"level":32,"move":"body-slam"},{"level":36,"move":"iron-defense"},{"level":40,"move":"flamethrower"},{"level":44,"move":"curse"},{"level":48,"move":"heat-wave"},{"level":52,"move":"amnesia"},{"level":56,"move":"inferno"},{"level":60,"move":"shell-smash"},{"level":64,"move":"eruption"}],
+  "325": [{"level":1,"move":"splash"},{"level":7,"move":"confusion"},{"level":10,"move":"growl"},{"level":14,"move":"psybeam"},{"level":18,"move":"psych-up"},{"level":22,"move":"confuse-ray"},{"level":29,"move":"power-gem"},{"level":29,"move":"rest"},{"level":33,"move":"snore"},{"level":38,"move":"psyshock"},{"level":40,"move":"payback"},{"level":44,"move":"psychic"},{"level":50,"move":"bounce"}],
+  "326": [{"level":0,"move":"teeter-dance"},{"level":1,"move":"belch"},{"level":1,"move":"confusion"},{"level":1,"move":"psybeam"},{"level":1,"move":"splash"},{"level":18,"move":"psych-up"},{"level":22,"move":"confuse-ray"},{"level":26,"move":"zen-headbutt"},{"level":29,"move":"power-gem"},{"level":35,"move":"rest"},{"level":35,"move":"snore"},{"level":42,"move":"psyshock"},{"level":46,"move":"payback"},{"level":52,"move":"psychic"},{"level":60,"move":"bounce"}],
+  "327": [{"level":1,"move":"tackle"},{"level":5,"move":"copycat"},{"level":10,"move":"feint-attack"},{"level":14,"move":"psybeam"},{"level":19,"move":"hypnosis"},{"level":23,"move":"dizzy-punch"},{"level":28,"move":"sucker-punch"},{"level":32,"move":"teeter-dance"},{"level":37,"move":"uproar"},{"level":41,"move":"psych-up"},{"level":46,"move":"double-edge"},{"level":50,"move":"flail"},{"level":55,"move":"thrash"}],
+  "328": [{"level":1,"move":"astonish"},{"level":1,"move":"sand-attack"},{"level":8,"move":"bite"},{"level":12,"move":"mud-slap"},{"level":16,"move":"sand-tomb"},{"level":20,"move":"bulldoze"},{"level":24,"move":"dig"},{"level":28,"move":"crunch"},{"level":32,"move":"sandstorm"},{"level":36,"move":"earth-power"},{"level":40,"move":"earthquake"},{"level":44,"move":"superpower"},{"level":48,"move":"fissure"}],
+  "329": [{"level":0,"move":"dragon-breath"},{"level":1,"move":"bite"},{"level":1,"move":"dig"},{"level":1,"move":"sand-attack"},{"level":12,"move":"mud-slap"},{"level":16,"move":"sand-tomb"},{"level":20,"move":"dragon-tail"},{"level":24,"move":"screech"},{"level":28,"move":"bug-buzz"},{"level":32,"move":"sandstorm"},{"level":38,"move":"earth-power"},{"level":44,"move":"earthquake"},{"level":50,"move":"uproar"},{"level":56,"move":"dragon-rush"},{"level":62,"move":"boomburst"}],
+  "330": [{"level":0,"move":"dragon-claw"},{"level":1,"move":"bulldoze"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"sand-attack"},{"level":1,"move":"supersonic"},{"level":12,"move":"mud-slap"},{"level":16,"move":"sand-tomb"},{"level":20,"move":"dragon-tail"},{"level":24,"move":"screech"},{"level":28,"move":"bug-buzz"},{"level":32,"move":"sandstorm"},{"level":38,"move":"earth-power"},{"level":44,"move":"earthquake"},{"level":52,"move":"uproar"},{"level":60,"move":"dragon-rush"},{"level":68,"move":"boomburst"}],
+  "331": [{"level":1,"move":"leer"},{"level":1,"move":"poison-sting"},{"level":4,"move":"absorb"},{"level":7,"move":"growth"},{"level":10,"move":"leech-seed"},{"level":13,"move":"sand-attack"},{"level":16,"move":"bullet-seed"},{"level":19,"move":"power-trip"},{"level":22,"move":"ingrain"},{"level":26,"move":"payback"},{"level":30,"move":"spikes"},{"level":34,"move":"sucker-punch"},{"level":38,"move":"pin-missile"},{"level":42,"move":"energy-ball"},{"level":46,"move":"cotton-spore"},{"level":50,"move":"sandstorm"},{"level":54,"move":"destiny-bond"}],
+  "332": [{"level":0,"move":"spiky-shield"},{"level":1,"move":"absorb"},{"level":1,"move":"destiny-bond"},{"level":1,"move":"growth"},{"level":1,"move":"leer"},{"level":1,"move":"poison-sting"},{"level":10,"move":"leech-seed"},{"level":13,"move":"sand-attack"},{"level":16,"move":"bullet-seed"},{"level":19,"move":"power-trip"},{"level":22,"move":"ingrain"},{"level":26,"move":"payback"},{"level":30,"move":"spikes"},{"level":35,"move":"sucker-punch"},{"level":38,"move":"pin-missile"},{"level":44,"move":"energy-ball"},{"level":49,"move":"cotton-spore"},{"level":54,"move":"sandstorm"}],
+  "333": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":4,"move":"disarming-voice"},{"level":8,"move":"mist"},{"level":12,"move":"fury-attack"},{"level":16,"move":"round"},{"level":20,"move":"dragon-breath"},{"level":24,"move":"safeguard"},{"level":28,"move":"sing"},{"level":32,"move":"cotton-guard"},{"level":36,"move":"take-down"},{"level":40,"move":"moonblast"},{"level":44,"move":"perish-song"}],
+  "334": [{"level":0,"move":"dragon-pulse"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"growl"},{"level":1,"move":"mist"},{"level":1,"move":"peck"},{"level":1,"move":"pluck"},{"level":12,"move":"fury-attack"},{"level":16,"move":"round"},{"level":20,"move":"dragon-breath"},{"level":24,"move":"safeguard"},{"level":28,"move":"sing"},{"level":32,"move":"cotton-guard"},{"level":38,"move":"take-down"},{"level":44,"move":"moonblast"},{"level":50,"move":"perish-song"},{"level":56,"move":"sky-attack"}],
+  "335": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":5,"move":"quick-attack"},{"level":8,"move":"fury-cutter"},{"level":12,"move":"metal-claw"},{"level":15,"move":"hone-claws"},{"level":19,"move":"slash"},{"level":22,"move":"power-trip"},{"level":26,"move":"crush-claw"},{"level":29,"move":"false-swipe"},{"level":33,"move":"switcheroo"},{"level":36,"move":"detect"},{"level":40,"move":"x-scissor"},{"level":43,"move":"taunt"},{"level":47,"move":"swords-dance"},{"level":50,"move":"close-combat"}],
+  "336": [{"level":1,"move":"swagger"},{"level":1,"move":"wrap"},{"level":4,"move":"bite"},{"level":6,"move":"lick"},{"level":9,"move":"poison-tail"},{"level":11,"move":"feint"},{"level":14,"move":"screech"},{"level":19,"move":"glare"},{"level":21,"move":"poison-fang"},{"level":24,"move":"venoshock"},{"level":29,"move":"gastro-acid"},{"level":31,"move":"poison-jab"},{"level":34,"move":"haze"},{"level":39,"move":"crunch"},{"level":41,"move":"belch"},{"level":44,"move":"coil"},{"level":46,"move":"sludge-bomb"}],
+  "337": [{"level":1,"move":"confusion"},{"level":1,"move":"harden"},{"level":1,"move":"moonblast"},{"level":1,"move":"moonlight"},{"level":1,"move":"rock-throw"},{"level":1,"move":"tackle"},{"level":5,"move":"hypnosis"},{"level":10,"move":"rock-polish"},{"level":15,"move":"rock-slide"},{"level":20,"move":"psyshock"},{"level":25,"move":"cosmic-power"},{"level":30,"move":"psychic"},{"level":35,"move":"stone-edge"},{"level":40,"move":"future-sight"},{"level":45,"move":"magic-room"},{"level":50,"move":"explosion"}],
+  "338": [{"level":1,"move":"confusion"},{"level":1,"move":"flare-blitz"},{"level":1,"move":"harden"},{"level":1,"move":"morning-sun"},{"level":1,"move":"rock-throw"},{"level":1,"move":"tackle"},{"level":5,"move":"hypnosis"},{"level":10,"move":"rock-polish"},{"level":15,"move":"rock-slide"},{"level":20,"move":"zen-headbutt"},{"level":25,"move":"cosmic-power"},{"level":30,"move":"psychic"},{"level":35,"move":"stone-edge"},{"level":40,"move":"solar-beam"},{"level":45,"move":"wonder-room"},{"level":50,"move":"explosion"}],
+  "339": [{"level":1,"move":"mud-slap"},{"level":1,"move":"water-gun"},{"level":6,"move":"rest"},{"level":6,"move":"snore"},{"level":12,"move":"water-pulse"},{"level":18,"move":"amnesia"},{"level":24,"move":"aqua-tail"},{"level":31,"move":"muddy-water"},{"level":36,"move":"earthquake"},{"level":42,"move":"future-sight"},{"level":48,"move":"fissure"}],
+  "340": [{"level":0,"move":"thrash"},{"level":1,"move":"belch"},{"level":1,"move":"mud-slap"},{"level":1,"move":"rest"},{"level":1,"move":"snore"},{"level":1,"move":"tickle"},{"level":1,"move":"water-gun"},{"level":1,"move":"zen-headbutt"},{"level":12,"move":"water-pulse"},{"level":18,"move":"amnesia"},{"level":24,"move":"aqua-tail"},{"level":33,"move":"muddy-water"},{"level":40,"move":"earthquake"},{"level":48,"move":"future-sight"},{"level":56,"move":"fissure"}],
+  "341": [{"level":1,"move":"harden"},{"level":1,"move":"water-gun"},{"level":4,"move":"leer"},{"level":8,"move":"taunt"},{"level":12,"move":"bubble-beam"},{"level":16,"move":"knock-off"},{"level":20,"move":"double-hit"},{"level":24,"move":"protect"},{"level":28,"move":"night-slash"},{"level":32,"move":"razor-shell"},{"level":36,"move":"swords-dance"},{"level":40,"move":"crunch"},{"level":44,"move":"crabhammer"},{"level":48,"move":"endeavor"},{"level":52,"move":"guillotine"}],
+  "342": [{"level":0,"move":"swift"},{"level":1,"move":"harden"},{"level":1,"move":"leer"},{"level":1,"move":"taunt"},{"level":1,"move":"water-gun"},{"level":12,"move":"bubble-beam"},{"level":16,"move":"knock-off"},{"level":20,"move":"double-hit"},{"level":24,"move":"protect"},{"level":28,"move":"night-slash"},{"level":34,"move":"razor-shell"},{"level":40,"move":"swords-dance"},{"level":46,"move":"crunch"},{"level":52,"move":"crabhammer"},{"level":58,"move":"endeavor"},{"level":64,"move":"guillotine"}],
+  "343": [{"level":1,"move":"harden"},{"level":1,"move":"mud-slap"},{"level":3,"move":"rapid-spin"},{"level":6,"move":"confusion"},{"level":9,"move":"rock-tomb"},{"level":12,"move":"power-trick"},{"level":15,"move":"psybeam"},{"level":18,"move":"ancient-power"},{"level":21,"move":"imprison"},{"level":24,"move":"cosmic-power"},{"level":27,"move":"extrasensory"},{"level":30,"move":"earth-power"},{"level":33,"move":"self-destruct"},{"level":36,"move":"guard-split"},{"level":36,"move":"power-split"},{"level":39,"move":"sandstorm"},{"level":42,"move":"explosion"}],
+  "344": [{"level":0,"move":"hyper-beam"},{"level":1,"move":"confusion"},{"level":1,"move":"harden"},{"level":1,"move":"hyper-beam"},{"level":1,"move":"mud-slap"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"teleport"},{"level":9,"move":"rock-tomb"},{"level":12,"move":"power-trick"},{"level":15,"move":"psybeam"},{"level":18,"move":"ancient-power"},{"level":21,"move":"imprison"},{"level":24,"move":"cosmic-power"},{"level":27,"move":"extrasensory"},{"level":30,"move":"earth-power"},{"level":33,"move":"self-destruct"},{"level":38,"move":"guard-split"},{"level":38,"move":"power-split"},{"level":43,"move":"sandstorm"},{"level":48,"move":"explosion"}],
+  "345": [{"level":1,"move":"astonish"},{"level":1,"move":"wrap"},{"level":4,"move":"acid"},{"level":8,"move":"confuse-ray"},{"level":12,"move":"ingrain"},{"level":16,"move":"ancient-power"},{"level":20,"move":"mega-drain"},{"level":24,"move":"brine"},{"level":28,"move":"amnesia"},{"level":32,"move":"gastro-acid"},{"level":36,"move":"giga-drain"},{"level":41,"move":"spit-up"},{"level":41,"move":"stockpile"},{"level":41,"move":"swallow"},{"level":44,"move":"energy-ball"}],
+  "346": [{"level":1,"move":"acid"},{"level":1,"move":"astonish"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"leech-seed"},{"level":1,"move":"wrap"},{"level":12,"move":"ingrain"},{"level":16,"move":"ancient-power"},{"level":20,"move":"mega-drain"},{"level":24,"move":"brine"},{"level":28,"move":"amnesia"},{"level":32,"move":"gastro-acid"},{"level":36,"move":"giga-drain"},{"level":43,"move":"spit-up"},{"level":43,"move":"stockpile"},{"level":43,"move":"swallow"},{"level":48,"move":"energy-ball"}],
+  "347": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"harden"},{"level":4,"move":"water-gun"},{"level":8,"move":"smack-down"},{"level":12,"move":"metal-claw"},{"level":16,"move":"ancient-power"},{"level":20,"move":"bug-bite"},{"level":24,"move":"brine"},{"level":28,"move":"slash"},{"level":32,"move":"crush-claw"},{"level":36,"move":"rock-blast"},{"level":41,"move":"protect"},{"level":44,"move":"x-scissor"}],
+  "348": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"harden"},{"level":1,"move":"smack-down"},{"level":1,"move":"water-gun"},{"level":12,"move":"metal-claw"},{"level":16,"move":"ancient-power"},{"level":20,"move":"bug-bite"},{"level":24,"move":"brine"},{"level":28,"move":"slash"},{"level":32,"move":"crush-claw"},{"level":36,"move":"rock-blast"},{"level":43,"move":"protect"},{"level":48,"move":"x-scissor"}],
+  "349": [{"level":1,"move":"splash"},{"level":15,"move":"tackle"},{"level":25,"move":"flail"}],
+  "350": [{"level":0,"move":"water-pulse"},{"level":1,"move":"flail"},{"level":1,"move":"splash"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":1,"move":"wrap"},{"level":4,"move":"disarming-voice"},{"level":8,"move":"twister"},{"level":12,"move":"aqua-ring"},{"level":16,"move":"attract"},{"level":20,"move":"life-dew"},{"level":24,"move":"dragon-tail"},{"level":28,"move":"recover"},{"level":32,"move":"aqua-tail"},{"level":36,"move":"safeguard"},{"level":40,"move":"surf"},{"level":44,"move":"rain-dance"},{"level":48,"move":"coil"},{"level":52,"move":"hydro-pump"}],
+  "351": [{"level":1,"move":"tackle"},{"level":10,"move":"ember"},{"level":10,"move":"powder-snow"},{"level":10,"move":"water-gun"},{"level":15,"move":"headbutt"},{"level":20,"move":"hail"},{"level":20,"move":"rain-dance"},{"level":20,"move":"sunny-day"},{"level":25,"move":"weather-ball"},{"level":35,"move":"blizzard"},{"level":35,"move":"fire-blast"},{"level":35,"move":"hydro-pump"},{"level":45,"move":"hurricane"}],
+  "352": [{"level":1,"move":"astonish"},{"level":1,"move":"lick"},{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thief"},{"level":4,"move":"bind"},{"level":7,"move":"shadow-sneak"},{"level":10,"move":"feint"},{"level":13,"move":"fury-swipes"},{"level":16,"move":"feint-attack"},{"level":18,"move":"psybeam"},{"level":21,"move":"ancient-power"},{"level":25,"move":"slash"},{"level":30,"move":"camouflage"},{"level":33,"move":"shadow-claw"},{"level":38,"move":"screech"},{"level":42,"move":"substitute"},{"level":46,"move":"sucker-punch"},{"level":50,"move":"synchronoise"}],
+  "353": [{"level":1,"move":"astonish"},{"level":4,"move":"screech"},{"level":7,"move":"night-shade"},{"level":10,"move":"spite"},{"level":16,"move":"will-o-wisp"},{"level":19,"move":"shadow-sneak"},{"level":22,"move":"hex"},{"level":26,"move":"curse"},{"level":30,"move":"shadow-ball"},{"level":34,"move":"role-play"},{"level":38,"move":"sucker-punch"},{"level":42,"move":"trick"},{"level":48,"move":"phantom-force"}],
+  "354": [{"level":0,"move":"knock-off"},{"level":1,"move":"night-shade"},{"level":1,"move":"screech"},{"level":1,"move":"spite"},{"level":16,"move":"will-o-wisp"},{"level":19,"move":"shadow-sneak"},{"level":22,"move":"hex"},{"level":26,"move":"curse"},{"level":30,"move":"shadow-ball"},{"level":34,"move":"role-play"},{"level":40,"move":"sucker-punch"},{"level":46,"move":"trick"},{"level":53,"move":"phantom-force"}],
+  "355": [{"level":1,"move":"astonish"},{"level":1,"move":"leer"},{"level":4,"move":"disable"},{"level":8,"move":"shadow-sneak"},{"level":12,"move":"confuse-ray"},{"level":16,"move":"night-shade"},{"level":20,"move":"payback"},{"level":24,"move":"will-o-wisp"},{"level":28,"move":"mean-look"},{"level":32,"move":"hex"},{"level":36,"move":"curse"},{"level":40,"move":"shadow-ball"},{"level":44,"move":"future-sight"}],
+  "356": [{"level":0,"move":"shadow-punch"},{"level":1,"move":"astonish"},{"level":1,"move":"bind"},{"level":1,"move":"disable"},{"level":1,"move":"fire-punch"},{"level":1,"move":"gravity"},{"level":1,"move":"ice-punch"},{"level":1,"move":"leer"},{"level":1,"move":"shadow-sneak"},{"level":1,"move":"thunder-punch"},{"level":12,"move":"confuse-ray"},{"level":16,"move":"night-shade"},{"level":20,"move":"payback"},{"level":24,"move":"will-o-wisp"},{"level":28,"move":"mean-look"},{"level":32,"move":"hex"},{"level":36,"move":"curse"},{"level":42,"move":"shadow-ball"},{"level":48,"move":"future-sight"}],
+  "357": [{"level":1,"move":"growth"},{"level":1,"move":"gust"},{"level":1,"move":"leaf-storm"},{"level":1,"move":"leer"},{"level":1,"move":"razor-leaf"},{"level":6,"move":"sweet-scent"},{"level":10,"move":"stomp"},{"level":16,"move":"magical-leaf"},{"level":21,"move":"whirlwind"},{"level":30,"move":"wide-guard"},{"level":36,"move":"air-slash"},{"level":41,"move":"body-slam"},{"level":46,"move":"outrage"},{"level":50,"move":"synthesis"},{"level":56,"move":"solar-beam"}],
+  "358": [{"level":1,"move":"astonish"},{"level":1,"move":"confusion"},{"level":1,"move":"growl"},{"level":1,"move":"healing-wish"},{"level":1,"move":"wrap"},{"level":13,"move":"yawn"},{"level":16,"move":"stored-power"},{"level":19,"move":"take-down"},{"level":22,"move":"extrasensory"},{"level":27,"move":"heal-bell"},{"level":32,"move":"uproar"},{"level":37,"move":"safeguard"},{"level":42,"move":"double-edge"},{"level":47,"move":"heal-pulse"}],
+  "359": [{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":5,"move":"double-team"},{"level":10,"move":"knock-off"},{"level":15,"move":"detect"},{"level":20,"move":"taunt"},{"level":25,"move":"slash"},{"level":30,"move":"night-slash"},{"level":35,"move":"focus-energy"},{"level":40,"move":"sucker-punch"},{"level":45,"move":"swords-dance"},{"level":50,"move":"future-sight"},{"level":55,"move":"perish-song"}],
+  "360": [{"level":1,"move":"amnesia"},{"level":1,"move":"charm"},{"level":1,"move":"counter"},{"level":1,"move":"destiny-bond"},{"level":1,"move":"encore"},{"level":1,"move":"mirror-coat"},{"level":1,"move":"safeguard"},{"level":1,"move":"splash"}],
+  "361": [{"level":1,"move":"astonish"},{"level":1,"move":"headbutt"},{"level":1,"move":"powder-snow"},{"level":5,"move":"leer"},{"level":10,"move":"double-team"},{"level":15,"move":"ice-shard"},{"level":20,"move":"protect"},{"level":25,"move":"icy-wind"},{"level":30,"move":"frost-breath"},{"level":35,"move":"bite"},{"level":40,"move":"ice-fang"},{"level":45,"move":"snowscape"},{"level":50,"move":"weather-ball"},{"level":55,"move":"crunch"},{"level":60,"move":"blizzard"}],
+  "362": [{"level":0,"move":"freeze-dry"},{"level":1,"move":"astonish"},{"level":1,"move":"double-team"},{"level":1,"move":"headbutt"},{"level":1,"move":"leer"},{"level":1,"move":"powder-snow"},{"level":1,"move":"sheer-cold"},{"level":15,"move":"ice-shard"},{"level":20,"move":"protect"},{"level":25,"move":"icy-wind"},{"level":30,"move":"frost-breath"},{"level":35,"move":"bite"},{"level":40,"move":"ice-fang"},{"level":47,"move":"snowscape"},{"level":54,"move":"weather-ball"},{"level":61,"move":"crunch"},{"level":68,"move":"blizzard"}],
+  "363": [{"level":1,"move":"defense-curl"},{"level":1,"move":"rollout"},{"level":4,"move":"growl"},{"level":8,"move":"water-gun"},{"level":12,"move":"powder-snow"},{"level":16,"move":"rest"},{"level":20,"move":"snore"},{"level":24,"move":"brine"},{"level":28,"move":"aurora-beam"},{"level":33,"move":"encore"},{"level":36,"move":"body-slam"},{"level":40,"move":"surf"},{"level":44,"move":"blizzard"},{"level":48,"move":"hail"},{"level":52,"move":"sheer-cold"}],
+  "364": [{"level":0,"move":"swagger"},{"level":1,"move":"defense-curl"},{"level":1,"move":"growl"},{"level":1,"move":"rollout"},{"level":1,"move":"swagger"},{"level":1,"move":"water-gun"},{"level":12,"move":"powder-snow"},{"level":16,"move":"rest"},{"level":20,"move":"snore"},{"level":24,"move":"brine"},{"level":28,"move":"aurora-beam"},{"level":35,"move":"encore"},{"level":40,"move":"body-slam"},{"level":46,"move":"surf"},{"level":52,"move":"blizzard"},{"level":58,"move":"hail"},{"level":64,"move":"sheer-cold"}],
+  "365": [{"level":1,"move":"crunch"},{"level":1,"move":"defense-curl"},{"level":1,"move":"growl"},{"level":1,"move":"ice-fang"},{"level":1,"move":"rollout"},{"level":1,"move":"swagger"},{"level":1,"move":"water-gun"},{"level":12,"move":"powder-snow"},{"level":16,"move":"rest"},{"level":20,"move":"snore"},{"level":24,"move":"brine"},{"level":28,"move":"aurora-beam"},{"level":35,"move":"encore"},{"level":40,"move":"body-slam"},{"level":48,"move":"surf"},{"level":56,"move":"blizzard"},{"level":64,"move":"hail"},{"level":72,"move":"sheer-cold"}],
+  "366": [{"level":1,"move":"clamp"},{"level":1,"move":"iron-defense"},{"level":1,"move":"water-gun"},{"level":1,"move":"whirlpool"},{"level":50,"move":"shell-smash"}],
+  "367": [{"level":1,"move":"bite"},{"level":1,"move":"whirlpool"},{"level":5,"move":"screech"},{"level":9,"move":"scary-face"},{"level":11,"move":"feint-attack"},{"level":14,"move":"water-pulse"},{"level":16,"move":"ice-fang"},{"level":19,"move":"brine"},{"level":23,"move":"sucker-punch"},{"level":26,"move":"dive"},{"level":29,"move":"baton-pass"},{"level":34,"move":"crunch"},{"level":39,"move":"aqua-tail"},{"level":45,"move":"coil"},{"level":50,"move":"hydro-pump"}],
+  "368": [{"level":1,"move":"confusion"},{"level":1,"move":"whirlpool"},{"level":5,"move":"water-sport"},{"level":9,"move":"agility"},{"level":11,"move":"draining-kiss"},{"level":14,"move":"water-pulse"},{"level":16,"move":"amnesia"},{"level":19,"move":"aqua-ring"},{"level":23,"move":"captivate"},{"level":26,"move":"dive"},{"level":29,"move":"baton-pass"},{"level":34,"move":"psychic"},{"level":39,"move":"aqua-tail"},{"level":45,"move":"coil"},{"level":50,"move":"hydro-pump"}],
+  "369": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":5,"move":"water-gun"},{"level":10,"move":"ancient-power"},{"level":15,"move":"yawn"},{"level":20,"move":"dive"},{"level":25,"move":"take-down"},{"level":30,"move":"aqua-tail"},{"level":35,"move":"rest"},{"level":40,"move":"flail"},{"level":45,"move":"hydro-pump"},{"level":50,"move":"double-edge"},{"level":55,"move":"head-smash"}],
+  "370": [{"level":1,"move":"charm"},{"level":1,"move":"tackle"},{"level":4,"move":"water-gun"},{"level":7,"move":"agility"},{"level":13,"move":"wish"},{"level":17,"move":"water-pulse"},{"level":20,"move":"attract"},{"level":22,"move":"draining-kiss"},{"level":26,"move":"flail"},{"level":31,"move":"sweet-kiss"},{"level":34,"move":"take-down"},{"level":37,"move":"baby-doll-eyes"},{"level":40,"move":"aqua-ring"},{"level":42,"move":"soak"},{"level":46,"move":"hydro-pump"},{"level":49,"move":"safeguard"}],
+  "371": [{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":5,"move":"bite"},{"level":10,"move":"dragon-breath"},{"level":15,"move":"headbutt"},{"level":20,"move":"scary-face"},{"level":25,"move":"crunch"},{"level":31,"move":"dragon-claw"},{"level":35,"move":"zen-headbutt"},{"level":40,"move":"focus-energy"},{"level":45,"move":"flamethrower"},{"level":50,"move":"outrage"},{"level":55,"move":"double-edge"}],
+  "372": [{"level":0,"move":"protect"},{"level":1,"move":"bite"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":15,"move":"headbutt"},{"level":20,"move":"scary-face"},{"level":25,"move":"crunch"},{"level":33,"move":"dragon-claw"},{"level":39,"move":"zen-headbutt"},{"level":46,"move":"focus-energy"},{"level":53,"move":"flamethrower"},{"level":60,"move":"outrage"},{"level":67,"move":"double-edge"}],
+  "373": [{"level":0,"move":"fly"},{"level":1,"move":"bite"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"dragon-tail"},{"level":1,"move":"dual-wingbeat"},{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"protect"},{"level":1,"move":"roost"},{"level":15,"move":"headbutt"},{"level":20,"move":"scary-face"},{"level":25,"move":"crunch"},{"level":33,"move":"dragon-claw"},{"level":39,"move":"zen-headbutt"},{"level":46,"move":"focus-energy"},{"level":55,"move":"flamethrower"},{"level":73,"move":"double-edge"}],
+  "374": [{"level":1,"move":"tackle"}],
+  "375": [{"level":0,"move":"confusion"},{"level":0,"move":"metal-claw"},{"level":1,"move":"bullet-punch"},{"level":1,"move":"hone-claws"},{"level":1,"move":"tackle"},{"level":6,"move":"zen-headbutt"},{"level":12,"move":"magnet-rise"},{"level":18,"move":"flash-cannon"},{"level":26,"move":"take-down"},{"level":34,"move":"psychic"},{"level":42,"move":"scary-face"},{"level":50,"move":"meteor-mash"},{"level":58,"move":"iron-defense"},{"level":66,"move":"agility"},{"level":74,"move":"hyper-beam"}],
+  "376": [{"level":0,"move":"hammer-arm"},{"level":1,"move":"bullet-punch"},{"level":1,"move":"confusion"},{"level":1,"move":"metal-claw"},{"level":1,"move":"tackle"},{"level":6,"move":"zen-headbutt"},{"level":12,"move":"magnet-rise"},{"level":16,"move":"flash-cannon"},{"level":26,"move":"take-down"},{"level":34,"move":"psychic"},{"level":42,"move":"scary-face"},{"level":52,"move":"meteor-mash"},{"level":62,"move":"iron-defense"},{"level":72,"move":"agility"},{"level":82,"move":"hyper-beam"}],
+  "377": [{"level":1,"move":"charge-beam"},{"level":1,"move":"rock-throw"},{"level":6,"move":"bulldoze"},{"level":12,"move":"ancient-power"},{"level":18,"move":"stomp"},{"level":24,"move":"rock-slide"},{"level":30,"move":"curse"},{"level":36,"move":"iron-defense"},{"level":42,"move":"hammer-arm"},{"level":48,"move":"stone-edge"},{"level":54,"move":"superpower"},{"level":60,"move":"lock-on"},{"level":66,"move":"zap-cannon"},{"level":72,"move":"hyper-beam"},{"level":78,"move":"explosion"}],
+  "378": [{"level":1,"move":"charge-beam"},{"level":1,"move":"icy-wind"},{"level":6,"move":"bulldoze"},{"level":12,"move":"ancient-power"},{"level":18,"move":"stomp"},{"level":24,"move":"ice-beam"},{"level":30,"move":"curse"},{"level":36,"move":"amnesia"},{"level":42,"move":"hammer-arm"},{"level":48,"move":"blizzard"},{"level":54,"move":"superpower"},{"level":60,"move":"lock-on"},{"level":66,"move":"zap-cannon"},{"level":72,"move":"hyper-beam"},{"level":78,"move":"explosion"}],
+  "379": [{"level":1,"move":"charge-beam"},{"level":1,"move":"metal-claw"},{"level":6,"move":"bulldoze"},{"level":12,"move":"ancient-power"},{"level":18,"move":"stomp"},{"level":24,"move":"flash-cannon"},{"level":24,"move":"iron-head"},{"level":30,"move":"curse"},{"level":36,"move":"amnesia"},{"level":36,"move":"iron-defense"},{"level":42,"move":"hammer-arm"},{"level":48,"move":"heavy-slam"},{"level":54,"move":"superpower"},{"level":60,"move":"lock-on"},{"level":66,"move":"zap-cannon"},{"level":72,"move":"hyper-beam"},{"level":78,"move":"explosion"}],
+  "380": [{"level":1,"move":"charm"},{"level":1,"move":"stored-power"},{"level":5,"move":"helping-hand"},{"level":10,"move":"recover"},{"level":15,"move":"confusion"},{"level":20,"move":"tailwind"},{"level":25,"move":"dragon-breath"},{"level":30,"move":"wish"},{"level":35,"move":"mist-ball"},{"level":40,"move":"zen-headbutt"},{"level":45,"move":"dragon-pulse"},{"level":50,"move":"heal-pulse"},{"level":55,"move":"reflect-type"},{"level":60,"move":"psychic"},{"level":65,"move":"guard-split"},{"level":70,"move":"healing-wish"}],
+  "381": [{"level":1,"move":"dragon-dance"},{"level":1,"move":"stored-power"},{"level":5,"move":"helping-hand"},{"level":10,"move":"recover"},{"level":15,"move":"confusion"},{"level":20,"move":"tailwind"},{"level":25,"move":"dragon-breath"},{"level":30,"move":"ally-switch"},{"level":35,"move":"luster-purge"},{"level":40,"move":"zen-headbutt"},{"level":45,"move":"dragon-pulse"},{"level":50,"move":"heal-pulse"},{"level":55,"move":"simple-beam"},{"level":60,"move":"psychic"},{"level":65,"move":"power-split"},{"level":70,"move":"memento"}],
+  "382": [{"level":1,"move":"ancient-power"},{"level":1,"move":"body-slam"},{"level":1,"move":"origin-pulse"},{"level":1,"move":"scary-face"},{"level":1,"move":"water-pulse"},{"level":9,"move":"aqua-tail"},{"level":18,"move":"calm-mind"},{"level":27,"move":"muddy-water"},{"level":36,"move":"ice-beam"},{"level":45,"move":"sheer-cold"},{"level":54,"move":"aqua-ring"},{"level":72,"move":"hydro-pump"},{"level":81,"move":"double-edge"},{"level":90,"move":"water-spout"}],
+  "383": [{"level":1,"move":"ancient-power"},{"level":1,"move":"lava-plume"},{"level":1,"move":"mud-shot"},{"level":1,"move":"precipice-blades"},{"level":1,"move":"scary-face"},{"level":9,"move":"earth-power"},{"level":18,"move":"bulk-up"},{"level":27,"move":"earthquake"},{"level":36,"move":"hammer-arm"},{"level":45,"move":"fissure"},{"level":54,"move":"rest"},{"level":72,"move":"fire-blast"},{"level":81,"move":"solar-beam"},{"level":90,"move":"eruption"}],
+  "384": [{"level":1,"move":"air-slash"},{"level":1,"move":"ancient-power"},{"level":1,"move":"dragon-ascent"},{"level":1,"move":"scary-face"},{"level":1,"move":"twister"},{"level":9,"move":"crunch"},{"level":18,"move":"dragon-dance"},{"level":27,"move":"extreme-speed"},{"level":36,"move":"dragon-pulse"},{"level":45,"move":"hyper-voice"},{"level":54,"move":"rest"},{"level":63,"move":"fly"},{"level":72,"move":"hurricane"},{"level":81,"move":"outrage"},{"level":90,"move":"hyper-beam"}],
+  "385": [{"level":1,"move":"confusion"},{"level":1,"move":"wish"},{"level":7,"move":"swift"},{"level":21,"move":"life-dew"},{"level":28,"move":"zen-headbutt"},{"level":35,"move":"gravity"},{"level":42,"move":"psychic"},{"level":49,"move":"meteor-mash"},{"level":56,"move":"healing-wish"},{"level":63,"move":"rest"},{"level":70,"move":"future-sight"},{"level":77,"move":"double-edge"},{"level":84,"move":"cosmic-power"},{"level":91,"move":"last-resort"},{"level":98,"move":"doom-desire"}],
+  "386": [{"level":1,"move":"leer"},{"level":1,"move":"wrap"},{"level":7,"move":"night-shade"},{"level":13,"move":"teleport"},{"level":19,"move":"knock-off"},{"level":25,"move":"psyshock"},{"level":31,"move":"psychic"},{"level":37,"move":"gravity"},{"level":43,"move":"skill-swap"},{"level":49,"move":"zen-headbutt"},{"level":55,"move":"cosmic-power"},{"level":61,"move":"recover"},{"level":67,"move":"psycho-boost"},{"level":73,"move":"hyper-beam"}],
+  "387": [{"level":1,"move":"tackle"},{"level":5,"move":"withdraw"},{"level":9,"move":"absorb"},{"level":13,"move":"razor-leaf"},{"level":17,"move":"curse"},{"level":21,"move":"bite"},{"level":25,"move":"mega-drain"},{"level":29,"move":"leech-seed"},{"level":33,"move":"synthesis"},{"level":37,"move":"crunch"},{"level":41,"move":"giga-drain"},{"level":45,"move":"leaf-storm"}],
+  "388": [{"level":1,"move":"absorb"},{"level":1,"move":"tackle"},{"level":1,"move":"withdraw"},{"level":13,"move":"razor-leaf"},{"level":17,"move":"curse"},{"level":22,"move":"bite"},{"level":27,"move":"mega-drain"},{"level":32,"move":"leech-seed"},{"level":37,"move":"synthesis"},{"level":42,"move":"crunch"},{"level":47,"move":"giga-drain"},{"level":52,"move":"leaf-storm"}],
+  "389": [{"level":0,"move":"earthquake"},{"level":1,"move":"absorb"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"tackle"},{"level":1,"move":"withdraw"},{"level":1,"move":"wood-hammer"},{"level":17,"move":"curse"},{"level":22,"move":"bite"},{"level":27,"move":"mega-drain"},{"level":33,"move":"leech-seed"},{"level":39,"move":"synthesis"},{"level":45,"move":"crunch"},{"level":51,"move":"giga-drain"},{"level":57,"move":"leaf-storm"},{"level":63,"move":"headlong-rush"}],
+  "390": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":7,"move":"ember"},{"level":9,"move":"taunt"},{"level":15,"move":"fury-swipes"},{"level":17,"move":"flame-wheel"},{"level":23,"move":"nasty-plot"},{"level":25,"move":"torment"},{"level":31,"move":"facade"},{"level":33,"move":"fire-spin"},{"level":39,"move":"acrobatics"},{"level":41,"move":"slack-off"},{"level":47,"move":"flamethrower"}],
+  "391": [{"level":0,"move":"mach-punch"},{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":9,"move":"taunt"},{"level":16,"move":"fury-swipes"},{"level":19,"move":"flame-wheel"},{"level":26,"move":"feint"},{"level":29,"move":"torment"},{"level":36,"move":"close-combat"},{"level":39,"move":"fire-spin"},{"level":46,"move":"acrobatics"},{"level":49,"move":"slack-off"},{"level":56,"move":"flare-blitz"}],
+  "392": [{"level":0,"move":"close-combat"},{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"mach-punch"},{"level":1,"move":"scratch"},{"level":16,"move":"fury-swipes"},{"level":19,"move":"flame-wheel"},{"level":26,"move":"feint"},{"level":29,"move":"torment"},{"level":42,"move":"fire-spin"},{"level":47,"move":"flare-blitz"},{"level":52,"move":"acrobatics"},{"level":58,"move":"calm-mind"},{"level":65,"move":"raging-fury"}],
+  "393": [{"level":1,"move":"pound"},{"level":4,"move":"growl"},{"level":8,"move":"water-gun"},{"level":11,"move":"charm"},{"level":15,"move":"peck"},{"level":18,"move":"bubble-beam"},{"level":22,"move":"swagger"},{"level":25,"move":"fury-attack"},{"level":29,"move":"brine"},{"level":32,"move":"whirlpool"},{"level":36,"move":"mist"},{"level":39,"move":"drill-peck"},{"level":43,"move":"hydro-pump"}],
+  "394": [{"level":0,"move":"metal-claw"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":15,"move":"peck"},{"level":19,"move":"bubble-beam"},{"level":24,"move":"swagger"},{"level":28,"move":"fury-attack"},{"level":33,"move":"brine"},{"level":37,"move":"whirlpool"},{"level":42,"move":"mist"},{"level":46,"move":"drill-peck"},{"level":50,"move":"hydro-pump"}],
+  "395": [{"level":0,"move":"aqua-jet"},{"level":1,"move":"growl"},{"level":1,"move":"metal-claw"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":11,"move":"swords-dance"},{"level":15,"move":"peck"},{"level":19,"move":"bubble-beam"},{"level":24,"move":"swagger"},{"level":28,"move":"fury-attack"},{"level":33,"move":"brine"},{"level":39,"move":"whirlpool"},{"level":46,"move":"mist"},{"level":52,"move":"drill-peck"},{"level":59,"move":"hydro-pump"},{"level":66,"move":"wave-crash"}],
+  "396": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":5,"move":"quick-attack"},{"level":9,"move":"wing-attack"},{"level":13,"move":"double-team"},{"level":17,"move":"endeavor"},{"level":21,"move":"whirlwind"},{"level":25,"move":"aerial-ace"},{"level":29,"move":"take-down"},{"level":33,"move":"agility"},{"level":37,"move":"brave-bird"},{"level":41,"move":"final-gambit"}],
+  "397": [{"level":1,"move":"growl"},{"level":1,"move":"quick-attack"},{"level":1,"move":"tackle"},{"level":9,"move":"wing-attack"},{"level":13,"move":"double-team"},{"level":18,"move":"endeavor"},{"level":23,"move":"whirlwind"},{"level":28,"move":"aerial-ace"},{"level":33,"move":"take-down"},{"level":38,"move":"agility"},{"level":43,"move":"brave-bird"},{"level":48,"move":"final-gambit"}],
+  "398": [{"level":0,"move":"close-combat"},{"level":1,"move":"growl"},{"level":1,"move":"quick-attack"},{"level":1,"move":"tackle"},{"level":1,"move":"wing-attack"},{"level":13,"move":"double-team"},{"level":18,"move":"endeavor"},{"level":23,"move":"whirlwind"},{"level":28,"move":"aerial-ace"},{"level":33,"move":"take-down"},{"level":41,"move":"agility"},{"level":49,"move":"brave-bird"},{"level":57,"move":"final-gambit"}],
+  "399": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":5,"move":"defense-curl"},{"level":9,"move":"rollout"},{"level":13,"move":"headbutt"},{"level":17,"move":"hyper-fang"},{"level":21,"move":"yawn"},{"level":25,"move":"crunch"},{"level":29,"move":"take-down"},{"level":33,"move":"super-fang"},{"level":37,"move":"swords-dance"},{"level":41,"move":"amnesia"},{"level":45,"move":"superpower"},{"level":49,"move":"curse"}],
+  "400": [{"level":0,"move":"water-gun"},{"level":1,"move":"aqua-jet"},{"level":1,"move":"growl"},{"level":1,"move":"rototiller"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":5,"move":"defense-curl"},{"level":9,"move":"rollout"},{"level":13,"move":"headbutt"},{"level":18,"move":"hyper-fang"},{"level":23,"move":"yawn"},{"level":28,"move":"crunch"},{"level":33,"move":"take-down"},{"level":38,"move":"super-fang"},{"level":43,"move":"swords-dance"},{"level":48,"move":"amnesia"},{"level":53,"move":"superpower"},{"level":58,"move":"curse"}],
+  "401": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":6,"move":"struggle-bug"},{"level":16,"move":"bug-bite"}],
+  "402": [{"level":0,"move":"fury-cutter"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":14,"move":"absorb"},{"level":18,"move":"sing"},{"level":22,"move":"focus-energy"},{"level":26,"move":"slash"},{"level":30,"move":"x-scissor"},{"level":34,"move":"screech"},{"level":36,"move":"fell-stinger"},{"level":38,"move":"taunt"},{"level":42,"move":"night-slash"},{"level":44,"move":"sticky-web"},{"level":46,"move":"bug-buzz"},{"level":50,"move":"perish-song"}],
+  "403": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":4,"move":"thunder-shock"},{"level":8,"move":"charge"},{"level":12,"move":"bite"},{"level":16,"move":"spark"},{"level":20,"move":"roar"},{"level":24,"move":"volt-switch"},{"level":28,"move":"scary-face"},{"level":32,"move":"thunder-wave"},{"level":36,"move":"crunch"},{"level":40,"move":"discharge"},{"level":44,"move":"swagger"},{"level":48,"move":"wild-charge"}],
+  "404": [{"level":1,"move":"charge"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":12,"move":"bite"},{"level":18,"move":"spark"},{"level":24,"move":"roar"},{"level":31,"move":"volt-switch"},{"level":36,"move":"scary-face"},{"level":42,"move":"thunder-wave"},{"level":48,"move":"crunch"},{"level":54,"move":"discharge"},{"level":60,"move":"swagger"},{"level":68,"move":"wild-charge"}],
+  "405": [{"level":1,"move":"charge"},{"level":1,"move":"electric-terrain"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":12,"move":"bite"},{"level":18,"move":"spark"},{"level":24,"move":"roar"},{"level":33,"move":"volt-switch"},{"level":40,"move":"scary-face"},{"level":48,"move":"thunder-wave"},{"level":56,"move":"crunch"},{"level":64,"move":"discharge"},{"level":72,"move":"swagger"},{"level":80,"move":"wild-charge"}],
+  "406": [{"level":1,"move":"absorb"},{"level":1,"move":"growth"},{"level":1,"move":"stun-spore"},{"level":1,"move":"worry-seed"}],
+  "407": [{"level":1,"move":"absorb"},{"level":1,"move":"aromatherapy"},{"level":1,"move":"giga-drain"},{"level":1,"move":"grassy-terrain"},{"level":1,"move":"growth"},{"level":1,"move":"ingrain"},{"level":1,"move":"leech-seed"},{"level":1,"move":"magical-leaf"},{"level":1,"move":"mega-drain"},{"level":1,"move":"petal-blizzard"},{"level":1,"move":"petal-dance"},{"level":1,"move":"poison-sting"},{"level":1,"move":"stun-spore"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"synthesis"},{"level":1,"move":"toxic"},{"level":1,"move":"toxic-spikes"},{"level":1,"move":"venom-drench"},{"level":1,"move":"worry-seed"}],
+  "408": [{"level":1,"move":"headbutt"},{"level":1,"move":"leer"},{"level":6,"move":"focus-energy"},{"level":10,"move":"rock-smash"},{"level":15,"move":"take-down"},{"level":19,"move":"scary-face"},{"level":24,"move":"assurance"},{"level":28,"move":"slam"},{"level":33,"move":"ancient-power"},{"level":37,"move":"zen-headbutt"},{"level":42,"move":"screech"},{"level":46,"move":"head-smash"}],
+  "409": [{"level":0,"move":"endeavor"},{"level":1,"move":"focus-energy"},{"level":1,"move":"headbutt"},{"level":1,"move":"leer"},{"level":10,"move":"rock-smash"},{"level":15,"move":"take-down"},{"level":19,"move":"scary-face"},{"level":24,"move":"assurance"},{"level":28,"move":"slam"},{"level":36,"move":"ancient-power"},{"level":43,"move":"zen-headbutt"},{"level":51,"move":"screech"},{"level":58,"move":"head-smash"}],
+  "410": [{"level":1,"move":"protect"},{"level":1,"move":"tackle"},{"level":6,"move":"taunt"},{"level":10,"move":"metal-sound"},{"level":15,"move":"take-down"},{"level":19,"move":"iron-defense"},{"level":24,"move":"swagger"},{"level":28,"move":"ancient-power"},{"level":33,"move":"endure"},{"level":37,"move":"metal-burst"},{"level":42,"move":"iron-head"},{"level":46,"move":"heavy-slam"}],
+  "411": [{"level":0,"move":"block"},{"level":1,"move":"metal-sound"},{"level":1,"move":"protect"},{"level":1,"move":"tackle"},{"level":1,"move":"taunt"},{"level":15,"move":"take-down"},{"level":19,"move":"iron-defense"},{"level":24,"move":"swagger"},{"level":28,"move":"ancient-power"},{"level":36,"move":"endure"},{"level":43,"move":"metal-burst"},{"level":51,"move":"iron-head"},{"level":58,"move":"heavy-slam"}],
+  "412": [{"level":1,"move":"protect"},{"level":10,"move":"tackle"},{"level":15,"move":"bug-bite"},{"level":20,"move":"hidden-power"}],
+  "413": [{"level":0,"move":"quiver-dance"},{"level":1,"move":"bug-bite"},{"level":1,"move":"protect"},{"level":1,"move":"quiver-dance"},{"level":1,"move":"sucker-punch"},{"level":1,"move":"tackle"},{"level":10,"move":"protect"},{"level":15,"move":"bug-bite"},{"level":20,"move":"hidden-power"},{"level":23,"move":"confusion"},{"level":26,"move":"razor-leaf"},{"level":29,"move":"growth"},{"level":32,"move":"psybeam"},{"level":35,"move":"captivate"},{"level":38,"move":"flail"},{"level":41,"move":"attract"},{"level":44,"move":"psychic"},{"level":47,"move":"leaf-storm"},{"level":50,"move":"bug-buzz"}],
+  "414": [{"level":0,"move":"quiver-dance"},{"level":1,"move":"bug-bite"},{"level":1,"move":"protect"},{"level":1,"move":"quiver-dance"},{"level":1,"move":"tackle"},{"level":10,"move":"protect"},{"level":15,"move":"bug-bite"},{"level":20,"move":"hidden-power"},{"level":23,"move":"confusion"},{"level":26,"move":"gust"},{"level":29,"move":"poison-powder"},{"level":32,"move":"psybeam"},{"level":35,"move":"camouflage"},{"level":38,"move":"silver-wind"},{"level":41,"move":"air-slash"},{"level":44,"move":"psychic"},{"level":47,"move":"lunge"},{"level":50,"move":"bug-buzz"}],
+  "415": [{"level":1,"move":"bug-bite"},{"level":1,"move":"gust"},{"level":1,"move":"struggle-bug"},{"level":1,"move":"sweet-scent"}],
+  "416": [{"level":0,"move":"slash"},{"level":1,"move":"bug-bite"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"gust"},{"level":1,"move":"poison-sting"},{"level":1,"move":"struggle-bug"},{"level":1,"move":"sweet-scent"},{"level":4,"move":"fury-cutter"},{"level":8,"move":"aromatic-mist"},{"level":12,"move":"fell-stinger"},{"level":16,"move":"fury-swipes"},{"level":20,"move":"swagger"},{"level":24,"move":"roost"},{"level":28,"move":"air-slash"},{"level":32,"move":"power-gem"},{"level":36,"move":"toxic"},{"level":40,"move":"attack-order"},{"level":40,"move":"defend-order"},{"level":44,"move":"destiny-bond"}],
+  "417": [{"level":1,"move":"growl"},{"level":1,"move":"thunder-shock"},{"level":5,"move":"quick-attack"},{"level":9,"move":"charm"},{"level":13,"move":"spark"},{"level":17,"move":"endure"},{"level":19,"move":"nuzzle"},{"level":21,"move":"swift"},{"level":25,"move":"electro-ball"},{"level":29,"move":"sweet-kiss"},{"level":33,"move":"thunder-wave"},{"level":37,"move":"super-fang"},{"level":41,"move":"discharge"},{"level":45,"move":"last-resort"},{"level":49,"move":"thunder"}],
+  "418": [{"level":1,"move":"tackle"},{"level":4,"move":"growl"},{"level":7,"move":"soak"},{"level":11,"move":"quick-attack"},{"level":15,"move":"water-gun"},{"level":18,"move":"bite"},{"level":21,"move":"swift"},{"level":24,"move":"aqua-jet"},{"level":27,"move":"double-hit"},{"level":31,"move":"whirlpool"},{"level":35,"move":"liquidation"},{"level":38,"move":"aqua-tail"},{"level":41,"move":"agility"},{"level":45,"move":"hydro-pump"},{"level":49,"move":"wave-crash"}],
+  "419": [{"level":1,"move":"crunch"},{"level":1,"move":"growl"},{"level":1,"move":"ice-fang"},{"level":1,"move":"quick-attack"},{"level":1,"move":"soak"},{"level":15,"move":"water-gun"},{"level":18,"move":"bite"},{"level":21,"move":"swift"},{"level":24,"move":"aqua-jet"},{"level":29,"move":"double-hit"},{"level":35,"move":"whirlpool"},{"level":41,"move":"liquidation"},{"level":46,"move":"aqua-tail"},{"level":51,"move":"agility"},{"level":57,"move":"hydro-pump"},{"level":62,"move":"wave-crash"}],
+  "420": [{"level":1,"move":"morning-sun"},{"level":1,"move":"tackle"},{"level":5,"move":"leafage"},{"level":10,"move":"growth"},{"level":15,"move":"helping-hand"},{"level":20,"move":"magical-leaf"},{"level":26,"move":"leech-seed"},{"level":30,"move":"take-down"},{"level":35,"move":"petal-blizzard"},{"level":40,"move":"worry-seed"},{"level":45,"move":"solar-beam"}],
+  "421": [{"level":0,"move":"sunny-day"},{"level":1,"move":"flower-shield"},{"level":1,"move":"growth"},{"level":1,"move":"leafage"},{"level":1,"move":"morning-sun"},{"level":1,"move":"sunny-day"},{"level":1,"move":"tackle"},{"level":15,"move":"helping-hand"},{"level":20,"move":"magical-leaf"},{"level":28,"move":"leech-seed"},{"level":34,"move":"take-down"},{"level":41,"move":"petal-blizzard"},{"level":48,"move":"worry-seed"},{"level":55,"move":"solar-beam"},{"level":62,"move":"petal-dance"}],
+  "422": [{"level":1,"move":"mud-slap"},{"level":1,"move":"water-gun"},{"level":5,"move":"harden"},{"level":10,"move":"recover"},{"level":15,"move":"water-pulse"},{"level":20,"move":"ancient-power"},{"level":25,"move":"body-slam"},{"level":31,"move":"muddy-water"},{"level":35,"move":"earth-power"},{"level":40,"move":"rain-dance"},{"level":45,"move":"memento"}],
+  "423": [{"level":1,"move":"harden"},{"level":1,"move":"mud-slap"},{"level":1,"move":"recover"},{"level":1,"move":"water-gun"},{"level":15,"move":"water-pulse"},{"level":20,"move":"ancient-power"},{"level":25,"move":"body-slam"},{"level":33,"move":"muddy-water"},{"level":39,"move":"earth-power"},{"level":46,"move":"rain-dance"},{"level":53,"move":"memento"}],
+  "424": [{"level":1,"move":"astonish"},{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":11,"move":"baton-pass"},{"level":15,"move":"tickle"},{"level":18,"move":"fury-swipes"},{"level":22,"move":"swift"},{"level":25,"move":"screech"},{"level":29,"move":"agility"},{"level":32,"move":"double-hit"},{"level":36,"move":"fling"},{"level":39,"move":"nasty-plot"},{"level":43,"move":"last-resort"}],
+  "425": [{"level":1,"move":"astonish"},{"level":1,"move":"minimize"},{"level":4,"move":"gust"},{"level":8,"move":"focus-energy"},{"level":12,"move":"payback"},{"level":16,"move":"hex"},{"level":20,"move":"shadow-ball"},{"level":24,"move":"spit-up"},{"level":24,"move":"stockpile"},{"level":24,"move":"swallow"},{"level":29,"move":"self-destruct"},{"level":32,"move":"destiny-bond"},{"level":36,"move":"baton-pass"},{"level":40,"move":"tailwind"},{"level":44,"move":"explosion"}],
+  "426": [{"level":0,"move":"phantom-force"},{"level":1,"move":"astonish"},{"level":1,"move":"focus-energy"},{"level":1,"move":"gust"},{"level":1,"move":"minimize"},{"level":1,"move":"strength-sap"},{"level":12,"move":"payback"},{"level":16,"move":"hex"},{"level":20,"move":"shadow-ball"},{"level":24,"move":"spit-up"},{"level":24,"move":"stockpile"},{"level":24,"move":"swallow"},{"level":31,"move":"self-destruct"},{"level":36,"move":"destiny-bond"},{"level":42,"move":"baton-pass"},{"level":48,"move":"tailwind"},{"level":54,"move":"explosion"}],
+  "427": [{"level":1,"move":"pound"},{"level":1,"move":"splash"},{"level":4,"move":"defense-curl"},{"level":8,"move":"baby-doll-eyes"},{"level":12,"move":"after-you"},{"level":16,"move":"quick-attack"},{"level":20,"move":"double-kick"},{"level":24,"move":"charm"},{"level":28,"move":"baton-pass"},{"level":32,"move":"headbutt"},{"level":36,"move":"agility"},{"level":40,"move":"entrainment"},{"level":44,"move":"flatter"},{"level":48,"move":"bounce"},{"level":52,"move":"healing-wish"}],
+  "428": [{"level":1,"move":"baby-doll-eyes"},{"level":1,"move":"defense-curl"},{"level":1,"move":"magic-coat"},{"level":1,"move":"mirror-coat"},{"level":1,"move":"pound"},{"level":1,"move":"splash"},{"level":12,"move":"after-you"},{"level":16,"move":"quick-attack"},{"level":20,"move":"double-kick"},{"level":24,"move":"charm"},{"level":28,"move":"baton-pass"},{"level":32,"move":"headbutt"},{"level":36,"move":"agility"},{"level":40,"move":"entrainment"},{"level":44,"move":"flatter"},{"level":48,"move":"bounce"},{"level":52,"move":"healing-wish"},{"level":56,"move":"high-jump-kick"}],
+  "429": [{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":1,"move":"magical-leaf"},{"level":1,"move":"mystical-fire"},{"level":1,"move":"phantom-force"},{"level":1,"move":"power-gem"},{"level":1,"move":"spite"}],
+  "430": [{"level":1,"move":"astonish"},{"level":1,"move":"haze"},{"level":1,"move":"night-slash"},{"level":1,"move":"quash"},{"level":1,"move":"sucker-punch"},{"level":1,"move":"wing-attack"},{"level":25,"move":"swagger"},{"level":35,"move":"nasty-plot"},{"level":45,"move":"foul-play"},{"level":55,"move":"dark-pulse"},{"level":65,"move":"comeuppance"}],
+  "431": [{"level":1,"move":"fake-out"},{"level":5,"move":"scratch"},{"level":8,"move":"growl"},{"level":13,"move":"hypnosis"},{"level":17,"move":"feint-attack"},{"level":20,"move":"fury-swipes"},{"level":25,"move":"charm"},{"level":29,"move":"assist"},{"level":32,"move":"captivate"},{"level":37,"move":"slash"},{"level":41,"move":"sucker-punch"},{"level":44,"move":"attract"},{"level":48,"move":"hone-claws"},{"level":50,"move":"play-rough"}],
+  "432": [{"level":0,"move":"swagger"},{"level":1,"move":"fake-out"},{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":1,"move":"swagger"},{"level":5,"move":"scratch"},{"level":8,"move":"growl"},{"level":13,"move":"hypnosis"},{"level":17,"move":"feint-attack"},{"level":20,"move":"fury-swipes"},{"level":25,"move":"charm"},{"level":29,"move":"assist"},{"level":32,"move":"captivate"},{"level":37,"move":"slash"},{"level":45,"move":"body-slam"},{"level":52,"move":"attract"},{"level":60,"move":"hone-claws"}],
+  "433": [{"level":1,"move":"wrap"},{"level":4,"move":"growl"},{"level":7,"move":"astonish"},{"level":10,"move":"confusion"},{"level":13,"move":"yawn"},{"level":16,"move":"last-resort"},{"level":19,"move":"entrainment"},{"level":32,"move":"uproar"}],
+  "434": [{"level":1,"move":"poison-gas"},{"level":1,"move":"scratch"},{"level":3,"move":"feint"},{"level":6,"move":"smokescreen"},{"level":9,"move":"acid-spray"},{"level":12,"move":"fury-swipes"},{"level":15,"move":"focus-energy"},{"level":18,"move":"bite"},{"level":21,"move":"venoshock"},{"level":24,"move":"screech"},{"level":27,"move":"toxic"},{"level":30,"move":"sucker-punch"},{"level":33,"move":"memento"},{"level":36,"move":"night-slash"},{"level":39,"move":"belch"},{"level":42,"move":"explosion"}],
+  "435": [{"level":0,"move":"flamethrower"},{"level":1,"move":"feint"},{"level":1,"move":"poison-gas"},{"level":1,"move":"scratch"},{"level":1,"move":"smokescreen"},{"level":12,"move":"fury-swipes"},{"level":15,"move":"focus-energy"},{"level":18,"move":"bite"},{"level":21,"move":"venoshock"},{"level":24,"move":"screech"},{"level":27,"move":"toxic"},{"level":30,"move":"sucker-punch"},{"level":33,"move":"memento"},{"level":38,"move":"night-slash"},{"level":43,"move":"belch"},{"level":48,"move":"explosion"}],
+  "436": [{"level":1,"move":"confusion"},{"level":1,"move":"tackle"},{"level":4,"move":"confuse-ray"},{"level":8,"move":"payback"},{"level":12,"move":"imprison"},{"level":16,"move":"gyro-ball"},{"level":20,"move":"hypnosis"},{"level":24,"move":"safeguard"},{"level":28,"move":"extrasensory"},{"level":32,"move":"heavy-slam"},{"level":36,"move":"iron-defense"},{"level":40,"move":"metal-sound"},{"level":44,"move":"future-sight"}],
+  "437": [{"level":0,"move":"block"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"confusion"},{"level":1,"move":"payback"},{"level":1,"move":"sunny-day"},{"level":1,"move":"tackle"},{"level":1,"move":"weather-ball"},{"level":12,"move":"imprison"},{"level":16,"move":"gyro-ball"},{"level":20,"move":"hypnosis"},{"level":24,"move":"safeguard"},{"level":28,"move":"extrasensory"},{"level":32,"move":"heavy-slam"},{"level":38,"move":"iron-defense"},{"level":44,"move":"metal-sound"},{"level":50,"move":"future-sight"},{"level":56,"move":"rain-dance"}],
+  "438": [{"level":1,"move":"copycat"},{"level":1,"move":"fake-tears"},{"level":4,"move":"flail"},{"level":8,"move":"rock-throw"},{"level":12,"move":"block"},{"level":16,"move":"mimic"},{"level":20,"move":"rock-tomb"},{"level":24,"move":"tearful-look"},{"level":28,"move":"sucker-punch"},{"level":32,"move":"rock-slide"},{"level":36,"move":"low-kick"},{"level":40,"move":"counter"},{"level":44,"move":"double-edge"}],
+  "439": [{"level":1,"move":"copycat"},{"level":1,"move":"pound"},{"level":4,"move":"baton-pass"},{"level":8,"move":"encore"},{"level":12,"move":"confusion"},{"level":16,"move":"role-play"},{"level":20,"move":"protect"},{"level":24,"move":"recycle"},{"level":28,"move":"psybeam"},{"level":32,"move":"mimic"},{"level":36,"move":"light-screen"},{"level":36,"move":"reflect"},{"level":36,"move":"safeguard"},{"level":40,"move":"sucker-punch"},{"level":44,"move":"dazzling-gleam"},{"level":48,"move":"psychic"},{"level":52,"move":"teeter-dance"}],
+  "440": [{"level":1,"move":"copycat"},{"level":1,"move":"pound"},{"level":4,"move":"defense-curl"},{"level":8,"move":"sweet-kiss"},{"level":12,"move":"disarming-voice"},{"level":16,"move":"covet"},{"level":20,"move":"charm"}],
+  "441": [{"level":1,"move":"chatter"},{"level":1,"move":"confide"},{"level":1,"move":"hyper-voice"},{"level":1,"move":"peck"},{"level":1,"move":"taunt"},{"level":5,"move":"growl"},{"level":9,"move":"mirror-move"},{"level":13,"move":"sing"},{"level":17,"move":"fury-attack"},{"level":21,"move":"chatter"},{"level":25,"move":"taunt"},{"level":29,"move":"round"},{"level":33,"move":"mimic"},{"level":37,"move":"echoed-voice"},{"level":41,"move":"roost"},{"level":45,"move":"uproar"},{"level":49,"move":"synchronoise"},{"level":50,"move":"feather-dance"},{"level":57,"move":"hyper-voice"}],
+  "442": [{"level":1,"move":"confuse-ray"},{"level":1,"move":"night-shade"},{"level":5,"move":"shadow-sneak"},{"level":10,"move":"spite"},{"level":15,"move":"payback"},{"level":20,"move":"nasty-plot"},{"level":25,"move":"hex"},{"level":30,"move":"memento"},{"level":35,"move":"sucker-punch"},{"level":40,"move":"curse"},{"level":45,"move":"shadow-ball"},{"level":50,"move":"dark-pulse"},{"level":55,"move":"hypnosis"},{"level":60,"move":"dream-eater"}],
+  "443": [{"level":1,"move":"sand-tomb"},{"level":1,"move":"tackle"},{"level":6,"move":"sand-attack"},{"level":12,"move":"dragon-breath"},{"level":18,"move":"bulldoze"},{"level":25,"move":"bite"},{"level":30,"move":"slash"},{"level":36,"move":"dragon-claw"},{"level":42,"move":"dig"},{"level":48,"move":"sandstorm"},{"level":54,"move":"take-down"},{"level":60,"move":"dragon-rush"}],
+  "444": [{"level":1,"move":"dragon-breath"},{"level":1,"move":"sand-attack"},{"level":1,"move":"sand-tomb"},{"level":1,"move":"tackle"},{"level":18,"move":"bulldoze"},{"level":27,"move":"bite"},{"level":34,"move":"slash"},{"level":42,"move":"dragon-claw"},{"level":50,"move":"dig"},{"level":58,"move":"sandstorm"},{"level":66,"move":"take-down"},{"level":74,"move":"dragon-rush"}],
+  "445": [{"level":0,"move":"crunch"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"sand-attack"},{"level":1,"move":"sand-tomb"},{"level":1,"move":"tackle"},{"level":18,"move":"bulldoze"},{"level":27,"move":"bite"},{"level":34,"move":"slash"},{"level":42,"move":"dragon-claw"},{"level":52,"move":"dig"},{"level":62,"move":"sandstorm"},{"level":72,"move":"take-down"},{"level":82,"move":"dragon-rush"}],
+  "446": [{"level":1,"move":"lick"},{"level":1,"move":"tackle"},{"level":4,"move":"defense-curl"},{"level":8,"move":"recycle"},{"level":12,"move":"covet"},{"level":16,"move":"bite"},{"level":20,"move":"stockpile"},{"level":20,"move":"swallow"},{"level":24,"move":"screech"},{"level":28,"move":"body-slam"},{"level":32,"move":"fling"},{"level":36,"move":"amnesia"},{"level":40,"move":"metronome"},{"level":44,"move":"flail"},{"level":48,"move":"belly-drum"},{"level":52,"move":"last-resort"}],
+  "447": [{"level":1,"move":"endure"},{"level":1,"move":"quick-attack"},{"level":4,"move":"feint"},{"level":8,"move":"metal-claw"},{"level":12,"move":"counter"},{"level":16,"move":"work-up"},{"level":20,"move":"rock-smash"},{"level":24,"move":"vacuum-wave"},{"level":28,"move":"screech"},{"level":32,"move":"quick-guard"},{"level":36,"move":"force-palm"},{"level":40,"move":"swords-dance"},{"level":44,"move":"helping-hand"},{"level":48,"move":"copycat"},{"level":52,"move":"final-gambit"},{"level":56,"move":"reversal"}],
+  "448": [{"level":0,"move":"aura-sphere"},{"level":1,"move":"copycat"},{"level":1,"move":"detect"},{"level":1,"move":"feint"},{"level":1,"move":"final-gambit"},{"level":1,"move":"helping-hand"},{"level":1,"move":"life-dew"},{"level":1,"move":"metal-claw"},{"level":1,"move":"quick-attack"},{"level":1,"move":"reversal"},{"level":1,"move":"rock-smash"},{"level":1,"move":"screech"},{"level":1,"move":"vacuum-wave"},{"level":12,"move":"counter"},{"level":16,"move":"work-up"},{"level":20,"move":"force-palm"},{"level":24,"move":"calm-mind"},{"level":28,"move":"metal-sound"},{"level":32,"move":"quick-guard"},{"level":36,"move":"bone-rush"},{"level":40,"move":"swords-dance"},{"level":44,"move":"heal-pulse"},{"level":48,"move":"meteor-mash"},{"level":52,"move":"dragon-pulse"},{"level":56,"move":"extreme-speed"},{"level":60,"move":"close-combat"}],
+  "449": [{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":4,"move":"bite"},{"level":8,"move":"yawn"},{"level":12,"move":"sand-tomb"},{"level":16,"move":"dig"},{"level":20,"move":"crunch"},{"level":24,"move":"sandstorm"},{"level":28,"move":"take-down"},{"level":32,"move":"roar"},{"level":36,"move":"rest"},{"level":40,"move":"earthquake"},{"level":44,"move":"double-edge"},{"level":48,"move":"fissure"},{"level":52,"move":"slack-off"}],
+  "450": [{"level":1,"move":"bite"},{"level":1,"move":"fire-fang"},{"level":1,"move":"ice-fang"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-fang"},{"level":1,"move":"yawn"},{"level":12,"move":"sand-tomb"},{"level":16,"move":"dig"},{"level":20,"move":"crunch"},{"level":24,"move":"sandstorm"},{"level":28,"move":"take-down"},{"level":32,"move":"roar"},{"level":38,"move":"rest"},{"level":44,"move":"earthquake"},{"level":50,"move":"double-edge"},{"level":56,"move":"fissure"},{"level":62,"move":"slack-off"}],
+  "451": [{"level":1,"move":"leer"},{"level":1,"move":"poison-sting"},{"level":3,"move":"hone-claws"},{"level":6,"move":"fell-stinger"},{"level":9,"move":"poison-fang"},{"level":12,"move":"bite"},{"level":15,"move":"toxic-spikes"},{"level":18,"move":"bug-bite"},{"level":21,"move":"venoshock"},{"level":24,"move":"knock-off"},{"level":27,"move":"scary-face"},{"level":30,"move":"pin-missile"},{"level":33,"move":"toxic"},{"level":36,"move":"night-slash"},{"level":39,"move":"cross-poison"},{"level":42,"move":"x-scissor"},{"level":45,"move":"acupressure"},{"level":48,"move":"crunch"}],
+  "452": [{"level":1,"move":"fell-stinger"},{"level":1,"move":"fire-fang"},{"level":1,"move":"hone-claws"},{"level":1,"move":"ice-fang"},{"level":1,"move":"leer"},{"level":1,"move":"poison-sting"},{"level":1,"move":"thunder-fang"},{"level":9,"move":"poison-fang"},{"level":12,"move":"bite"},{"level":15,"move":"toxic-spikes"},{"level":18,"move":"bug-bite"},{"level":21,"move":"venoshock"},{"level":24,"move":"knock-off"},{"level":27,"move":"scary-face"},{"level":30,"move":"pin-missile"},{"level":33,"move":"toxic"},{"level":36,"move":"night-slash"},{"level":39,"move":"cross-poison"},{"level":44,"move":"x-scissor"},{"level":49,"move":"acupressure"},{"level":54,"move":"crunch"}],
+  "453": [{"level":1,"move":"mud-slap"},{"level":1,"move":"poison-sting"},{"level":4,"move":"astonish"},{"level":8,"move":"taunt"},{"level":12,"move":"flatter"},{"level":16,"move":"low-kick"},{"level":20,"move":"venoshock"},{"level":24,"move":"sucker-punch"},{"level":28,"move":"swagger"},{"level":32,"move":"poison-jab"},{"level":36,"move":"toxic"},{"level":40,"move":"nasty-plot"},{"level":44,"move":"sludge-bomb"},{"level":48,"move":"belch"}],
+  "454": [{"level":1,"move":"astonish"},{"level":1,"move":"mud-slap"},{"level":1,"move":"poison-sting"},{"level":1,"move":"taunt"},{"level":12,"move":"flatter"},{"level":16,"move":"low-kick"},{"level":20,"move":"venoshock"},{"level":24,"move":"sucker-punch"},{"level":28,"move":"swagger"},{"level":32,"move":"poison-jab"},{"level":36,"move":"toxic"},{"level":42,"move":"nasty-plot"},{"level":48,"move":"sludge-bomb"},{"level":54,"move":"belch"}],
+  "455": [{"level":1,"move":"bind"},{"level":1,"move":"growth"},{"level":7,"move":"bite"},{"level":11,"move":"vine-whip"},{"level":17,"move":"sweet-scent"},{"level":21,"move":"ingrain"},{"level":27,"move":"feint-attack"},{"level":31,"move":"leaf-tornado"},{"level":37,"move":"spit-up"},{"level":37,"move":"stockpile"},{"level":37,"move":"swallow"},{"level":41,"move":"crunch"},{"level":47,"move":"wring-out"},{"level":50,"move":"power-whip"}],
+  "456": [{"level":1,"move":"pound"},{"level":6,"move":"water-gun"},{"level":13,"move":"rain-dance"},{"level":17,"move":"gust"},{"level":22,"move":"water-pulse"},{"level":26,"move":"attract"},{"level":29,"move":"safeguard"},{"level":33,"move":"aqua-ring"},{"level":38,"move":"whirlpool"},{"level":42,"move":"u-turn"},{"level":45,"move":"bounce"},{"level":49,"move":"tailwind"},{"level":54,"move":"soak"}],
+  "457": [{"level":1,"move":"gust"},{"level":1,"move":"pound"},{"level":1,"move":"soak"},{"level":1,"move":"water-gun"},{"level":13,"move":"rain-dance"},{"level":22,"move":"water-pulse"},{"level":26,"move":"attract"},{"level":29,"move":"safeguard"},{"level":35,"move":"aqua-ring"},{"level":42,"move":"whirlpool"},{"level":48,"move":"u-turn"},{"level":53,"move":"bounce"},{"level":59,"move":"tailwind"}],
+  "458": [{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":4,"move":"supersonic"},{"level":8,"move":"wing-attack"},{"level":12,"move":"water-pulse"},{"level":16,"move":"wide-guard"},{"level":20,"move":"agility"},{"level":24,"move":"bubble-beam"},{"level":28,"move":"headbutt"},{"level":32,"move":"air-slash"},{"level":36,"move":"aqua-ring"},{"level":40,"move":"bounce"},{"level":44,"move":"take-down"},{"level":48,"move":"hydro-pump"}],
+  "459": [{"level":1,"move":"leer"},{"level":1,"move":"powder-snow"},{"level":5,"move":"leafage"},{"level":10,"move":"mist"},{"level":15,"move":"ice-shard"},{"level":20,"move":"razor-leaf"},{"level":25,"move":"icy-wind"},{"level":30,"move":"swagger"},{"level":35,"move":"ingrain"},{"level":41,"move":"wood-hammer"},{"level":45,"move":"blizzard"},{"level":50,"move":"sheer-cold"}],
+  "460": [{"level":0,"move":"ice-punch"},{"level":1,"move":"aurora-veil"},{"level":1,"move":"leafage"},{"level":1,"move":"leer"},{"level":1,"move":"mist"},{"level":1,"move":"powder-snow"},{"level":15,"move":"ice-shard"},{"level":20,"move":"razor-leaf"},{"level":25,"move":"icy-wind"},{"level":30,"move":"swagger"},{"level":35,"move":"ingrain"},{"level":43,"move":"wood-hammer"},{"level":49,"move":"blizzard"},{"level":56,"move":"sheer-cold"}],
+  "461": [{"level":1,"move":"agility"},{"level":1,"move":"assurance"},{"level":1,"move":"beat-up"},{"level":1,"move":"ice-shard"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"scratch"},{"level":1,"move":"slash"},{"level":1,"move":"taunt"},{"level":18,"move":"metal-claw"},{"level":24,"move":"icy-wind"},{"level":30,"move":"fury-swipes"},{"level":36,"move":"hone-claws"},{"level":42,"move":"fling"},{"level":48,"move":"nasty-plot"},{"level":54,"move":"screech"},{"level":60,"move":"night-slash"},{"level":66,"move":"dark-pulse"}],
+  "462": [{"level":1,"move":"electric-terrain"},{"level":1,"move":"magnetic-flux"},{"level":1,"move":"mirror-coat"},{"level":1,"move":"supersonic"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"thunder-wave"},{"level":1,"move":"tri-attack"},{"level":12,"move":"electro-ball"},{"level":16,"move":"gyro-ball"},{"level":20,"move":"spark"},{"level":24,"move":"screech"},{"level":28,"move":"magnet-rise"},{"level":34,"move":"flash-cannon"},{"level":40,"move":"discharge"},{"level":46,"move":"metal-sound"},{"level":52,"move":"light-screen"},{"level":58,"move":"lock-on"},{"level":64,"move":"zap-cannon"}],
+  "463": [{"level":1,"move":"defense-curl"},{"level":1,"move":"lick"},{"level":1,"move":"rollout"},{"level":1,"move":"supersonic"},{"level":18,"move":"wrap"},{"level":24,"move":"disable"},{"level":30,"move":"stomp"},{"level":36,"move":"knock-off"},{"level":42,"move":"screech"},{"level":48,"move":"slam"},{"level":54,"move":"power-whip"},{"level":60,"move":"belly-drum"}],
+  "464": [{"level":1,"move":"bulldoze"},{"level":1,"move":"hammer-arm"},{"level":1,"move":"smack-down"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":15,"move":"horn-attack"},{"level":20,"move":"scary-face"},{"level":25,"move":"stomp"},{"level":30,"move":"rock-blast"},{"level":35,"move":"drill-run"},{"level":40,"move":"take-down"},{"level":47,"move":"earthquake"},{"level":54,"move":"stone-edge"},{"level":61,"move":"megahorn"},{"level":68,"move":"horn-drill"},{"level":75,"move":"rock-wrecker"}],
+  "465": [{"level":1,"move":"absorb"},{"level":1,"move":"bind"},{"level":1,"move":"block"},{"level":1,"move":"growth"},{"level":1,"move":"stun-spore"},{"level":12,"move":"mega-drain"},{"level":16,"move":"vine-whip"},{"level":20,"move":"poison-powder"},{"level":24,"move":"ancient-power"},{"level":28,"move":"knock-off"},{"level":32,"move":"giga-drain"},{"level":36,"move":"sleep-powder"},{"level":40,"move":"slam"},{"level":44,"move":"tickle"},{"level":48,"move":"power-whip"},{"level":52,"move":"ingrain"},{"level":56,"move":"grassy-terrain"}],
+  "466": [{"level":1,"move":"charge"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"thunder-shock"},{"level":12,"move":"swift"},{"level":16,"move":"shock-wave"},{"level":20,"move":"thunder-wave"},{"level":24,"move":"screech"},{"level":28,"move":"thunder-punch"},{"level":34,"move":"discharge"},{"level":40,"move":"low-kick"},{"level":46,"move":"thunderbolt"},{"level":52,"move":"light-screen"},{"level":58,"move":"thunder"},{"level":64,"move":"giga-impact"}],
+  "467": [{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"smog"},{"level":1,"move":"smokescreen"},{"level":12,"move":"clear-smog"},{"level":16,"move":"flame-wheel"},{"level":20,"move":"confuse-ray"},{"level":24,"move":"scary-face"},{"level":28,"move":"fire-punch"},{"level":34,"move":"lava-plume"},{"level":40,"move":"low-kick"},{"level":46,"move":"flamethrower"},{"level":52,"move":"sunny-day"},{"level":58,"move":"fire-blast"},{"level":64,"move":"hyper-beam"}],
+  "468": [{"level":0,"move":"air-slash"},{"level":1,"move":"after-you"},{"level":1,"move":"air-slash"},{"level":1,"move":"ancient-power"},{"level":1,"move":"aura-sphere"},{"level":1,"move":"baton-pass"},{"level":1,"move":"charm"},{"level":1,"move":"double-edge"},{"level":1,"move":"extreme-speed"},{"level":1,"move":"fairy-wind"},{"level":1,"move":"follow-me"},{"level":1,"move":"growl"},{"level":1,"move":"last-resort"},{"level":1,"move":"life-dew"},{"level":1,"move":"metronome"},{"level":1,"move":"pound"},{"level":1,"move":"safeguard"},{"level":1,"move":"sky-attack"},{"level":1,"move":"sweet-kiss"},{"level":1,"move":"tri-attack"},{"level":1,"move":"wish"},{"level":1,"move":"yawn"}],
+  "469": [{"level":1,"move":"air-slash"},{"level":1,"move":"bug-buzz"},{"level":1,"move":"double-team"},{"level":1,"move":"night-slash"},{"level":1,"move":"tackle"},{"level":14,"move":"quick-attack"},{"level":17,"move":"detect"},{"level":22,"move":"supersonic"},{"level":27,"move":"uproar"},{"level":30,"move":"bug-bite"},{"level":33,"move":"ancient-power"},{"level":38,"move":"feint"},{"level":43,"move":"slash"},{"level":46,"move":"screech"},{"level":49,"move":"u-turn"}],
+  "470": [{"level":0,"move":"razor-leaf"},{"level":1,"move":"baton-pass"},{"level":1,"move":"bite"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"double-edge"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"swift"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"take-down"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"leech-seed"},{"level":25,"move":"magical-leaf"},{"level":30,"move":"synthesis"},{"level":35,"move":"sunny-day"},{"level":40,"move":"giga-drain"},{"level":45,"move":"swords-dance"},{"level":50,"move":"leaf-blade"},{"level":55,"move":"last-resort"}],
+  "471": [{"level":0,"move":"icy-wind"},{"level":1,"move":"baton-pass"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"double-edge"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"swift"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"take-down"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"ice-shard"},{"level":25,"move":"bite"},{"level":30,"move":"ice-fang"},{"level":35,"move":"snowscape"},{"level":40,"move":"freeze-dry"},{"level":45,"move":"mirror-coat"},{"level":50,"move":"blizzard"},{"level":55,"move":"last-resort"}],
+  "472": [{"level":1,"move":"fire-fang"},{"level":1,"move":"harden"},{"level":1,"move":"ice-fang"},{"level":1,"move":"poison-jab"},{"level":1,"move":"sand-attack"},{"level":1,"move":"thunder-fang"},{"level":13,"move":"quick-attack"},{"level":16,"move":"fury-cutter"},{"level":19,"move":"knock-off"},{"level":22,"move":"acrobatics"},{"level":27,"move":"night-slash"},{"level":30,"move":"u-turn"},{"level":35,"move":"screech"},{"level":40,"move":"x-scissor"},{"level":45,"move":"crabhammer"},{"level":50,"move":"swords-dance"}],
+  "473": [{"level":0,"move":"double-hit"},{"level":1,"move":"ancient-power"},{"level":1,"move":"flail"},{"level":1,"move":"ice-fang"},{"level":1,"move":"mud-slap"},{"level":1,"move":"powder-snow"},{"level":1,"move":"tackle"},{"level":15,"move":"ice-shard"},{"level":20,"move":"mist"},{"level":25,"move":"endure"},{"level":30,"move":"icy-wind"},{"level":37,"move":"amnesia"},{"level":44,"move":"take-down"},{"level":51,"move":"earthquake"},{"level":58,"move":"blizzard"},{"level":65,"move":"thrash"}],
+  "474": [{"level":1,"move":"conversion"},{"level":1,"move":"defense-curl"},{"level":1,"move":"magnet-rise"},{"level":1,"move":"nasty-plot"},{"level":1,"move":"recycle"},{"level":1,"move":"tackle"},{"level":1,"move":"trick-room"},{"level":15,"move":"thunder-shock"},{"level":20,"move":"psybeam"},{"level":25,"move":"conversion-2"},{"level":30,"move":"agility"},{"level":35,"move":"recover"},{"level":40,"move":"discharge"},{"level":45,"move":"tri-attack"},{"level":50,"move":"double-edge"},{"level":55,"move":"lock-on"},{"level":60,"move":"zap-cannon"},{"level":65,"move":"hyper-beam"}],
+  "475": [{"level":0,"move":"slash"},{"level":1,"move":"aqua-cutter"},{"level":1,"move":"calm-mind"},{"level":1,"move":"charm"},{"level":1,"move":"confusion"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"double-team"},{"level":1,"move":"draining-kiss"},{"level":1,"move":"dream-eater"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"future-sight"},{"level":1,"move":"growl"},{"level":1,"move":"hypnosis"},{"level":1,"move":"imprison"},{"level":1,"move":"leaf-blade"},{"level":1,"move":"leer"},{"level":1,"move":"life-dew"},{"level":1,"move":"night-slash"},{"level":1,"move":"psybeam"},{"level":1,"move":"psychic"},{"level":1,"move":"sacred-sword"},{"level":9,"move":"helping-hand"},{"level":12,"move":"feint"},{"level":15,"move":"teleport"},{"level":18,"move":"aerial-ace"},{"level":23,"move":"false-swipe"},{"level":28,"move":"protect"},{"level":35,"move":"swords-dance"},{"level":42,"move":"psycho-cut"},{"level":49,"move":"heal-pulse"},{"level":56,"move":"quick-guard"},{"level":56,"move":"wide-guard"},{"level":63,"move":"close-combat"}],
+  "476": [{"level":0,"move":"tri-attack"},{"level":1,"move":"block"},{"level":1,"move":"gravity"},{"level":1,"move":"iron-defense"},{"level":1,"move":"magnet-rise"},{"level":1,"move":"magnetic-flux"},{"level":1,"move":"tackle"},{"level":1,"move":"wide-guard"},{"level":13,"move":"thunder-wave"},{"level":16,"move":"rest"},{"level":19,"move":"spark"},{"level":22,"move":"rock-slide"},{"level":25,"move":"power-gem"},{"level":28,"move":"rock-blast"},{"level":31,"move":"discharge"},{"level":34,"move":"sandstorm"},{"level":37,"move":"earth-power"},{"level":40,"move":"stone-edge"},{"level":43,"move":"lock-on"},{"level":43,"move":"zap-cannon"}],
+  "477": [{"level":1,"move":"astonish"},{"level":1,"move":"bind"},{"level":1,"move":"disable"},{"level":1,"move":"fire-punch"},{"level":1,"move":"gravity"},{"level":1,"move":"ice-punch"},{"level":1,"move":"leer"},{"level":1,"move":"shadow-punch"},{"level":1,"move":"shadow-sneak"},{"level":1,"move":"thunder-punch"},{"level":12,"move":"confuse-ray"},{"level":16,"move":"night-shade"},{"level":20,"move":"payback"},{"level":24,"move":"will-o-wisp"},{"level":28,"move":"mean-look"},{"level":32,"move":"hex"},{"level":36,"move":"curse"},{"level":42,"move":"shadow-ball"},{"level":48,"move":"future-sight"},{"level":54,"move":"destiny-bond"}],
+  "478": [{"level":0,"move":"hex"},{"level":1,"move":"astonish"},{"level":1,"move":"bite"},{"level":1,"move":"crunch"},{"level":1,"move":"destiny-bond"},{"level":1,"move":"double-team"},{"level":1,"move":"headbutt"},{"level":1,"move":"ice-fang"},{"level":1,"move":"leer"},{"level":1,"move":"powder-snow"},{"level":1,"move":"protect"},{"level":15,"move":"ice-shard"},{"level":20,"move":"draining-kiss"},{"level":25,"move":"icy-wind"},{"level":30,"move":"frost-breath"},{"level":35,"move":"confuse-ray"},{"level":40,"move":"snowscape"},{"level":47,"move":"will-o-wisp"},{"level":54,"move":"aurora-veil"},{"level":61,"move":"shadow-ball"},{"level":68,"move":"blizzard"}],
+  "479": [{"level":1,"move":"astonish"},{"level":1,"move":"double-team"},{"level":5,"move":"thunder-shock"},{"level":10,"move":"confuse-ray"},{"level":15,"move":"charge"},{"level":20,"move":"electro-ball"},{"level":25,"move":"thunder-wave"},{"level":30,"move":"shock-wave"},{"level":35,"move":"hex"},{"level":40,"move":"substitute"},{"level":45,"move":"trick"},{"level":50,"move":"discharge"},{"level":55,"move":"uproar"}],
+  "480": [{"level":1,"move":"confusion"},{"level":1,"move":"rest"},{"level":7,"move":"swift"},{"level":14,"move":"endure"},{"level":21,"move":"psybeam"},{"level":28,"move":"imprison"},{"level":35,"move":"extrasensory"},{"level":42,"move":"amnesia"},{"level":49,"move":"psychic"},{"level":56,"move":"yawn"},{"level":63,"move":"future-sight"},{"level":70,"move":"flail"},{"level":77,"move":"memento"},{"level":84,"move":"mystical-power"}],
+  "481": [{"level":1,"move":"confusion"},{"level":1,"move":"rest"},{"level":7,"move":"swift"},{"level":14,"move":"protect"},{"level":21,"move":"psybeam"},{"level":28,"move":"imprison"},{"level":35,"move":"extrasensory"},{"level":42,"move":"charm"},{"level":49,"move":"psychic"},{"level":56,"move":"flatter"},{"level":63,"move":"future-sight"},{"level":70,"move":"copycat"},{"level":77,"move":"healing-wish"},{"level":84,"move":"mystical-power"}],
+  "482": [{"level":1,"move":"confusion"},{"level":1,"move":"rest"},{"level":7,"move":"swift"},{"level":14,"move":"detect"},{"level":21,"move":"psybeam"},{"level":28,"move":"imprison"},{"level":35,"move":"extrasensory"},{"level":42,"move":"nasty-plot"},{"level":49,"move":"psychic"},{"level":56,"move":"uproar"},{"level":63,"move":"future-sight"},{"level":70,"move":"last-resort"},{"level":77,"move":"explosion"},{"level":84,"move":"mystical-power"}],
+  "483": [{"level":1,"move":"metal-claw"},{"level":1,"move":"scary-face"},{"level":8,"move":"dragon-breath"},{"level":16,"move":"ancient-power"},{"level":24,"move":"slash"},{"level":32,"move":"flash-cannon"},{"level":40,"move":"dragon-claw"},{"level":48,"move":"aura-sphere"},{"level":56,"move":"power-gem"},{"level":64,"move":"metal-burst"},{"level":72,"move":"earth-power"},{"level":80,"move":"iron-tail"},{"level":88,"move":"roar-of-time"}],
+  "484": [{"level":1,"move":"scary-face"},{"level":1,"move":"water-pulse"},{"level":8,"move":"dragon-breath"},{"level":16,"move":"ancient-power"},{"level":24,"move":"slash"},{"level":32,"move":"aqua-ring"},{"level":48,"move":"aura-sphere"},{"level":56,"move":"power-gem"},{"level":64,"move":"aqua-tail"},{"level":72,"move":"earth-power"},{"level":80,"move":"spacial-rend"},{"level":88,"move":"hydro-pump"}],
+  "485": [{"level":1,"move":"fire-spin"},{"level":1,"move":"leer"},{"level":6,"move":"metal-claw"},{"level":12,"move":"ancient-power"},{"level":18,"move":"fire-fang"},{"level":24,"move":"scary-face"},{"level":30,"move":"iron-head"},{"level":36,"move":"crunch"},{"level":42,"move":"lava-plume"},{"level":48,"move":"metal-sound"},{"level":54,"move":"earth-power"},{"level":60,"move":"heat-wave"},{"level":66,"move":"stone-edge"},{"level":72,"move":"magma-storm"}],
+  "486": [{"level":1,"move":"confuse-ray"},{"level":1,"move":"pound"},{"level":6,"move":"payback"},{"level":12,"move":"facade"},{"level":18,"move":"stomp"},{"level":24,"move":"protect"},{"level":30,"move":"knock-off"},{"level":36,"move":"mega-punch"},{"level":42,"move":"body-press"},{"level":48,"move":"wide-guard"},{"level":54,"move":"zen-headbutt"},{"level":60,"move":"heavy-slam"},{"level":66,"move":"hammer-arm"},{"level":72,"move":"giga-impact"},{"level":78,"move":"crush-grip"}],
+  "487": [{"level":1,"move":"defog"},{"level":1,"move":"shadow-sneak"},{"level":7,"move":"dragon-breath"},{"level":14,"move":"ancient-power"},{"level":21,"move":"hex"},{"level":28,"move":"slash"},{"level":35,"move":"scary-face"},{"level":42,"move":"shadow-claw"},{"level":49,"move":"pain-split"},{"level":56,"move":"aura-sphere"},{"level":63,"move":"dragon-claw"},{"level":70,"move":"earth-power"},{"level":77,"move":"shadow-force"},{"level":84,"move":"destiny-bond"}],
+  "488": [{"level":1,"move":"confusion"},{"level":1,"move":"double-team"},{"level":6,"move":"mist"},{"level":12,"move":"aurora-beam"},{"level":18,"move":"psybeam"},{"level":24,"move":"ally-switch"},{"level":30,"move":"slash"},{"level":36,"move":"psycho-cut"},{"level":42,"move":"moonlight"},{"level":48,"move":"safeguard"},{"level":54,"move":"psychic"},{"level":60,"move":"moonblast"},{"level":66,"move":"future-sight"},{"level":72,"move":"lunar-blessing"},{"level":72,"move":"lunar-dance"}],
+  "489": [{"level":1,"move":"water-gun"},{"level":9,"move":"charm"},{"level":16,"move":"supersonic"},{"level":24,"move":"bubble-beam"},{"level":31,"move":"acid-armor"},{"level":39,"move":"whirlpool"},{"level":46,"move":"water-pulse"},{"level":54,"move":"aqua-ring"},{"level":61,"move":"dive"},{"level":69,"move":"rain-dance"},{"level":75,"move":"take-heart"}],
+  "490": [{"level":1,"move":"heart-swap"},{"level":1,"move":"tail-glow"},{"level":1,"move":"water-gun"},{"level":9,"move":"charm"},{"level":16,"move":"supersonic"},{"level":24,"move":"bubble-beam"},{"level":31,"move":"acid-armor"},{"level":39,"move":"whirlpool"},{"level":46,"move":"water-pulse"},{"level":54,"move":"aqua-ring"},{"level":61,"move":"dive"},{"level":69,"move":"rain-dance"},{"level":76,"move":"take-heart"}],
+  "491": [{"level":1,"move":"disable"},{"level":11,"move":"quick-attack"},{"level":20,"move":"hypnosis"},{"level":29,"move":"sucker-punch"},{"level":38,"move":"night-shade"},{"level":47,"move":"double-team"},{"level":57,"move":"haze"},{"level":66,"move":"dark-void"},{"level":75,"move":"nasty-plot"},{"level":84,"move":"dream-eater"},{"level":93,"move":"dark-pulse"}],
+  "492": [{"level":1,"move":"growth"},{"level":10,"move":"magical-leaf"},{"level":19,"move":"leech-seed"},{"level":28,"move":"synthesis"},{"level":37,"move":"sweet-scent"},{"level":46,"move":"play-rough"},{"level":55,"move":"worry-seed"},{"level":64,"move":"grassy-terrain"},{"level":73,"move":"energy-ball"},{"level":82,"move":"sweet-kiss"},{"level":91,"move":"healing-wish"},{"level":100,"move":"seed-flare"}],
+  "493": [{"level":1,"move":"cosmic-power"},{"level":1,"move":"seismic-toss"},{"level":10,"move":"gravity"},{"level":20,"move":"earth-power"},{"level":30,"move":"hyper-voice"},{"level":40,"move":"extreme-speed"},{"level":50,"move":"healing-wish"},{"level":60,"move":"future-sight"},{"level":70,"move":"recover"},{"level":80,"move":"hyper-beam"},{"level":90,"move":"perish-song"},{"level":100,"move":"judgment"}],
+  "494": [{"level":1,"move":"confusion"},{"level":1,"move":"flame-charge"},{"level":1,"move":"focus-energy"},{"level":1,"move":"quick-attack"},{"level":1,"move":"v-create"},{"level":7,"move":"work-up"},{"level":14,"move":"incinerate"},{"level":21,"move":"stored-power"},{"level":28,"move":"headbutt"},{"level":35,"move":"endure"},{"level":42,"move":"zen-headbutt"},{"level":49,"move":"inferno"},{"level":56,"move":"reversal"},{"level":63,"move":"searing-shot"},{"level":70,"move":"double-edge"},{"level":77,"move":"flare-blitz"},{"level":84,"move":"overheat"},{"level":91,"move":"final-gambit"}],
+  "495": [{"level":1,"move":"tackle"},{"level":4,"move":"leer"},{"level":7,"move":"vine-whip"},{"level":10,"move":"wrap"},{"level":13,"move":"growth"},{"level":16,"move":"magical-leaf"},{"level":19,"move":"leech-seed"},{"level":22,"move":"mega-drain"},{"level":25,"move":"slam"},{"level":28,"move":"leaf-blade"},{"level":31,"move":"coil"},{"level":34,"move":"giga-drain"},{"level":37,"move":"gastro-acid"},{"level":40,"move":"leaf-storm"}],
+  "496": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":1,"move":"vine-whip"},{"level":1,"move":"wrap"},{"level":13,"move":"growth"},{"level":16,"move":"magical-leaf"},{"level":20,"move":"leech-seed"},{"level":24,"move":"mega-drain"},{"level":28,"move":"slam"},{"level":32,"move":"leaf-blade"},{"level":36,"move":"coil"},{"level":40,"move":"giga-drain"},{"level":44,"move":"gastro-acid"},{"level":48,"move":"leaf-storm"}],
+  "497": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":1,"move":"vine-whip"},{"level":1,"move":"wrap"},{"level":13,"move":"growth"},{"level":16,"move":"magical-leaf"},{"level":20,"move":"leech-seed"},{"level":24,"move":"mega-drain"},{"level":28,"move":"slam"},{"level":32,"move":"leaf-blade"},{"level":38,"move":"coil"},{"level":44,"move":"giga-drain"},{"level":50,"move":"gastro-acid"},{"level":56,"move":"leaf-storm"}],
+  "498": [{"level":1,"move":"tackle"},{"level":3,"move":"tail-whip"},{"level":7,"move":"ember"},{"level":9,"move":"endure"},{"level":13,"move":"defense-curl"},{"level":15,"move":"flame-charge"},{"level":19,"move":"smog"},{"level":21,"move":"rollout"},{"level":25,"move":"take-down"},{"level":27,"move":"heat-crash"},{"level":31,"move":"assurance"},{"level":33,"move":"flamethrower"},{"level":37,"move":"head-smash"},{"level":39,"move":"roar"},{"level":43,"move":"flare-blitz"}],
+  "499": [{"level":0,"move":"arm-thrust"},{"level":1,"move":"ember"},{"level":1,"move":"endure"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":13,"move":"defense-curl"},{"level":15,"move":"flame-charge"},{"level":20,"move":"smog"},{"level":23,"move":"rollout"},{"level":28,"move":"take-down"},{"level":31,"move":"heat-crash"},{"level":36,"move":"assurance"},{"level":39,"move":"flamethrower"},{"level":44,"move":"head-smash"},{"level":47,"move":"roar"},{"level":52,"move":"flare-blitz"}],
+  "500": [{"level":1,"move":"arm-thrust"},{"level":1,"move":"ember"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":13,"move":"defense-curl"},{"level":15,"move":"flame-charge"},{"level":20,"move":"smog"},{"level":23,"move":"rollout"},{"level":28,"move":"take-down"},{"level":31,"move":"heat-crash"},{"level":38,"move":"assurance"},{"level":43,"move":"flamethrower"},{"level":50,"move":"head-smash"},{"level":55,"move":"roar"},{"level":62,"move":"flare-blitz"}],
+  "501": [{"level":1,"move":"tackle"},{"level":5,"move":"tail-whip"},{"level":7,"move":"water-gun"},{"level":11,"move":"soak"},{"level":13,"move":"focus-energy"},{"level":17,"move":"razor-shell"},{"level":19,"move":"fury-cutter"},{"level":23,"move":"water-pulse"},{"level":25,"move":"aerial-ace"},{"level":29,"move":"aqua-jet"},{"level":31,"move":"encore"},{"level":35,"move":"aqua-tail"},{"level":37,"move":"retaliate"},{"level":41,"move":"swords-dance"},{"level":43,"move":"hydro-pump"}],
+  "502": [{"level":1,"move":"soak"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":13,"move":"focus-energy"},{"level":18,"move":"razor-shell"},{"level":21,"move":"fury-cutter"},{"level":26,"move":"water-pulse"},{"level":29,"move":"aerial-ace"},{"level":34,"move":"aqua-jet"},{"level":37,"move":"encore"},{"level":42,"move":"aqua-tail"},{"level":45,"move":"retaliate"},{"level":50,"move":"swords-dance"},{"level":53,"move":"hydro-pump"}],
+  "503": [{"level":0,"move":"slash"},{"level":1,"move":"megahorn"},{"level":1,"move":"soak"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":13,"move":"focus-energy"},{"level":18,"move":"razor-shell"},{"level":21,"move":"fury-cutter"},{"level":25,"move":"water-pulse"},{"level":29,"move":"aerial-ace"},{"level":34,"move":"aqua-jet"},{"level":39,"move":"encore"},{"level":46,"move":"aqua-tail"},{"level":51,"move":"retaliate"},{"level":58,"move":"swords-dance"},{"level":63,"move":"hydro-pump"}],
+  "504": [{"level":1,"move":"tackle"},{"level":3,"move":"leer"},{"level":6,"move":"bite"},{"level":8,"move":"bide"},{"level":11,"move":"detect"},{"level":13,"move":"sand-attack"},{"level":16,"move":"crunch"},{"level":18,"move":"hypnosis"},{"level":21,"move":"super-fang"},{"level":23,"move":"after-you"},{"level":26,"move":"focus-energy"},{"level":28,"move":"work-up"},{"level":31,"move":"hyper-fang"},{"level":33,"move":"nasty-plot"},{"level":36,"move":"mean-look"},{"level":38,"move":"baton-pass"},{"level":41,"move":"slam"}],
+  "505": [{"level":0,"move":"confuse-ray"},{"level":1,"move":"bite"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":1,"move":"rototiller"},{"level":1,"move":"tackle"},{"level":3,"move":"leer"},{"level":6,"move":"bite"},{"level":8,"move":"bide"},{"level":11,"move":"detect"},{"level":13,"move":"sand-attack"},{"level":16,"move":"crunch"},{"level":18,"move":"hypnosis"},{"level":22,"move":"super-fang"},{"level":25,"move":"after-you"},{"level":29,"move":"focus-energy"},{"level":32,"move":"psych-up"},{"level":36,"move":"hyper-fang"},{"level":39,"move":"nasty-plot"},{"level":43,"move":"mean-look"},{"level":46,"move":"baton-pass"},{"level":50,"move":"slam"}],
+  "506": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":4,"move":"work-up"},{"level":8,"move":"bite"},{"level":12,"move":"retaliate"},{"level":17,"move":"baby-doll-eyes"},{"level":20,"move":"play-rough"},{"level":24,"move":"crunch"},{"level":28,"move":"take-down"},{"level":32,"move":"helping-hand"},{"level":36,"move":"reversal"},{"level":40,"move":"roar"},{"level":44,"move":"last-resort"},{"level":48,"move":"giga-impact"}],
+  "507": [{"level":1,"move":"bite"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":1,"move":"work-up"},{"level":12,"move":"retaliate"},{"level":19,"move":"baby-doll-eyes"},{"level":24,"move":"play-rough"},{"level":30,"move":"crunch"},{"level":36,"move":"take-down"},{"level":42,"move":"helping-hand"},{"level":48,"move":"reversal"},{"level":54,"move":"roar"},{"level":60,"move":"last-resort"},{"level":66,"move":"giga-impact"}],
+  "508": [{"level":1,"move":"bite"},{"level":1,"move":"fire-fang"},{"level":1,"move":"ice-fang"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-fang"},{"level":1,"move":"work-up"},{"level":12,"move":"retaliate"},{"level":19,"move":"baby-doll-eyes"},{"level":24,"move":"play-rough"},{"level":30,"move":"crunch"},{"level":38,"move":"take-down"},{"level":46,"move":"helping-hand"},{"level":54,"move":"reversal"},{"level":62,"move":"roar"},{"level":70,"move":"last-resort"},{"level":78,"move":"giga-impact"}],
+  "509": [{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":4,"move":"sand-attack"},{"level":5,"move":"fake-out"},{"level":12,"move":"fury-swipes"},{"level":16,"move":"torment"},{"level":21,"move":"assurance"},{"level":24,"move":"hone-claws"},{"level":28,"move":"sucker-punch"},{"level":32,"move":"nasty-plot"},{"level":36,"move":"night-slash"},{"level":40,"move":"play-rough"}],
+  "510": [{"level":1,"move":"fake-out"},{"level":1,"move":"growl"},{"level":1,"move":"sand-attack"},{"level":1,"move":"scratch"},{"level":12,"move":"fury-swipes"},{"level":16,"move":"torment"},{"level":23,"move":"assurance"},{"level":28,"move":"hone-claws"},{"level":34,"move":"sucker-punch"},{"level":40,"move":"nasty-plot"},{"level":46,"move":"night-slash"},{"level":52,"move":"play-rough"}],
+  "511": [{"level":1,"move":"play-nice"},{"level":1,"move":"scratch"},{"level":4,"move":"leer"},{"level":7,"move":"lick"},{"level":10,"move":"vine-whip"},{"level":13,"move":"fury-swipes"},{"level":16,"move":"leech-seed"},{"level":19,"move":"bite"},{"level":22,"move":"seed-bomb"},{"level":25,"move":"torment"},{"level":28,"move":"fling"},{"level":31,"move":"acrobatics"},{"level":34,"move":"grass-knot"},{"level":37,"move":"recycle"},{"level":40,"move":"natural-gift"},{"level":43,"move":"crunch"}],
+  "512": [{"level":1,"move":"fury-swipes"},{"level":1,"move":"leer"},{"level":1,"move":"lick"},{"level":1,"move":"seed-bomb"}],
+  "513": [{"level":1,"move":"play-nice"},{"level":1,"move":"scratch"},{"level":4,"move":"leer"},{"level":7,"move":"lick"},{"level":10,"move":"incinerate"},{"level":13,"move":"fury-swipes"},{"level":16,"move":"yawn"},{"level":19,"move":"bite"},{"level":22,"move":"flame-burst"},{"level":25,"move":"amnesia"},{"level":28,"move":"fling"},{"level":31,"move":"acrobatics"},{"level":34,"move":"fire-blast"},{"level":37,"move":"recycle"},{"level":40,"move":"natural-gift"},{"level":43,"move":"crunch"}],
+  "514": [{"level":1,"move":"flame-burst"},{"level":1,"move":"fury-swipes"},{"level":1,"move":"leer"},{"level":1,"move":"lick"}],
+  "515": [{"level":1,"move":"play-nice"},{"level":1,"move":"scratch"},{"level":4,"move":"leer"},{"level":7,"move":"lick"},{"level":10,"move":"water-gun"},{"level":13,"move":"fury-swipes"},{"level":16,"move":"water-sport"},{"level":19,"move":"bite"},{"level":22,"move":"scald"},{"level":25,"move":"taunt"},{"level":28,"move":"fling"},{"level":31,"move":"acrobatics"},{"level":34,"move":"brine"},{"level":37,"move":"recycle"},{"level":40,"move":"natural-gift"},{"level":43,"move":"crunch"}],
+  "516": [{"level":1,"move":"fury-swipes"},{"level":1,"move":"leer"},{"level":1,"move":"lick"},{"level":1,"move":"scald"}],
+  "517": [{"level":1,"move":"defense-curl"},{"level":1,"move":"stored-power"},{"level":4,"move":"hypnosis"},{"level":8,"move":"psybeam"},{"level":12,"move":"imprison"},{"level":16,"move":"moonlight"},{"level":20,"move":"magic-coat"},{"level":24,"move":"zen-headbutt"},{"level":28,"move":"calm-mind"},{"level":32,"move":"yawn"},{"level":36,"move":"psychic"},{"level":40,"move":"moonblast"},{"level":44,"move":"dream-eater"},{"level":48,"move":"future-sight"},{"level":52,"move":"wonder-room"}],
+  "518": [{"level":1,"move":"calm-mind"},{"level":1,"move":"defense-curl"},{"level":1,"move":"dream-eater"},{"level":1,"move":"future-sight"},{"level":1,"move":"hypnosis"},{"level":1,"move":"imprison"},{"level":1,"move":"magic-coat"},{"level":1,"move":"moonblast"},{"level":1,"move":"moonlight"},{"level":1,"move":"psybeam"},{"level":1,"move":"psychic"},{"level":1,"move":"psychic-terrain"},{"level":1,"move":"stored-power"},{"level":1,"move":"wonder-room"},{"level":1,"move":"yawn"},{"level":1,"move":"zen-headbutt"}],
+  "519": [{"level":1,"move":"growl"},{"level":1,"move":"gust"},{"level":4,"move":"leer"},{"level":8,"move":"quick-attack"},{"level":12,"move":"taunt"},{"level":16,"move":"air-cutter"},{"level":20,"move":"swagger"},{"level":24,"move":"feather-dance"},{"level":28,"move":"detect"},{"level":32,"move":"air-slash"},{"level":36,"move":"roost"},{"level":40,"move":"tailwind"},{"level":44,"move":"sky-attack"}],
+  "520": [{"level":1,"move":"growl"},{"level":1,"move":"gust"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":12,"move":"taunt"},{"level":16,"move":"air-cutter"},{"level":20,"move":"swagger"},{"level":26,"move":"feather-dance"},{"level":34,"move":"detect"},{"level":38,"move":"air-slash"},{"level":44,"move":"roost"},{"level":50,"move":"tailwind"},{"level":56,"move":"sky-attack"}],
+  "521": [{"level":1,"move":"growl"},{"level":1,"move":"gust"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":12,"move":"taunt"},{"level":16,"move":"air-cutter"},{"level":20,"move":"swagger"},{"level":26,"move":"feather-dance"},{"level":36,"move":"detect"},{"level":42,"move":"air-slash"},{"level":50,"move":"roost"},{"level":58,"move":"tailwind"},{"level":66,"move":"sky-attack"}],
+  "522": [{"level":1,"move":"quick-attack"},{"level":4,"move":"tail-whip"},{"level":8,"move":"charge"},{"level":11,"move":"shock-wave"},{"level":15,"move":"thunder-wave"},{"level":18,"move":"flame-charge"},{"level":22,"move":"spark"},{"level":25,"move":"stomp"},{"level":29,"move":"discharge"},{"level":33,"move":"agility"},{"level":35,"move":"wild-charge"},{"level":40,"move":"thrash"}],
+  "523": [{"level":1,"move":"charge"},{"level":1,"move":"quick-attack"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder-wave"},{"level":11,"move":"shock-wave"},{"level":18,"move":"flame-charge"},{"level":25,"move":"spark"},{"level":31,"move":"stomp"},{"level":36,"move":"discharge"},{"level":42,"move":"agility"},{"level":47,"move":"wild-charge"},{"level":53,"move":"thrash"}],
+  "524": [{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":4,"move":"harden"},{"level":8,"move":"stealth-rock"},{"level":12,"move":"mud-slap"},{"level":16,"move":"smack-down"},{"level":20,"move":"iron-defense"},{"level":24,"move":"headbutt"},{"level":28,"move":"rock-slide"},{"level":32,"move":"rock-blast"},{"level":36,"move":"sandstorm"},{"level":40,"move":"stone-edge"},{"level":44,"move":"explosion"}],
+  "525": [{"level":0,"move":"power-gem"},{"level":1,"move":"harden"},{"level":1,"move":"power-gem"},{"level":1,"move":"sand-attack"},{"level":1,"move":"stealth-rock"},{"level":1,"move":"tackle"},{"level":12,"move":"mud-slap"},{"level":16,"move":"smack-down"},{"level":20,"move":"iron-defense"},{"level":24,"move":"headbutt"},{"level":30,"move":"rock-slide"},{"level":36,"move":"rock-blast"},{"level":42,"move":"sandstorm"},{"level":48,"move":"stone-edge"},{"level":54,"move":"explosion"}],
+  "526": [{"level":1,"move":"harden"},{"level":1,"move":"power-gem"},{"level":1,"move":"sand-attack"},{"level":1,"move":"stealth-rock"},{"level":1,"move":"tackle"},{"level":12,"move":"mud-slap"},{"level":16,"move":"smack-down"},{"level":20,"move":"iron-defense"},{"level":24,"move":"headbutt"},{"level":30,"move":"rock-slide"},{"level":36,"move":"rock-blast"},{"level":42,"move":"sandstorm"},{"level":48,"move":"stone-edge"},{"level":54,"move":"explosion"}],
+  "527": [{"level":1,"move":"attract"},{"level":1,"move":"gust"},{"level":5,"move":"confusion"},{"level":10,"move":"endeavor"},{"level":15,"move":"air-cutter"},{"level":20,"move":"imprison"},{"level":25,"move":"assurance"},{"level":30,"move":"amnesia"},{"level":35,"move":"air-slash"},{"level":40,"move":"psychic"},{"level":45,"move":"calm-mind"},{"level":50,"move":"future-sight"},{"level":55,"move":"simple-beam"}],
+  "528": [{"level":1,"move":"attract"},{"level":1,"move":"confusion"},{"level":1,"move":"endeavor"},{"level":1,"move":"gust"},{"level":15,"move":"air-cutter"},{"level":20,"move":"imprison"},{"level":25,"move":"assurance"},{"level":30,"move":"amnesia"},{"level":35,"move":"air-slash"},{"level":40,"move":"psychic"},{"level":45,"move":"calm-mind"},{"level":50,"move":"future-sight"},{"level":55,"move":"simple-beam"}],
+  "529": [{"level":1,"move":"mud-slap"},{"level":1,"move":"rapid-spin"},{"level":4,"move":"scratch"},{"level":8,"move":"hone-claws"},{"level":12,"move":"fury-swipes"},{"level":16,"move":"metal-claw"},{"level":20,"move":"sandstorm"},{"level":24,"move":"crush-claw"},{"level":28,"move":"rock-slide"},{"level":32,"move":"dig"},{"level":36,"move":"swords-dance"},{"level":40,"move":"drill-run"},{"level":44,"move":"earthquake"},{"level":48,"move":"fissure"}],
+  "530": [{"level":0,"move":"horn-drill"},{"level":1,"move":"hone-claws"},{"level":1,"move":"mud-slap"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"scratch"},{"level":12,"move":"fury-swipes"},{"level":16,"move":"metal-claw"},{"level":20,"move":"sandstorm"},{"level":24,"move":"crush-claw"},{"level":28,"move":"rock-slide"},{"level":34,"move":"dig"},{"level":40,"move":"swords-dance"},{"level":46,"move":"drill-run"},{"level":52,"move":"earthquake"},{"level":58,"move":"fissure"}],
+  "531": [{"level":1,"move":"play-nice"},{"level":1,"move":"pound"},{"level":4,"move":"disarming-voice"},{"level":9,"move":"baby-doll-eyes"},{"level":12,"move":"helping-hand"},{"level":16,"move":"growl"},{"level":20,"move":"zen-headbutt"},{"level":24,"move":"life-dew"},{"level":28,"move":"after-you"},{"level":32,"move":"take-down"},{"level":36,"move":"simple-beam"},{"level":40,"move":"hyper-voice"},{"level":44,"move":"heal-pulse"},{"level":48,"move":"double-edge"},{"level":52,"move":"entrainment"},{"level":56,"move":"misty-terrain"},{"level":60,"move":"last-resort"}],
+  "532": [{"level":1,"move":"leer"},{"level":1,"move":"pound"},{"level":4,"move":"low-kick"},{"level":8,"move":"rock-throw"},{"level":12,"move":"focus-energy"},{"level":16,"move":"bulk-up"},{"level":20,"move":"rock-slide"},{"level":24,"move":"slam"},{"level":28,"move":"scary-face"},{"level":32,"move":"dynamic-punch"},{"level":36,"move":"hammer-arm"},{"level":40,"move":"stone-edge"},{"level":44,"move":"superpower"},{"level":48,"move":"focus-punch"}],
+  "533": [{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":1,"move":"pound"},{"level":1,"move":"rock-throw"},{"level":12,"move":"focus-energy"},{"level":16,"move":"bulk-up"},{"level":20,"move":"rock-slide"},{"level":24,"move":"slam"},{"level":30,"move":"scary-face"},{"level":36,"move":"dynamic-punch"},{"level":42,"move":"hammer-arm"},{"level":48,"move":"stone-edge"},{"level":54,"move":"superpower"},{"level":60,"move":"focus-punch"}],
+  "534": [{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":1,"move":"pound"},{"level":1,"move":"rock-throw"},{"level":12,"move":"focus-energy"},{"level":16,"move":"bulk-up"},{"level":20,"move":"rock-slide"},{"level":24,"move":"slam"},{"level":30,"move":"scary-face"},{"level":36,"move":"dynamic-punch"},{"level":42,"move":"hammer-arm"},{"level":48,"move":"stone-edge"},{"level":54,"move":"superpower"},{"level":60,"move":"focus-punch"}],
+  "535": [{"level":1,"move":"echoed-voice"},{"level":1,"move":"growl"},{"level":4,"move":"acid"},{"level":8,"move":"supersonic"},{"level":12,"move":"mud-shot"},{"level":16,"move":"round"},{"level":20,"move":"bubble-beam"},{"level":24,"move":"flail"},{"level":28,"move":"uproar"},{"level":32,"move":"aqua-ring"},{"level":36,"move":"hyper-voice"},{"level":40,"move":"muddy-water"},{"level":44,"move":"rain-dance"},{"level":48,"move":"hydro-pump"}],
+  "536": [{"level":1,"move":"acid"},{"level":1,"move":"echoed-voice"},{"level":1,"move":"growl"},{"level":1,"move":"supersonic"},{"level":12,"move":"mud-shot"},{"level":16,"move":"round"},{"level":20,"move":"bubble-beam"},{"level":24,"move":"flail"},{"level":30,"move":"uproar"},{"level":37,"move":"aqua-ring"},{"level":42,"move":"hyper-voice"},{"level":48,"move":"muddy-water"},{"level":54,"move":"rain-dance"},{"level":60,"move":"hydro-pump"}],
+  "537": [{"level":0,"move":"drain-punch"},{"level":1,"move":"acid"},{"level":1,"move":"drain-punch"},{"level":1,"move":"echoed-voice"},{"level":1,"move":"gastro-acid"},{"level":1,"move":"growl"},{"level":1,"move":"supersonic"},{"level":12,"move":"mud-shot"},{"level":16,"move":"round"},{"level":20,"move":"bubble-beam"},{"level":24,"move":"flail"},{"level":30,"move":"uproar"},{"level":39,"move":"aqua-ring"},{"level":46,"move":"hyper-voice"},{"level":54,"move":"muddy-water"},{"level":62,"move":"rain-dance"},{"level":70,"move":"hydro-pump"}],
+  "538": [{"level":1,"move":"bind"},{"level":1,"move":"leer"},{"level":5,"move":"focus-energy"},{"level":10,"move":"circle-throw"},{"level":15,"move":"wide-guard"},{"level":20,"move":"revenge"},{"level":25,"move":"bulk-up"},{"level":30,"move":"storm-throw"},{"level":35,"move":"vital-throw"},{"level":40,"move":"seismic-toss"},{"level":45,"move":"endure"},{"level":50,"move":"reversal"},{"level":55,"move":"superpower"}],
+  "539": [{"level":1,"move":"leer"},{"level":1,"move":"rock-smash"},{"level":5,"move":"focus-energy"},{"level":10,"move":"double-kick"},{"level":15,"move":"quick-guard"},{"level":20,"move":"low-sweep"},{"level":25,"move":"bulk-up"},{"level":30,"move":"retaliate"},{"level":35,"move":"brick-break"},{"level":40,"move":"counter"},{"level":45,"move":"endure"},{"level":50,"move":"reversal"},{"level":55,"move":"close-combat"}],
+  "540": [{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":8,"move":"bug-bite"},{"level":15,"move":"razor-leaf"},{"level":22,"move":"struggle-bug"},{"level":29,"move":"endure"},{"level":31,"move":"sticky-web"},{"level":36,"move":"bug-buzz"},{"level":43,"move":"flail"}],
+  "541": [{"level":0,"move":"protect"},{"level":1,"move":"bug-bite"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":22,"move":"struggle-bug"},{"level":29,"move":"endure"},{"level":31,"move":"sticky-web"},{"level":36,"move":"bug-buzz"},{"level":43,"move":"flail"}],
+  "542": [{"level":0,"move":"slash"},{"level":1,"move":"false-swipe"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":22,"move":"struggle-bug"},{"level":29,"move":"fell-stinger"},{"level":32,"move":"helping-hand"},{"level":36,"move":"leaf-blade"},{"level":39,"move":"x-scissor"},{"level":43,"move":"entrainment"},{"level":46,"move":"swords-dance"},{"level":50,"move":"leaf-storm"}],
+  "543": [{"level":1,"move":"defense-curl"},{"level":1,"move":"poison-sting"},{"level":4,"move":"rollout"},{"level":8,"move":"protect"},{"level":12,"move":"poison-tail"},{"level":16,"move":"screech"},{"level":20,"move":"bug-bite"},{"level":24,"move":"venoshock"},{"level":28,"move":"take-down"},{"level":32,"move":"agility"},{"level":36,"move":"toxic"},{"level":40,"move":"venom-drench"},{"level":44,"move":"double-edge"}],
+  "544": [{"level":0,"move":"iron-defense"},{"level":1,"move":"defense-curl"},{"level":1,"move":"iron-defense"},{"level":1,"move":"poison-sting"},{"level":1,"move":"protect"},{"level":1,"move":"rollout"},{"level":12,"move":"poison-tail"},{"level":16,"move":"screech"},{"level":20,"move":"bug-bite"},{"level":26,"move":"venoshock"},{"level":32,"move":"take-down"},{"level":38,"move":"agility"},{"level":44,"move":"toxic"},{"level":50,"move":"venom-drench"},{"level":56,"move":"double-edge"}],
+  "545": [{"level":1,"move":"baton-pass"},{"level":1,"move":"defense-curl"},{"level":1,"move":"iron-defense"},{"level":1,"move":"poison-sting"},{"level":1,"move":"protect"},{"level":1,"move":"rollout"},{"level":12,"move":"poison-tail"},{"level":16,"move":"screech"},{"level":20,"move":"bug-bite"},{"level":26,"move":"venoshock"},{"level":34,"move":"take-down"},{"level":42,"move":"agility"},{"level":50,"move":"toxic"},{"level":58,"move":"venom-drench"},{"level":66,"move":"double-edge"},{"level":74,"move":"megahorn"}],
+  "546": [{"level":1,"move":"absorb"},{"level":1,"move":"helping-hand"},{"level":3,"move":"fairy-wind"},{"level":6,"move":"stun-spore"},{"level":12,"move":"mega-drain"},{"level":15,"move":"razor-leaf"},{"level":18,"move":"growth"},{"level":21,"move":"poison-powder"},{"level":24,"move":"giga-drain"},{"level":27,"move":"charm"},{"level":30,"move":"leech-seed"},{"level":33,"move":"cotton-spore"},{"level":36,"move":"energy-ball"},{"level":39,"move":"sunny-day"},{"level":42,"move":"endeavor"},{"level":45,"move":"cotton-guard"},{"level":48,"move":"solar-beam"}],
+  "547": [{"level":1,"move":"absorb"},{"level":1,"move":"charm"},{"level":1,"move":"cotton-guard"},{"level":1,"move":"cotton-spore"},{"level":1,"move":"endeavor"},{"level":1,"move":"energy-ball"},{"level":1,"move":"fairy-wind"},{"level":1,"move":"giga-drain"},{"level":1,"move":"growth"},{"level":1,"move":"gust"},{"level":1,"move":"helping-hand"},{"level":1,"move":"hurricane"},{"level":1,"move":"leech-seed"},{"level":1,"move":"mega-drain"},{"level":1,"move":"memento"},{"level":1,"move":"moonblast"},{"level":1,"move":"poison-powder"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"solar-beam"},{"level":1,"move":"stun-spore"},{"level":1,"move":"sunny-day"},{"level":1,"move":"tailwind"}],
+  "548": [{"level":1,"move":"absorb"},{"level":1,"move":"growth"},{"level":3,"move":"helping-hand"},{"level":6,"move":"stun-spore"},{"level":9,"move":"mega-drain"},{"level":12,"move":"charm"},{"level":15,"move":"magical-leaf"},{"level":18,"move":"sleep-powder"},{"level":21,"move":"giga-drain"},{"level":24,"move":"leech-seed"},{"level":27,"move":"after-you"},{"level":30,"move":"energy-ball"},{"level":33,"move":"synthesis"},{"level":36,"move":"sunny-day"},{"level":39,"move":"entrainment"},{"level":42,"move":"leaf-storm"}],
+  "549": [{"level":0,"move":"petal-dance"},{"level":1,"move":"absorb"},{"level":1,"move":"after-you"},{"level":1,"move":"charm"},{"level":1,"move":"energy-ball"},{"level":1,"move":"entrainment"},{"level":1,"move":"giga-drain"},{"level":1,"move":"growth"},{"level":1,"move":"helping-hand"},{"level":1,"move":"leaf-storm"},{"level":1,"move":"leech-seed"},{"level":1,"move":"mega-drain"},{"level":1,"move":"petal-blizzard"},{"level":1,"move":"quiver-dance"},{"level":1,"move":"sleep-powder"},{"level":1,"move":"stun-spore"},{"level":1,"move":"sunny-day"},{"level":1,"move":"synthesis"},{"level":1,"move":"teeter-dance"},{"level":5,"move":"magical-leaf"}],
+  "550": [{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":4,"move":"tackle"},{"level":8,"move":"flail"},{"level":12,"move":"aqua-jet"},{"level":16,"move":"bite"},{"level":20,"move":"scary-face"},{"level":24,"move":"headbutt"},{"level":28,"move":"soak"},{"level":32,"move":"crunch"},{"level":36,"move":"take-down"},{"level":40,"move":"final-gambit"},{"level":44,"move":"wave-crash"},{"level":48,"move":"thrash"},{"level":52,"move":"double-edge"},{"level":56,"move":"head-smash"}],
+  "551": [{"level":1,"move":"leer"},{"level":1,"move":"power-trip"},{"level":3,"move":"sand-attack"},{"level":6,"move":"hone-claws"},{"level":9,"move":"sand-tomb"},{"level":12,"move":"scary-face"},{"level":15,"move":"bite"},{"level":18,"move":"torment"},{"level":21,"move":"dig"},{"level":24,"move":"swagger"},{"level":27,"move":"crunch"},{"level":30,"move":"sandstorm"},{"level":33,"move":"foul-play"},{"level":36,"move":"earthquake"},{"level":39,"move":"thrash"}],
+  "552": [{"level":1,"move":"hone-claws"},{"level":1,"move":"leer"},{"level":1,"move":"power-trip"},{"level":1,"move":"sand-attack"},{"level":9,"move":"sand-tomb"},{"level":12,"move":"scary-face"},{"level":15,"move":"bite"},{"level":18,"move":"torment"},{"level":21,"move":"dig"},{"level":24,"move":"swagger"},{"level":27,"move":"crunch"},{"level":32,"move":"sandstorm"},{"level":35,"move":"foul-play"},{"level":42,"move":"earthquake"},{"level":47,"move":"thrash"}],
+  "553": [{"level":1,"move":"hone-claws"},{"level":1,"move":"leer"},{"level":1,"move":"power-trip"},{"level":1,"move":"sand-attack"},{"level":9,"move":"sand-tomb"},{"level":12,"move":"scary-face"},{"level":15,"move":"bite"},{"level":18,"move":"torment"},{"level":21,"move":"dig"},{"level":24,"move":"swagger"},{"level":27,"move":"crunch"},{"level":32,"move":"sandstorm"},{"level":35,"move":"foul-play"},{"level":44,"move":"earthquake"},{"level":51,"move":"thrash"},{"level":58,"move":"outrage"}],
+  "554": [{"level":1,"move":"ember"},{"level":1,"move":"tackle"},{"level":4,"move":"taunt"},{"level":8,"move":"bite"},{"level":12,"move":"incinerate"},{"level":16,"move":"work-up"},{"level":20,"move":"fire-fang"},{"level":24,"move":"headbutt"},{"level":28,"move":"fire-punch"},{"level":32,"move":"uproar"},{"level":36,"move":"belly-drum"},{"level":40,"move":"flare-blitz"},{"level":44,"move":"thrash"},{"level":48,"move":"superpower"}],
+  "555": [{"level":0,"move":"hammer-arm"},{"level":1,"move":"bite"},{"level":1,"move":"ember"},{"level":1,"move":"hammer-arm"},{"level":1,"move":"tackle"},{"level":1,"move":"taunt"},{"level":12,"move":"incinerate"},{"level":16,"move":"work-up"},{"level":20,"move":"fire-fang"},{"level":24,"move":"headbutt"},{"level":28,"move":"fire-punch"},{"level":32,"move":"uproar"},{"level":38,"move":"belly-drum"},{"level":44,"move":"flare-blitz"},{"level":50,"move":"thrash"},{"level":56,"move":"superpower"}],
+  "556": [{"level":1,"move":"absorb"},{"level":1,"move":"after-you"},{"level":1,"move":"ingrain"},{"level":1,"move":"peck"},{"level":1,"move":"spiky-shield"},{"level":4,"move":"growth"},{"level":8,"move":"mega-drain"},{"level":12,"move":"leech-seed"},{"level":16,"move":"sucker-punch"},{"level":20,"move":"pin-missile"},{"level":24,"move":"giga-drain"},{"level":28,"move":"sweet-scent"},{"level":32,"move":"synthesis"},{"level":36,"move":"petal-blizzard"},{"level":40,"move":"cotton-spore"},{"level":44,"move":"sunny-day"},{"level":48,"move":"solar-beam"},{"level":52,"move":"acupressure"},{"level":56,"move":"petal-dance"},{"level":60,"move":"cotton-guard"}],
+  "557": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"sand-attack"},{"level":4,"move":"withdraw"},{"level":8,"move":"smack-down"},{"level":12,"move":"bug-bite"},{"level":16,"move":"flail"},{"level":20,"move":"slash"},{"level":24,"move":"rock-slide"},{"level":28,"move":"stealth-rock"},{"level":32,"move":"rock-blast"},{"level":36,"move":"x-scissor"},{"level":40,"move":"rock-polish"},{"level":44,"move":"shell-smash"},{"level":48,"move":"rock-wrecker"}],
+  "558": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"sand-attack"},{"level":1,"move":"smack-down"},{"level":1,"move":"withdraw"},{"level":12,"move":"bug-bite"},{"level":16,"move":"flail"},{"level":20,"move":"slash"},{"level":24,"move":"rock-slide"},{"level":28,"move":"stealth-rock"},{"level":32,"move":"rock-blast"},{"level":38,"move":"x-scissor"},{"level":44,"move":"rock-polish"},{"level":50,"move":"shell-smash"},{"level":56,"move":"rock-wrecker"}],
+  "559": [{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":4,"move":"payback"},{"level":8,"move":"headbutt"},{"level":12,"move":"sand-attack"},{"level":16,"move":"facade"},{"level":20,"move":"torment"},{"level":24,"move":"beat-up"},{"level":28,"move":"scary-face"},{"level":32,"move":"brick-break"},{"level":36,"move":"swagger"},{"level":40,"move":"crunch"},{"level":44,"move":"high-jump-kick"},{"level":48,"move":"focus-punch"},{"level":52,"move":"head-smash"}],
+  "560": [{"level":1,"move":"headbutt"},{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":1,"move":"payback"},{"level":12,"move":"sand-attack"},{"level":16,"move":"facade"},{"level":20,"move":"torment"},{"level":24,"move":"beat-up"},{"level":28,"move":"scary-face"},{"level":32,"move":"brick-break"},{"level":36,"move":"swagger"},{"level":42,"move":"crunch"},{"level":48,"move":"high-jump-kick"},{"level":54,"move":"focus-punch"},{"level":60,"move":"head-smash"}],
+  "561": [{"level":1,"move":"confusion"},{"level":1,"move":"gust"},{"level":5,"move":"gravity"},{"level":10,"move":"hypnosis"},{"level":15,"move":"air-cutter"},{"level":20,"move":"psybeam"},{"level":25,"move":"whirlwind"},{"level":30,"move":"cosmic-power"},{"level":35,"move":"air-slash"},{"level":40,"move":"psychic"},{"level":45,"move":"tailwind"},{"level":50,"move":"light-screen"},{"level":50,"move":"reflect"},{"level":55,"move":"sky-attack"},{"level":60,"move":"skill-swap"}],
+  "562": [{"level":1,"move":"astonish"},{"level":1,"move":"protect"},{"level":4,"move":"haze"},{"level":8,"move":"night-shade"},{"level":12,"move":"disable"},{"level":16,"move":"will-o-wisp"},{"level":20,"move":"crafty-shield"},{"level":24,"move":"hex"},{"level":28,"move":"mean-look"},{"level":32,"move":"grudge"},{"level":36,"move":"curse"},{"level":40,"move":"shadow-ball"},{"level":44,"move":"dark-pulse"},{"level":48,"move":"guard-split"},{"level":48,"move":"power-split"},{"level":52,"move":"destiny-bond"}],
+  "563": [{"level":0,"move":"shadow-claw"},{"level":1,"move":"astonish"},{"level":1,"move":"haze"},{"level":1,"move":"night-shade"},{"level":1,"move":"protect"},{"level":1,"move":"scary-face"},{"level":1,"move":"shadow-claw"},{"level":12,"move":"disable"},{"level":16,"move":"will-o-wisp"},{"level":20,"move":"crafty-shield"},{"level":24,"move":"hex"},{"level":28,"move":"mean-look"},{"level":32,"move":"grudge"},{"level":38,"move":"curse"},{"level":44,"move":"shadow-ball"},{"level":50,"move":"dark-pulse"},{"level":56,"move":"guard-split"},{"level":56,"move":"power-split"},{"level":62,"move":"destiny-bond"}],
+  "564": [{"level":1,"move":"water-gun"},{"level":1,"move":"withdraw"},{"level":3,"move":"protect"},{"level":6,"move":"aqua-jet"},{"level":9,"move":"smack-down"},{"level":12,"move":"ancient-power"},{"level":15,"move":"bite"},{"level":18,"move":"wide-guard"},{"level":21,"move":"brine"},{"level":24,"move":"rock-slide"},{"level":27,"move":"crunch"},{"level":30,"move":"curse"},{"level":33,"move":"iron-defense"},{"level":36,"move":"aqua-tail"},{"level":39,"move":"rain-dance"},{"level":42,"move":"hydro-pump"},{"level":45,"move":"shell-smash"}],
+  "565": [{"level":1,"move":"aqua-jet"},{"level":1,"move":"protect"},{"level":1,"move":"water-gun"},{"level":1,"move":"withdraw"},{"level":9,"move":"smack-down"},{"level":12,"move":"ancient-power"},{"level":15,"move":"bite"},{"level":18,"move":"wide-guard"},{"level":21,"move":"brine"},{"level":24,"move":"rock-slide"},{"level":27,"move":"crunch"},{"level":30,"move":"curse"},{"level":33,"move":"iron-defense"},{"level":36,"move":"aqua-tail"},{"level":41,"move":"rain-dance"},{"level":46,"move":"hydro-pump"},{"level":51,"move":"shell-smash"}],
+  "566": [{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":3,"move":"rock-throw"},{"level":6,"move":"wing-attack"},{"level":9,"move":"dragon-breath"},{"level":12,"move":"ancient-power"},{"level":15,"move":"pluck"},{"level":18,"move":"quick-guard"},{"level":21,"move":"u-turn"},{"level":24,"move":"rock-slide"},{"level":27,"move":"scary-face"},{"level":30,"move":"crunch"},{"level":33,"move":"agility"},{"level":36,"move":"tailwind"},{"level":39,"move":"dragon-claw"},{"level":42,"move":"thrash"},{"level":45,"move":"endeavor"}],
+  "567": [{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"rock-throw"},{"level":1,"move":"wing-attack"},{"level":9,"move":"dragon-breath"},{"level":12,"move":"ancient-power"},{"level":15,"move":"pluck"},{"level":18,"move":"quick-guard"},{"level":21,"move":"u-turn"},{"level":24,"move":"rock-slide"},{"level":27,"move":"scary-face"},{"level":30,"move":"crunch"},{"level":33,"move":"agility"},{"level":36,"move":"tailwind"},{"level":41,"move":"dragon-claw"},{"level":46,"move":"thrash"},{"level":51,"move":"endeavor"}],
+  "568": [{"level":1,"move":"poison-gas"},{"level":1,"move":"pound"},{"level":3,"move":"recycle"},{"level":6,"move":"acid-spray"},{"level":9,"move":"amnesia"},{"level":12,"move":"clear-smog"},{"level":15,"move":"toxic-spikes"},{"level":18,"move":"sludge"},{"level":21,"move":"stockpile"},{"level":21,"move":"swallow"},{"level":24,"move":"take-down"},{"level":27,"move":"sludge-bomb"},{"level":30,"move":"toxic"},{"level":33,"move":"belch"},{"level":37,"move":"pain-split"},{"level":39,"move":"gunk-shot"},{"level":42,"move":"explosion"}],
+  "569": [{"level":1,"move":"acid-spray"},{"level":1,"move":"metal-claw"},{"level":1,"move":"poison-gas"},{"level":1,"move":"pound"},{"level":1,"move":"recycle"},{"level":1,"move":"take-down"},{"level":9,"move":"amnesia"},{"level":12,"move":"clear-smog"},{"level":15,"move":"toxic-spikes"},{"level":18,"move":"sludge"},{"level":21,"move":"stockpile"},{"level":21,"move":"swallow"},{"level":24,"move":"body-slam"},{"level":27,"move":"sludge-bomb"},{"level":30,"move":"toxic"},{"level":33,"move":"belch"},{"level":39,"move":"pain-split"},{"level":43,"move":"gunk-shot"},{"level":48,"move":"explosion"}],
+  "570": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":4,"move":"torment"},{"level":8,"move":"hone-claws"},{"level":12,"move":"fury-swipes"},{"level":16,"move":"scary-face"},{"level":20,"move":"taunt"},{"level":24,"move":"knock-off"},{"level":28,"move":"fake-tears"},{"level":32,"move":"agility"},{"level":36,"move":"imprison"},{"level":40,"move":"night-daze"},{"level":44,"move":"nasty-plot"},{"level":48,"move":"foul-play"}],
+  "571": [{"level":0,"move":"night-slash"},{"level":1,"move":"hone-claws"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":1,"move":"torment"},{"level":1,"move":"u-turn"},{"level":12,"move":"fury-swipes"},{"level":20,"move":"taunt"},{"level":24,"move":"knock-off"},{"level":28,"move":"fake-tears"},{"level":34,"move":"agility"},{"level":40,"move":"imprison"},{"level":46,"move":"night-daze"},{"level":52,"move":"nasty-plot"},{"level":58,"move":"foul-play"}],
+  "572": [{"level":1,"move":"baby-doll-eyes"},{"level":1,"move":"pound"},{"level":4,"move":"helping-hand"},{"level":8,"move":"echoed-voice"},{"level":12,"move":"sing"},{"level":16,"move":"charm"},{"level":20,"move":"swift"},{"level":24,"move":"encore"},{"level":28,"move":"after-you"},{"level":32,"move":"tail-slap"},{"level":36,"move":"tickle"},{"level":40,"move":"slam"},{"level":44,"move":"hyper-voice"},{"level":48,"move":"last-resort"}],
+  "573": [{"level":0,"move":"tail-slap"},{"level":1,"move":"bullet-seed"},{"level":1,"move":"charm"},{"level":1,"move":"pound"},{"level":1,"move":"sing"}],
+  "574": [{"level":1,"move":"confusion"},{"level":1,"move":"pound"},{"level":4,"move":"play-nice"},{"level":8,"move":"tickle"},{"level":12,"move":"psybeam"},{"level":16,"move":"charm"},{"level":20,"move":"psyshock"},{"level":24,"move":"hypnosis"},{"level":28,"move":"fake-tears"},{"level":33,"move":"psych-up"},{"level":36,"move":"psychic"},{"level":40,"move":"flatter"},{"level":44,"move":"future-sight"},{"level":48,"move":"magic-room"}],
+  "575": [{"level":1,"move":"confusion"},{"level":1,"move":"play-nice"},{"level":1,"move":"pound"},{"level":1,"move":"tickle"},{"level":12,"move":"psybeam"},{"level":16,"move":"charm"},{"level":20,"move":"psyshock"},{"level":24,"move":"hypnosis"},{"level":28,"move":"fake-tears"},{"level":35,"move":"psych-up"},{"level":46,"move":"flatter"},{"level":52,"move":"future-sight"},{"level":58,"move":"magic-room"}],
+  "576": [{"level":1,"move":"confusion"},{"level":1,"move":"play-nice"},{"level":1,"move":"pound"},{"level":1,"move":"tickle"},{"level":12,"move":"psybeam"},{"level":16,"move":"charm"},{"level":20,"move":"psyshock"},{"level":24,"move":"hypnosis"},{"level":28,"move":"fake-tears"},{"level":35,"move":"psych-up"},{"level":40,"move":"psychic"},{"level":48,"move":"flatter"},{"level":56,"move":"future-sight"},{"level":64,"move":"magic-room"}],
+  "577": [{"level":1,"move":"confusion"},{"level":1,"move":"protect"},{"level":4,"move":"recover"},{"level":8,"move":"endeavor"},{"level":12,"move":"psybeam"},{"level":16,"move":"charm"},{"level":20,"move":"psyshock"},{"level":24,"move":"light-screen"},{"level":24,"move":"reflect"},{"level":28,"move":"ally-switch"},{"level":33,"move":"pain-split"},{"level":36,"move":"psychic"},{"level":40,"move":"skill-swap"},{"level":44,"move":"future-sight"},{"level":48,"move":"wonder-room"}],
+  "578": [{"level":1,"move":"confusion"},{"level":1,"move":"endeavor"},{"level":1,"move":"protect"},{"level":1,"move":"recover"},{"level":12,"move":"psybeam"},{"level":16,"move":"charm"},{"level":20,"move":"psyshock"},{"level":24,"move":"light-screen"},{"level":24,"move":"reflect"},{"level":28,"move":"ally-switch"},{"level":35,"move":"pain-split"},{"level":40,"move":"psychic"},{"level":46,"move":"skill-swap"},{"level":52,"move":"future-sight"},{"level":58,"move":"wonder-room"}],
+  "579": [{"level":0,"move":"hammer-arm"},{"level":1,"move":"confusion"},{"level":1,"move":"endeavor"},{"level":1,"move":"protect"},{"level":1,"move":"recover"},{"level":12,"move":"psybeam"},{"level":16,"move":"charm"},{"level":20,"move":"psyshock"},{"level":24,"move":"light-screen"},{"level":24,"move":"reflect"},{"level":28,"move":"ally-switch"},{"level":35,"move":"pain-split"},{"level":40,"move":"psychic"},{"level":48,"move":"skill-swap"},{"level":56,"move":"future-sight"},{"level":64,"move":"wonder-room"}],
+  "580": [{"level":1,"move":"water-gun"},{"level":6,"move":"defog"},{"level":9,"move":"wing-attack"},{"level":13,"move":"water-pulse"},{"level":15,"move":"aerial-ace"},{"level":19,"move":"bubble-beam"},{"level":21,"move":"feather-dance"},{"level":24,"move":"aqua-ring"},{"level":27,"move":"air-slash"},{"level":30,"move":"roost"},{"level":34,"move":"rain-dance"},{"level":37,"move":"tailwind"},{"level":41,"move":"brave-bird"},{"level":46,"move":"hurricane"}],
+  "581": [{"level":1,"move":"defog"},{"level":1,"move":"water-gun"},{"level":1,"move":"wing-attack"},{"level":13,"move":"water-pulse"},{"level":15,"move":"aerial-ace"},{"level":19,"move":"bubble-beam"},{"level":21,"move":"feather-dance"},{"level":24,"move":"aqua-ring"},{"level":27,"move":"air-slash"},{"level":30,"move":"roost"},{"level":34,"move":"rain-dance"},{"level":40,"move":"tailwind"},{"level":47,"move":"brave-bird"},{"level":55,"move":"hurricane"}],
+  "582": [{"level":1,"move":"astonish"},{"level":1,"move":"harden"},{"level":4,"move":"taunt"},{"level":8,"move":"mist"},{"level":12,"move":"icy-wind"},{"level":16,"move":"avalanche"},{"level":20,"move":"hail"},{"level":24,"move":"icicle-spear"},{"level":28,"move":"uproar"},{"level":32,"move":"acid-armor"},{"level":36,"move":"mirror-coat"},{"level":40,"move":"ice-beam"},{"level":44,"move":"blizzard"},{"level":48,"move":"sheer-cold"}],
+  "583": [{"level":1,"move":"astonish"},{"level":1,"move":"harden"},{"level":1,"move":"mist"},{"level":1,"move":"taunt"},{"level":12,"move":"icy-wind"},{"level":16,"move":"avalanche"},{"level":20,"move":"hail"},{"level":24,"move":"icicle-spear"},{"level":28,"move":"uproar"},{"level":32,"move":"acid-armor"},{"level":38,"move":"mirror-coat"},{"level":44,"move":"ice-beam"},{"level":50,"move":"blizzard"},{"level":56,"move":"sheer-cold"}],
+  "584": [{"level":1,"move":"astonish"},{"level":1,"move":"freeze-dry"},{"level":1,"move":"harden"},{"level":1,"move":"icicle-crash"},{"level":1,"move":"mist"},{"level":1,"move":"taunt"},{"level":1,"move":"weather-ball"},{"level":12,"move":"icy-wind"},{"level":16,"move":"avalanche"},{"level":20,"move":"hail"},{"level":24,"move":"icicle-spear"},{"level":28,"move":"uproar"},{"level":32,"move":"acid-armor"},{"level":38,"move":"mirror-coat"},{"level":44,"move":"ice-beam"},{"level":52,"move":"blizzard"},{"level":60,"move":"sheer-cold"}],
+  "585": [{"level":1,"move":"tackle"},{"level":4,"move":"growl"},{"level":7,"move":"sand-attack"},{"level":10,"move":"double-kick"},{"level":13,"move":"leech-seed"},{"level":16,"move":"bullet-seed"},{"level":20,"move":"take-down"},{"level":24,"move":"zen-headbutt"},{"level":28,"move":"energy-ball"},{"level":32,"move":"charm"},{"level":37,"move":"double-edge"},{"level":42,"move":"solar-beam"}],
+  "586": [{"level":0,"move":"horn-leech"},{"level":1,"move":"growl"},{"level":1,"move":"megahorn"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":10,"move":"double-kick"},{"level":13,"move":"leech-seed"},{"level":16,"move":"bullet-seed"},{"level":20,"move":"take-down"},{"level":24,"move":"zen-headbutt"},{"level":28,"move":"energy-ball"},{"level":36,"move":"charm"},{"level":44,"move":"double-edge"},{"level":52,"move":"solar-beam"}],
+  "587": [{"level":1,"move":"nuzzle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"double-team"},{"level":10,"move":"quick-attack"},{"level":15,"move":"thunder-shock"},{"level":20,"move":"charge"},{"level":25,"move":"acrobatics"},{"level":30,"move":"spark"},{"level":35,"move":"encore"},{"level":40,"move":"volt-switch"},{"level":45,"move":"light-screen"},{"level":50,"move":"discharge"},{"level":55,"move":"agility"}],
+  "588": [{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":4,"move":"fury-cutter"},{"level":8,"move":"endure"},{"level":12,"move":"false-swipe"},{"level":16,"move":"acid-spray"},{"level":20,"move":"headbutt"},{"level":24,"move":"flail"},{"level":28,"move":"scary-face"},{"level":32,"move":"x-scissor"},{"level":36,"move":"swords-dance"},{"level":40,"move":"take-down"},{"level":44,"move":"bug-buzz"},{"level":48,"move":"double-edge"}],
+  "589": [{"level":1,"move":"double-edge"},{"level":1,"move":"endure"},{"level":1,"move":"fell-stinger"},{"level":1,"move":"flail"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":1,"move":"quick-guard"},{"level":1,"move":"scary-face"},{"level":1,"move":"take-down"},{"level":12,"move":"false-swipe"},{"level":16,"move":"acid-spray"},{"level":20,"move":"headbutt"},{"level":24,"move":"reversal"},{"level":28,"move":"iron-defense"},{"level":32,"move":"x-scissor"},{"level":36,"move":"swords-dance"},{"level":40,"move":"iron-head"},{"level":44,"move":"bug-buzz"},{"level":48,"move":"giga-impact"},{"level":52,"move":"metal-burst"}],
+  "590": [{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":4,"move":"growth"},{"level":8,"move":"stun-spore"},{"level":12,"move":"mega-drain"},{"level":16,"move":"synthesis"},{"level":20,"move":"clear-smog"},{"level":24,"move":"sweet-scent"},{"level":28,"move":"giga-drain"},{"level":32,"move":"ingrain"},{"level":36,"move":"toxic"},{"level":40,"move":"rage-powder"},{"level":44,"move":"solar-beam"},{"level":48,"move":"spore"}],
+  "591": [{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":1,"move":"growth"},{"level":1,"move":"stun-spore"},{"level":12,"move":"mega-drain"},{"level":16,"move":"synthesis"},{"level":20,"move":"clear-smog"},{"level":24,"move":"sweet-scent"},{"level":28,"move":"giga-drain"},{"level":32,"move":"ingrain"},{"level":36,"move":"toxic"},{"level":42,"move":"rage-powder"},{"level":48,"move":"solar-beam"},{"level":54,"move":"spore"}],
+  "592": [{"level":1,"move":"absorb"},{"level":1,"move":"water-gun"},{"level":4,"move":"poison-sting"},{"level":8,"move":"night-shade"},{"level":12,"move":"water-pulse"},{"level":16,"move":"rain-dance"},{"level":20,"move":"hex"},{"level":24,"move":"brine"},{"level":28,"move":"recover"},{"level":32,"move":"shadow-ball"},{"level":36,"move":"whirlpool"},{"level":41,"move":"hydro-pump"},{"level":44,"move":"destiny-bond"},{"level":48,"move":"water-spout"}],
+  "593": [{"level":1,"move":"absorb"},{"level":1,"move":"acid-armor"},{"level":1,"move":"night-shade"},{"level":1,"move":"poison-sting"},{"level":1,"move":"water-gun"},{"level":12,"move":"water-pulse"},{"level":16,"move":"rain-dance"},{"level":20,"move":"hex"},{"level":24,"move":"brine"},{"level":28,"move":"recover"},{"level":32,"move":"shadow-ball"},{"level":36,"move":"whirlpool"},{"level":43,"move":"hydro-pump"},{"level":48,"move":"destiny-bond"},{"level":54,"move":"water-spout"}],
+  "594": [{"level":1,"move":"play-nice"},{"level":1,"move":"pound"},{"level":5,"move":"aqua-ring"},{"level":9,"move":"aqua-jet"},{"level":13,"move":"helping-hand"},{"level":13,"move":"wide-guard"},{"level":21,"move":"protect"},{"level":25,"move":"water-pulse"},{"level":29,"move":"healing-wish"},{"level":33,"move":"soak"},{"level":37,"move":"wish"},{"level":41,"move":"brine"},{"level":45,"move":"safeguard"},{"level":49,"move":"whirlpool"},{"level":55,"move":"hydro-pump"}],
+  "595": [{"level":1,"move":"absorb"},{"level":1,"move":"fury-cutter"},{"level":4,"move":"electroweb"},{"level":8,"move":"bug-bite"},{"level":12,"move":"string-shot"},{"level":16,"move":"thunder-wave"},{"level":20,"move":"electro-ball"},{"level":24,"move":"agility"},{"level":28,"move":"sucker-punch"},{"level":32,"move":"slash"},{"level":37,"move":"discharge"},{"level":40,"move":"screech"},{"level":44,"move":"gastro-acid"},{"level":48,"move":"bug-buzz"}],
+  "596": [{"level":0,"move":"sticky-web"},{"level":1,"move":"absorb"},{"level":1,"move":"bug-bite"},{"level":1,"move":"electroweb"},{"level":1,"move":"fury-cutter"},{"level":12,"move":"string-shot"},{"level":16,"move":"thunder-wave"},{"level":20,"move":"electro-ball"},{"level":24,"move":"agility"},{"level":28,"move":"sucker-punch"},{"level":32,"move":"slash"},{"level":39,"move":"discharge"},{"level":44,"move":"screech"},{"level":50,"move":"gastro-acid"},{"level":56,"move":"bug-buzz"}],
+  "597": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":5,"move":"metal-claw"},{"level":10,"move":"pin-missile"},{"level":15,"move":"ingrain"},{"level":20,"move":"flash-cannon"},{"level":25,"move":"iron-head"},{"level":30,"move":"self-destruct"},{"level":35,"move":"iron-defense"},{"level":41,"move":"curse"},{"level":45,"move":"gyro-ball"},{"level":50,"move":"explosion"}],
+  "598": [{"level":0,"move":"power-whip"},{"level":1,"move":"harden"},{"level":1,"move":"metal-claw"},{"level":1,"move":"pin-missile"},{"level":1,"move":"power-whip"},{"level":1,"move":"tackle"},{"level":15,"move":"ingrain"},{"level":20,"move":"flash-cannon"},{"level":25,"move":"iron-head"},{"level":30,"move":"self-destruct"},{"level":35,"move":"iron-defense"},{"level":43,"move":"curse"},{"level":49,"move":"gyro-ball"},{"level":56,"move":"explosion"}],
+  "599": [{"level":1,"move":"thunder-shock"},{"level":1,"move":"vice-grip"},{"level":4,"move":"bind"},{"level":8,"move":"charge"},{"level":12,"move":"charge-beam"},{"level":16,"move":"metal-sound"},{"level":20,"move":"autotomize"},{"level":24,"move":"discharge"},{"level":28,"move":"screech"},{"level":32,"move":"gear-grind"},{"level":36,"move":"lock-on"},{"level":40,"move":"shift-gear"},{"level":44,"move":"zap-cannon"},{"level":48,"move":"hyper-beam"}],
+  "600": [{"level":1,"move":"bind"},{"level":1,"move":"charge"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"vice-grip"},{"level":12,"move":"charge-beam"},{"level":16,"move":"metal-sound"},{"level":20,"move":"autotomize"},{"level":24,"move":"discharge"},{"level":28,"move":"screech"},{"level":32,"move":"gear-grind"},{"level":36,"move":"lock-on"},{"level":42,"move":"shift-gear"},{"level":48,"move":"zap-cannon"},{"level":54,"move":"hyper-beam"}],
+  "601": [{"level":1,"move":"bind"},{"level":1,"move":"charge"},{"level":1,"move":"gear-up"},{"level":1,"move":"magnetic-flux"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"vice-grip"},{"level":12,"move":"charge-beam"},{"level":16,"move":"metal-sound"},{"level":20,"move":"autotomize"},{"level":24,"move":"discharge"},{"level":28,"move":"screech"},{"level":32,"move":"gear-grind"},{"level":36,"move":"lock-on"},{"level":42,"move":"shift-gear"},{"level":48,"move":"zap-cannon"},{"level":56,"move":"hyper-beam"},{"level":64,"move":"electric-terrain"}],
+  "602": [{"level":1,"move":"charge-beam"},{"level":1,"move":"spark"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-wave"}],
+  "603": [{"level":0,"move":"crunch"},{"level":1,"move":"charge-beam"},{"level":1,"move":"headbutt"},{"level":1,"move":"spark"},{"level":1,"move":"thunder-wave"},{"level":9,"move":"bind"},{"level":19,"move":"acid"},{"level":29,"move":"discharge"},{"level":44,"move":"thunderbolt"},{"level":49,"move":"acid-spray"},{"level":54,"move":"coil"},{"level":59,"move":"wild-charge"},{"level":64,"move":"gastro-acid"},{"level":69,"move":"zap-cannon"},{"level":74,"move":"thrash"}],
+  "604": [{"level":1,"move":"acid"},{"level":1,"move":"coil"},{"level":1,"move":"crunch"},{"level":1,"move":"crush-claw"},{"level":1,"move":"discharge"},{"level":1,"move":"gastro-acid"},{"level":1,"move":"headbutt"},{"level":1,"move":"thrash"},{"level":1,"move":"zap-cannon"},{"level":5,"move":"wild-charge"}],
+  "605": [{"level":1,"move":"confusion"},{"level":1,"move":"growl"},{"level":6,"move":"imprison"},{"level":12,"move":"teleport"},{"level":18,"move":"psybeam"},{"level":24,"move":"guard-split"},{"level":24,"move":"power-split"},{"level":30,"move":"headbutt"},{"level":36,"move":"zen-headbutt"},{"level":43,"move":"recover"},{"level":48,"move":"calm-mind"},{"level":54,"move":"wonder-room"},{"level":60,"move":"psychic"}],
+  "606": [{"level":1,"move":"confusion"},{"level":1,"move":"growl"},{"level":1,"move":"imprison"},{"level":1,"move":"psychic-terrain"},{"level":1,"move":"teleport"},{"level":18,"move":"psybeam"},{"level":24,"move":"guard-split"},{"level":24,"move":"power-split"},{"level":30,"move":"headbutt"},{"level":36,"move":"zen-headbutt"},{"level":45,"move":"recover"},{"level":52,"move":"calm-mind"},{"level":60,"move":"wonder-room"},{"level":68,"move":"psychic"}],
+  "607": [{"level":1,"move":"astonish"},{"level":1,"move":"smog"},{"level":4,"move":"ember"},{"level":8,"move":"minimize"},{"level":12,"move":"confuse-ray"},{"level":16,"move":"hex"},{"level":20,"move":"will-o-wisp"},{"level":24,"move":"fire-spin"},{"level":28,"move":"night-shade"},{"level":32,"move":"curse"},{"level":36,"move":"shadow-ball"},{"level":40,"move":"inferno"},{"level":44,"move":"imprison"},{"level":48,"move":"pain-split"},{"level":52,"move":"overheat"},{"level":56,"move":"memento"}],
+  "608": [{"level":1,"move":"astonish"},{"level":1,"move":"ember"},{"level":1,"move":"minimize"},{"level":1,"move":"smog"},{"level":12,"move":"confuse-ray"},{"level":16,"move":"hex"},{"level":20,"move":"will-o-wisp"},{"level":24,"move":"fire-spin"},{"level":28,"move":"night-shade"},{"level":32,"move":"curse"},{"level":36,"move":"shadow-ball"},{"level":40,"move":"inferno"},{"level":46,"move":"imprison"},{"level":52,"move":"pain-split"},{"level":58,"move":"overheat"},{"level":64,"move":"memento"}],
+  "609": [{"level":1,"move":"astonish"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"curse"},{"level":1,"move":"ember"},{"level":1,"move":"fire-spin"},{"level":1,"move":"hex"},{"level":1,"move":"imprison"},{"level":1,"move":"inferno"},{"level":1,"move":"memento"},{"level":1,"move":"minimize"},{"level":1,"move":"night-shade"},{"level":1,"move":"overheat"},{"level":1,"move":"pain-split"},{"level":1,"move":"shadow-ball"},{"level":1,"move":"smog"},{"level":1,"move":"will-o-wisp"}],
+  "610": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":3,"move":"bite"},{"level":6,"move":"false-swipe"},{"level":9,"move":"assurance"},{"level":12,"move":"taunt"},{"level":15,"move":"slash"},{"level":18,"move":"dragon-claw"},{"level":21,"move":"scary-face"},{"level":24,"move":"crunch"},{"level":27,"move":"dragon-dance"},{"level":30,"move":"breaking-swipe"},{"level":33,"move":"focus-energy"},{"level":36,"move":"dragon-pulse"},{"level":39,"move":"swords-dance"},{"level":42,"move":"outrage"},{"level":45,"move":"guillotine"},{"level":48,"move":"giga-impact"}],
+  "611": [{"level":1,"move":"bite"},{"level":1,"move":"false-swipe"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":9,"move":"assurance"},{"level":12,"move":"taunt"},{"level":15,"move":"slash"},{"level":18,"move":"dragon-claw"},{"level":21,"move":"scary-face"},{"level":24,"move":"crunch"},{"level":27,"move":"dragon-dance"},{"level":30,"move":"breaking-swipe"},{"level":33,"move":"focus-energy"},{"level":36,"move":"dragon-pulse"},{"level":41,"move":"swords-dance"},{"level":46,"move":"outrage"},{"level":51,"move":"guillotine"},{"level":56,"move":"giga-impact"}],
+  "612": [{"level":1,"move":"bite"},{"level":1,"move":"false-swipe"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":9,"move":"assurance"},{"level":12,"move":"taunt"},{"level":15,"move":"slash"},{"level":18,"move":"dragon-claw"},{"level":21,"move":"scary-face"},{"level":24,"move":"crunch"},{"level":27,"move":"dragon-dance"},{"level":30,"move":"breaking-swipe"},{"level":33,"move":"focus-energy"},{"level":36,"move":"dragon-pulse"},{"level":41,"move":"swords-dance"},{"level":46,"move":"outrage"},{"level":53,"move":"guillotine"},{"level":60,"move":"giga-impact"}],
+  "613": [{"level":1,"move":"growl"},{"level":1,"move":"powder-snow"},{"level":3,"move":"endure"},{"level":6,"move":"fury-swipes"},{"level":9,"move":"icy-wind"},{"level":12,"move":"play-nice"},{"level":15,"move":"brine"},{"level":18,"move":"frost-breath"},{"level":21,"move":"slash"},{"level":24,"move":"flail"},{"level":27,"move":"charm"},{"level":30,"move":"snowscape"},{"level":33,"move":"thrash"},{"level":36,"move":"rest"},{"level":39,"move":"blizzard"},{"level":42,"move":"sheer-cold"}],
+  "614": [{"level":0,"move":"icicle-crash"},{"level":1,"move":"aqua-jet"},{"level":1,"move":"charm"},{"level":1,"move":"endure"},{"level":1,"move":"fury-swipes"},{"level":1,"move":"growl"},{"level":1,"move":"powder-snow"},{"level":9,"move":"icy-wind"},{"level":12,"move":"play-nice"},{"level":15,"move":"brine"},{"level":18,"move":"frost-breath"},{"level":21,"move":"slash"},{"level":24,"move":"flail"},{"level":27,"move":"swagger"},{"level":30,"move":"snowscape"},{"level":33,"move":"thrash"},{"level":36,"move":"rest"},{"level":41,"move":"blizzard"},{"level":46,"move":"sheer-cold"},{"level":51,"move":"superpower"}],
+  "615": [{"level":1,"move":"bind"},{"level":1,"move":"ice-shard"},{"level":4,"move":"confuse-ray"},{"level":8,"move":"rapid-spin"},{"level":12,"move":"icy-wind"},{"level":16,"move":"haze"},{"level":16,"move":"mist"},{"level":20,"move":"ancient-power"},{"level":24,"move":"aurora-beam"},{"level":28,"move":"slash"},{"level":32,"move":"night-slash"},{"level":36,"move":"freeze-dry"},{"level":40,"move":"light-screen"},{"level":40,"move":"reflect"},{"level":44,"move":"recover"},{"level":48,"move":"ice-beam"},{"level":52,"move":"acid-armor"},{"level":56,"move":"solar-beam"},{"level":60,"move":"sheer-cold"}],
+  "616": [{"level":1,"move":"absorb"},{"level":1,"move":"protect"},{"level":4,"move":"acid"},{"level":8,"move":"curse"},{"level":12,"move":"mega-drain"},{"level":16,"move":"struggle-bug"},{"level":20,"move":"yawn"},{"level":24,"move":"acid-armor"},{"level":28,"move":"giga-drain"},{"level":32,"move":"guard-swap"},{"level":36,"move":"body-slam"},{"level":40,"move":"recover"},{"level":44,"move":"bug-buzz"},{"level":48,"move":"final-gambit"}],
+  "617": [{"level":1,"move":"absorb"},{"level":1,"move":"acid"},{"level":1,"move":"acid-armor"},{"level":1,"move":"acid-spray"},{"level":1,"move":"body-slam"},{"level":1,"move":"curse"},{"level":1,"move":"double-team"},{"level":1,"move":"guard-swap"},{"level":1,"move":"quick-attack"},{"level":1,"move":"water-shuriken"},{"level":1,"move":"yawn"},{"level":12,"move":"mega-drain"},{"level":16,"move":"struggle-bug"},{"level":20,"move":"swift"},{"level":24,"move":"agility"},{"level":28,"move":"giga-drain"},{"level":32,"move":"power-swap"},{"level":36,"move":"u-turn"},{"level":40,"move":"recover"},{"level":44,"move":"bug-buzz"},{"level":48,"move":"final-gambit"},{"level":52,"move":"toxic"}],
+  "618": [{"level":1,"move":"mud-slap"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"water-gun"},{"level":5,"move":"endure"},{"level":10,"move":"mud-shot"},{"level":15,"move":"revenge"},{"level":20,"move":"charge"},{"level":25,"move":"sucker-punch"},{"level":30,"move":"electric-terrain"},{"level":35,"move":"bounce"},{"level":40,"move":"muddy-water"},{"level":45,"move":"discharge"},{"level":50,"move":"flail"},{"level":55,"move":"fissure"}],
+  "619": [{"level":1,"move":"detect"},{"level":1,"move":"pound"},{"level":5,"move":"fake-out"},{"level":10,"move":"reversal"},{"level":15,"move":"fury-swipes"},{"level":20,"move":"quick-guard"},{"level":25,"move":"force-palm"},{"level":30,"move":"u-turn"},{"level":35,"move":"drain-punch"},{"level":40,"move":"hone-claws"},{"level":45,"move":"aura-sphere"},{"level":51,"move":"bounce"},{"level":55,"move":"calm-mind"},{"level":60,"move":"high-jump-kick"}],
+  "620": [{"level":1,"move":"detect"},{"level":1,"move":"fake-out"},{"level":1,"move":"pound"},{"level":1,"move":"quick-guard"},{"level":1,"move":"reversal"},{"level":15,"move":"fury-swipes"},{"level":20,"move":"wide-guard"},{"level":25,"move":"force-palm"},{"level":30,"move":"u-turn"},{"level":35,"move":"drain-punch"},{"level":40,"move":"hone-claws"},{"level":45,"move":"aura-sphere"},{"level":53,"move":"bounce"},{"level":59,"move":"calm-mind"},{"level":66,"move":"high-jump-kick"}],
+  "621": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":5,"move":"bite"},{"level":10,"move":"dragon-tail"},{"level":15,"move":"metal-claw"},{"level":20,"move":"scary-face"},{"level":25,"move":"slash"},{"level":30,"move":"dragon-claw"},{"level":35,"move":"hone-claws"},{"level":40,"move":"crunch"},{"level":45,"move":"iron-head"},{"level":50,"move":"outrage"},{"level":55,"move":"superpower"}],
+  "622": [{"level":1,"move":"astonish"},{"level":1,"move":"mud-slap"},{"level":4,"move":"defense-curl"},{"level":8,"move":"pound"},{"level":12,"move":"shadow-punch"},{"level":16,"move":"curse"},{"level":20,"move":"night-shade"},{"level":24,"move":"stomping-tantrum"},{"level":28,"move":"iron-defense"},{"level":32,"move":"mega-punch"},{"level":36,"move":"shadow-ball"},{"level":40,"move":"heavy-slam"},{"level":44,"move":"phantom-force"},{"level":48,"move":"hammer-arm"},{"level":52,"move":"earthquake"},{"level":56,"move":"dynamic-punch"}],
+  "623": [{"level":1,"move":"astonish"},{"level":1,"move":"defense-curl"},{"level":1,"move":"high-horsepower"},{"level":1,"move":"pound"},{"level":12,"move":"shadow-punch"},{"level":16,"move":"curse"},{"level":20,"move":"night-shade"},{"level":24,"move":"stomping-tantrum"},{"level":28,"move":"iron-defense"},{"level":32,"move":"mega-punch"},{"level":36,"move":"shadow-ball"},{"level":40,"move":"heavy-slam"},{"level":46,"move":"phantom-force"},{"level":52,"move":"hammer-arm"},{"level":58,"move":"earthquake"},{"level":64,"move":"dynamic-punch"}],
+  "624": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":5,"move":"fury-cutter"},{"level":10,"move":"metal-claw"},{"level":15,"move":"torment"},{"level":20,"move":"scary-face"},{"level":25,"move":"assurance"},{"level":30,"move":"metal-sound"},{"level":35,"move":"slash"},{"level":40,"move":"night-slash"},{"level":45,"move":"iron-defense"},{"level":50,"move":"retaliate"},{"level":55,"move":"iron-head"},{"level":60,"move":"swords-dance"},{"level":65,"move":"guillotine"}],
+  "625": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"leer"},{"level":1,"move":"metal-burst"},{"level":1,"move":"metal-claw"},{"level":1,"move":"scratch"},{"level":15,"move":"torment"},{"level":20,"move":"scary-face"},{"level":25,"move":"assurance"},{"level":30,"move":"metal-sound"},{"level":35,"move":"slash"},{"level":40,"move":"night-slash"},{"level":45,"move":"iron-defense"},{"level":50,"move":"retaliate"},{"level":57,"move":"iron-head"},{"level":64,"move":"swords-dance"},{"level":71,"move":"guillotine"}],
+  "626": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":5,"move":"focus-energy"},{"level":10,"move":"fury-attack"},{"level":15,"move":"revenge"},{"level":20,"move":"scary-face"},{"level":25,"move":"horn-attack"},{"level":30,"move":"reversal"},{"level":35,"move":"throat-chop"},{"level":40,"move":"head-charge"},{"level":45,"move":"swords-dance"},{"level":50,"move":"megahorn"},{"level":55,"move":"giga-impact"}],
+  "627": [{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":6,"move":"hone-claws"},{"level":12,"move":"wing-attack"},{"level":18,"move":"tailwind"},{"level":24,"move":"scary-face"},{"level":30,"move":"aerial-ace"},{"level":36,"move":"slash"},{"level":42,"move":"whirlwind"},{"level":48,"move":"crush-claw"},{"level":55,"move":"air-slash"},{"level":60,"move":"defog"},{"level":66,"move":"thrash"},{"level":72,"move":"brave-bird"}],
+  "628": [{"level":0,"move":"superpower"},{"level":1,"move":"hone-claws"},{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":1,"move":"sky-attack"},{"level":1,"move":"wing-attack"},{"level":18,"move":"tailwind"},{"level":24,"move":"scary-face"},{"level":30,"move":"aerial-ace"},{"level":36,"move":"slash"},{"level":42,"move":"whirlwind"},{"level":48,"move":"crush-claw"},{"level":57,"move":"air-slash"},{"level":64,"move":"defog"},{"level":72,"move":"thrash"}],
+  "629": [{"level":1,"move":"gust"},{"level":1,"move":"leer"},{"level":6,"move":"flatter"},{"level":12,"move":"pluck"},{"level":18,"move":"tailwind"},{"level":24,"move":"knock-off"},{"level":30,"move":"iron-defense"},{"level":36,"move":"whirlwind"},{"level":42,"move":"air-slash"},{"level":48,"move":"dark-pulse"},{"level":54,"move":"nasty-plot"},{"level":60,"move":"defog"},{"level":66,"move":"attract"},{"level":72,"move":"brave-bird"}],
+  "630": [{"level":0,"move":"bone-rush"},{"level":1,"move":"flatter"},{"level":1,"move":"gust"},{"level":1,"move":"leer"},{"level":1,"move":"pluck"},{"level":1,"move":"sky-attack"},{"level":1,"move":"toxic"},{"level":18,"move":"tailwind"},{"level":24,"move":"knock-off"},{"level":30,"move":"iron-defense"},{"level":36,"move":"whirlwind"},{"level":42,"move":"air-slash"},{"level":48,"move":"dark-pulse"},{"level":57,"move":"nasty-plot"},{"level":64,"move":"defog"},{"level":72,"move":"attract"},{"level":80,"move":"brave-bird"}],
+  "631": [{"level":1,"move":"lick"},{"level":1,"move":"tackle"},{"level":5,"move":"fury-swipes"},{"level":10,"move":"incinerate"},{"level":15,"move":"bug-bite"},{"level":20,"move":"spit-up"},{"level":20,"move":"stockpile"},{"level":20,"move":"swallow"},{"level":25,"move":"slash"},{"level":30,"move":"bind"},{"level":35,"move":"fire-lash"},{"level":40,"move":"hone-claws"},{"level":45,"move":"amnesia"},{"level":50,"move":"fire-spin"},{"level":55,"move":"inferno"},{"level":60,"move":"flare-blitz"}],
+  "632": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"sand-attack"},{"level":4,"move":"vice-grip"},{"level":8,"move":"metal-claw"},{"level":12,"move":"beat-up"},{"level":16,"move":"bug-bite"},{"level":20,"move":"bite"},{"level":24,"move":"agility"},{"level":28,"move":"dig"},{"level":32,"move":"x-scissor"},{"level":36,"move":"crunch"},{"level":40,"move":"metal-sound"},{"level":44,"move":"iron-head"},{"level":48,"move":"entrainment"},{"level":52,"move":"iron-defense"},{"level":56,"move":"guillotine"}],
+  "633": [{"level":1,"move":"focus-energy"},{"level":1,"move":"tackle"},{"level":4,"move":"dragon-breath"},{"level":8,"move":"bite"},{"level":12,"move":"roar"},{"level":16,"move":"assurance"},{"level":20,"move":"headbutt"},{"level":24,"move":"work-up"},{"level":28,"move":"slam"},{"level":32,"move":"crunch"},{"level":36,"move":"scary-face"},{"level":40,"move":"dragon-pulse"},{"level":44,"move":"body-slam"},{"level":48,"move":"hyper-voice"},{"level":52,"move":"dragon-rush"},{"level":56,"move":"nasty-plot"},{"level":60,"move":"outrage"}],
+  "634": [{"level":1,"move":"bite"},{"level":1,"move":"double-hit"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"focus-energy"},{"level":1,"move":"tackle"},{"level":12,"move":"roar"},{"level":16,"move":"assurance"},{"level":20,"move":"headbutt"},{"level":24,"move":"work-up"},{"level":28,"move":"slam"},{"level":32,"move":"crunch"},{"level":36,"move":"scary-face"},{"level":40,"move":"dragon-pulse"},{"level":44,"move":"body-slam"},{"level":48,"move":"hyper-voice"},{"level":54,"move":"dragon-rush"},{"level":60,"move":"nasty-plot"},{"level":66,"move":"outrage"}],
+  "635": [{"level":1,"move":"bite"},{"level":1,"move":"double-hit"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"focus-energy"},{"level":1,"move":"tackle"},{"level":1,"move":"tri-attack"},{"level":12,"move":"roar"},{"level":16,"move":"assurance"},{"level":20,"move":"headbutt"},{"level":24,"move":"work-up"},{"level":28,"move":"slam"},{"level":32,"move":"crunch"},{"level":36,"move":"scary-face"},{"level":40,"move":"dragon-pulse"},{"level":44,"move":"body-slam"},{"level":48,"move":"hyper-voice"},{"level":54,"move":"dragon-rush"},{"level":60,"move":"nasty-plot"},{"level":68,"move":"outrage"},{"level":76,"move":"hyper-beam"}],
+  "636": [{"level":1,"move":"ember"},{"level":1,"move":"string-shot"},{"level":6,"move":"flame-charge"},{"level":12,"move":"struggle-bug"},{"level":18,"move":"flame-wheel"},{"level":24,"move":"bug-bite"},{"level":30,"move":"screech"},{"level":36,"move":"leech-life"},{"level":42,"move":"bug-buzz"},{"level":48,"move":"take-down"},{"level":54,"move":"amnesia"},{"level":60,"move":"double-edge"},{"level":66,"move":"flare-blitz"}],
+  "637": [{"level":0,"move":"quiver-dance"},{"level":1,"move":"double-edge"},{"level":1,"move":"ember"},{"level":1,"move":"fiery-dance"},{"level":1,"move":"fire-spin"},{"level":1,"move":"flame-charge"},{"level":1,"move":"flare-blitz"},{"level":1,"move":"gust"},{"level":1,"move":"string-shot"},{"level":1,"move":"struggle-bug"},{"level":1,"move":"take-down"},{"level":1,"move":"whirlwind"},{"level":18,"move":"flame-wheel"},{"level":24,"move":"bug-bite"},{"level":30,"move":"screech"},{"level":36,"move":"leech-life"},{"level":42,"move":"bug-buzz"},{"level":48,"move":"heat-wave"},{"level":54,"move":"amnesia"},{"level":62,"move":"hurricane"},{"level":70,"move":"fire-blast"},{"level":78,"move":"rage-powder"}],
+  "638": [{"level":1,"move":"helping-hand"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"work-up"},{"level":7,"move":"metal-claw"},{"level":14,"move":"quick-guard"},{"level":21,"move":"double-kick"},{"level":28,"move":"retaliate"},{"level":35,"move":"metal-burst"},{"level":42,"move":"take-down"},{"level":49,"move":"sacred-sword"},{"level":56,"move":"swords-dance"},{"level":63,"move":"iron-head"},{"level":70,"move":"close-combat"}],
+  "639": [{"level":1,"move":"helping-hand"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"work-up"},{"level":7,"move":"smack-down"},{"level":14,"move":"quick-guard"},{"level":21,"move":"double-kick"},{"level":28,"move":"retaliate"},{"level":35,"move":"rock-slide"},{"level":42,"move":"take-down"},{"level":49,"move":"sacred-sword"},{"level":56,"move":"swords-dance"},{"level":63,"move":"stone-edge"},{"level":70,"move":"close-combat"}],
+  "640": [{"level":1,"move":"helping-hand"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"work-up"},{"level":7,"move":"magical-leaf"},{"level":14,"move":"quick-guard"},{"level":21,"move":"double-kick"},{"level":28,"move":"retaliate"},{"level":35,"move":"giga-drain"},{"level":42,"move":"synthesis"},{"level":49,"move":"sacred-sword"},{"level":56,"move":"swords-dance"},{"level":63,"move":"leaf-blade"},{"level":70,"move":"close-combat"}],
+  "641": [{"level":1,"move":"astonish"},{"level":1,"move":"gust"},{"level":5,"move":"leer"},{"level":10,"move":"swagger"},{"level":15,"move":"bite"},{"level":20,"move":"air-cutter"},{"level":25,"move":"agility"},{"level":30,"move":"tailwind"},{"level":35,"move":"air-slash"},{"level":40,"move":"crunch"},{"level":45,"move":"extrasensory"},{"level":50,"move":"uproar"},{"level":55,"move":"hammer-arm"},{"level":60,"move":"rain-dance"},{"level":65,"move":"hurricane"},{"level":70,"move":"thrash"},{"level":77,"move":"bleakwind-storm"}],
+  "642": [{"level":1,"move":"astonish"},{"level":1,"move":"thunder-shock"},{"level":5,"move":"leer"},{"level":10,"move":"swagger"},{"level":15,"move":"bite"},{"level":20,"move":"shock-wave"},{"level":25,"move":"agility"},{"level":30,"move":"charge"},{"level":35,"move":"volt-switch"},{"level":40,"move":"crunch"},{"level":45,"move":"discharge"},{"level":50,"move":"uproar"},{"level":55,"move":"hammer-arm"},{"level":60,"move":"rain-dance"},{"level":65,"move":"thunder"},{"level":70,"move":"thrash"},{"level":75,"move":"wildbolt-storm"}],
+  "643": [{"level":1,"move":"ancient-power"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"fire-fang"},{"level":1,"move":"noble-roar"},{"level":8,"move":"slash"},{"level":16,"move":"crunch"},{"level":24,"move":"extrasensory"},{"level":32,"move":"dragon-pulse"},{"level":40,"move":"flamethrower"},{"level":48,"move":"fusion-flare"},{"level":56,"move":"hyper-voice"},{"level":64,"move":"fire-blast"},{"level":72,"move":"imprison"},{"level":80,"move":"outrage"},{"level":88,"move":"blue-flare"}],
+  "644": [{"level":1,"move":"ancient-power"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"noble-roar"},{"level":1,"move":"thunder-fang"},{"level":8,"move":"slash"},{"level":16,"move":"crunch"},{"level":24,"move":"zen-headbutt"},{"level":32,"move":"dragon-claw"},{"level":40,"move":"thunderbolt"},{"level":48,"move":"fusion-bolt"},{"level":56,"move":"hyper-voice"},{"level":64,"move":"thunder"},{"level":72,"move":"imprison"},{"level":80,"move":"outrage"},{"level":88,"move":"bolt-strike"}],
+  "645": [{"level":1,"move":"sand-tomb"},{"level":1,"move":"smack-down"},{"level":5,"move":"leer"},{"level":10,"move":"block"},{"level":15,"move":"bulldoze"},{"level":20,"move":"rock-tomb"},{"level":30,"move":"imprison"},{"level":35,"move":"rock-slide"},{"level":40,"move":"earth-power"},{"level":45,"move":"extrasensory"},{"level":50,"move":"stone-edge"},{"level":55,"move":"hammer-arm"},{"level":60,"move":"sandstorm"},{"level":65,"move":"earthquake"},{"level":70,"move":"outrage"},{"level":75,"move":"fissure"},{"level":80,"move":"sandsear-storm"}],
+  "646": [{"level":1,"move":"ancient-power"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"freeze-dry"},{"level":1,"move":"noble-roar"},{"level":8,"move":"slash"},{"level":16,"move":"endeavor"},{"level":24,"move":"dragon-pulse"},{"level":32,"move":"ice-beam"},{"level":40,"move":"hyper-voice"},{"level":48,"move":"scary-face"},{"level":56,"move":"blizzard"},{"level":64,"move":"imprison"},{"level":72,"move":"outrage"},{"level":80,"move":"glaciate"},{"level":88,"move":"sheer-cold"}],
+  "647": [{"level":1,"move":"aqua-jet"},{"level":1,"move":"helping-hand"},{"level":1,"move":"leer"},{"level":1,"move":"secret-sword"},{"level":1,"move":"work-up"},{"level":7,"move":"bubble-beam"},{"level":14,"move":"quick-guard"},{"level":21,"move":"double-kick"},{"level":28,"move":"retaliate"},{"level":35,"move":"aqua-tail"},{"level":42,"move":"take-down"},{"level":49,"move":"sacred-sword"},{"level":56,"move":"swords-dance"},{"level":63,"move":"hydro-pump"},{"level":70,"move":"close-combat"}],
+  "648": [{"level":1,"move":"confusion"},{"level":1,"move":"quick-attack"},{"level":1,"move":"round"},{"level":1,"move":"sing"},{"level":21,"move":"teeter-dance"},{"level":26,"move":"acrobatics"},{"level":31,"move":"psybeam"},{"level":36,"move":"echoed-voice"},{"level":43,"move":"u-turn"},{"level":50,"move":"relic-song"},{"level":57,"move":"psychic"},{"level":64,"move":"hyper-voice"},{"level":71,"move":"role-play"},{"level":78,"move":"close-combat"},{"level":85,"move":"perish-song"}],
+  "649": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"quick-attack"},{"level":7,"move":"screech"},{"level":14,"move":"metal-claw"},{"level":21,"move":"fell-stinger"},{"level":28,"move":"flame-charge"},{"level":35,"move":"metal-sound"},{"level":42,"move":"x-scissor"},{"level":49,"move":"magnet-rise"},{"level":56,"move":"bug-buzz"},{"level":63,"move":"simple-beam"},{"level":70,"move":"zap-cannon"},{"level":77,"move":"lock-on"},{"level":84,"move":"techno-blast"},{"level":91,"move":"self-destruct"}],
+  "650": [{"level":1,"move":"growl"},{"level":1,"move":"vine-whip"},{"level":8,"move":"rollout"},{"level":11,"move":"bite"},{"level":15,"move":"leech-seed"},{"level":18,"move":"pin-missile"},{"level":27,"move":"take-down"},{"level":32,"move":"seed-bomb"},{"level":35,"move":"mud-shot"},{"level":42,"move":"body-slam"},{"level":45,"move":"pain-split"},{"level":48,"move":"wood-hammer"}],
+  "651": [{"level":1,"move":"growl"},{"level":1,"move":"vine-whip"},{"level":8,"move":"rollout"},{"level":11,"move":"bite"},{"level":15,"move":"leech-seed"},{"level":20,"move":"seed-bomb"},{"level":24,"move":"pin-missile"},{"level":29,"move":"take-down"},{"level":34,"move":"mud-shot"},{"level":38,"move":"bulk-up"},{"level":43,"move":"body-slam"},{"level":47,"move":"pain-split"},{"level":53,"move":"wood-hammer"}],
+  "652": [{"level":0,"move":"spiky-shield"},{"level":1,"move":"feint"},{"level":1,"move":"growl"},{"level":1,"move":"hammer-arm"},{"level":1,"move":"rollout"},{"level":1,"move":"tackle"},{"level":1,"move":"vine-whip"},{"level":11,"move":"bite"},{"level":15,"move":"leech-seed"},{"level":19,"move":"pin-missile"},{"level":29,"move":"take-down"},{"level":35,"move":"seed-bomb"},{"level":41,"move":"mud-shot"},{"level":48,"move":"bulk-up"},{"level":54,"move":"body-slam"},{"level":60,"move":"pain-split"},{"level":66,"move":"wood-hammer"},{"level":78,"move":"giga-impact"}],
+  "653": [{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":5,"move":"ember"},{"level":11,"move":"howl"},{"level":14,"move":"flame-charge"},{"level":17,"move":"psybeam"},{"level":20,"move":"fire-spin"},{"level":25,"move":"light-screen"},{"level":31,"move":"psyshock"},{"level":35,"move":"flamethrower"},{"level":38,"move":"will-o-wisp"},{"level":41,"move":"psychic"},{"level":43,"move":"sunny-day"},{"level":48,"move":"fire-blast"}],
+  "654": [{"level":1,"move":"ember"},{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":11,"move":"howl"},{"level":14,"move":"flame-charge"},{"level":18,"move":"psybeam"},{"level":22,"move":"fire-spin"},{"level":28,"move":"light-screen"},{"level":36,"move":"psyshock"},{"level":41,"move":"flamethrower"},{"level":45,"move":"will-o-wisp"},{"level":49,"move":"psychic"},{"level":52,"move":"sunny-day"},{"level":56,"move":"magic-room"},{"level":59,"move":"fire-blast"}],
+  "655": [{"level":0,"move":"mystical-fire"},{"level":1,"move":"ember"},{"level":1,"move":"future-sight"},{"level":1,"move":"howl"},{"level":1,"move":"role-play"},{"level":1,"move":"scratch"},{"level":1,"move":"shadow-ball"},{"level":1,"move":"switcheroo"},{"level":1,"move":"tail-whip"},{"level":14,"move":"flame-charge"},{"level":18,"move":"psybeam"},{"level":22,"move":"fire-spin"},{"level":28,"move":"light-screen"},{"level":38,"move":"psyshock"},{"level":45,"move":"flamethrower"},{"level":51,"move":"will-o-wisp"},{"level":57,"move":"psychic"},{"level":62,"move":"sunny-day"},{"level":68,"move":"magic-room"},{"level":74,"move":"fire-blast"}],
+  "656": [{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":5,"move":"water-gun"},{"level":8,"move":"quick-attack"},{"level":10,"move":"lick"},{"level":14,"move":"water-pulse"},{"level":18,"move":"smokescreen"},{"level":21,"move":"round"},{"level":25,"move":"fling"},{"level":29,"move":"smack-down"},{"level":35,"move":"substitute"},{"level":39,"move":"bounce"},{"level":43,"move":"double-team"},{"level":48,"move":"hydro-pump"}],
+  "657": [{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":8,"move":"quick-attack"},{"level":10,"move":"lick"},{"level":14,"move":"water-pulse"},{"level":19,"move":"smokescreen"},{"level":23,"move":"round"},{"level":28,"move":"fling"},{"level":33,"move":"smack-down"},{"level":40,"move":"substitute"},{"level":45,"move":"bounce"},{"level":50,"move":"double-team"},{"level":56,"move":"hydro-pump"}],
+  "658": [{"level":0,"move":"water-shuriken"},{"level":1,"move":"growl"},{"level":1,"move":"haze"},{"level":1,"move":"night-slash"},{"level":1,"move":"pound"},{"level":1,"move":"quick-attack"},{"level":1,"move":"role-play"},{"level":1,"move":"water-gun"},{"level":10,"move":"lick"},{"level":14,"move":"water-pulse"},{"level":19,"move":"smokescreen"},{"level":23,"move":"shadow-sneak"},{"level":28,"move":"spikes"},{"level":33,"move":"aerial-ace"},{"level":42,"move":"substitute"},{"level":49,"move":"extrasensory"},{"level":56,"move":"double-team"},{"level":68,"move":"hydro-pump"}],
+  "659": [{"level":1,"move":"leer"},{"level":1,"move":"mud-slap"},{"level":3,"move":"tackle"},{"level":6,"move":"laser-focus"},{"level":9,"move":"quick-attack"},{"level":12,"move":"mud-shot"},{"level":15,"move":"flail"},{"level":18,"move":"double-kick"},{"level":21,"move":"bulldoze"},{"level":24,"move":"dig"},{"level":27,"move":"bounce"},{"level":30,"move":"take-down"},{"level":33,"move":"swords-dance"},{"level":36,"move":"earthquake"},{"level":39,"move":"super-fang"}],
+  "660": [{"level":1,"move":"laser-focus"},{"level":1,"move":"leer"},{"level":1,"move":"mud-slap"},{"level":1,"move":"tackle"},{"level":9,"move":"quick-attack"},{"level":12,"move":"mud-shot"},{"level":15,"move":"flail"},{"level":18,"move":"double-kick"},{"level":23,"move":"bulldoze"},{"level":28,"move":"dig"},{"level":33,"move":"bounce"},{"level":38,"move":"take-down"},{"level":43,"move":"swords-dance"},{"level":48,"move":"earthquake"},{"level":53,"move":"super-fang"},{"level":58,"move":"hammer-arm"}],
+  "661": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":5,"move":"quick-attack"},{"level":10,"move":"ember"},{"level":15,"move":"flail"},{"level":20,"move":"acrobatics"},{"level":25,"move":"agility"},{"level":30,"move":"aerial-ace"},{"level":35,"move":"tailwind"},{"level":40,"move":"steel-wing"},{"level":45,"move":"roost"},{"level":50,"move":"fly"}],
+  "662": [{"level":0,"move":"flame-charge"},{"level":1,"move":"ember"},{"level":1,"move":"feint"},{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":1,"move":"quick-attack"},{"level":15,"move":"flail"},{"level":22,"move":"acrobatics"},{"level":29,"move":"agility"},{"level":36,"move":"aerial-ace"},{"level":43,"move":"tailwind"},{"level":50,"move":"steel-wing"},{"level":57,"move":"roost"},{"level":64,"move":"fly"}],
+  "663": [{"level":1,"move":"ember"},{"level":1,"move":"feint"},{"level":1,"move":"flame-charge"},{"level":1,"move":"flare-blitz"},{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":1,"move":"quick-attack"},{"level":15,"move":"flail"},{"level":22,"move":"acrobatics"},{"level":29,"move":"agility"},{"level":38,"move":"aerial-ace"},{"level":47,"move":"tailwind"},{"level":56,"move":"steel-wing"},{"level":65,"move":"roost"},{"level":74,"move":"fly"},{"level":83,"move":"brave-bird"}],
+  "664": [{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":6,"move":"stun-spore"},{"level":15,"move":"bug-bite"}],
+  "665": [{"level":0,"move":"protect"},{"level":1,"move":"harden"}],
+  "666": [{"level":0,"move":"gust"},{"level":1,"move":"poison-powder"},{"level":1,"move":"sleep-powder"},{"level":1,"move":"struggle-bug"},{"level":1,"move":"stun-spore"},{"level":12,"move":"light-screen"},{"level":17,"move":"psybeam"},{"level":21,"move":"supersonic"},{"level":25,"move":"draining-kiss"},{"level":31,"move":"safeguard"},{"level":35,"move":"bug-buzz"},{"level":45,"move":"quiver-dance"},{"level":50,"move":"hurricane"}],
+  "667": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":5,"move":"ember"},{"level":8,"move":"work-up"},{"level":11,"move":"headbutt"},{"level":15,"move":"noble-roar"},{"level":20,"move":"take-down"},{"level":23,"move":"fire-fang"},{"level":28,"move":"endeavor"},{"level":33,"move":"echoed-voice"},{"level":36,"move":"flamethrower"},{"level":39,"move":"crunch"},{"level":43,"move":"hyper-voice"},{"level":46,"move":"incinerate"},{"level":50,"move":"overheat"}],
+  "668": [{"level":1,"move":"ember"},{"level":1,"move":"hyper-beam"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":1,"move":"work-up"},{"level":11,"move":"headbutt"},{"level":15,"move":"noble-roar"},{"level":20,"move":"take-down"},{"level":23,"move":"fire-fang"},{"level":28,"move":"endeavor"},{"level":33,"move":"echoed-voice"},{"level":38,"move":"flamethrower"},{"level":42,"move":"crunch"},{"level":48,"move":"hyper-voice"},{"level":51,"move":"incinerate"},{"level":57,"move":"overheat"}],
+  "669": [{"level":1,"move":"tackle"},{"level":1,"move":"vine-whip"},{"level":6,"move":"fairy-wind"},{"level":10,"move":"safeguard"},{"level":15,"move":"razor-leaf"},{"level":20,"move":"wish"},{"level":22,"move":"magical-leaf"},{"level":24,"move":"grassy-terrain"},{"level":28,"move":"petal-blizzard"},{"level":33,"move":"synthesis"},{"level":37,"move":"misty-terrain"},{"level":41,"move":"moonblast"},{"level":45,"move":"petal-dance"},{"level":48,"move":"solar-beam"}],
+  "670": [{"level":1,"move":"fairy-wind"},{"level":1,"move":"tackle"},{"level":1,"move":"vine-whip"},{"level":10,"move":"safeguard"},{"level":15,"move":"razor-leaf"},{"level":20,"move":"wish"},{"level":25,"move":"magical-leaf"},{"level":27,"move":"grassy-terrain"},{"level":33,"move":"petal-blizzard"},{"level":38,"move":"synthesis"},{"level":43,"move":"misty-terrain"},{"level":46,"move":"moonblast"},{"level":51,"move":"petal-dance"},{"level":58,"move":"solar-beam"}],
+  "671": [{"level":1,"move":"disarming-voice"},{"level":1,"move":"grass-knot"},{"level":1,"move":"grassy-terrain"},{"level":1,"move":"magical-leaf"},{"level":1,"move":"misty-terrain"},{"level":1,"move":"petal-blizzard"},{"level":1,"move":"petal-dance"},{"level":1,"move":"safeguard"},{"level":1,"move":"solar-beam"},{"level":1,"move":"synthesis"},{"level":1,"move":"wish"},{"level":5,"move":"moonblast"}],
+  "672": [{"level":1,"move":"growth"},{"level":1,"move":"tackle"},{"level":7,"move":"vine-whip"},{"level":9,"move":"tail-whip"},{"level":12,"move":"leech-seed"},{"level":13,"move":"razor-leaf"},{"level":16,"move":"worry-seed"},{"level":20,"move":"synthesis"},{"level":22,"move":"take-down"},{"level":26,"move":"bulldoze"},{"level":30,"move":"seed-bomb"},{"level":34,"move":"bulk-up"},{"level":38,"move":"double-edge"},{"level":42,"move":"horn-leech"},{"level":45,"move":"leaf-blade"}],
+  "673": [{"level":0,"move":"aerial-ace"},{"level":1,"move":"earthquake"},{"level":1,"move":"growth"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"vine-whip"},{"level":12,"move":"leech-seed"},{"level":13,"move":"razor-leaf"},{"level":16,"move":"worry-seed"},{"level":20,"move":"synthesis"},{"level":22,"move":"take-down"},{"level":26,"move":"bulldoze"},{"level":30,"move":"seed-bomb"},{"level":34,"move":"bulk-up"},{"level":40,"move":"double-edge"},{"level":47,"move":"horn-leech"},{"level":55,"move":"leaf-blade"},{"level":58,"move":"milk-drink"}],
+  "674": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":4,"move":"arm-thrust"},{"level":8,"move":"taunt"},{"level":12,"move":"circle-throw"},{"level":16,"move":"low-sweep"},{"level":20,"move":"work-up"},{"level":24,"move":"slash"},{"level":28,"move":"vital-throw"},{"level":33,"move":"crunch"},{"level":36,"move":"body-slam"},{"level":40,"move":"parting-shot"},{"level":44,"move":"entrainment"}],
+  "675": [{"level":0,"move":"night-slash"},{"level":1,"move":"arm-thrust"},{"level":1,"move":"bullet-punch"},{"level":1,"move":"leer"},{"level":1,"move":"night-slash"},{"level":1,"move":"tackle"},{"level":1,"move":"taunt"},{"level":12,"move":"circle-throw"},{"level":16,"move":"low-sweep"},{"level":20,"move":"work-up"},{"level":24,"move":"slash"},{"level":28,"move":"vital-throw"},{"level":35,"move":"crunch"},{"level":40,"move":"body-slam"},{"level":46,"move":"parting-shot"},{"level":52,"move":"entrainment"},{"level":58,"move":"hammer-arm"}],
+  "676": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":5,"move":"sand-attack"},{"level":9,"move":"baby-doll-eyes"},{"level":12,"move":"headbutt"},{"level":15,"move":"tail-whip"},{"level":22,"move":"bite"},{"level":27,"move":"odor-sleuth"},{"level":33,"move":"retaliate"},{"level":35,"move":"take-down"},{"level":38,"move":"charm"},{"level":42,"move":"sucker-punch"},{"level":48,"move":"cotton-guard"}],
+  "677": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":3,"move":"fake-out"},{"level":6,"move":"disarming-voice"},{"level":9,"move":"confusion"},{"level":18,"move":"covet"},{"level":21,"move":"psybeam"},{"level":30,"move":"light-screen"},{"level":30,"move":"reflect"},{"level":33,"move":"psyshock"}],
+  "678": [{"level":1,"move":"disarming-voice"},{"level":1,"move":"fake-out"},{"level":1,"move":"leer"},{"level":1,"move":"mean-look"},{"level":1,"move":"scratch"},{"level":9,"move":"confusion"},{"level":12,"move":"helping-hand"},{"level":15,"move":"charm"},{"level":18,"move":"covet"},{"level":21,"move":"psybeam"},{"level":24,"move":"sucker-punch"},{"level":29,"move":"role-play"},{"level":34,"move":"light-screen"},{"level":34,"move":"reflect"},{"level":39,"move":"psyshock"},{"level":44,"move":"imprison"},{"level":49,"move":"quick-guard"},{"level":54,"move":"psychic"},{"level":59,"move":"misty-terrain"}],
+  "679": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"tackle"},{"level":4,"move":"shadow-sneak"},{"level":8,"move":"autotomize"},{"level":12,"move":"aerial-ace"},{"level":16,"move":"metal-sound"},{"level":20,"move":"slash"},{"level":24,"move":"night-slash"},{"level":28,"move":"retaliate"},{"level":32,"move":"iron-defense"},{"level":36,"move":"iron-head"},{"level":40,"move":"power-trick"},{"level":44,"move":"swords-dance"},{"level":48,"move":"sacred-sword"}],
+  "680": [{"level":1,"move":"autotomize"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"shadow-sneak"},{"level":1,"move":"tackle"},{"level":12,"move":"aerial-ace"},{"level":16,"move":"metal-sound"},{"level":20,"move":"slash"},{"level":24,"move":"night-slash"},{"level":28,"move":"retaliate"},{"level":32,"move":"iron-defense"},{"level":38,"move":"iron-head"},{"level":44,"move":"power-trick"},{"level":50,"move":"swords-dance"},{"level":56,"move":"sacred-sword"}],
+  "681": [{"level":0,"move":"kings-shield"},{"level":1,"move":"aerial-ace"},{"level":1,"move":"autotomize"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"head-smash"},{"level":1,"move":"iron-defense"},{"level":1,"move":"iron-head"},{"level":1,"move":"kings-shield"},{"level":1,"move":"metal-sound"},{"level":1,"move":"night-slash"},{"level":1,"move":"power-trick"},{"level":1,"move":"retaliate"},{"level":1,"move":"sacred-sword"},{"level":1,"move":"shadow-sneak"},{"level":1,"move":"slash"},{"level":1,"move":"swords-dance"},{"level":1,"move":"tackle"}],
+  "682": [{"level":1,"move":"fairy-wind"},{"level":1,"move":"sweet-scent"},{"level":3,"move":"sweet-kiss"},{"level":6,"move":"echoed-voice"},{"level":9,"move":"draining-kiss"},{"level":12,"move":"aromatherapy"},{"level":15,"move":"draining-kiss"},{"level":18,"move":"attract"},{"level":21,"move":"flail"},{"level":24,"move":"misty-terrain"},{"level":27,"move":"psychic"},{"level":30,"move":"charm"},{"level":33,"move":"calm-mind"},{"level":36,"move":"moonblast"},{"level":39,"move":"skill-swap"}],
+  "683": [{"level":1,"move":"aromatic-mist"},{"level":1,"move":"echoed-voice"},{"level":1,"move":"fairy-wind"},{"level":1,"move":"heal-pulse"},{"level":1,"move":"sweet-kiss"},{"level":1,"move":"sweet-scent"},{"level":9,"move":"disarming-voice"},{"level":12,"move":"aromatherapy"},{"level":15,"move":"draining-kiss"},{"level":18,"move":"attract"},{"level":21,"move":"flail"},{"level":24,"move":"misty-terrain"},{"level":27,"move":"psychic"},{"level":30,"move":"charm"},{"level":33,"move":"calm-mind"},{"level":36,"move":"moonblast"},{"level":39,"move":"skill-swap"},{"level":42,"move":"psych-up"}],
+  "684": [{"level":1,"move":"sweet-scent"},{"level":1,"move":"tackle"},{"level":3,"move":"play-nice"},{"level":6,"move":"fairy-wind"},{"level":9,"move":"aromatherapy"},{"level":12,"move":"draining-kiss"},{"level":15,"move":"fake-tears"},{"level":18,"move":"round"},{"level":21,"move":"string-shot"},{"level":24,"move":"cotton-spore"},{"level":27,"move":"energy-ball"},{"level":30,"move":"wish"},{"level":33,"move":"play-rough"},{"level":36,"move":"cotton-guard"},{"level":39,"move":"endeavor"}],
+  "685": [{"level":1,"move":"fairy-wind"},{"level":1,"move":"play-nice"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"tackle"},{"level":9,"move":"aromatherapy"},{"level":12,"move":"draining-kiss"},{"level":15,"move":"fake-tears"},{"level":18,"move":"round"},{"level":21,"move":"string-shot"},{"level":24,"move":"cotton-spore"},{"level":27,"move":"energy-ball"},{"level":30,"move":"wish"},{"level":33,"move":"play-rough"},{"level":36,"move":"cotton-guard"},{"level":39,"move":"endeavor"},{"level":42,"move":"sticky-web"}],
+  "686": [{"level":1,"move":"peck"},{"level":1,"move":"tackle"},{"level":3,"move":"hypnosis"},{"level":6,"move":"wrap"},{"level":9,"move":"payback"},{"level":12,"move":"pluck"},{"level":15,"move":"psybeam"},{"level":18,"move":"swagger"},{"level":21,"move":"slash"},{"level":24,"move":"night-slash"},{"level":27,"move":"psycho-cut"},{"level":31,"move":"switcheroo"},{"level":33,"move":"foul-play"},{"level":36,"move":"topsy-turvy"},{"level":39,"move":"superpower"}],
+  "687": [{"level":1,"move":"hypnosis"},{"level":1,"move":"peck"},{"level":1,"move":"reversal"},{"level":1,"move":"tackle"},{"level":1,"move":"wrap"},{"level":9,"move":"payback"},{"level":12,"move":"pluck"},{"level":15,"move":"psybeam"},{"level":18,"move":"swagger"},{"level":21,"move":"slash"},{"level":24,"move":"night-slash"},{"level":27,"move":"psycho-cut"},{"level":33,"move":"switcheroo"},{"level":37,"move":"foul-play"},{"level":42,"move":"topsy-turvy"},{"level":47,"move":"superpower"}],
+  "688": [{"level":1,"move":"mud-slap"},{"level":1,"move":"scratch"},{"level":4,"move":"withdraw"},{"level":8,"move":"water-gun"},{"level":12,"move":"fury-cutter"},{"level":16,"move":"fury-swipes"},{"level":20,"move":"ancient-power"},{"level":24,"move":"rock-polish"},{"level":28,"move":"slash"},{"level":32,"move":"hone-claws"},{"level":36,"move":"razor-shell"},{"level":40,"move":"shell-smash"},{"level":44,"move":"cross-chop"}],
+  "689": [{"level":1,"move":"mud-slap"},{"level":1,"move":"scratch"},{"level":1,"move":"skull-bash"},{"level":1,"move":"water-gun"},{"level":1,"move":"withdraw"},{"level":12,"move":"fury-cutter"},{"level":16,"move":"fury-swipes"},{"level":20,"move":"ancient-power"},{"level":24,"move":"rock-polish"},{"level":28,"move":"slash"},{"level":32,"move":"hone-claws"},{"level":36,"move":"razor-shell"},{"level":42,"move":"shell-smash"},{"level":48,"move":"cross-chop"},{"level":54,"move":"stone-edge"}],
+  "690": [{"level":1,"move":"smokescreen"},{"level":1,"move":"tackle"},{"level":5,"move":"acid"},{"level":10,"move":"water-gun"},{"level":15,"move":"tail-whip"},{"level":20,"move":"double-team"},{"level":25,"move":"poison-tail"},{"level":30,"move":"water-pulse"},{"level":35,"move":"toxic"},{"level":40,"move":"dragon-pulse"},{"level":45,"move":"aqua-tail"},{"level":50,"move":"sludge-bomb"},{"level":55,"move":"hydro-pump"}],
+  "691": [{"level":1,"move":"acid"},{"level":1,"move":"smokescreen"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":15,"move":"tail-whip"},{"level":20,"move":"double-team"},{"level":25,"move":"poison-tail"},{"level":30,"move":"water-pulse"},{"level":35,"move":"toxic"},{"level":40,"move":"dragon-pulse"},{"level":45,"move":"aqua-tail"},{"level":52,"move":"sludge-bomb"},{"level":59,"move":"hydro-pump"},{"level":66,"move":"outrage"}],
+  "692": [{"level":1,"move":"splash"},{"level":1,"move":"water-gun"},{"level":10,"move":"flail"},{"level":15,"move":"aqua-jet"},{"level":20,"move":"smack-down"},{"level":25,"move":"hone-claws"},{"level":30,"move":"water-pulse"},{"level":35,"move":"swords-dance"},{"level":40,"move":"aura-sphere"},{"level":45,"move":"bounce"},{"level":50,"move":"muddy-water"},{"level":55,"move":"crabhammer"}],
+  "693": [{"level":1,"move":"dark-pulse"},{"level":1,"move":"dragon-pulse"},{"level":1,"move":"flail"},{"level":1,"move":"heal-pulse"},{"level":1,"move":"splash"},{"level":1,"move":"water-gun"},{"level":15,"move":"aqua-jet"},{"level":20,"move":"smack-down"},{"level":25,"move":"hone-claws"},{"level":30,"move":"water-pulse"},{"level":35,"move":"swords-dance"},{"level":42,"move":"aura-sphere"},{"level":49,"move":"bounce"},{"level":56,"move":"muddy-water"},{"level":63,"move":"crabhammer"}],
+  "694": [{"level":1,"move":"mud-slap"},{"level":1,"move":"tail-whip"},{"level":4,"move":"pound"},{"level":8,"move":"thunder-shock"},{"level":12,"move":"quick-attack"},{"level":16,"move":"charge"},{"level":20,"move":"bulldoze"},{"level":24,"move":"volt-switch"},{"level":28,"move":"parabolic-charge"},{"level":32,"move":"thunder-wave"},{"level":36,"move":"thunderbolt"},{"level":40,"move":"electrify"},{"level":44,"move":"thunder"}],
+  "695": [{"level":1,"move":"bulldoze"},{"level":1,"move":"charge"},{"level":1,"move":"discharge"},{"level":1,"move":"eerie-impulse"},{"level":1,"move":"electrify"},{"level":1,"move":"mud-slap"},{"level":1,"move":"parabolic-charge"},{"level":1,"move":"pound"},{"level":1,"move":"quick-attack"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"thunder-wave"},{"level":1,"move":"thunderbolt"},{"level":1,"move":"volt-switch"}],
+  "696": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":4,"move":"roar"},{"level":8,"move":"ancient-power"},{"level":12,"move":"charm"},{"level":16,"move":"bite"},{"level":20,"move":"dragon-tail"},{"level":24,"move":"stomp"},{"level":28,"move":"rock-slide"},{"level":32,"move":"crunch"},{"level":36,"move":"dragon-claw"},{"level":40,"move":"thrash"},{"level":44,"move":"earthquake"},{"level":48,"move":"horn-drill"}],
+  "697": [{"level":1,"move":"ancient-power"},{"level":1,"move":"roar"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":12,"move":"charm"},{"level":16,"move":"bite"},{"level":20,"move":"dragon-tail"},{"level":24,"move":"stomp"},{"level":28,"move":"rock-slide"},{"level":32,"move":"crunch"},{"level":36,"move":"dragon-claw"},{"level":42,"move":"thrash"},{"level":48,"move":"earthquake"},{"level":54,"move":"horn-drill"},{"level":60,"move":"giga-impact"},{"level":66,"move":"head-smash"}],
+  "698": [{"level":1,"move":"growl"},{"level":1,"move":"powder-snow"},{"level":4,"move":"encore"},{"level":8,"move":"ancient-power"},{"level":12,"move":"icy-wind"},{"level":16,"move":"round"},{"level":20,"move":"mist"},{"level":24,"move":"aurora-beam"},{"level":28,"move":"thunder-wave"},{"level":32,"move":"nature-power"},{"level":36,"move":"freeze-dry"},{"level":40,"move":"ice-beam"},{"level":44,"move":"light-screen"},{"level":48,"move":"hail"},{"level":52,"move":"blizzard"},{"level":56,"move":"hyper-beam"}],
+  "699": [{"level":1,"move":"ancient-power"},{"level":1,"move":"encore"},{"level":1,"move":"growl"},{"level":1,"move":"powder-snow"},{"level":12,"move":"icy-wind"},{"level":16,"move":"round"},{"level":20,"move":"mist"},{"level":24,"move":"aurora-beam"},{"level":28,"move":"thunder-wave"},{"level":32,"move":"nature-power"},{"level":36,"move":"freeze-dry"},{"level":42,"move":"ice-beam"},{"level":48,"move":"light-screen"},{"level":54,"move":"hail"},{"level":60,"move":"blizzard"},{"level":66,"move":"hyper-beam"}],
+  "700": [{"level":0,"move":"disarming-voice"},{"level":1,"move":"baton-pass"},{"level":1,"move":"bite"},{"level":1,"move":"charm"},{"level":1,"move":"copycat"},{"level":1,"move":"covet"},{"level":1,"move":"double-edge"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":1,"move":"take-down"},{"level":5,"move":"sand-attack"},{"level":10,"move":"quick-attack"},{"level":15,"move":"baby-doll-eyes"},{"level":20,"move":"swift"},{"level":25,"move":"light-screen"},{"level":30,"move":"draining-kiss"},{"level":35,"move":"misty-terrain"},{"level":40,"move":"skill-swap"},{"level":45,"move":"psych-up"},{"level":50,"move":"moonblast"},{"level":55,"move":"last-resort"}],
+  "701": [{"level":1,"move":"hone-claws"},{"level":1,"move":"tackle"},{"level":4,"move":"wing-attack"},{"level":8,"move":"detect"},{"level":12,"move":"aerial-ace"},{"level":16,"move":"encore"},{"level":20,"move":"feather-dance"},{"level":24,"move":"brick-break"},{"level":28,"move":"bounce"},{"level":32,"move":"taunt"},{"level":36,"move":"roost"},{"level":40,"move":"swords-dance"},{"level":44,"move":"flying-press"},{"level":48,"move":"high-jump-kick"},{"level":52,"move":"endeavor"},{"level":56,"move":"sky-attack"}],
+  "702": [{"level":1,"move":"nuzzle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"tackle"},{"level":10,"move":"charge"},{"level":15,"move":"thunder-shock"},{"level":20,"move":"charm"},{"level":25,"move":"parabolic-charge"},{"level":30,"move":"volt-switch"},{"level":35,"move":"rest"},{"level":35,"move":"snore"},{"level":40,"move":"discharge"},{"level":45,"move":"play-rough"},{"level":50,"move":"super-fang"},{"level":55,"move":"entrainment"},{"level":60,"move":"thunder"}],
+  "703": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":5,"move":"guard-split"},{"level":10,"move":"smack-down"},{"level":15,"move":"flail"},{"level":20,"move":"ancient-power"},{"level":25,"move":"rock-polish"},{"level":30,"move":"light-screen"},{"level":35,"move":"rock-slide"},{"level":40,"move":"skill-swap"},{"level":45,"move":"power-gem"},{"level":50,"move":"stealth-rock"},{"level":55,"move":"moonblast"},{"level":60,"move":"stone-edge"}],
+  "704": [{"level":1,"move":"absorb"},{"level":1,"move":"tackle"},{"level":5,"move":"water-gun"},{"level":10,"move":"dragon-breath"},{"level":15,"move":"protect"},{"level":20,"move":"flail"},{"level":25,"move":"water-pulse"},{"level":30,"move":"rain-dance"},{"level":35,"move":"dragon-pulse"},{"level":41,"move":"curse"},{"level":45,"move":"body-slam"},{"level":50,"move":"muddy-water"}],
+  "705": [{"level":0,"move":"acid-spray"},{"level":1,"move":"absorb"},{"level":1,"move":"acid-armor"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":15,"move":"protect"},{"level":20,"move":"flail"},{"level":25,"move":"water-pulse"},{"level":30,"move":"rain-dance"},{"level":35,"move":"dragon-pulse"},{"level":43,"move":"curse"},{"level":49,"move":"body-slam"},{"level":56,"move":"muddy-water"}],
+  "706": [{"level":0,"move":"aqua-tail"},{"level":1,"move":"absorb"},{"level":1,"move":"acid-spray"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"feint"},{"level":1,"move":"poison-tail"},{"level":1,"move":"tackle"},{"level":1,"move":"tearful-look"},{"level":1,"move":"water-gun"},{"level":15,"move":"protect"},{"level":20,"move":"flail"},{"level":25,"move":"water-pulse"},{"level":30,"move":"rain-dance"},{"level":43,"move":"curse"},{"level":49,"move":"body-slam"},{"level":58,"move":"muddy-water"},{"level":67,"move":"power-whip"}],
+  "707": [{"level":1,"move":"astonish"},{"level":4,"move":"tackle"},{"level":8,"move":"fairy-wind"},{"level":12,"move":"torment"},{"level":16,"move":"fairy-lock"},{"level":20,"move":"metal-sound"},{"level":24,"move":"draining-kiss"},{"level":28,"move":"recycle"},{"level":32,"move":"imprison"},{"level":36,"move":"flash-cannon"},{"level":40,"move":"play-rough"},{"level":44,"move":"magic-room"},{"level":48,"move":"foul-play"},{"level":52,"move":"last-resort"}],
+  "708": [{"level":1,"move":"astonish"},{"level":1,"move":"tackle"},{"level":4,"move":"branch-poke"},{"level":8,"move":"leech-seed"},{"level":12,"move":"confuse-ray"},{"level":16,"move":"will-o-wisp"},{"level":20,"move":"hex"},{"level":24,"move":"growth"},{"level":28,"move":"horn-leech"},{"level":32,"move":"curse"},{"level":36,"move":"phantom-force"},{"level":40,"move":"ingrain"},{"level":44,"move":"wood-hammer"},{"level":48,"move":"destiny-bond"},{"level":52,"move":"forests-curse"}],
+  "709": [{"level":0,"move":"shadow-claw"},{"level":1,"move":"astonish"},{"level":1,"move":"branch-poke"},{"level":1,"move":"leech-seed"},{"level":1,"move":"tackle"},{"level":12,"move":"confuse-ray"},{"level":16,"move":"will-o-wisp"},{"level":20,"move":"hex"},{"level":24,"move":"growth"},{"level":28,"move":"horn-leech"},{"level":32,"move":"curse"},{"level":36,"move":"phantom-force"},{"level":40,"move":"ingrain"},{"level":44,"move":"wood-hammer"},{"level":48,"move":"destiny-bond"},{"level":52,"move":"forests-curse"}],
+  "710": [{"level":1,"move":"astonish"},{"level":1,"move":"trick-or-treat"},{"level":4,"move":"shadow-sneak"},{"level":8,"move":"confuse-ray"},{"level":12,"move":"razor-leaf"},{"level":12,"move":"trick-or-treat"},{"level":16,"move":"leech-seed"},{"level":20,"move":"bullet-seed"},{"level":24,"move":"scary-face"},{"level":24,"move":"trick-or-treat"},{"level":28,"move":"worry-seed"},{"level":32,"move":"seed-bomb"},{"level":36,"move":"shadow-ball"},{"level":36,"move":"trick-or-treat"},{"level":40,"move":"trick"},{"level":44,"move":"pain-split"}],
+  "711": [{"level":1,"move":"astonish"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"explosion"},{"level":1,"move":"moonblast"},{"level":1,"move":"shadow-sneak"},{"level":1,"move":"trick-or-treat"},{"level":12,"move":"razor-leaf"},{"level":12,"move":"trick-or-treat"},{"level":16,"move":"leech-seed"},{"level":20,"move":"bullet-seed"},{"level":24,"move":"scary-face"},{"level":24,"move":"trick-or-treat"},{"level":28,"move":"worry-seed"},{"level":32,"move":"seed-bomb"},{"level":36,"move":"shadow-ball"},{"level":36,"move":"trick-or-treat"},{"level":40,"move":"trick"},{"level":44,"move":"pain-split"},{"level":48,"move":"phantom-force"}],
+  "712": [{"level":1,"move":"harden"},{"level":1,"move":"rapid-spin"},{"level":3,"move":"tackle"},{"level":6,"move":"powder-snow"},{"level":9,"move":"curse"},{"level":12,"move":"icy-wind"},{"level":15,"move":"protect"},{"level":18,"move":"avalanche"},{"level":21,"move":"bite"},{"level":24,"move":"ice-fang"},{"level":27,"move":"iron-defense"},{"level":30,"move":"recover"},{"level":33,"move":"crunch"},{"level":36,"move":"take-down"},{"level":39,"move":"blizzard"},{"level":42,"move":"double-edge"}],
+  "713": [{"level":0,"move":"body-slam"},{"level":1,"move":"harden"},{"level":1,"move":"powder-snow"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"tackle"},{"level":1,"move":"wide-guard"},{"level":9,"move":"curse"},{"level":12,"move":"icy-wind"},{"level":15,"move":"protect"},{"level":18,"move":"avalanche"},{"level":21,"move":"bite"},{"level":24,"move":"ice-fang"},{"level":27,"move":"iron-defense"},{"level":30,"move":"recover"},{"level":33,"move":"crunch"},{"level":36,"move":"take-down"},{"level":41,"move":"blizzard"},{"level":46,"move":"double-edge"},{"level":51,"move":"icicle-crash"}],
+  "714": [{"level":1,"move":"absorb"},{"level":1,"move":"tackle"},{"level":4,"move":"gust"},{"level":8,"move":"supersonic"},{"level":12,"move":"double-team"},{"level":16,"move":"wing-attack"},{"level":20,"move":"bite"},{"level":24,"move":"air-cutter"},{"level":28,"move":"whirlwind"},{"level":32,"move":"super-fang"},{"level":36,"move":"air-slash"},{"level":40,"move":"screech"},{"level":44,"move":"roost"},{"level":49,"move":"tailwind"},{"level":52,"move":"hurricane"}],
+  "715": [{"level":0,"move":"dragon-pulse"},{"level":1,"move":"absorb"},{"level":1,"move":"gust"},{"level":1,"move":"moonlight"},{"level":1,"move":"supersonic"},{"level":1,"move":"tackle"},{"level":12,"move":"double-team"},{"level":16,"move":"wing-attack"},{"level":20,"move":"bite"},{"level":24,"move":"air-cutter"},{"level":28,"move":"whirlwind"},{"level":32,"move":"super-fang"},{"level":36,"move":"air-slash"},{"level":40,"move":"screech"},{"level":44,"move":"roost"},{"level":51,"move":"tailwind"},{"level":56,"move":"hurricane"},{"level":62,"move":"boomburst"}],
+  "716": [{"level":1,"move":"gravity"},{"level":1,"move":"tackle"},{"level":5,"move":"light-screen"},{"level":10,"move":"aurora-beam"},{"level":15,"move":"nature-power"},{"level":20,"move":"night-slash"},{"level":25,"move":"aromatherapy"},{"level":30,"move":"psych-up"},{"level":35,"move":"horn-leech"},{"level":40,"move":"misty-terrain"},{"level":45,"move":"ingrain"},{"level":50,"move":"take-down"},{"level":55,"move":"geomancy"},{"level":60,"move":"moonblast"},{"level":65,"move":"heal-pulse"},{"level":70,"move":"megahorn"},{"level":75,"move":"close-combat"},{"level":80,"move":"outrage"},{"level":85,"move":"giga-impact"}],
+  "717": [{"level":1,"move":"double-team"},{"level":1,"move":"gust"},{"level":5,"move":"taunt"},{"level":10,"move":"snarl"},{"level":15,"move":"disable"},{"level":20,"move":"sucker-punch"},{"level":25,"move":"tailwind"},{"level":30,"move":"roost"},{"level":35,"move":"air-slash"},{"level":40,"move":"dark-pulse"},{"level":45,"move":"psychic"},{"level":50,"move":"oblivion-wing"},{"level":55,"move":"phantom-force"},{"level":60,"move":"foul-play"},{"level":65,"move":"dragon-rush"},{"level":70,"move":"hurricane"},{"level":75,"move":"focus-blast"},{"level":80,"move":"sky-attack"},{"level":85,"move":"hyper-beam"}],
+  "718": [{"level":1,"move":"bind"},{"level":1,"move":"bite"},{"level":1,"move":"bulldoze"},{"level":1,"move":"core-enforcer"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"thousand-arrows"},{"level":1,"move":"thousand-waves"},{"level":8,"move":"haze"},{"level":16,"move":"dig"},{"level":24,"move":"safeguard"},{"level":32,"move":"crunch"},{"level":40,"move":"dragon-pulse"},{"level":48,"move":"lands-wrath"},{"level":56,"move":"glare"},{"level":64,"move":"sandstorm"},{"level":72,"move":"coil"},{"level":80,"move":"earthquake"},{"level":88,"move":"outrage"}],
+  "719": [{"level":1,"move":"diamond-storm"},{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":7,"move":"guard-split"},{"level":14,"move":"smack-down"},{"level":21,"move":"flail"},{"level":28,"move":"ancient-power"},{"level":35,"move":"rock-polish"},{"level":42,"move":"light-screen"},{"level":49,"move":"rock-slide"},{"level":56,"move":"skill-swap"},{"level":63,"move":"power-gem"},{"level":70,"move":"stealth-rock"},{"level":77,"move":"moonblast"},{"level":84,"move":"stone-edge"}],
+  "720": [{"level":1,"move":"ally-switch"},{"level":1,"move":"confusion"},{"level":1,"move":"destiny-bond"},{"level":6,"move":"astonish"},{"level":10,"move":"trick"},{"level":15,"move":"light-screen"},{"level":19,"move":"psybeam"},{"level":25,"move":"skill-swap"},{"level":29,"move":"guard-split"},{"level":29,"move":"power-split"},{"level":35,"move":"phantom-force"},{"level":46,"move":"zen-headbutt"},{"level":50,"move":"trick-room"},{"level":50,"move":"wonder-room"},{"level":55,"move":"shadow-ball"},{"level":68,"move":"nasty-plot"},{"level":75,"move":"psychic"},{"level":85,"move":"hyperspace-hole"}],
+  "721": [{"level":1,"move":"fire-spin"},{"level":1,"move":"steam-eruption"},{"level":1,"move":"water-gun"},{"level":6,"move":"leer"},{"level":12,"move":"weather-ball"},{"level":18,"move":"flame-charge"},{"level":24,"move":"water-pulse"},{"level":30,"move":"scary-face"},{"level":36,"move":"incinerate"},{"level":42,"move":"stomp"},{"level":48,"move":"scald"},{"level":54,"move":"take-down"},{"level":60,"move":"haze"},{"level":60,"move":"mist"},{"level":66,"move":"hydro-pump"},{"level":78,"move":"flare-blitz"},{"level":84,"move":"overheat"},{"level":90,"move":"explosion"}],
+  "722": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":3,"move":"leafage"},{"level":6,"move":"astonish"},{"level":9,"move":"peck"},{"level":12,"move":"shadow-sneak"},{"level":15,"move":"razor-leaf"},{"level":18,"move":"synthesis"},{"level":21,"move":"pluck"},{"level":24,"move":"nasty-plot"},{"level":27,"move":"sucker-punch"},{"level":30,"move":"leaf-blade"},{"level":33,"move":"feather-dance"},{"level":36,"move":"brave-bird"}],
+  "723": [{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":1,"move":"leafage"},{"level":1,"move":"tackle"},{"level":9,"move":"peck"},{"level":12,"move":"shadow-sneak"},{"level":15,"move":"razor-leaf"},{"level":20,"move":"synthesis"},{"level":25,"move":"pluck"},{"level":30,"move":"nasty-plot"},{"level":35,"move":"sucker-punch"},{"level":40,"move":"leaf-blade"},{"level":45,"move":"feather-dance"},{"level":50,"move":"brave-bird"}],
+  "724": [{"level":0,"move":"spirit-shackle"},{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":1,"move":"leaf-storm"},{"level":1,"move":"leafage"},{"level":1,"move":"phantom-force"},{"level":1,"move":"spite"},{"level":1,"move":"tackle"},{"level":1,"move":"u-turn"},{"level":9,"move":"peck"},{"level":12,"move":"shadow-sneak"},{"level":15,"move":"razor-leaf"},{"level":20,"move":"synthesis"},{"level":25,"move":"pluck"},{"level":30,"move":"nasty-plot"},{"level":37,"move":"sucker-punch"},{"level":44,"move":"leaf-blade"},{"level":51,"move":"feather-dance"},{"level":58,"move":"brave-bird"}],
+  "725": [{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":3,"move":"ember"},{"level":6,"move":"lick"},{"level":9,"move":"roar"},{"level":12,"move":"fury-swipes"},{"level":15,"move":"bite"},{"level":18,"move":"double-kick"},{"level":21,"move":"fire-fang"},{"level":24,"move":"scary-face"},{"level":27,"move":"swagger"},{"level":30,"move":"flamethrower"},{"level":33,"move":"thrash"},{"level":36,"move":"flare-blitz"}],
+  "726": [{"level":1,"move":"ember"},{"level":1,"move":"growl"},{"level":1,"move":"lick"},{"level":1,"move":"scratch"},{"level":9,"move":"roar"},{"level":12,"move":"fury-swipes"},{"level":15,"move":"bite"},{"level":20,"move":"double-kick"},{"level":25,"move":"fire-fang"},{"level":30,"move":"scary-face"},{"level":35,"move":"swagger"},{"level":40,"move":"flamethrower"},{"level":45,"move":"thrash"},{"level":50,"move":"flare-blitz"}],
+  "727": [{"level":0,"move":"darkest-lariat"},{"level":1,"move":"bulk-up"},{"level":1,"move":"cross-chop"},{"level":1,"move":"ember"},{"level":1,"move":"lick"},{"level":9,"move":"roar"},{"level":12,"move":"fury-swipes"},{"level":15,"move":"bite"},{"level":20,"move":"double-kick"},{"level":25,"move":"fire-fang"},{"level":30,"move":"scary-face"},{"level":32,"move":"swagger"},{"level":44,"move":"flamethrower"},{"level":51,"move":"thrash"},{"level":58,"move":"flare-blitz"}],
+  "728": [{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":3,"move":"water-gun"},{"level":6,"move":"disarming-voice"},{"level":9,"move":"aqua-jet"},{"level":12,"move":"baby-doll-eyes"},{"level":15,"move":"icy-wind"},{"level":18,"move":"sing"},{"level":21,"move":"bubble-beam"},{"level":24,"move":"encore"},{"level":27,"move":"misty-terrain"},{"level":30,"move":"hyper-voice"},{"level":33,"move":"moonblast"},{"level":36,"move":"hydro-pump"}],
+  "729": [{"level":1,"move":"disarming-voice"},{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":9,"move":"aqua-jet"},{"level":12,"move":"baby-doll-eyes"},{"level":15,"move":"icy-wind"},{"level":20,"move":"sing"},{"level":25,"move":"bubble-beam"},{"level":30,"move":"encore"},{"level":35,"move":"misty-terrain"},{"level":40,"move":"hyper-voice"},{"level":45,"move":"moonblast"},{"level":50,"move":"hydro-pump"}],
+  "730": [{"level":0,"move":"sparkling-aria"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":9,"move":"aqua-jet"},{"level":12,"move":"baby-doll-eyes"},{"level":15,"move":"icy-wind"},{"level":20,"move":"sing"},{"level":25,"move":"bubble-beam"},{"level":30,"move":"encore"},{"level":37,"move":"misty-terrain"},{"level":44,"move":"hyper-voice"},{"level":51,"move":"moonblast"},{"level":58,"move":"hydro-pump"}],
+  "731": [{"level":1,"move":"peck"},{"level":3,"move":"growl"},{"level":7,"move":"echoed-voice"},{"level":9,"move":"rock-smash"},{"level":13,"move":"supersonic"},{"level":15,"move":"pluck"},{"level":19,"move":"roost"},{"level":21,"move":"fury-attack"},{"level":25,"move":"screech"},{"level":27,"move":"drill-peck"},{"level":31,"move":"bullet-seed"},{"level":33,"move":"feather-dance"},{"level":37,"move":"hyper-voice"}],
+  "732": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":1,"move":"rock-blast"},{"level":1,"move":"rock-smash"},{"level":13,"move":"supersonic"},{"level":16,"move":"pluck"},{"level":21,"move":"roost"},{"level":24,"move":"fury-attack"},{"level":29,"move":"screech"},{"level":32,"move":"drill-peck"},{"level":37,"move":"bullet-seed"},{"level":40,"move":"feather-dance"},{"level":45,"move":"hyper-voice"}],
+  "733": [{"level":0,"move":"beak-blast"},{"level":1,"move":"echoed-voice"},{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":1,"move":"rock-blast"},{"level":1,"move":"rock-smash"},{"level":13,"move":"supersonic"},{"level":16,"move":"pluck"},{"level":21,"move":"roost"},{"level":24,"move":"fury-attack"},{"level":30,"move":"screech"},{"level":34,"move":"drill-peck"},{"level":40,"move":"bullet-seed"},{"level":44,"move":"feather-dance"},{"level":50,"move":"hyper-voice"}],
+  "734": [{"level":1,"move":"tackle"},{"level":3,"move":"leer"},{"level":7,"move":"payback"},{"level":10,"move":"sand-attack"},{"level":13,"move":"work-up"},{"level":19,"move":"bite"},{"level":22,"move":"mud-slap"},{"level":25,"move":"super-fang"},{"level":28,"move":"take-down"},{"level":31,"move":"scary-face"},{"level":34,"move":"crunch"},{"level":37,"move":"yawn"},{"level":40,"move":"thrash"},{"level":43,"move":"rest"}],
+  "735": [{"level":1,"move":"leer"},{"level":1,"move":"payback"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":13,"move":"work-up"},{"level":19,"move":"bite"},{"level":23,"move":"mud-slap"},{"level":27,"move":"super-fang"},{"level":31,"move":"take-down"},{"level":35,"move":"scary-face"},{"level":39,"move":"crunch"},{"level":43,"move":"yawn"},{"level":47,"move":"thrash"},{"level":52,"move":"rest"}],
+  "736": [{"level":1,"move":"mud-slap"},{"level":1,"move":"vice-grip"},{"level":5,"move":"string-shot"},{"level":10,"move":"bug-bite"},{"level":15,"move":"bite"},{"level":21,"move":"spark"},{"level":25,"move":"sticky-web"},{"level":30,"move":"x-scissor"},{"level":35,"move":"crunch"},{"level":40,"move":"dig"}],
+  "737": [{"level":0,"move":"charge"},{"level":1,"move":"bug-bite"},{"level":1,"move":"mud-slap"},{"level":1,"move":"string-shot"},{"level":1,"move":"vice-grip"},{"level":15,"move":"bite"},{"level":23,"move":"spark"},{"level":29,"move":"sticky-web"},{"level":36,"move":"x-scissor"},{"level":43,"move":"crunch"},{"level":50,"move":"dig"},{"level":57,"move":"iron-defense"},{"level":64,"move":"discharge"}],
+  "738": [{"level":0,"move":"thunderbolt"},{"level":1,"move":"charge"},{"level":1,"move":"crunch"},{"level":1,"move":"discharge"},{"level":1,"move":"string-shot"},{"level":15,"move":"bite"},{"level":23,"move":"spark"},{"level":29,"move":"sticky-web"},{"level":36,"move":"bug-buzz"},{"level":43,"move":"guillotine"},{"level":50,"move":"fly"},{"level":57,"move":"agility"},{"level":64,"move":"zap-cannon"}],
+  "739": [{"level":5,"move":"rock-smash"},{"level":9,"move":"leer"},{"level":13,"move":"bubble-beam"},{"level":17,"move":"protect"},{"level":22,"move":"brick-break"},{"level":25,"move":"slam"},{"level":29,"move":"payback"},{"level":33,"move":"reversal"},{"level":37,"move":"crabhammer"},{"level":42,"move":"iron-defense"},{"level":45,"move":"dynamic-punch"},{"level":49,"move":"close-combat"}],
+  "740": [{"level":0,"move":"ice-punch"},{"level":1,"move":"leer"},{"level":1,"move":"protect"},{"level":1,"move":"rock-smash"},{"level":17,"move":"bubble-beam"},{"level":22,"move":"brick-break"},{"level":25,"move":"slam"},{"level":29,"move":"avalanche"},{"level":33,"move":"reversal"},{"level":37,"move":"ice-hammer"},{"level":42,"move":"iron-defense"},{"level":45,"move":"dynamic-punch"},{"level":49,"move":"close-combat"}],
+  "741": [{"level":1,"move":"pound"},{"level":4,"move":"growl"},{"level":6,"move":"peck"},{"level":10,"move":"helping-hand"},{"level":13,"move":"air-cutter"},{"level":16,"move":"baton-pass"},{"level":20,"move":"feather-dance"},{"level":23,"move":"acrobatics"},{"level":26,"move":"teeter-dance"},{"level":30,"move":"roost"},{"level":33,"move":"flatter"},{"level":36,"move":"air-slash"},{"level":40,"move":"revelation-dance"},{"level":43,"move":"agility"},{"level":47,"move":"hurricane"}],
+  "742": [{"level":1,"move":"absorb"},{"level":1,"move":"fairy-wind"},{"level":6,"move":"stun-spore"},{"level":12,"move":"sweet-scent"},{"level":18,"move":"draining-kiss"},{"level":24,"move":"struggle-bug"},{"level":30,"move":"covet"},{"level":36,"move":"switcheroo"},{"level":42,"move":"dazzling-gleam"},{"level":48,"move":"bug-buzz"},{"level":54,"move":"quiver-dance"}],
+  "743": [{"level":0,"move":"pollen-puff"},{"level":1,"move":"absorb"},{"level":1,"move":"fairy-wind"},{"level":1,"move":"stun-spore"},{"level":1,"move":"sweet-scent"},{"level":18,"move":"draining-kiss"},{"level":24,"move":"struggle-bug"},{"level":32,"move":"covet"},{"level":40,"move":"switcheroo"},{"level":48,"move":"dazzling-gleam"},{"level":56,"move":"bug-buzz"},{"level":64,"move":"quiver-dance"}],
+  "744": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":4,"move":"sand-attack"},{"level":8,"move":"double-team"},{"level":12,"move":"rock-throw"},{"level":16,"move":"howl"},{"level":20,"move":"bite"},{"level":24,"move":"rock-tomb"},{"level":28,"move":"roar"},{"level":32,"move":"rock-slide"},{"level":36,"move":"crunch"},{"level":40,"move":"scary-face"},{"level":44,"move":"stealth-rock"},{"level":48,"move":"stone-edge"}],
+  "745": [{"level":0,"move":"sucker-punch"},{"level":1,"move":"accelerock"},{"level":1,"move":"double-team"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":1,"move":"quick-guard"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":12,"move":"rock-throw"},{"level":16,"move":"howl"},{"level":20,"move":"bite"},{"level":24,"move":"rock-tomb"},{"level":30,"move":"roar"},{"level":36,"move":"rock-slide"},{"level":42,"move":"crunch"},{"level":48,"move":"scary-face"},{"level":54,"move":"stealth-rock"},{"level":60,"move":"stone-edge"}],
+  "746": [{"level":1,"move":"growl"},{"level":1,"move":"water-gun"},{"level":4,"move":"helping-hand"},{"level":8,"move":"beat-up"},{"level":12,"move":"brine"},{"level":16,"move":"tearful-look"},{"level":20,"move":"dive"},{"level":24,"move":"soak"},{"level":28,"move":"uproar"},{"level":32,"move":"aqua-tail"},{"level":36,"move":"aqua-ring"},{"level":40,"move":"endeavor"},{"level":44,"move":"hydro-pump"},{"level":48,"move":"double-edge"}],
+  "747": [{"level":1,"move":"peck"},{"level":1,"move":"poison-sting"},{"level":5,"move":"wide-guard"},{"level":10,"move":"bite"},{"level":15,"move":"venoshock"},{"level":20,"move":"recover"},{"level":25,"move":"pin-missile"},{"level":30,"move":"toxic-spikes"},{"level":35,"move":"liquidation"},{"level":40,"move":"acid-spray"},{"level":45,"move":"poison-jab"},{"level":50,"move":"toxic"}],
+  "748": [{"level":0,"move":"baneful-bunker"},{"level":1,"move":"bite"},{"level":1,"move":"peck"},{"level":1,"move":"poison-sting"},{"level":1,"move":"wide-guard"},{"level":15,"move":"venoshock"},{"level":20,"move":"recover"},{"level":25,"move":"pin-missile"},{"level":30,"move":"toxic-spikes"},{"level":35,"move":"liquidation"},{"level":42,"move":"acid-spray"},{"level":49,"move":"poison-jab"},{"level":56,"move":"toxic"}],
+  "749": [{"level":1,"move":"mud-slap"},{"level":1,"move":"rock-smash"},{"level":4,"move":"iron-defense"},{"level":8,"move":"double-kick"},{"level":12,"move":"bulldoze"},{"level":16,"move":"stomp"},{"level":20,"move":"strength"},{"level":24,"move":"counter"},{"level":28,"move":"high-horsepower"},{"level":32,"move":"heavy-slam"},{"level":36,"move":"earthquake"},{"level":40,"move":"mega-kick"},{"level":44,"move":"superpower"}],
+  "750": [{"level":1,"move":"double-kick"},{"level":1,"move":"iron-defense"},{"level":1,"move":"mud-slap"},{"level":1,"move":"rock-smash"},{"level":12,"move":"bulldoze"},{"level":16,"move":"stomp"},{"level":20,"move":"strength"},{"level":24,"move":"counter"},{"level":28,"move":"high-horsepower"},{"level":34,"move":"heavy-slam"},{"level":40,"move":"earthquake"},{"level":46,"move":"mega-kick"},{"level":52,"move":"superpower"}],
+  "751": [{"level":1,"move":"infestation"},{"level":1,"move":"water-gun"},{"level":4,"move":"bug-bite"},{"level":8,"move":"bite"},{"level":12,"move":"bubble-beam"},{"level":16,"move":"aqua-ring"},{"level":20,"move":"headbutt"},{"level":24,"move":"crunch"},{"level":28,"move":"soak"},{"level":32,"move":"entrainment"},{"level":36,"move":"lunge"},{"level":40,"move":"liquidation"},{"level":44,"move":"leech-life"},{"level":48,"move":"mirror-coat"}],
+  "752": [{"level":1,"move":"bite"},{"level":1,"move":"bug-bite"},{"level":1,"move":"infestation"},{"level":1,"move":"water-gun"},{"level":1,"move":"wide-guard"},{"level":12,"move":"bubble-beam"},{"level":16,"move":"aqua-ring"},{"level":20,"move":"headbutt"},{"level":26,"move":"crunch"},{"level":32,"move":"soak"},{"level":38,"move":"entrainment"},{"level":44,"move":"lunge"},{"level":50,"move":"liquidation"},{"level":56,"move":"leech-life"},{"level":62,"move":"mirror-coat"}],
+  "753": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"leafage"},{"level":5,"move":"growth"},{"level":10,"move":"ingrain"},{"level":15,"move":"razor-leaf"},{"level":20,"move":"sweet-scent"},{"level":25,"move":"slash"},{"level":30,"move":"x-scissor"},{"level":35,"move":"synthesis"},{"level":40,"move":"leaf-blade"},{"level":45,"move":"sunny-day"},{"level":50,"move":"solar-beam"}],
+  "754": [{"level":0,"move":"petal-blizzard"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"growth"},{"level":1,"move":"ingrain"},{"level":1,"move":"leafage"},{"level":1,"move":"night-slash"},{"level":1,"move":"solar-beam"},{"level":15,"move":"razor-leaf"},{"level":20,"move":"sweet-scent"},{"level":25,"move":"slash"},{"level":30,"move":"x-scissor"},{"level":37,"move":"synthesis"},{"level":44,"move":"leaf-blade"},{"level":51,"move":"sunny-day"},{"level":63,"move":"solar-blade"}],
+  "755": [{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":4,"move":"confuse-ray"},{"level":8,"move":"ingrain"},{"level":12,"move":"mega-drain"},{"level":16,"move":"sleep-powder"},{"level":20,"move":"moonlight"},{"level":25,"move":"strength-sap"},{"level":28,"move":"giga-drain"},{"level":32,"move":"dazzling-gleam"},{"level":36,"move":"spore"},{"level":40,"move":"moonblast"},{"level":44,"move":"dream-eater"}],
+  "756": [{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"ingrain"},{"level":12,"move":"mega-drain"},{"level":16,"move":"sleep-powder"},{"level":20,"move":"moonlight"},{"level":27,"move":"strength-sap"},{"level":32,"move":"giga-drain"},{"level":38,"move":"dazzling-gleam"},{"level":44,"move":"spore"},{"level":50,"move":"moonblast"},{"level":56,"move":"dream-eater"}],
+  "757": [{"level":1,"move":"poison-gas"},{"level":1,"move":"scratch"},{"level":5,"move":"smog"},{"level":10,"move":"ember"},{"level":15,"move":"poison-fang"},{"level":20,"move":"sweet-scent"},{"level":25,"move":"nasty-plot"},{"level":30,"move":"incinerate"},{"level":35,"move":"venoshock"},{"level":40,"move":"dragon-pulse"},{"level":45,"move":"flamethrower"},{"level":50,"move":"toxic"},{"level":55,"move":"endeavor"}],
+  "758": [{"level":0,"move":"fire-lash"},{"level":1,"move":"disable"},{"level":1,"move":"ember"},{"level":1,"move":"encore"},{"level":1,"move":"endeavor"},{"level":1,"move":"knock-off"},{"level":1,"move":"poison-gas"},{"level":1,"move":"pound"},{"level":1,"move":"scratch"},{"level":1,"move":"smog"},{"level":1,"move":"swagger"},{"level":1,"move":"torment"},{"level":15,"move":"poison-fang"},{"level":20,"move":"sweet-scent"},{"level":25,"move":"nasty-plot"},{"level":30,"move":"incinerate"},{"level":37,"move":"venoshock"},{"level":44,"move":"dragon-pulse"},{"level":51,"move":"flamethrower"},{"level":58,"move":"toxic"}],
+  "759": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":4,"move":"baby-doll-eyes"},{"level":8,"move":"payback"},{"level":12,"move":"brutal-swing"},{"level":16,"move":"endure"},{"level":20,"move":"strength"},{"level":24,"move":"take-down"},{"level":28,"move":"flail"},{"level":32,"move":"hammer-arm"},{"level":36,"move":"thrash"},{"level":40,"move":"pain-split"},{"level":44,"move":"double-edge"},{"level":48,"move":"superpower"}],
+  "760": [{"level":0,"move":"bind"},{"level":1,"move":"baby-doll-eyes"},{"level":1,"move":"bind"},{"level":1,"move":"leer"},{"level":1,"move":"payback"},{"level":1,"move":"tackle"},{"level":12,"move":"brutal-swing"},{"level":16,"move":"endure"},{"level":20,"move":"strength"},{"level":24,"move":"take-down"},{"level":30,"move":"flail"},{"level":36,"move":"hammer-arm"},{"level":42,"move":"thrash"},{"level":48,"move":"pain-split"},{"level":54,"move":"double-edge"},{"level":60,"move":"superpower"}],
+  "761": [{"level":1,"move":"splash"},{"level":4,"move":"play-nice"},{"level":8,"move":"rapid-spin"},{"level":12,"move":"razor-leaf"},{"level":16,"move":"sweet-scent"},{"level":20,"move":"magical-leaf"},{"level":24,"move":"flail"},{"level":28,"move":"teeter-dance"},{"level":32,"move":"aromatic-mist"}],
+  "762": [{"level":1,"move":"flail"},{"level":1,"move":"play-nice"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"splash"},{"level":16,"move":"sweet-scent"},{"level":22,"move":"magical-leaf"},{"level":28,"move":"stomp"},{"level":34,"move":"teeter-dance"},{"level":40,"move":"aromatic-mist"},{"level":46,"move":"leaf-storm"}],
+  "763": [{"level":0,"move":"trop-kick"},{"level":1,"move":"flail"},{"level":1,"move":"play-nice"},{"level":1,"move":"power-whip"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"razor-leaf"},{"level":1,"move":"splash"},{"level":1,"move":"swagger"},{"level":16,"move":"sweet-scent"},{"level":22,"move":"magical-leaf"},{"level":28,"move":"stomp"},{"level":34,"move":"teeter-dance"},{"level":40,"move":"aromatic-mist"},{"level":46,"move":"leaf-storm"},{"level":58,"move":"high-jump-kick"}],
+  "764": [{"level":1,"move":"growth"},{"level":1,"move":"wrap"},{"level":3,"move":"vine-whip"},{"level":6,"move":"helping-hand"},{"level":9,"move":"draining-kiss"},{"level":12,"move":"charm"},{"level":15,"move":"magical-leaf"},{"level":18,"move":"synthesis"},{"level":21,"move":"leech-seed"},{"level":24,"move":"grass-knot"},{"level":27,"move":"sweet-kiss"},{"level":30,"move":"floral-healing"},{"level":33,"move":"petal-blizzard"},{"level":36,"move":"bind"},{"level":39,"move":"play-rough"},{"level":42,"move":"sweet-scent"},{"level":45,"move":"petal-dance"},{"level":48,"move":"grassy-terrain"}],
+  "765": [{"level":1,"move":"confusion"},{"level":1,"move":"taunt"},{"level":5,"move":"after-you"},{"level":10,"move":"calm-mind"},{"level":15,"move":"stored-power"},{"level":20,"move":"psych-up"},{"level":25,"move":"quash"},{"level":30,"move":"nasty-plot"},{"level":35,"move":"zen-headbutt"},{"level":40,"move":"trick-room"},{"level":45,"move":"psychic"},{"level":50,"move":"instruct"},{"level":55,"move":"foul-play"},{"level":60,"move":"future-sight"}],
+  "766": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":5,"move":"rock-smash"},{"level":10,"move":"focus-energy"},{"level":15,"move":"beat-up"},{"level":20,"move":"scary-face"},{"level":25,"move":"take-down"},{"level":30,"move":"fling"},{"level":35,"move":"bulk-up"},{"level":40,"move":"thrash"},{"level":45,"move":"double-edge"},{"level":50,"move":"close-combat"},{"level":55,"move":"reversal"},{"level":60,"move":"giga-impact"}],
+  "767": [{"level":1,"move":"defense-curl"},{"level":1,"move":"sand-attack"},{"level":1,"move":"struggle-bug"}],
+  "768": [{"level":0,"move":"first-impression"},{"level":1,"move":"defense-curl"},{"level":1,"move":"first-impression"},{"level":1,"move":"sand-attack"},{"level":1,"move":"spite"},{"level":1,"move":"struggle-bug"},{"level":4,"move":"rock-smash"},{"level":8,"move":"fury-cutter"},{"level":12,"move":"mud-shot"},{"level":16,"move":"bug-bite"},{"level":20,"move":"iron-defense"},{"level":24,"move":"sucker-punch"},{"level":28,"move":"slash"},{"level":32,"move":"razor-shell"},{"level":36,"move":"pin-missile"},{"level":40,"move":"swords-dance"},{"level":44,"move":"liquidation"}],
+  "769": [{"level":1,"move":"absorb"},{"level":1,"move":"harden"},{"level":5,"move":"astonish"},{"level":10,"move":"sand-tomb"},{"level":15,"move":"mega-drain"},{"level":20,"move":"sand-attack"},{"level":25,"move":"bulldoze"},{"level":30,"move":"hypnosis"},{"level":35,"move":"giga-drain"},{"level":40,"move":"iron-defense"},{"level":45,"move":"shadow-ball"},{"level":50,"move":"earth-power"},{"level":55,"move":"shore-up"},{"level":60,"move":"sandstorm"}],
+  "770": [{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":1,"move":"harden"},{"level":1,"move":"sand-tomb"},{"level":15,"move":"mega-drain"},{"level":20,"move":"sand-attack"},{"level":25,"move":"bulldoze"},{"level":30,"move":"hypnosis"},{"level":35,"move":"giga-drain"},{"level":40,"move":"iron-defense"},{"level":47,"move":"shadow-ball"},{"level":54,"move":"earth-power"},{"level":61,"move":"shore-up"},{"level":68,"move":"sandstorm"}],
+  "771": [{"level":1,"move":"baton-pass"},{"level":1,"move":"harden"},{"level":5,"move":"helping-hand"},{"level":10,"move":"taunt"},{"level":15,"move":"safeguard"},{"level":20,"move":"counter"},{"level":25,"move":"purify"},{"level":30,"move":"curse"},{"level":35,"move":"gastro-acid"},{"level":40,"move":"pain-split"},{"level":45,"move":"recover"},{"level":50,"move":"soak"},{"level":55,"move":"toxic"},{"level":60,"move":"memento"}],
+  "772": [{"level":1,"move":"imprison"},{"level":1,"move":"tackle"},{"level":5,"move":"aerial-ace"},{"level":10,"move":"scary-face"},{"level":15,"move":"double-hit"},{"level":20,"move":"metal-sound"},{"level":25,"move":"crush-claw"},{"level":30,"move":"air-slash"},{"level":35,"move":"tri-attack"},{"level":40,"move":"x-scissor"},{"level":45,"move":"iron-head"},{"level":50,"move":"take-down"},{"level":55,"move":"double-edge"}],
+  "773": [{"level":0,"move":"multi-attack"},{"level":1,"move":"aerial-ace"},{"level":1,"move":"bite"},{"level":1,"move":"explosion"},{"level":1,"move":"fire-fang"},{"level":1,"move":"ice-fang"},{"level":1,"move":"imprison"},{"level":1,"move":"iron-head"},{"level":1,"move":"multi-attack"},{"level":1,"move":"poison-fang"},{"level":1,"move":"scary-face"},{"level":1,"move":"tackle"},{"level":1,"move":"thunder-fang"},{"level":15,"move":"double-hit"},{"level":20,"move":"metal-sound"},{"level":25,"move":"crush-claw"},{"level":30,"move":"air-slash"},{"level":35,"move":"tri-attack"},{"level":40,"move":"x-scissor"},{"level":45,"move":"crunch"},{"level":50,"move":"take-down"},{"level":55,"move":"double-edge"},{"level":60,"move":"parting-shot"}],
+  "774": [{"level":1,"move":"tackle"},{"level":3,"move":"defense-curl"},{"level":8,"move":"rollout"},{"level":10,"move":"confuse-ray"},{"level":15,"move":"swift"},{"level":17,"move":"ancient-power"},{"level":22,"move":"self-destruct"},{"level":24,"move":"stealth-rock"},{"level":29,"move":"take-down"},{"level":31,"move":"rock-polish"},{"level":36,"move":"cosmic-power"},{"level":38,"move":"power-gem"},{"level":43,"move":"double-edge"},{"level":45,"move":"shell-smash"},{"level":50,"move":"explosion"}],
+  "775": [{"level":1,"move":"defense-curl"},{"level":1,"move":"rollout"},{"level":6,"move":"spit-up"},{"level":6,"move":"stockpile"},{"level":6,"move":"swallow"},{"level":11,"move":"rapid-spin"},{"level":16,"move":"yawn"},{"level":21,"move":"slam"},{"level":26,"move":"flail"},{"level":31,"move":"sucker-punch"},{"level":36,"move":"psych-up"},{"level":41,"move":"wood-hammer"},{"level":46,"move":"thrash"}],
+  "776": [{"level":1,"move":"smog"},{"level":1,"move":"tackle"},{"level":4,"move":"ember"},{"level":8,"move":"protect"},{"level":12,"move":"endure"},{"level":16,"move":"flail"},{"level":20,"move":"incinerate"},{"level":24,"move":"iron-defense"},{"level":28,"move":"dragon-pulse"},{"level":32,"move":"body-slam"},{"level":36,"move":"flamethrower"},{"level":40,"move":"shell-trap"},{"level":44,"move":"shell-smash"},{"level":48,"move":"overheat"},{"level":52,"move":"explosion"}],
+  "777": [{"level":1,"move":"nuzzle"},{"level":1,"move":"tackle"},{"level":5,"move":"defense-curl"},{"level":10,"move":"charge"},{"level":15,"move":"thunder-shock"},{"level":20,"move":"fell-stinger"},{"level":25,"move":"spark"},{"level":30,"move":"pin-missile"},{"level":35,"move":"magnet-rise"},{"level":40,"move":"zing-zap"},{"level":45,"move":"discharge"},{"level":50,"move":"electric-terrain"},{"level":55,"move":"wild-charge"},{"level":60,"move":"spiky-shield"}],
+  "778": [{"level":1,"move":"astonish"},{"level":1,"move":"copycat"},{"level":1,"move":"scratch"},{"level":1,"move":"splash"},{"level":1,"move":"wood-hammer"},{"level":6,"move":"shadow-sneak"},{"level":12,"move":"double-team"},{"level":18,"move":"baby-doll-eyes"},{"level":24,"move":"mimic"},{"level":30,"move":"hone-claws"},{"level":36,"move":"slash"},{"level":42,"move":"shadow-claw"},{"level":48,"move":"charm"},{"level":54,"move":"play-rough"},{"level":60,"move":"pain-split"}],
+  "779": [{"level":1,"move":"water-gun"},{"level":4,"move":"astonish"},{"level":9,"move":"confusion"},{"level":12,"move":"bite"},{"level":17,"move":"aqua-jet"},{"level":20,"move":"disable"},{"level":25,"move":"psyshock"},{"level":28,"move":"crunch"},{"level":33,"move":"aqua-tail"},{"level":36,"move":"screech"},{"level":41,"move":"psychic-fangs"},{"level":44,"move":"wave-crash"}],
+  "780": [{"level":1,"move":"echoed-voice"},{"level":1,"move":"play-nice"},{"level":5,"move":"twister"},{"level":10,"move":"protect"},{"level":15,"move":"glare"},{"level":20,"move":"safeguard"},{"level":25,"move":"dragon-breath"},{"level":30,"move":"extrasensory"},{"level":35,"move":"dragon-pulse"},{"level":40,"move":"light-screen"},{"level":45,"move":"fly"},{"level":50,"move":"hyper-voice"},{"level":55,"move":"outrage"}],
+  "781": [{"level":1,"move":"absorb"},{"level":1,"move":"rapid-spin"},{"level":4,"move":"astonish"},{"level":8,"move":"wrap"},{"level":12,"move":"mega-drain"},{"level":16,"move":"growth"},{"level":20,"move":"gyro-ball"},{"level":24,"move":"switcheroo"},{"level":28,"move":"giga-drain"},{"level":32,"move":"whirlpool"},{"level":36,"move":"heavy-slam"},{"level":40,"move":"slam"},{"level":44,"move":"shadow-ball"},{"level":48,"move":"metal-sound"},{"level":52,"move":"anchor-shot"},{"level":56,"move":"energy-ball"},{"level":60,"move":"phantom-force"},{"level":64,"move":"power-whip"}],
+  "782": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":4,"move":"protect"},{"level":8,"move":"dragon-tail"},{"level":12,"move":"scary-face"},{"level":16,"move":"headbutt"},{"level":20,"move":"work-up"},{"level":24,"move":"screech"},{"level":28,"move":"iron-defense"},{"level":32,"move":"dragon-claw"},{"level":36,"move":"noble-roar"},{"level":40,"move":"dragon-dance"},{"level":44,"move":"outrage"}],
+  "783": [{"level":1,"move":"dragon-tail"},{"level":1,"move":"leer"},{"level":1,"move":"protect"},{"level":1,"move":"tackle"},{"level":12,"move":"scary-face"},{"level":16,"move":"headbutt"},{"level":20,"move":"work-up"},{"level":24,"move":"screech"},{"level":28,"move":"iron-defense"},{"level":32,"move":"dragon-claw"},{"level":38,"move":"noble-roar"},{"level":44,"move":"dragon-dance"},{"level":50,"move":"outrage"},{"level":56,"move":"close-combat"}],
+  "784": [{"level":0,"move":"clanging-scales"},{"level":1,"move":"dragon-tail"},{"level":1,"move":"leer"},{"level":1,"move":"protect"},{"level":1,"move":"tackle"},{"level":12,"move":"scary-face"},{"level":16,"move":"headbutt"},{"level":20,"move":"work-up"},{"level":24,"move":"screech"},{"level":28,"move":"iron-defense"},{"level":32,"move":"dragon-claw"},{"level":38,"move":"noble-roar"},{"level":44,"move":"dragon-dance"},{"level":52,"move":"outrage"},{"level":60,"move":"close-combat"},{"level":68,"move":"clangorous-soul"},{"level":76,"move":"boomburst"}],
+  "785": [{"level":1,"move":"quick-attack"},{"level":1,"move":"thunder-shock"},{"level":5,"move":"withdraw"},{"level":10,"move":"fairy-wind"},{"level":15,"move":"false-swipe"},{"level":20,"move":"spark"},{"level":25,"move":"shock-wave"},{"level":30,"move":"charge"},{"level":35,"move":"agility"},{"level":40,"move":"screech"},{"level":45,"move":"discharge"},{"level":50,"move":"mean-look"},{"level":55,"move":"natures-madness"},{"level":60,"move":"wild-charge"},{"level":65,"move":"brave-bird"},{"level":70,"move":"power-swap"},{"level":75,"move":"electric-terrain"}],
+  "786": [{"level":1,"move":"astonish"},{"level":1,"move":"confusion"},{"level":5,"move":"withdraw"},{"level":10,"move":"aromatherapy"},{"level":15,"move":"draining-kiss"},{"level":20,"move":"psybeam"},{"level":25,"move":"flatter"},{"level":30,"move":"aromatic-mist"},{"level":35,"move":"sweet-scent"},{"level":40,"move":"extrasensory"},{"level":45,"move":"psyshock"},{"level":50,"move":"mean-look"},{"level":55,"move":"natures-madness"},{"level":60,"move":"moonblast"},{"level":65,"move":"tickle"},{"level":70,"move":"skill-swap"},{"level":75,"move":"psychic-terrain"}],
+  "787": [{"level":1,"move":"leafage"},{"level":1,"move":"rock-smash"},{"level":5,"move":"withdraw"},{"level":10,"move":"disable"},{"level":15,"move":"leech-seed"},{"level":20,"move":"mega-drain"},{"level":25,"move":"whirlwind"},{"level":30,"move":"horn-attack"},{"level":35,"move":"scary-face"},{"level":40,"move":"horn-leech"},{"level":45,"move":"zen-headbutt"},{"level":50,"move":"mean-look"},{"level":55,"move":"natures-madness"},{"level":60,"move":"wood-hammer"},{"level":65,"move":"megahorn"},{"level":70,"move":"skull-bash"},{"level":75,"move":"grassy-terrain"}],
+  "788": [{"level":1,"move":"disarming-voice"},{"level":1,"move":"water-gun"},{"level":5,"move":"withdraw"},{"level":10,"move":"haze"},{"level":10,"move":"mist"},{"level":15,"move":"aqua-ring"},{"level":20,"move":"water-pulse"},{"level":25,"move":"brine"},{"level":30,"move":"defog"},{"level":35,"move":"heal-pulse"},{"level":40,"move":"surf"},{"level":45,"move":"muddy-water"},{"level":50,"move":"mean-look"},{"level":55,"move":"natures-madness"},{"level":60,"move":"moonblast"},{"level":65,"move":"hydro-pump"},{"level":70,"move":"soak"},{"level":75,"move":"misty-terrain"}],
+  "789": [{"level":1,"move":"splash"},{"level":1,"move":"teleport"}],
+  "790": [{"level":0,"move":"cosmic-power"},{"level":1,"move":"teleport"}],
+  "791": [{"level":0,"move":"sunsteel-strike"},{"level":1,"move":"cosmic-power"},{"level":1,"move":"metal-claw"},{"level":1,"move":"noble-roar"},{"level":1,"move":"teleport"},{"level":7,"move":"iron-head"},{"level":14,"move":"metal-sound"},{"level":21,"move":"zen-headbutt"},{"level":28,"move":"flash-cannon"},{"level":35,"move":"morning-sun"},{"level":42,"move":"crunch"},{"level":49,"move":"metal-burst"},{"level":56,"move":"wild-charge"},{"level":63,"move":"solar-beam"},{"level":70,"move":"flare-blitz"},{"level":77,"move":"wide-guard"},{"level":84,"move":"giga-impact"}],
+  "792": [{"level":0,"move":"moongeist-beam"},{"level":1,"move":"confusion"},{"level":1,"move":"cosmic-power"},{"level":1,"move":"hypnosis"},{"level":1,"move":"teleport"},{"level":7,"move":"night-shade"},{"level":14,"move":"confuse-ray"},{"level":21,"move":"air-slash"},{"level":28,"move":"shadow-ball"},{"level":35,"move":"moonlight"},{"level":42,"move":"night-daze"},{"level":49,"move":"psychic"},{"level":56,"move":"moonblast"},{"level":63,"move":"phantom-force"},{"level":70,"move":"dream-eater"},{"level":77,"move":"wide-guard"}],
+  "793": [{"level":1,"move":"pound"},{"level":1,"move":"wrap"},{"level":5,"move":"acid"},{"level":10,"move":"tickle"},{"level":15,"move":"acid-spray"},{"level":20,"move":"clear-smog"},{"level":25,"move":"guard-split"},{"level":25,"move":"power-split"},{"level":30,"move":"venoshock"},{"level":35,"move":"headbutt"},{"level":40,"move":"toxic-spikes"},{"level":45,"move":"venom-drench"},{"level":50,"move":"power-gem"},{"level":55,"move":"stealth-rock"},{"level":60,"move":"mirror-coat"},{"level":65,"move":"wonder-room"},{"level":70,"move":"head-smash"}],
+  "794": [{"level":1,"move":"harden"},{"level":1,"move":"power-up-punch"},{"level":5,"move":"taunt"},{"level":10,"move":"fell-stinger"},{"level":15,"move":"vital-throw"},{"level":20,"move":"bulk-up"},{"level":25,"move":"endure"},{"level":30,"move":"reversal"},{"level":35,"move":"mega-punch"},{"level":40,"move":"lunge"},{"level":45,"move":"focus-energy"},{"level":50,"move":"dynamic-punch"},{"level":55,"move":"counter"},{"level":60,"move":"hammer-arm"},{"level":65,"move":"superpower"},{"level":70,"move":"focus-punch"}],
+  "795": [{"level":1,"move":"feint"},{"level":1,"move":"rapid-spin"},{"level":5,"move":"leer"},{"level":10,"move":"quick-guard"},{"level":15,"move":"bug-bite"},{"level":20,"move":"low-kick"},{"level":25,"move":"double-kick"},{"level":30,"move":"triple-kick"},{"level":35,"move":"stomp"},{"level":40,"move":"agility"},{"level":45,"move":"lunge"},{"level":50,"move":"bounce"},{"level":55,"move":"speed-swap"},{"level":60,"move":"bug-buzz"},{"level":65,"move":"quiver-dance"},{"level":70,"move":"high-jump-kick"}],
+  "796": [{"level":1,"move":"thunder-shock"},{"level":1,"move":"wrap"},{"level":5,"move":"charge"},{"level":10,"move":"thunder-wave"},{"level":15,"move":"ingrain"},{"level":20,"move":"spark"},{"level":25,"move":"shock-wave"},{"level":30,"move":"hypnosis"},{"level":35,"move":"eerie-impulse"},{"level":40,"move":"thunder-punch"},{"level":45,"move":"discharge"},{"level":50,"move":"magnet-rise"},{"level":55,"move":"thunderbolt"},{"level":60,"move":"electric-terrain"},{"level":65,"move":"power-whip"},{"level":70,"move":"zap-cannon"}],
+  "797": [{"level":1,"move":"absorb"},{"level":1,"move":"tackle"},{"level":5,"move":"harden"},{"level":10,"move":"wide-guard"},{"level":15,"move":"mega-drain"},{"level":20,"move":"smack-down"},{"level":25,"move":"ingrain"},{"level":30,"move":"autotomize"},{"level":35,"move":"giga-drain"},{"level":40,"move":"flash-cannon"},{"level":45,"move":"metal-sound"},{"level":50,"move":"iron-defense"},{"level":55,"move":"leech-seed"},{"level":60,"move":"heavy-slam"},{"level":65,"move":"double-edge"},{"level":70,"move":"skull-bash"}],
+  "798": [{"level":1,"move":"fury-cutter"},{"level":1,"move":"vacuum-wave"},{"level":5,"move":"razor-leaf"},{"level":10,"move":"false-swipe"},{"level":15,"move":"cut"},{"level":20,"move":"air-cutter"},{"level":25,"move":"aerial-ace"},{"level":30,"move":"detect"},{"level":35,"move":"night-slash"},{"level":40,"move":"synthesis"},{"level":45,"move":"laser-focus"},{"level":50,"move":"defog"},{"level":55,"move":"leaf-blade"},{"level":60,"move":"sacred-sword"},{"level":65,"move":"swords-dance"},{"level":70,"move":"guillotine"}],
+  "799": [{"level":1,"move":"bite"},{"level":1,"move":"dragon-tail"},{"level":5,"move":"stockpile"},{"level":5,"move":"swallow"},{"level":10,"move":"knock-off"},{"level":15,"move":"stomp"},{"level":20,"move":"stomping-tantrum"},{"level":25,"move":"wide-guard"},{"level":30,"move":"crunch"},{"level":35,"move":"body-slam"},{"level":40,"move":"gastro-acid"},{"level":45,"move":"hammer-arm"},{"level":50,"move":"heavy-slam"},{"level":55,"move":"dragon-rush"},{"level":60,"move":"belch"},{"level":65,"move":"thrash"},{"level":70,"move":"giga-impact"}],
+  "800": [{"level":1,"move":"charge-beam"},{"level":1,"move":"confusion"},{"level":1,"move":"metal-claw"},{"level":1,"move":"moonlight"},{"level":1,"move":"morning-sun"},{"level":8,"move":"stealth-rock"},{"level":16,"move":"slash"},{"level":24,"move":"night-slash"},{"level":32,"move":"psycho-cut"},{"level":40,"move":"stored-power"},{"level":48,"move":"rock-blast"},{"level":56,"move":"iron-defense"},{"level":64,"move":"power-gem"},{"level":72,"move":"photon-geyser"},{"level":80,"move":"gravity"},{"level":88,"move":"prismatic-laser"}],
+  "801": [{"level":1,"move":"gyro-ball"},{"level":1,"move":"helping-hand"},{"level":6,"move":"defense-curl"},{"level":12,"move":"rollout"},{"level":18,"move":"iron-defense"},{"level":24,"move":"magnetic-flux"},{"level":30,"move":"psybeam"},{"level":36,"move":"aurora-beam"},{"level":42,"move":"lock-on"},{"level":48,"move":"shift-gear"},{"level":54,"move":"trick"},{"level":60,"move":"iron-head"},{"level":66,"move":"aura-sphere"},{"level":72,"move":"flash-cannon"},{"level":78,"move":"pain-split"},{"level":84,"move":"zap-cannon"},{"level":90,"move":"fleur-cannon"}],
+  "802": [{"level":1,"move":"copycat"},{"level":1,"move":"counter"},{"level":1,"move":"feint"},{"level":1,"move":"fire-punch"},{"level":1,"move":"ice-punch"},{"level":1,"move":"shadow-sneak"},{"level":1,"move":"thunder-punch"},{"level":9,"move":"role-play"},{"level":18,"move":"shadow-punch"},{"level":27,"move":"force-palm"},{"level":36,"move":"assurance"},{"level":45,"move":"sucker-punch"},{"level":54,"move":"drain-punch"},{"level":63,"move":"psych-up"},{"level":72,"move":"spectral-thief"},{"level":81,"move":"laser-focus"},{"level":90,"move":"endeavor"},{"level":99,"move":"close-combat"}],
+  "803": [{"level":1,"move":"acid"},{"level":1,"move":"dragon-pulse"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"peck"},{"level":7,"move":"fury-attack"},{"level":14,"move":"fell-stinger"},{"level":21,"move":"charm"},{"level":28,"move":"venoshock"},{"level":35,"move":"venom-drench"},{"level":42,"move":"nasty-plot"},{"level":49,"move":"poison-jab"},{"level":56,"move":"gastro-acid"},{"level":63,"move":"toxic"}],
+  "804": [{"level":0,"move":"air-cutter"},{"level":1,"move":"acid"},{"level":1,"move":"air-cutter"},{"level":1,"move":"air-slash"},{"level":1,"move":"dragon-pulse"},{"level":1,"move":"growl"},{"level":1,"move":"helping-hand"},{"level":1,"move":"peck"},{"level":7,"move":"fury-attack"},{"level":14,"move":"fell-stinger"},{"level":21,"move":"charm"},{"level":28,"move":"venoshock"},{"level":35,"move":"venom-drench"},{"level":42,"move":"nasty-plot"},{"level":49,"move":"poison-jab"},{"level":56,"move":"gastro-acid"},{"level":63,"move":"toxic"},{"level":70,"move":"dragon-rush"}],
+  "805": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":5,"move":"rock-throw"},{"level":10,"move":"protect"},{"level":15,"move":"stomp"},{"level":20,"move":"block"},{"level":25,"move":"rock-slide"},{"level":30,"move":"wide-guard"},{"level":35,"move":"autotomize"},{"level":40,"move":"rock-blast"},{"level":45,"move":"magnet-rise"},{"level":50,"move":"iron-defense"},{"level":55,"move":"iron-head"},{"level":60,"move":"take-down"},{"level":65,"move":"stealth-rock"},{"level":70,"move":"double-edge"}],
+  "806": [{"level":1,"move":"astonish"},{"level":1,"move":"fire-spin"},{"level":5,"move":"light-screen"},{"level":10,"move":"ember"},{"level":15,"move":"night-shade"},{"level":20,"move":"confuse-ray"},{"level":25,"move":"magic-coat"},{"level":30,"move":"incinerate"},{"level":35,"move":"hypnosis"},{"level":40,"move":"mystical-fire"},{"level":45,"move":"shadow-ball"},{"level":50,"move":"calm-mind"},{"level":55,"move":"will-o-wisp"},{"level":60,"move":"trick"},{"level":65,"move":"fire-blast"},{"level":70,"move":"mind-blown"}],
+  "807": [{"level":1,"move":"fake-out"},{"level":1,"move":"power-up-punch"},{"level":1,"move":"quick-attack"},{"level":1,"move":"scratch"},{"level":1,"move":"snarl"},{"level":1,"move":"spark"},{"level":8,"move":"fury-swipes"},{"level":16,"move":"quick-guard"},{"level":24,"move":"slash"},{"level":32,"move":"volt-switch"},{"level":40,"move":"charge"},{"level":48,"move":"thunder-punch"},{"level":56,"move":"hone-claws"},{"level":64,"move":"discharge"},{"level":72,"move":"wild-charge"},{"level":80,"move":"agility"},{"level":88,"move":"plasma-fists"},{"level":96,"move":"close-combat"}],
+  "808": [{"level":1,"move":"harden"},{"level":1,"move":"thunder-shock"},{"level":8,"move":"tail-whip"},{"level":16,"move":"headbutt"},{"level":24,"move":"thunder-wave"},{"level":32,"move":"acid-armor"},{"level":40,"move":"flash-cannon"}],
+  "809": [{"level":0,"move":"thunder-punch"},{"level":1,"move":"harden"},{"level":1,"move":"headbutt"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder-punch"},{"level":1,"move":"thunder-shock"},{"level":24,"move":"thunder-wave"},{"level":32,"move":"acid-armor"},{"level":40,"move":"flash-cannon"},{"level":48,"move":"mega-punch"},{"level":56,"move":"protect"},{"level":64,"move":"discharge"},{"level":72,"move":"dynamic-punch"},{"level":80,"move":"superpower"},{"level":88,"move":"double-iron-bash"},{"level":96,"move":"hyper-beam"}],
+  "810": [{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":6,"move":"branch-poke"},{"level":8,"move":"taunt"},{"level":12,"move":"razor-leaf"},{"level":17,"move":"screech"},{"level":20,"move":"knock-off"},{"level":24,"move":"slam"},{"level":28,"move":"uproar"},{"level":32,"move":"wood-hammer"},{"level":36,"move":"endeavor"}],
+  "811": [{"level":0,"move":"double-hit"},{"level":1,"move":"branch-poke"},{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":1,"move":"taunt"},{"level":12,"move":"razor-leaf"},{"level":19,"move":"screech"},{"level":24,"move":"knock-off"},{"level":30,"move":"slam"},{"level":36,"move":"uproar"},{"level":42,"move":"wood-hammer"},{"level":48,"move":"endeavor"}],
+  "812": [{"level":0,"move":"drum-beating"},{"level":1,"move":"branch-poke"},{"level":1,"move":"double-hit"},{"level":1,"move":"grassy-terrain"},{"level":1,"move":"growl"},{"level":1,"move":"noble-roar"},{"level":1,"move":"scratch"},{"level":1,"move":"taunt"},{"level":12,"move":"razor-leaf"},{"level":19,"move":"screech"},{"level":24,"move":"knock-off"},{"level":30,"move":"slam"},{"level":38,"move":"uproar"},{"level":46,"move":"wood-hammer"},{"level":54,"move":"endeavor"},{"level":62,"move":"boomburst"}],
+  "813": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":6,"move":"ember"},{"level":8,"move":"quick-attack"},{"level":12,"move":"double-kick"},{"level":17,"move":"flame-charge"},{"level":20,"move":"agility"},{"level":24,"move":"headbutt"},{"level":28,"move":"counter"},{"level":32,"move":"bounce"},{"level":36,"move":"double-edge"}],
+  "814": [{"level":1,"move":"ember"},{"level":1,"move":"growl"},{"level":1,"move":"quick-attack"},{"level":1,"move":"tackle"},{"level":12,"move":"double-kick"},{"level":19,"move":"flame-charge"},{"level":24,"move":"agility"},{"level":30,"move":"headbutt"},{"level":36,"move":"counter"},{"level":42,"move":"bounce"},{"level":48,"move":"double-edge"}],
+  "815": [{"level":0,"move":"pyro-ball"},{"level":1,"move":"ember"},{"level":1,"move":"feint"},{"level":1,"move":"growl"},{"level":1,"move":"quick-attack"},{"level":1,"move":"tackle"},{"level":12,"move":"double-kick"},{"level":19,"move":"flame-charge"},{"level":24,"move":"agility"},{"level":30,"move":"headbutt"},{"level":38,"move":"counter"},{"level":46,"move":"bounce"},{"level":54,"move":"double-edge"},{"level":62,"move":"court-change"}],
+  "816": [{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":6,"move":"water-gun"},{"level":8,"move":"bind"},{"level":12,"move":"water-pulse"},{"level":17,"move":"tearful-look"},{"level":20,"move":"sucker-punch"},{"level":24,"move":"u-turn"},{"level":28,"move":"liquidation"},{"level":32,"move":"soak"},{"level":36,"move":"rain-dance"}],
+  "817": [{"level":1,"move":"bind"},{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":12,"move":"water-pulse"},{"level":19,"move":"tearful-look"},{"level":24,"move":"sucker-punch"},{"level":30,"move":"u-turn"},{"level":36,"move":"liquidation"},{"level":42,"move":"soak"},{"level":48,"move":"rain-dance"}],
+  "818": [{"level":0,"move":"snipe-shot"},{"level":1,"move":"acrobatics"},{"level":1,"move":"bind"},{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":12,"move":"water-pulse"},{"level":19,"move":"tearful-look"},{"level":24,"move":"sucker-punch"},{"level":30,"move":"u-turn"},{"level":38,"move":"liquidation"},{"level":46,"move":"soak"},{"level":54,"move":"rain-dance"},{"level":62,"move":"hydro-pump"}],
+  "819": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"bite"},{"level":10,"move":"stuff-cheeks"},{"level":15,"move":"spit-up"},{"level":15,"move":"stockpile"},{"level":15,"move":"swallow"},{"level":20,"move":"body-slam"},{"level":25,"move":"rest"},{"level":30,"move":"counter"},{"level":35,"move":"bullet-seed"},{"level":40,"move":"super-fang"},{"level":45,"move":"belch"}],
+  "820": [{"level":0,"move":"covet"},{"level":1,"move":"bite"},{"level":1,"move":"stuff-cheeks"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":15,"move":"spit-up"},{"level":15,"move":"stockpile"},{"level":15,"move":"swallow"},{"level":20,"move":"body-slam"},{"level":27,"move":"rest"},{"level":34,"move":"counter"},{"level":41,"move":"bullet-seed"},{"level":48,"move":"super-fang"},{"level":55,"move":"belch"}],
+  "821": [{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":4,"move":"power-trip"},{"level":8,"move":"hone-claws"},{"level":12,"move":"fury-attack"},{"level":16,"move":"pluck"},{"level":20,"move":"taunt"},{"level":24,"move":"scary-face"},{"level":28,"move":"drill-peck"},{"level":32,"move":"swagger"},{"level":36,"move":"brave-bird"}],
+  "822": [{"level":1,"move":"hone-claws"},{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":1,"move":"power-trip"},{"level":12,"move":"fury-attack"},{"level":16,"move":"pluck"},{"level":22,"move":"taunt"},{"level":28,"move":"scary-face"},{"level":34,"move":"drill-peck"},{"level":40,"move":"swagger"},{"level":46,"move":"brave-bird"}],
+  "823": [{"level":0,"move":"steel-wing"},{"level":1,"move":"hone-claws"},{"level":1,"move":"iron-defense"},{"level":1,"move":"leer"},{"level":1,"move":"metal-sound"},{"level":1,"move":"peck"},{"level":1,"move":"power-trip"},{"level":1,"move":"screech"},{"level":12,"move":"fury-attack"},{"level":16,"move":"pluck"},{"level":22,"move":"taunt"},{"level":28,"move":"scary-face"},{"level":34,"move":"drill-peck"},{"level":42,"move":"swagger"},{"level":50,"move":"brave-bird"}],
+  "824": [{"level":1,"move":"struggle-bug"}],
+  "825": [{"level":0,"move":"confusion"},{"level":0,"move":"light-screen"},{"level":0,"move":"reflect"},{"level":1,"move":"confusion"},{"level":1,"move":"light-screen"},{"level":1,"move":"reflect"},{"level":1,"move":"struggle-bug"}],
+  "826": [{"level":1,"move":"confusion"},{"level":1,"move":"light-screen"},{"level":1,"move":"reflect"},{"level":1,"move":"struggle-bug"},{"level":4,"move":"confuse-ray"},{"level":8,"move":"magic-coat"},{"level":12,"move":"agility"},{"level":16,"move":"psybeam"},{"level":20,"move":"hypnosis"},{"level":24,"move":"ally-switch"},{"level":28,"move":"bug-buzz"},{"level":32,"move":"mirror-coat"},{"level":36,"move":"psychic"},{"level":40,"move":"after-you"},{"level":44,"move":"calm-mind"},{"level":48,"move":"psychic-terrain"}],
+  "827": [{"level":1,"move":"quick-attack"},{"level":1,"move":"tail-whip"},{"level":4,"move":"beat-up"},{"level":8,"move":"hone-claws"},{"level":12,"move":"snarl"},{"level":16,"move":"assurance"},{"level":20,"move":"nasty-plot"},{"level":24,"move":"sucker-punch"},{"level":28,"move":"night-slash"},{"level":32,"move":"tail-slap"},{"level":36,"move":"foul-play"}],
+  "828": [{"level":0,"move":"thief"},{"level":1,"move":"beat-up"},{"level":1,"move":"hone-claws"},{"level":1,"move":"quick-attack"},{"level":1,"move":"tail-whip"},{"level":1,"move":"thief"},{"level":12,"move":"snarl"},{"level":16,"move":"assurance"},{"level":22,"move":"nasty-plot"},{"level":28,"move":"sucker-punch"},{"level":34,"move":"night-slash"},{"level":40,"move":"tail-slap"},{"level":46,"move":"foul-play"},{"level":52,"move":"parting-shot"}],
+  "829": [{"level":1,"move":"leafage"},{"level":1,"move":"sing"},{"level":4,"move":"rapid-spin"},{"level":8,"move":"sweet-scent"},{"level":12,"move":"razor-leaf"},{"level":16,"move":"round"},{"level":21,"move":"leaf-tornado"},{"level":24,"move":"synthesis"},{"level":28,"move":"hyper-voice"},{"level":32,"move":"aromatherapy"},{"level":36,"move":"leaf-storm"}],
+  "830": [{"level":0,"move":"cotton-spore"},{"level":1,"move":"cotton-spore"},{"level":1,"move":"leafage"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"sing"},{"level":1,"move":"sweet-scent"},{"level":12,"move":"razor-leaf"},{"level":16,"move":"round"},{"level":23,"move":"leaf-tornado"},{"level":28,"move":"synthesis"},{"level":34,"move":"hyper-voice"},{"level":40,"move":"aromatherapy"},{"level":46,"move":"leaf-storm"},{"level":52,"move":"cotton-guard"}],
+  "831": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":4,"move":"defense-curl"},{"level":8,"move":"copycat"},{"level":12,"move":"guard-split"},{"level":16,"move":"double-kick"},{"level":21,"move":"headbutt"},{"level":25,"move":"take-down"},{"level":28,"move":"guard-swap"},{"level":32,"move":"reversal"},{"level":36,"move":"cotton-guard"},{"level":40,"move":"double-edge"}],
+  "832": [{"level":1,"move":"copycat"},{"level":1,"move":"defense-curl"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":12,"move":"guard-split"},{"level":16,"move":"double-kick"},{"level":21,"move":"headbutt"},{"level":27,"move":"take-down"},{"level":32,"move":"guard-swap"},{"level":38,"move":"reversal"},{"level":44,"move":"cotton-guard"},{"level":50,"move":"double-edge"},{"level":56,"move":"last-resort"}],
+  "833": [{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":7,"move":"bite"},{"level":14,"move":"protect"},{"level":21,"move":"headbutt"},{"level":28,"move":"counter"},{"level":35,"move":"jaw-lock"},{"level":42,"move":"liquidation"},{"level":49,"move":"body-slam"}],
+  "834": [{"level":0,"move":"rock-tomb"},{"level":1,"move":"bite"},{"level":1,"move":"crunch"},{"level":1,"move":"protect"},{"level":1,"move":"razor-shell"},{"level":1,"move":"rock-polish"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":21,"move":"headbutt"},{"level":30,"move":"counter"},{"level":39,"move":"jaw-lock"},{"level":48,"move":"liquidation"},{"level":57,"move":"body-slam"},{"level":66,"move":"head-smash"}],
+  "835": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"nuzzle"},{"level":10,"move":"bite"},{"level":15,"move":"roar"},{"level":20,"move":"spark"},{"level":26,"move":"charm"},{"level":30,"move":"crunch"},{"level":35,"move":"charge"},{"level":40,"move":"wild-charge"},{"level":45,"move":"play-rough"}],
+  "836": [{"level":1,"move":"bite"},{"level":1,"move":"electrify"},{"level":1,"move":"nuzzle"},{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":15,"move":"roar"},{"level":20,"move":"spark"},{"level":28,"move":"charm"},{"level":34,"move":"crunch"},{"level":41,"move":"charge"},{"level":48,"move":"wild-charge"},{"level":55,"move":"play-rough"},{"level":62,"move":"electric-terrain"}],
+  "837": [{"level":1,"move":"smokescreen"},{"level":1,"move":"tackle"},{"level":5,"move":"rapid-spin"},{"level":10,"move":"smack-down"},{"level":15,"move":"rock-polish"},{"level":20,"move":"ancient-power"},{"level":25,"move":"incinerate"},{"level":30,"move":"stealth-rock"},{"level":35,"move":"heat-crash"},{"level":40,"move":"rock-blast"}],
+  "838": [{"level":0,"move":"flame-charge"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"smack-down"},{"level":1,"move":"smokescreen"},{"level":1,"move":"tackle"},{"level":15,"move":"rock-polish"},{"level":20,"move":"ancient-power"},{"level":27,"move":"incinerate"},{"level":35,"move":"stealth-rock"},{"level":41,"move":"heat-crash"},{"level":48,"move":"rock-blast"},{"level":55,"move":"stone-edge"}],
+  "839": [{"level":0,"move":"tar-shot"},{"level":1,"move":"flame-charge"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"smack-down"},{"level":1,"move":"smokescreen"},{"level":1,"move":"tackle"},{"level":15,"move":"rock-polish"},{"level":20,"move":"ancient-power"},{"level":27,"move":"incinerate"},{"level":37,"move":"stealth-rock"},{"level":45,"move":"heat-crash"},{"level":54,"move":"rock-blast"},{"level":63,"move":"stone-edge"}],
+  "840": [{"level":1,"move":"astonish"},{"level":1,"move":"withdraw"}],
+  "841": [{"level":0,"move":"wing-attack"},{"level":1,"move":"astonish"},{"level":1,"move":"growth"},{"level":1,"move":"recycle"},{"level":1,"move":"twister"},{"level":1,"move":"withdraw"},{"level":4,"move":"acid-spray"},{"level":8,"move":"acrobatics"},{"level":12,"move":"leech-seed"},{"level":16,"move":"protect"},{"level":20,"move":"dragon-breath"},{"level":24,"move":"dragon-dance"},{"level":28,"move":"dragon-pulse"},{"level":32,"move":"grav-apple"},{"level":36,"move":"iron-defense"},{"level":40,"move":"fly"},{"level":44,"move":"dragon-rush"}],
+  "842": [{"level":0,"move":"headbutt"},{"level":1,"move":"astonish"},{"level":1,"move":"growth"},{"level":1,"move":"recycle"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"withdraw"},{"level":4,"move":"curse"},{"level":8,"move":"stomp"},{"level":12,"move":"leech-seed"},{"level":16,"move":"protect"},{"level":20,"move":"bullet-seed"},{"level":24,"move":"recover"},{"level":28,"move":"apple-acid"},{"level":32,"move":"body-slam"},{"level":36,"move":"iron-defense"},{"level":40,"move":"dragon-pulse"},{"level":44,"move":"energy-ball"}],
+  "843": [{"level":1,"move":"sand-attack"},{"level":1,"move":"wrap"},{"level":5,"move":"minimize"},{"level":10,"move":"brutal-swing"},{"level":15,"move":"bulldoze"},{"level":20,"move":"headbutt"},{"level":25,"move":"glare"},{"level":30,"move":"dig"},{"level":35,"move":"sandstorm"},{"level":40,"move":"slam"},{"level":45,"move":"coil"},{"level":50,"move":"sand-tomb"}],
+  "844": [{"level":1,"move":"brutal-swing"},{"level":1,"move":"minimize"},{"level":1,"move":"sand-attack"},{"level":1,"move":"wrap"},{"level":15,"move":"bulldoze"},{"level":20,"move":"headbutt"},{"level":25,"move":"glare"},{"level":30,"move":"dig"},{"level":35,"move":"sandstorm"},{"level":42,"move":"slam"},{"level":49,"move":"coil"},{"level":51,"move":"sand-tomb"}],
+  "845": [{"level":1,"move":"peck"},{"level":1,"move":"spit-up"},{"level":1,"move":"stockpile"},{"level":1,"move":"swallow"},{"level":7,"move":"water-gun"},{"level":14,"move":"fury-attack"},{"level":21,"move":"pluck"},{"level":28,"move":"dive"},{"level":35,"move":"drill-peck"},{"level":42,"move":"amnesia"},{"level":49,"move":"thrash"},{"level":56,"move":"hydro-pump"}],
+  "846": [{"level":1,"move":"aqua-jet"},{"level":1,"move":"peck"},{"level":6,"move":"fury-attack"},{"level":12,"move":"bite"},{"level":18,"move":"agility"},{"level":24,"move":"dive"},{"level":30,"move":"focus-energy"},{"level":36,"move":"crunch"},{"level":42,"move":"liquidation"},{"level":48,"move":"double-edge"}],
+  "847": [{"level":1,"move":"aqua-jet"},{"level":1,"move":"bite"},{"level":1,"move":"fury-attack"},{"level":1,"move":"peck"},{"level":1,"move":"throat-chop"},{"level":18,"move":"agility"},{"level":24,"move":"dive"},{"level":32,"move":"focus-energy"},{"level":40,"move":"crunch"},{"level":48,"move":"liquidation"},{"level":56,"move":"double-edge"}],
+  "848": [{"level":1,"move":"acid"},{"level":1,"move":"belch"},{"level":1,"move":"flail"},{"level":1,"move":"growl"},{"level":1,"move":"nuzzle"},{"level":1,"move":"tearful-look"}],
+  "849": [{"level":0,"move":"spark"},{"level":1,"move":"acid"},{"level":1,"move":"acid-spray"},{"level":1,"move":"belch"},{"level":1,"move":"flail"},{"level":1,"move":"growl"},{"level":1,"move":"leer"},{"level":1,"move":"noble-roar"},{"level":1,"move":"nuzzle"},{"level":1,"move":"tearful-look"},{"level":1,"move":"thunder-shock"},{"level":4,"move":"charge"},{"level":8,"move":"shock-wave"},{"level":12,"move":"scary-face"},{"level":16,"move":"taunt"},{"level":24,"move":"screech"},{"level":28,"move":"swagger"},{"level":32,"move":"toxic"},{"level":36,"move":"discharge"},{"level":40,"move":"poison-jab"},{"level":44,"move":"overdrive"},{"level":48,"move":"boomburst"},{"level":52,"move":"shift-gear"}],
+  "850": [{"level":1,"move":"ember"},{"level":1,"move":"smokescreen"},{"level":5,"move":"wrap"},{"level":10,"move":"bite"},{"level":15,"move":"flame-wheel"},{"level":20,"move":"bug-bite"},{"level":25,"move":"coil"},{"level":30,"move":"slam"},{"level":35,"move":"fire-spin"},{"level":40,"move":"crunch"},{"level":45,"move":"fire-lash"},{"level":50,"move":"lunge"},{"level":55,"move":"burn-up"}],
+  "851": [{"level":1,"move":"bite"},{"level":1,"move":"ember"},{"level":1,"move":"inferno"},{"level":1,"move":"smokescreen"},{"level":1,"move":"wrap"},{"level":15,"move":"flame-wheel"},{"level":20,"move":"bug-bite"},{"level":25,"move":"coil"},{"level":32,"move":"slam"},{"level":39,"move":"fire-spin"},{"level":46,"move":"crunch"},{"level":53,"move":"fire-lash"},{"level":60,"move":"lunge"},{"level":67,"move":"burn-up"}],
+  "852": [{"level":1,"move":"leer"},{"level":1,"move":"rock-smash"},{"level":5,"move":"feint"},{"level":10,"move":"bind"},{"level":15,"move":"detect"},{"level":20,"move":"brick-break"},{"level":25,"move":"bulk-up"},{"level":30,"move":"submission"},{"level":35,"move":"taunt"},{"level":40,"move":"reversal"},{"level":45,"move":"superpower"}],
+  "853": [{"level":0,"move":"octolock"},{"level":1,"move":"bind"},{"level":1,"move":"feint"},{"level":1,"move":"leer"},{"level":1,"move":"octazooka"},{"level":1,"move":"octolock"},{"level":1,"move":"rock-smash"},{"level":15,"move":"detect"},{"level":20,"move":"brick-break"},{"level":25,"move":"bulk-up"},{"level":30,"move":"submission"},{"level":35,"move":"taunt"},{"level":40,"move":"reversal"},{"level":45,"move":"superpower"},{"level":50,"move":"topsy-turvy"}],
+  "854": [{"level":1,"move":"astonish"},{"level":1,"move":"withdraw"},{"level":6,"move":"aromatic-mist"},{"level":12,"move":"mega-drain"},{"level":24,"move":"sucker-punch"},{"level":30,"move":"sweet-scent"},{"level":36,"move":"giga-drain"},{"level":42,"move":"nasty-plot"},{"level":48,"move":"shadow-ball"},{"level":54,"move":"memento"},{"level":60,"move":"shell-smash"}],
+  "855": [{"level":0,"move":"teatime"},{"level":1,"move":"aromatic-mist"},{"level":1,"move":"astonish"},{"level":1,"move":"mega-drain"},{"level":1,"move":"strength-sap"},{"level":1,"move":"withdraw"},{"level":18,"move":"protect"},{"level":24,"move":"sucker-punch"},{"level":30,"move":"sweet-scent"},{"level":36,"move":"giga-drain"},{"level":42,"move":"nasty-plot"},{"level":48,"move":"shadow-ball"},{"level":54,"move":"memento"},{"level":60,"move":"shell-smash"},{"level":66,"move":"curse"}],
+  "856": [{"level":1,"move":"confusion"},{"level":1,"move":"play-nice"},{"level":5,"move":"life-dew"},{"level":10,"move":"disarming-voice"},{"level":15,"move":"aromatic-mist"},{"level":20,"move":"psybeam"},{"level":25,"move":"heal-pulse"},{"level":30,"move":"dazzling-gleam"},{"level":35,"move":"calm-mind"},{"level":40,"move":"psychic"},{"level":45,"move":"healing-wish"}],
+  "857": [{"level":0,"move":"brutal-swing"},{"level":1,"move":"confusion"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"life-dew"},{"level":1,"move":"play-nice"},{"level":15,"move":"aromatic-mist"},{"level":20,"move":"psybeam"},{"level":25,"move":"heal-pulse"},{"level":30,"move":"dazzling-gleam"},{"level":37,"move":"calm-mind"},{"level":44,"move":"psychic"},{"level":51,"move":"healing-wish"}],
+  "858": [{"level":0,"move":"psycho-cut"},{"level":1,"move":"brutal-swing"},{"level":1,"move":"confusion"},{"level":1,"move":"disarming-voice"},{"level":1,"move":"life-dew"},{"level":1,"move":"play-nice"},{"level":15,"move":"aromatic-mist"},{"level":20,"move":"psybeam"},{"level":25,"move":"heal-pulse"},{"level":30,"move":"dazzling-gleam"},{"level":37,"move":"calm-mind"},{"level":46,"move":"psychic"},{"level":55,"move":"healing-wish"},{"level":64,"move":"magic-powder"}],
+  "859": [{"level":1,"move":"confide"},{"level":1,"move":"fake-out"},{"level":4,"move":"bite"},{"level":8,"move":"flatter"},{"level":12,"move":"fake-tears"},{"level":16,"move":"assurance"},{"level":20,"move":"swagger"},{"level":24,"move":"sucker-punch"},{"level":28,"move":"torment"},{"level":33,"move":"dark-pulse"},{"level":36,"move":"nasty-plot"},{"level":40,"move":"play-rough"},{"level":44,"move":"foul-play"}],
+  "860": [{"level":0,"move":"false-surrender"},{"level":1,"move":"bite"},{"level":1,"move":"confide"},{"level":1,"move":"fake-out"},{"level":1,"move":"flatter"},{"level":12,"move":"fake-tears"},{"level":16,"move":"assurance"},{"level":20,"move":"swagger"},{"level":24,"move":"sucker-punch"},{"level":28,"move":"torment"},{"level":35,"move":"dark-pulse"},{"level":40,"move":"nasty-plot"},{"level":46,"move":"play-rough"},{"level":52,"move":"foul-play"}],
+  "861": [{"level":0,"move":"spirit-break"},{"level":1,"move":"bite"},{"level":1,"move":"bulk-up"},{"level":1,"move":"confide"},{"level":1,"move":"fake-out"},{"level":1,"move":"false-surrender"},{"level":1,"move":"flatter"},{"level":12,"move":"fake-tears"},{"level":16,"move":"assurance"},{"level":20,"move":"swagger"},{"level":24,"move":"sucker-punch"},{"level":28,"move":"torment"},{"level":35,"move":"dark-pulse"},{"level":40,"move":"nasty-plot"},{"level":48,"move":"play-rough"},{"level":56,"move":"foul-play"},{"level":64,"move":"hammer-arm"}],
+  "862": [{"level":0,"move":"obstruct"},{"level":1,"move":"baby-doll-eyes"},{"level":1,"move":"cross-chop"},{"level":1,"move":"leer"},{"level":1,"move":"lick"},{"level":1,"move":"night-slash"},{"level":1,"move":"obstruct"},{"level":1,"move":"pin-missile"},{"level":1,"move":"sand-attack"},{"level":1,"move":"submission"},{"level":1,"move":"switcheroo"},{"level":1,"move":"tackle"},{"level":9,"move":"snarl"},{"level":12,"move":"headbutt"},{"level":15,"move":"hone-claws"},{"level":18,"move":"fury-swipes"},{"level":23,"move":"rest"},{"level":28,"move":"take-down"},{"level":35,"move":"scary-face"},{"level":42,"move":"counter"},{"level":49,"move":"taunt"},{"level":56,"move":"double-edge"}],
+  "863": [{"level":0,"move":"iron-head"},{"level":1,"move":"fake-out"},{"level":1,"move":"growl"},{"level":1,"move":"hone-claws"},{"level":1,"move":"iron-defense"},{"level":1,"move":"metal-burst"},{"level":1,"move":"scratch"},{"level":12,"move":"pay-day"},{"level":16,"move":"metal-claw"},{"level":20,"move":"taunt"},{"level":24,"move":"swagger"},{"level":31,"move":"fury-swipes"},{"level":36,"move":"screech"},{"level":42,"move":"slash"},{"level":48,"move":"metal-sound"},{"level":54,"move":"thrash"}],
+  "864": [{"level":1,"move":"astonish"},{"level":1,"move":"disable"},{"level":1,"move":"harden"},{"level":1,"move":"perish-song"},{"level":1,"move":"tackle"},{"level":15,"move":"spite"},{"level":20,"move":"ancient-power"},{"level":25,"move":"hex"},{"level":30,"move":"curse"},{"level":35,"move":"strength-sap"},{"level":40,"move":"power-gem"},{"level":45,"move":"night-shade"},{"level":50,"move":"grudge"},{"level":55,"move":"mirror-coat"}],
+  "865": [{"level":0,"move":"iron-defense"},{"level":1,"move":"first-impression"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"iron-defense"},{"level":1,"move":"leer"},{"level":1,"move":"peck"},{"level":1,"move":"sand-attack"},{"level":15,"move":"rock-smash"},{"level":20,"move":"brutal-swing"},{"level":25,"move":"detect"},{"level":30,"move":"knock-off"},{"level":35,"move":"defog"},{"level":40,"move":"brick-break"},{"level":45,"move":"swords-dance"},{"level":50,"move":"slam"},{"level":55,"move":"leaf-blade"},{"level":60,"move":"final-gambit"},{"level":65,"move":"brave-bird"},{"level":70,"move":"meteor-assault"}],
+  "866": [{"level":1,"move":"after-you"},{"level":1,"move":"baton-pass"},{"level":1,"move":"block"},{"level":1,"move":"copycat"},{"level":1,"move":"dazzling-gleam"},{"level":1,"move":"encore"},{"level":1,"move":"fake-tears"},{"level":1,"move":"ice-shard"},{"level":1,"move":"light-screen"},{"level":1,"move":"mimic"},{"level":1,"move":"misty-terrain"},{"level":1,"move":"pound"},{"level":1,"move":"protect"},{"level":1,"move":"rapid-spin"},{"level":1,"move":"recycle"},{"level":1,"move":"reflect"},{"level":1,"move":"role-play"},{"level":1,"move":"safeguard"},{"level":1,"move":"slack-off"},{"level":12,"move":"confusion"},{"level":16,"move":"ally-switch"},{"level":20,"move":"icy-wind"},{"level":24,"move":"double-kick"},{"level":28,"move":"psybeam"},{"level":32,"move":"hypnosis"},{"level":36,"move":"mirror-coat"},{"level":40,"move":"sucker-punch"},{"level":44,"move":"freeze-dry"},{"level":48,"move":"psychic"},{"level":52,"move":"teeter-dance"}],
+  "867": [{"level":0,"move":"shadow-claw"},{"level":1,"move":"astonish"},{"level":1,"move":"haze"},{"level":1,"move":"night-shade"},{"level":1,"move":"protect"},{"level":1,"move":"scary-face"},{"level":1,"move":"shadow-claw"},{"level":12,"move":"disable"},{"level":16,"move":"brutal-swing"},{"level":20,"move":"crafty-shield"},{"level":24,"move":"hex"},{"level":28,"move":"mean-look"},{"level":32,"move":"slam"},{"level":38,"move":"curse"},{"level":44,"move":"shadow-ball"},{"level":50,"move":"earthquake"},{"level":56,"move":"guard-split"},{"level":56,"move":"power-split"},{"level":62,"move":"destiny-bond"}],
+  "868": [{"level":1,"move":"aromatic-mist"},{"level":1,"move":"tackle"},{"level":5,"move":"sweet-kiss"},{"level":10,"move":"sweet-scent"},{"level":15,"move":"draining-kiss"},{"level":20,"move":"charm"},{"level":25,"move":"attract"},{"level":30,"move":"acid-armor"},{"level":35,"move":"dazzling-gleam"},{"level":40,"move":"recover"},{"level":45,"move":"misty-terrain"},{"level":50,"move":"entrainment"}],
+  "869": [{"level":0,"move":"decorate"},{"level":1,"move":"aromatic-mist"},{"level":1,"move":"sweet-kiss"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"tackle"},{"level":15,"move":"draining-kiss"},{"level":20,"move":"charm"},{"level":25,"move":"attract"},{"level":30,"move":"acid-armor"},{"level":35,"move":"dazzling-gleam"},{"level":40,"move":"recover"},{"level":45,"move":"misty-terrain"},{"level":50,"move":"entrainment"}],
+  "870": [{"level":1,"move":"protect"},{"level":1,"move":"tackle"},{"level":5,"move":"rock-smash"},{"level":10,"move":"focus-energy"},{"level":15,"move":"headbutt"},{"level":20,"move":"bulk-up"},{"level":25,"move":"endure"},{"level":30,"move":"reversal"},{"level":35,"move":"first-impression"},{"level":40,"move":"no-retreat"},{"level":45,"move":"iron-defense"},{"level":50,"move":"close-combat"},{"level":55,"move":"megahorn"},{"level":60,"move":"counter"}],
+  "871": [{"level":1,"move":"peck"},{"level":1,"move":"thunder-shock"},{"level":5,"move":"water-gun"},{"level":10,"move":"charge"},{"level":15,"move":"fury-attack"},{"level":20,"move":"spark"},{"level":25,"move":"bubble-beam"},{"level":30,"move":"recover"},{"level":35,"move":"curse"},{"level":40,"move":"electric-terrain"},{"level":45,"move":"poison-jab"},{"level":50,"move":"zing-zap"},{"level":55,"move":"acupressure"},{"level":60,"move":"discharge"}],
+  "872": [{"level":1,"move":"powder-snow"},{"level":1,"move":"struggle-bug"}],
+  "873": [{"level":0,"move":"icy-wind"},{"level":1,"move":"attract"},{"level":1,"move":"helping-hand"},{"level":1,"move":"powder-snow"},{"level":1,"move":"struggle-bug"},{"level":4,"move":"stun-spore"},{"level":8,"move":"infestation"},{"level":12,"move":"mist"},{"level":16,"move":"defog"},{"level":21,"move":"feather-dance"},{"level":24,"move":"aurora-beam"},{"level":28,"move":"snowscape"},{"level":32,"move":"bug-buzz"},{"level":36,"move":"aurora-veil"},{"level":40,"move":"blizzard"},{"level":44,"move":"tailwind"},{"level":48,"move":"wide-guard"},{"level":52,"move":"quiver-dance"}],
+  "874": [{"level":1,"move":"block"},{"level":1,"move":"rock-throw"},{"level":6,"move":"rock-polish"},{"level":12,"move":"rock-tomb"},{"level":18,"move":"gravity"},{"level":24,"move":"stomp"},{"level":30,"move":"stealth-rock"},{"level":36,"move":"rock-slide"},{"level":42,"move":"body-slam"},{"level":48,"move":"wide-guard"},{"level":54,"move":"heavy-slam"},{"level":60,"move":"stone-edge"},{"level":66,"move":"mega-kick"}],
+  "875": [{"level":1,"move":"powder-snow"},{"level":1,"move":"tackle"},{"level":6,"move":"mist"},{"level":12,"move":"weather-ball"},{"level":18,"move":"icy-wind"},{"level":24,"move":"headbutt"},{"level":30,"move":"amnesia"},{"level":36,"move":"freeze-dry"},{"level":42,"move":"snowscape"},{"level":48,"move":"aurora-veil"},{"level":54,"move":"surf"},{"level":60,"move":"blizzard"}],
+  "876": [{"level":1,"move":"play-nice"},{"level":1,"move":"stored-power"},{"level":5,"move":"encore"},{"level":10,"move":"disarming-voice"},{"level":15,"move":"psybeam"},{"level":20,"move":"helping-hand"},{"level":25,"move":"after-you"},{"level":30,"move":"healing-wish"},{"level":35,"move":"psychic"},{"level":40,"move":"calm-mind"},{"level":45,"move":"power-split"},{"level":50,"move":"psychic-terrain"},{"level":55,"move":"last-resort"}],
+  "877": [{"level":1,"move":"tail-whip"},{"level":1,"move":"thunder-shock"},{"level":5,"move":"leer"},{"level":10,"move":"power-trip"},{"level":15,"move":"quick-attack"},{"level":20,"move":"flatter"},{"level":25,"move":"bite"},{"level":30,"move":"spark"},{"level":35,"move":"torment"},{"level":40,"move":"agility"},{"level":45,"move":"bullet-seed"},{"level":50,"move":"crunch"},{"level":55,"move":"aura-wheel"},{"level":60,"move":"thrash"}],
+  "878": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":5,"move":"rollout"},{"level":10,"move":"rock-smash"},{"level":15,"move":"bulldoze"},{"level":20,"move":"stomp"},{"level":25,"move":"iron-defense"},{"level":30,"move":"dig"},{"level":35,"move":"strength"},{"level":40,"move":"iron-head"},{"level":45,"move":"play-rough"},{"level":50,"move":"high-horsepower"},{"level":55,"move":"superpower"}],
+  "879": [{"level":0,"move":"heavy-slam"},{"level":1,"move":"growl"},{"level":1,"move":"rock-smash"},{"level":1,"move":"rollout"},{"level":1,"move":"tackle"},{"level":15,"move":"bulldoze"},{"level":20,"move":"stomp"},{"level":25,"move":"iron-defense"},{"level":30,"move":"dig"},{"level":37,"move":"strength"},{"level":44,"move":"iron-head"},{"level":51,"move":"play-rough"},{"level":58,"move":"high-horsepower"},{"level":65,"move":"superpower"}],
+  "880": [{"level":1,"move":"tackle"},{"level":1,"move":"thunder-shock"},{"level":7,"move":"charge"},{"level":14,"move":"aerial-ace"},{"level":21,"move":"ancient-power"},{"level":28,"move":"pluck"},{"level":35,"move":"dragon-tail"},{"level":42,"move":"stomp"},{"level":49,"move":"slam"},{"level":56,"move":"discharge"},{"level":63,"move":"bolt-beak"},{"level":70,"move":"dragon-pulse"},{"level":77,"move":"dragon-rush"}],
+  "881": [{"level":1,"move":"powder-snow"},{"level":1,"move":"thunder-shock"},{"level":7,"move":"charge"},{"level":14,"move":"echoed-voice"},{"level":21,"move":"ancient-power"},{"level":28,"move":"pluck"},{"level":35,"move":"avalanche"},{"level":42,"move":"freeze-dry"},{"level":49,"move":"slam"},{"level":56,"move":"discharge"},{"level":63,"move":"bolt-beak"},{"level":70,"move":"icicle-crash"},{"level":77,"move":"blizzard"}],
+  "882": [{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":7,"move":"protect"},{"level":14,"move":"brutal-swing"},{"level":21,"move":"ancient-power"},{"level":28,"move":"bite"},{"level":35,"move":"dragon-breath"},{"level":42,"move":"stomp"},{"level":49,"move":"super-fang"},{"level":56,"move":"crunch"},{"level":63,"move":"fishious-rend"},{"level":70,"move":"dragon-pulse"},{"level":77,"move":"dragon-rush"}],
+  "883": [{"level":1,"move":"powder-snow"},{"level":1,"move":"water-gun"},{"level":7,"move":"protect"},{"level":14,"move":"icy-wind"},{"level":21,"move":"ancient-power"},{"level":28,"move":"bite"},{"level":35,"move":"aurora-veil"},{"level":42,"move":"freeze-dry"},{"level":49,"move":"super-fang"},{"level":56,"move":"crunch"},{"level":63,"move":"fishious-rend"},{"level":70,"move":"icicle-crash"},{"level":77,"move":"blizzard"}],
+  "884": [{"level":1,"move":"leer"},{"level":1,"move":"metal-claw"},{"level":6,"move":"rock-smash"},{"level":12,"move":"hone-claws"},{"level":18,"move":"metal-sound"},{"level":24,"move":"breaking-swipe"},{"level":30,"move":"dragon-tail"},{"level":36,"move":"iron-defense"},{"level":42,"move":"focus-energy"},{"level":48,"move":"dragon-claw"},{"level":54,"move":"flash-cannon"},{"level":60,"move":"metal-burst"},{"level":66,"move":"hyper-beam"}],
+  "885": [{"level":1,"move":"astonish"},{"level":1,"move":"bite"},{"level":1,"move":"infestation"},{"level":1,"move":"quick-attack"}],
+  "886": [{"level":0,"move":"dragon-pulse"},{"level":1,"move":"astonish"},{"level":1,"move":"bite"},{"level":1,"move":"infestation"},{"level":1,"move":"quick-attack"},{"level":6,"move":"lock-on"},{"level":12,"move":"assurance"},{"level":18,"move":"hex"},{"level":24,"move":"agility"},{"level":30,"move":"double-hit"},{"level":36,"move":"u-turn"},{"level":42,"move":"dragon-dance"},{"level":48,"move":"phantom-force"},{"level":54,"move":"take-down"},{"level":61,"move":"dragon-rush"},{"level":66,"move":"double-edge"},{"level":72,"move":"last-resort"}],
+  "887": [{"level":0,"move":"dragon-darts"},{"level":1,"move":"astonish"},{"level":1,"move":"bite"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"infestation"},{"level":1,"move":"quick-attack"},{"level":6,"move":"lock-on"},{"level":12,"move":"assurance"},{"level":18,"move":"hex"},{"level":24,"move":"agility"},{"level":30,"move":"double-hit"},{"level":36,"move":"u-turn"},{"level":42,"move":"dragon-dance"},{"level":48,"move":"phantom-force"},{"level":54,"move":"take-down"},{"level":63,"move":"dragon-rush"},{"level":70,"move":"double-edge"},{"level":78,"move":"last-resort"}],
+  "888": [{"level":1,"move":"bite"},{"level":1,"move":"howl"},{"level":1,"move":"metal-claw"},{"level":1,"move":"quick-attack"},{"level":1,"move":"quick-guard"},{"level":1,"move":"sacred-sword"},{"level":11,"move":"slash"},{"level":22,"move":"swords-dance"},{"level":33,"move":"iron-head"},{"level":44,"move":"noble-roar"},{"level":55,"move":"crunch"},{"level":66,"move":"moonblast"},{"level":77,"move":"close-combat"},{"level":88,"move":"giga-impact"}],
+  "889": [{"level":1,"move":"bite"},{"level":1,"move":"howl"},{"level":1,"move":"metal-claw"},{"level":1,"move":"quick-attack"},{"level":1,"move":"wide-guard"},{"level":11,"move":"slash"},{"level":22,"move":"iron-defense"},{"level":33,"move":"iron-head"},{"level":44,"move":"metal-burst"},{"level":55,"move":"crunch"},{"level":66,"move":"moonblast"},{"level":77,"move":"close-combat"},{"level":88,"move":"giga-impact"}],
+  "890": [{"level":1,"move":"agility"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"dragon-tail"},{"level":1,"move":"poison-tail"},{"level":8,"move":"toxic"},{"level":16,"move":"venoshock"},{"level":24,"move":"dragon-dance"},{"level":32,"move":"cross-poison"},{"level":40,"move":"dragon-pulse"},{"level":48,"move":"flamethrower"},{"level":56,"move":"dynamax-cannon"},{"level":64,"move":"cosmic-power"},{"level":72,"move":"recover"},{"level":80,"move":"hyper-beam"},{"level":88,"move":"outrage"}],
+  "891": [{"level":1,"move":"leer"},{"level":1,"move":"rock-smash"},{"level":4,"move":"endure"},{"level":8,"move":"focus-energy"},{"level":12,"move":"aerial-ace"},{"level":16,"move":"scary-face"},{"level":20,"move":"headbutt"},{"level":24,"move":"brick-break"},{"level":28,"move":"detect"},{"level":32,"move":"bulk-up"},{"level":36,"move":"iron-head"},{"level":40,"move":"dynamic-punch"},{"level":44,"move":"counter"},{"level":48,"move":"close-combat"},{"level":52,"move":"focus-punch"}],
+  "892": [{"level":0,"move":"wicked-blow"},{"level":1,"move":"endure"},{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":1,"move":"rock-smash"},{"level":1,"move":"sucker-punch"},{"level":12,"move":"aerial-ace"},{"level":16,"move":"scary-face"},{"level":20,"move":"headbutt"},{"level":24,"move":"brick-break"},{"level":28,"move":"detect"},{"level":32,"move":"bulk-up"},{"level":36,"move":"iron-head"},{"level":40,"move":"dynamic-punch"},{"level":44,"move":"counter"},{"level":48,"move":"close-combat"},{"level":52,"move":"focus-punch"}],
+  "893": [{"level":1,"move":"bind"},{"level":1,"move":"scratch"},{"level":6,"move":"leer"},{"level":12,"move":"vine-whip"},{"level":18,"move":"growth"},{"level":24,"move":"fury-swipes"},{"level":30,"move":"scary-face"},{"level":36,"move":"grass-knot"},{"level":42,"move":"bite"},{"level":48,"move":"u-turn"},{"level":54,"move":"swagger"},{"level":60,"move":"energy-ball"},{"level":66,"move":"synthesis"},{"level":72,"move":"hammer-arm"},{"level":78,"move":"thrash"},{"level":84,"move":"power-whip"},{"level":90,"move":"jungle-healing"}],
+  "894": [{"level":1,"move":"rapid-spin"},{"level":1,"move":"thunder-shock"},{"level":6,"move":"electroweb"},{"level":12,"move":"ancient-power"},{"level":18,"move":"shock-wave"},{"level":24,"move":"thunder-wave"},{"level":30,"move":"extreme-speed"},{"level":36,"move":"thunder-cage"},{"level":42,"move":"thunderbolt"},{"level":48,"move":"magnet-rise"},{"level":54,"move":"thrash"},{"level":60,"move":"lock-on"},{"level":66,"move":"zap-cannon"},{"level":72,"move":"hyper-beam"},{"level":78,"move":"explosion"}],
+  "895": [{"level":1,"move":"twister"},{"level":6,"move":"bite"},{"level":12,"move":"ancient-power"},{"level":18,"move":"dragon-breath"},{"level":30,"move":"crunch"},{"level":36,"move":"dragon-claw"},{"level":42,"move":"hammer-arm"},{"level":48,"move":"dragon-dance"},{"level":54,"move":"thrash"},{"level":60,"move":"focus-energy"},{"level":66,"move":"dragon-energy"},{"level":72,"move":"hyper-beam"},{"level":78,"move":"explosion"}],
+  "896": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":6,"move":"double-kick"},{"level":12,"move":"avalanche"},{"level":18,"move":"stomp"},{"level":24,"move":"torment"},{"level":30,"move":"mist"},{"level":36,"move":"icicle-crash"},{"level":42,"move":"take-down"},{"level":48,"move":"iron-defense"},{"level":54,"move":"thrash"},{"level":60,"move":"taunt"},{"level":66,"move":"double-edge"},{"level":72,"move":"swords-dance"}],
+  "897": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":6,"move":"double-kick"},{"level":12,"move":"hex"},{"level":18,"move":"stomp"},{"level":24,"move":"confuse-ray"},{"level":30,"move":"haze"},{"level":36,"move":"shadow-ball"},{"level":42,"move":"take-down"},{"level":48,"move":"agility"},{"level":54,"move":"thrash"},{"level":60,"move":"disable"},{"level":66,"move":"double-edge"},{"level":72,"move":"nasty-plot"}],
+  "898": [{"level":1,"move":"confusion"},{"level":1,"move":"growth"},{"level":1,"move":"mega-drain"},{"level":1,"move":"pound"},{"level":8,"move":"life-dew"},{"level":16,"move":"giga-drain"},{"level":24,"move":"psyshock"},{"level":32,"move":"helping-hand"},{"level":40,"move":"grassy-terrain"},{"level":40,"move":"psychic-terrain"},{"level":48,"move":"energy-ball"},{"level":56,"move":"psychic"},{"level":64,"move":"leech-seed"},{"level":72,"move":"heal-pulse"},{"level":80,"move":"solar-beam"},{"level":88,"move":"future-sight"}],
+  "899": [{"level":0,"move":"psyshield-bash"},{"level":1,"move":"tackle"},{"level":3,"move":"leer"},{"level":7,"move":"astonish"},{"level":10,"move":"hypnosis"},{"level":13,"move":"stomp"},{"level":16,"move":"sand-attack"},{"level":21,"move":"take-down"},{"level":23,"move":"confuse-ray"},{"level":27,"move":"calm-mind"},{"level":32,"move":"role-play"},{"level":37,"move":"zen-headbutt"},{"level":49,"move":"imprison"},{"level":55,"move":"double-edge"},{"level":62,"move":"megahorn"}],
+  "900": [{"level":0,"move":"stone-axe"},{"level":1,"move":"leer"},{"level":1,"move":"quick-attack"},{"level":4,"move":"fury-cutter"},{"level":8,"move":"false-swipe"},{"level":12,"move":"smack-down"},{"level":16,"move":"double-team"},{"level":20,"move":"double-hit"},{"level":24,"move":"slash"},{"level":28,"move":"focus-energy"},{"level":32,"move":"agility"},{"level":36,"move":"rock-slide"},{"level":40,"move":"x-scissor"},{"level":44,"move":"swords-dance"}],
+  "901": [{"level":0,"move":"headlong-rush"},{"level":1,"move":"covet"},{"level":1,"move":"fake-tears"},{"level":1,"move":"leer"},{"level":1,"move":"lick"},{"level":1,"move":"scratch"},{"level":8,"move":"fury-swipes"},{"level":13,"move":"payback"},{"level":17,"move":"sweet-scent"},{"level":22,"move":"slash"},{"level":25,"move":"play-nice"},{"level":29,"move":"play-rough"},{"level":35,"move":"scary-face"},{"level":41,"move":"rest"},{"level":41,"move":"snore"},{"level":48,"move":"high-horsepower"},{"level":56,"move":"thrash"},{"level":64,"move":"hammer-arm"}],
+  "902": [{"level":1,"move":"phantom-force"},{"level":1,"move":"shadow-ball"},{"level":1,"move":"tail-whip"},{"level":1,"move":"water-gun"},{"level":4,"move":"tackle"},{"level":8,"move":"flail"},{"level":12,"move":"aqua-jet"},{"level":16,"move":"bite"},{"level":20,"move":"scary-face"},{"level":24,"move":"headbutt"},{"level":28,"move":"soak"},{"level":32,"move":"crunch"},{"level":36,"move":"take-down"},{"level":40,"move":"uproar"},{"level":44,"move":"wave-crash"},{"level":48,"move":"thrash"},{"level":52,"move":"double-edge"},{"level":56,"move":"head-smash"}],
+  "903": [{"level":0,"move":"dire-claw"},{"level":1,"move":"fling"},{"level":1,"move":"leer"},{"level":1,"move":"rock-smash"},{"level":1,"move":"scratch"},{"level":6,"move":"taunt"},{"level":12,"move":"quick-attack"},{"level":18,"move":"metal-claw"},{"level":24,"move":"poison-jab"},{"level":30,"move":"brick-break"},{"level":36,"move":"hone-claws"},{"level":42,"move":"slash"},{"level":48,"move":"agility"},{"level":54,"move":"screech"},{"level":60,"move":"close-combat"}],
+  "904": [{"level":1,"move":"poison-sting"},{"level":1,"move":"tackle"},{"level":4,"move":"harden"},{"level":8,"move":"bite"},{"level":12,"move":"fell-stinger"},{"level":16,"move":"minimize"},{"level":20,"move":"spikes"},{"level":24,"move":"brine"},{"level":28,"move":"barb-barrage"},{"level":32,"move":"pin-missile"},{"level":36,"move":"toxic-spikes"},{"level":40,"move":"spit-up"},{"level":40,"move":"stockpile"},{"level":44,"move":"toxic"},{"level":48,"move":"crunch"},{"level":52,"move":"acupressure"},{"level":56,"move":"destiny-bond"}],
+  "905": [{"level":1,"move":"astonish"},{"level":1,"move":"fairy-wind"},{"level":5,"move":"torment"},{"level":10,"move":"flatter"},{"level":15,"move":"twister"},{"level":20,"move":"draining-kiss"},{"level":25,"move":"iron-defense"},{"level":30,"move":"imprison"},{"level":35,"move":"mystical-fire"},{"level":40,"move":"dazzling-gleam"},{"level":45,"move":"extrasensory"},{"level":50,"move":"uproar"},{"level":55,"move":"superpower"},{"level":60,"move":"healing-wish"},{"level":65,"move":"moonblast"},{"level":70,"move":"outrage"},{"level":75,"move":"springtide-storm"}],
+  "906": [{"level":1,"move":"leafage"},{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":7,"move":"bite"},{"level":10,"move":"hone-claws"},{"level":13,"move":"magical-leaf"},{"level":15,"move":"quick-attack"},{"level":17,"move":"seed-bomb"},{"level":21,"move":"u-turn"},{"level":25,"move":"worry-seed"},{"level":28,"move":"slash"},{"level":32,"move":"energy-ball"},{"level":36,"move":"play-rough"}],
+  "907": [{"level":1,"move":"leafage"},{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":7,"move":"bite"},{"level":10,"move":"hone-claws"},{"level":13,"move":"magical-leaf"},{"level":15,"move":"quick-attack"},{"level":20,"move":"seed-bomb"},{"level":24,"move":"u-turn"},{"level":28,"move":"worry-seed"},{"level":33,"move":"slash"},{"level":38,"move":"energy-ball"},{"level":42,"move":"play-rough"},{"level":46,"move":"leaf-storm"}],
+  "908": [{"level":0,"move":"flower-trick"},{"level":1,"move":"leafage"},{"level":1,"move":"scratch"},{"level":1,"move":"tail-whip"},{"level":7,"move":"bite"},{"level":10,"move":"hone-claws"},{"level":13,"move":"magical-leaf"},{"level":15,"move":"quick-attack"},{"level":20,"move":"seed-bomb"},{"level":24,"move":"u-turn"},{"level":29,"move":"worry-seed"},{"level":33,"move":"slash"},{"level":38,"move":"night-slash"},{"level":42,"move":"energy-ball"},{"level":47,"move":"play-rough"},{"level":52,"move":"knock-off"},{"level":58,"move":"grassy-terrain"},{"level":64,"move":"leaf-storm"}],
+  "909": [{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":7,"move":"round"},{"level":12,"move":"bite"},{"level":15,"move":"incinerate"},{"level":17,"move":"yawn"},{"level":21,"move":"snarl"},{"level":25,"move":"roar"},{"level":28,"move":"flamethrower"},{"level":32,"move":"hyper-voice"},{"level":36,"move":"fire-blast"}],
+  "910": [{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":7,"move":"lick"},{"level":10,"move":"round"},{"level":12,"move":"bite"},{"level":15,"move":"yawn"},{"level":17,"move":"incinerate"},{"level":24,"move":"snarl"},{"level":28,"move":"roar"},{"level":32,"move":"flamethrower"},{"level":38,"move":"hyper-voice"},{"level":42,"move":"will-o-wisp"},{"level":47,"move":"fire-blast"}],
+  "911": [{"level":0,"move":"torch-song"},{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":7,"move":"lick"},{"level":10,"move":"round"},{"level":12,"move":"scary-face"},{"level":15,"move":"bite"},{"level":17,"move":"incinerate"},{"level":24,"move":"snarl"},{"level":28,"move":"roar"},{"level":32,"move":"flamethrower"},{"level":38,"move":"shadow-ball"},{"level":42,"move":"hyper-voice"},{"level":47,"move":"hex"},{"level":47,"move":"will-o-wisp"},{"level":58,"move":"fire-blast"},{"level":64,"move":"overheat"}],
+  "912": [{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":7,"move":"work-up"},{"level":10,"move":"wing-attack"},{"level":13,"move":"aqua-jet"},{"level":17,"move":"double-hit"},{"level":21,"move":"aqua-cutter"},{"level":24,"move":"air-slash"},{"level":28,"move":"focus-energy"},{"level":31,"move":"acrobatics"},{"level":35,"move":"liquidation"}],
+  "913": [{"level":1,"move":"double-hit"},{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":7,"move":"work-up"},{"level":10,"move":"wing-attack"},{"level":13,"move":"aqua-jet"},{"level":17,"move":"water-pulse"},{"level":19,"move":"low-sweep"},{"level":23,"move":"aqua-cutter"},{"level":27,"move":"air-slash"},{"level":32,"move":"focus-energy"},{"level":38,"move":"acrobatics"},{"level":43,"move":"liquidation"},{"level":48,"move":"feather-dance"}],
+  "914": [{"level":0,"move":"aqua-step"},{"level":1,"move":"double-hit"},{"level":1,"move":"growl"},{"level":1,"move":"pound"},{"level":1,"move":"water-gun"},{"level":7,"move":"work-up"},{"level":10,"move":"wing-attack"},{"level":13,"move":"aqua-jet"},{"level":17,"move":"low-sweep"},{"level":17,"move":"water-pulse"},{"level":21,"move":"aqua-cutter"},{"level":27,"move":"air-slash"},{"level":32,"move":"focus-energy"},{"level":38,"move":"mega-kick"},{"level":43,"move":"acrobatics"},{"level":47,"move":"liquidation"},{"level":52,"move":"feather-dance"},{"level":58,"move":"close-combat"},{"level":64,"move":"wave-crash"}],
+  "915": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"disarming-voice"},{"level":8,"move":"echoed-voice"},{"level":12,"move":"mud-shot"},{"level":15,"move":"covet"},{"level":17,"move":"dig"},{"level":21,"move":"headbutt"},{"level":24,"move":"yawn"},{"level":27,"move":"take-down"},{"level":30,"move":"work-up"},{"level":32,"move":"uproar"},{"level":35,"move":"double-edge"}],
+  "916": [{"level":1,"move":"tackle"},{"level":1,"move":"tail-whip"},{"level":5,"move":"disarming-voice"},{"level":8,"move":"echoed-voice"},{"level":12,"move":"mud-shot"},{"level":15,"move":"covet"},{"level":17,"move":"dig"},{"level":23,"move":"headbutt"},{"level":26,"move":"take-down"},{"level":27,"move":"yawn"},{"level":34,"move":"work-up"},{"level":38,"move":"uproar"},{"level":42,"move":"double-edge"},{"level":48,"move":"earth-power"},{"level":54,"move":"belch"}],
+  "917": [{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":5,"move":"struggle-bug"},{"level":8,"move":"assurance"},{"level":11,"move":"feint"},{"level":14,"move":"bug-bite"},{"level":18,"move":"block"},{"level":22,"move":"counter"},{"level":25,"move":"headbutt"},{"level":29,"move":"sticky-web"},{"level":33,"move":"gastro-acid"},{"level":36,"move":"circle-throw"},{"level":40,"move":"throat-chop"},{"level":44,"move":"skitter-smack"}],
+  "918": [{"level":0,"move":"silk-trap"},{"level":1,"move":"string-shot"},{"level":1,"move":"tackle"},{"level":5,"move":"struggle-bug"},{"level":8,"move":"assurance"},{"level":11,"move":"feint"},{"level":14,"move":"bug-bite"},{"level":19,"move":"block"},{"level":24,"move":"counter"},{"level":28,"move":"headbutt"},{"level":33,"move":"sticky-web"},{"level":37,"move":"gastro-acid"},{"level":41,"move":"circle-throw"},{"level":45,"move":"throat-chop"},{"level":49,"move":"skitter-smack"}],
+  "919": [{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":4,"move":"struggle-bug"},{"level":6,"move":"astonish"},{"level":9,"move":"assurance"},{"level":11,"move":"double-kick"},{"level":14,"move":"screech"},{"level":18,"move":"endure"},{"level":22,"move":"bug-bite"},{"level":26,"move":"feint"},{"level":30,"move":"agility"},{"level":38,"move":"sucker-punch"},{"level":41,"move":"first-impression"}],
+  "920": [{"level":0,"move":"lunge"},{"level":1,"move":"detect"},{"level":1,"move":"leer"},{"level":1,"move":"low-kick"},{"level":1,"move":"tackle"},{"level":4,"move":"struggle-bug"},{"level":6,"move":"astonish"},{"level":9,"move":"assurance"},{"level":11,"move":"double-kick"},{"level":14,"move":"screech"},{"level":18,"move":"endure"},{"level":22,"move":"bug-bite"},{"level":28,"move":"feint"},{"level":32,"move":"agility"},{"level":36,"move":"throat-chop"},{"level":40,"move":"sucker-punch"},{"level":44,"move":"first-impression"},{"level":48,"move":"bounce"},{"level":53,"move":"axe-kick"}],
+  "921": [{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":3,"move":"thunder-shock"},{"level":6,"move":"quick-attack"},{"level":8,"move":"charge"},{"level":12,"move":"nuzzle"},{"level":15,"move":"dig"},{"level":19,"move":"bite"},{"level":23,"move":"spark"},{"level":27,"move":"thunder-wave"},{"level":31,"move":"entrainment"},{"level":35,"move":"slam"},{"level":38,"move":"discharge"},{"level":40,"move":"agility"},{"level":44,"move":"wild-charge"}],
+  "922": [{"level":0,"move":"arm-thrust"},{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":3,"move":"thunder-shock"},{"level":6,"move":"quick-attack"},{"level":8,"move":"charge"},{"level":12,"move":"nuzzle"},{"level":15,"move":"dig"},{"level":19,"move":"bite"},{"level":23,"move":"spark"},{"level":27,"move":"thunder-wave"},{"level":32,"move":"slam"},{"level":38,"move":"entrainment"},{"level":42,"move":"discharge"},{"level":46,"move":"agility"},{"level":52,"move":"wild-charge"}],
+  "923": [{"level":0,"move":"revival-blessing"},{"level":1,"move":"growl"},{"level":1,"move":"scratch"},{"level":1,"move":"wild-charge"},{"level":3,"move":"thunder-shock"},{"level":6,"move":"quick-attack"},{"level":8,"move":"charge"},{"level":12,"move":"nuzzle"},{"level":15,"move":"dig"},{"level":19,"move":"bite"},{"level":23,"move":"spark"},{"level":25,"move":"arm-thrust"},{"level":29,"move":"thunder-wave"},{"level":33,"move":"slam"},{"level":39,"move":"entrainment"},{"level":44,"move":"close-combat"},{"level":49,"move":"discharge"},{"level":54,"move":"agility"},{"level":60,"move":"double-shock"}],
+  "924": [{"level":1,"move":"baby-doll-eyes"},{"level":1,"move":"pound"},{"level":5,"move":"echoed-voice"},{"level":8,"move":"helping-hand"},{"level":11,"move":"super-fang"},{"level":14,"move":"double-hit"},{"level":18,"move":"bullet-seed"},{"level":22,"move":"encore"},{"level":26,"move":"play-rough"},{"level":30,"move":"hyper-voice"},{"level":33,"move":"charm"},{"level":37,"move":"beat-up"},{"level":41,"move":"copycat"},{"level":46,"move":"population-bomb"}],
+  "925": [{"level":1,"move":"baby-doll-eyes"},{"level":1,"move":"follow-me"},{"level":1,"move":"pound"},{"level":1,"move":"tidy-up"},{"level":5,"move":"echoed-voice"},{"level":8,"move":"helping-hand"},{"level":11,"move":"super-fang"},{"level":14,"move":"double-hit"},{"level":18,"move":"bullet-seed"},{"level":22,"move":"encore"},{"level":29,"move":"play-rough"},{"level":33,"move":"hyper-voice"},{"level":37,"move":"charm"},{"level":41,"move":"beat-up"},{"level":46,"move":"copycat"},{"level":53,"move":"population-bomb"}],
+  "926": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":3,"move":"lick"},{"level":6,"move":"tail-whip"},{"level":8,"move":"covet"},{"level":11,"move":"bite"},{"level":15,"move":"baby-doll-eyes"},{"level":18,"move":"play-rough"},{"level":22,"move":"work-up"},{"level":26,"move":"baton-pass"},{"level":30,"move":"roar"},{"level":33,"move":"double-edge"},{"level":36,"move":"charm"},{"level":40,"move":"crunch"},{"level":45,"move":"last-resort"}],
+  "927": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":3,"move":"lick"},{"level":6,"move":"tail-whip"},{"level":8,"move":"covet"},{"level":11,"move":"bite"},{"level":15,"move":"baby-doll-eyes"},{"level":18,"move":"play-rough"},{"level":22,"move":"work-up"},{"level":29,"move":"baton-pass"},{"level":33,"move":"roar"},{"level":38,"move":"double-edge"},{"level":42,"move":"charm"},{"level":47,"move":"crunch"},{"level":53,"move":"last-resort"}],
+  "928": [{"level":1,"move":"sweet-scent"},{"level":1,"move":"tackle"},{"level":5,"move":"absorb"},{"level":7,"move":"growth"},{"level":10,"move":"razor-leaf"},{"level":13,"move":"helping-hand"},{"level":16,"move":"flail"},{"level":20,"move":"mega-drain"},{"level":23,"move":"grassy-terrain"},{"level":27,"move":"seed-bomb"},{"level":30,"move":"energy-ball"},{"level":34,"move":"leech-seed"},{"level":38,"move":"terrain-pulse"}],
+  "929": [{"level":1,"move":"sweet-scent"},{"level":1,"move":"tackle"},{"level":5,"move":"absorb"},{"level":7,"move":"growth"},{"level":10,"move":"razor-leaf"},{"level":13,"move":"helping-hand"},{"level":16,"move":"flail"},{"level":20,"move":"mega-drain"},{"level":23,"move":"grassy-terrain"},{"level":29,"move":"seed-bomb"},{"level":34,"move":"energy-ball"},{"level":37,"move":"leech-seed"},{"level":42,"move":"terrain-pulse"}],
+  "930": [{"level":1,"move":"mirror-coat"},{"level":1,"move":"safeguard"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"tackle"},{"level":5,"move":"absorb"},{"level":7,"move":"growth"},{"level":10,"move":"razor-leaf"},{"level":13,"move":"helping-hand"},{"level":16,"move":"flail"},{"level":20,"move":"mega-drain"},{"level":23,"move":"grassy-terrain"},{"level":29,"move":"seed-bomb"},{"level":34,"move":"energy-ball"},{"level":39,"move":"leech-seed"},{"level":46,"move":"terrain-pulse"},{"level":52,"move":"petal-blizzard"},{"level":58,"move":"petal-dance"}],
+  "931": [{"level":1,"move":"growl"},{"level":1,"move":"mimic"},{"level":1,"move":"peck"},{"level":6,"move":"quick-attack"},{"level":10,"move":"torment"},{"level":13,"move":"aerial-ace"},{"level":17,"move":"fury-attack"},{"level":20,"move":"taunt"},{"level":24,"move":"uproar"},{"level":27,"move":"copycat"},{"level":30,"move":"fly"},{"level":34,"move":"facade"},{"level":38,"move":"swagger"},{"level":42,"move":"brave-bird"},{"level":47,"move":"roost"},{"level":52,"move":"reversal"}],
+  "932": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":5,"move":"rock-throw"},{"level":7,"move":"mud-shot"},{"level":10,"move":"smack-down"},{"level":13,"move":"rock-polish"},{"level":16,"move":"headbutt"},{"level":20,"move":"iron-defense"},{"level":25,"move":"recover"},{"level":30,"move":"rock-slide"},{"level":33,"move":"stealth-rock"},{"level":35,"move":"heavy-slam"},{"level":40,"move":"earthquake"},{"level":45,"move":"stone-edge"}],
+  "933": [{"level":0,"move":"salt-cure"},{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":5,"move":"rock-throw"},{"level":7,"move":"mud-shot"},{"level":10,"move":"smack-down"},{"level":13,"move":"rock-polish"},{"level":16,"move":"headbutt"},{"level":20,"move":"iron-defense"},{"level":30,"move":"recover"},{"level":34,"move":"rock-slide"},{"level":38,"move":"stealth-rock"},{"level":41,"move":"heavy-slam"},{"level":45,"move":"earthquake"},{"level":51,"move":"stone-edge"}],
+  "934": [{"level":0,"move":"hammer-arm"},{"level":1,"move":"block"},{"level":1,"move":"harden"},{"level":1,"move":"rock-blast"},{"level":1,"move":"tackle"},{"level":1,"move":"wide-guard"},{"level":5,"move":"rock-throw"},{"level":7,"move":"mud-shot"},{"level":10,"move":"rock-tomb"},{"level":13,"move":"rock-polish"},{"level":16,"move":"headbutt"},{"level":24,"move":"salt-cure"},{"level":30,"move":"recover"},{"level":34,"move":"rock-slide"},{"level":40,"move":"stealth-rock"},{"level":44,"move":"heavy-slam"},{"level":49,"move":"earthquake"},{"level":54,"move":"stone-edge"},{"level":60,"move":"explosion"}],
+  "935": [{"level":1,"move":"astonish"},{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":8,"move":"clear-smog"},{"level":12,"move":"fire-spin"},{"level":16,"move":"will-o-wisp"},{"level":20,"move":"night-shade"},{"level":24,"move":"flame-charge"},{"level":28,"move":"incinerate"},{"level":32,"move":"lava-plume"}],
+  "936": [{"level":0,"move":"psyshock"},{"level":1,"move":"astonish"},{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":1,"move":"mystical-fire"},{"level":1,"move":"wide-guard"},{"level":8,"move":"clear-smog"},{"level":12,"move":"fire-spin"},{"level":16,"move":"will-o-wisp"},{"level":20,"move":"night-shade"},{"level":24,"move":"flame-charge"},{"level":28,"move":"incinerate"},{"level":32,"move":"lava-plume"},{"level":37,"move":"calm-mind"},{"level":42,"move":"ally-switch"},{"level":48,"move":"flamethrower"},{"level":56,"move":"expanding-force"},{"level":62,"move":"armor-cannon"}],
+  "937": [{"level":0,"move":"shadow-claw"},{"level":1,"move":"astonish"},{"level":1,"move":"ember"},{"level":1,"move":"leer"},{"level":8,"move":"clear-smog"},{"level":12,"move":"fire-spin"},{"level":16,"move":"will-o-wisp"},{"level":20,"move":"night-shade"},{"level":24,"move":"flame-charge"},{"level":28,"move":"incinerate"},{"level":32,"move":"lava-plume"},{"level":37,"move":"swords-dance"},{"level":42,"move":"ally-switch"},{"level":48,"move":"bitter-blade"},{"level":56,"move":"psycho-cut"},{"level":62,"move":"flare-blitz"}],
+  "938": [{"level":1,"move":"mud-slap"},{"level":1,"move":"tackle"},{"level":7,"move":"thunder-shock"},{"level":11,"move":"water-gun"},{"level":17,"move":"charge"},{"level":21,"move":"spark"},{"level":24,"move":"mud-shot"},{"level":25,"move":"flail"},{"level":32,"move":"discharge"},{"level":36,"move":"weather-ball"},{"level":40,"move":"electric-terrain"},{"level":45,"move":"sucker-punch"},{"level":50,"move":"zap-cannon"}],
+  "939": [{"level":1,"move":"mud-slap"},{"level":1,"move":"slack-off"},{"level":1,"move":"tackle"},{"level":7,"move":"thunder-shock"},{"level":11,"move":"water-gun"},{"level":17,"move":"charge"},{"level":21,"move":"spark"},{"level":24,"move":"mud-shot"},{"level":25,"move":"flail"},{"level":32,"move":"discharge"},{"level":36,"move":"weather-ball"},{"level":40,"move":"electric-terrain"},{"level":45,"move":"sucker-punch"},{"level":50,"move":"zap-cannon"}],
+  "940": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":4,"move":"thunder-shock"},{"level":7,"move":"quick-attack"},{"level":11,"move":"pluck"},{"level":15,"move":"spark"},{"level":19,"move":"uproar"},{"level":23,"move":"roost"},{"level":27,"move":"dual-wingbeat"},{"level":32,"move":"agility"},{"level":37,"move":"volt-switch"},{"level":43,"move":"discharge"}],
+  "941": [{"level":0,"move":"electro-ball"},{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":4,"move":"thunder-shock"},{"level":7,"move":"quick-attack"},{"level":11,"move":"pluck"},{"level":15,"move":"spark"},{"level":19,"move":"uproar"},{"level":24,"move":"roost"},{"level":30,"move":"dual-wingbeat"},{"level":36,"move":"agility"},{"level":43,"move":"volt-switch"},{"level":48,"move":"discharge"},{"level":55,"move":"hurricane"}],
+  "942": [{"level":1,"move":"leer"},{"level":1,"move":"scary-face"},{"level":1,"move":"tackle"},{"level":4,"move":"lick"},{"level":7,"move":"snarl"},{"level":10,"move":"hone-claws"},{"level":14,"move":"bite"},{"level":18,"move":"roar"},{"level":22,"move":"headbutt"},{"level":26,"move":"payback"},{"level":31,"move":"crunch"},{"level":35,"move":"swagger"},{"level":39,"move":"reversal"},{"level":43,"move":"jaw-lock"},{"level":49,"move":"double-edge"}],
+  "943": [{"level":0,"move":"comeuppance"},{"level":1,"move":"leer"},{"level":1,"move":"scary-face"},{"level":1,"move":"tackle"},{"level":4,"move":"lick"},{"level":7,"move":"snarl"},{"level":10,"move":"hone-claws"},{"level":14,"move":"bite"},{"level":18,"move":"roar"},{"level":22,"move":"headbutt"},{"level":26,"move":"payback"},{"level":34,"move":"crunch"},{"level":39,"move":"swagger"},{"level":43,"move":"reversal"},{"level":48,"move":"jaw-lock"},{"level":55,"move":"double-edge"},{"level":60,"move":"outrage"}],
+  "944": [{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":5,"move":"acid-spray"},{"level":8,"move":"bite"},{"level":8,"move":"fury-swipes"},{"level":11,"move":"switcheroo"},{"level":14,"move":"poison-fang"},{"level":18,"move":"flatter"},{"level":21,"move":"slash"},{"level":25,"move":"u-turn"},{"level":29,"move":"poison-jab"},{"level":33,"move":"taunt"},{"level":36,"move":"substitute"},{"level":40,"move":"knock-off"},{"level":45,"move":"gunk-shot"}],
+  "945": [{"level":0,"move":"doodle"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":5,"move":"acid-spray"},{"level":8,"move":"fury-swipes"},{"level":11,"move":"switcheroo"},{"level":14,"move":"poison-fang"},{"level":18,"move":"flatter"},{"level":21,"move":"slash"},{"level":25,"move":"u-turn"},{"level":33,"move":"poison-jab"},{"level":37,"move":"taunt"},{"level":40,"move":"substitute"},{"level":45,"move":"knock-off"},{"level":51,"move":"gunk-shot"}],
+  "946": [{"level":1,"move":"astonish"},{"level":1,"move":"defense-curl"},{"level":1,"move":"rollout"},{"level":5,"move":"absorb"},{"level":9,"move":"rapid-spin"},{"level":13,"move":"bullet-seed"},{"level":17,"move":"infestation"},{"level":21,"move":"hex"},{"level":25,"move":"mega-drain"},{"level":29,"move":"disable"},{"level":35,"move":"phantom-force"},{"level":40,"move":"giga-drain"},{"level":45,"move":"curse"},{"level":50,"move":"pain-split"},{"level":55,"move":"power-whip"}],
+  "947": [{"level":1,"move":"astonish"},{"level":1,"move":"defense-curl"},{"level":1,"move":"rollout"},{"level":5,"move":"absorb"},{"level":9,"move":"rapid-spin"},{"level":13,"move":"bullet-seed"},{"level":17,"move":"infestation"},{"level":21,"move":"hex"},{"level":25,"move":"mega-drain"},{"level":29,"move":"disable"},{"level":35,"move":"phantom-force"},{"level":40,"move":"giga-drain"},{"level":45,"move":"curse"},{"level":50,"move":"pain-split"},{"level":55,"move":"power-whip"}],
+  "948": [{"level":1,"move":"mud-slap"},{"level":1,"move":"wrap"},{"level":4,"move":"absorb"},{"level":8,"move":"poison-powder"},{"level":8,"move":"stun-spore"},{"level":12,"move":"supersonic"},{"level":15,"move":"tackle"},{"level":16,"move":"mega-drain"},{"level":20,"move":"screech"},{"level":24,"move":"mud-shot"},{"level":28,"move":"hex"},{"level":32,"move":"seed-bomb"},{"level":36,"move":"spore"},{"level":40,"move":"growth"},{"level":44,"move":"giga-drain"},{"level":48,"move":"earth-power"},{"level":52,"move":"power-whip"}],
+  "949": [{"level":1,"move":"mud-slap"},{"level":1,"move":"reflect-type"},{"level":1,"move":"wrap"},{"level":4,"move":"absorb"},{"level":8,"move":"poison-powder"},{"level":8,"move":"stun-spore"},{"level":12,"move":"supersonic"},{"level":15,"move":"tackle"},{"level":16,"move":"mega-drain"},{"level":20,"move":"screech"},{"level":24,"move":"mud-shot"},{"level":28,"move":"hex"},{"level":34,"move":"seed-bomb"},{"level":40,"move":"spore"},{"level":44,"move":"growth"},{"level":48,"move":"giga-drain"},{"level":54,"move":"earth-power"},{"level":58,"move":"power-whip"}],
+  "950": [{"level":1,"move":"rock-throw"},{"level":6,"move":"harden"},{"level":9,"move":"rock-smash"},{"level":13,"move":"rock-tomb"},{"level":17,"move":"metal-claw"},{"level":21,"move":"protect"},{"level":24,"move":"rock-blast"},{"level":29,"move":"x-scissor"},{"level":33,"move":"swords-dance"},{"level":37,"move":"flail"},{"level":42,"move":"rock-slide"},{"level":47,"move":"high-horsepower"},{"level":51,"move":"iron-defense"},{"level":56,"move":"guillotine"}],
+  "951": [{"level":1,"move":"leafage"},{"level":1,"move":"leer"},{"level":4,"move":"bite"},{"level":10,"move":"growth"},{"level":13,"move":"razor-leaf"},{"level":17,"move":"sunny-day"},{"level":21,"move":"bullet-seed"},{"level":24,"move":"headbutt"},{"level":28,"move":"zen-headbutt"},{"level":38,"move":"crunch"},{"level":44,"move":"seed-bomb"},{"level":48,"move":"solar-beam"}],
+  "952": [{"level":0,"move":"flamethrower"},{"level":0,"move":"spicy-extract"},{"level":1,"move":"fire-fang"},{"level":1,"move":"leafage"},{"level":1,"move":"leer"},{"level":4,"move":"bite"},{"level":10,"move":"growth"},{"level":13,"move":"razor-leaf"},{"level":17,"move":"sunny-day"},{"level":21,"move":"bullet-seed"},{"level":24,"move":"headbutt"},{"level":28,"move":"zen-headbutt"},{"level":33,"move":"worry-seed"},{"level":38,"move":"crunch"},{"level":44,"move":"seed-bomb"},{"level":48,"move":"overheat"},{"level":48,"move":"solar-beam"}],
+  "953": [{"level":1,"move":"defense-curl"},{"level":1,"move":"tackle"},{"level":4,"move":"sand-attack"},{"level":7,"move":"struggle-bug"},{"level":11,"move":"rollout"},{"level":15,"move":"mud-shot"},{"level":20,"move":"bug-bite"},{"level":24,"move":"take-down"},{"level":29,"move":"dig"},{"level":35,"move":"lunge"}],
+  "954": [{"level":0,"move":"revival-blessing"},{"level":1,"move":"confusion"},{"level":1,"move":"defense-curl"},{"level":1,"move":"tackle"},{"level":4,"move":"sand-attack"},{"level":7,"move":"struggle-bug"},{"level":11,"move":"rollout"},{"level":15,"move":"psybeam"},{"level":20,"move":"bug-bite"},{"level":24,"move":"take-down"},{"level":29,"move":"extrasensory"},{"level":35,"move":"lunge"},{"level":40,"move":"guard-swap"},{"level":40,"move":"power-swap"},{"level":40,"move":"speed-swap"},{"level":45,"move":"bug-buzz"},{"level":50,"move":"psychic"}],
+  "955": [{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":5,"move":"confusion"},{"level":8,"move":"baby-doll-eyes"},{"level":11,"move":"disarming-voice"},{"level":15,"move":"quick-attack"},{"level":19,"move":"psybeam"},{"level":24,"move":"pluck"},{"level":29,"move":"agility"},{"level":34,"move":"uproar"}],
+  "956": [{"level":0,"move":"lumina-crash"},{"level":1,"move":"drill-peck"},{"level":1,"move":"feather-dance"},{"level":1,"move":"growl"},{"level":1,"move":"peck"},{"level":5,"move":"confusion"},{"level":8,"move":"baby-doll-eyes"},{"level":11,"move":"disarming-voice"},{"level":15,"move":"quick-attack"},{"level":19,"move":"psybeam"},{"level":24,"move":"pluck"},{"level":29,"move":"agility"},{"level":34,"move":"uproar"},{"level":43,"move":"dazzling-gleam"},{"level":49,"move":"psychic"},{"level":54,"move":"last-resort"}],
+  "957": [{"level":1,"move":"astonish"},{"level":1,"move":"fairy-wind"},{"level":5,"move":"baby-doll-eyes"},{"level":8,"move":"metal-claw"},{"level":11,"move":"covet"},{"level":14,"move":"rock-smash"},{"level":17,"move":"draining-kiss"},{"level":21,"move":"sweet-kiss"},{"level":24,"move":"brutal-swing"},{"level":27,"move":"slam"},{"level":31,"move":"flash-cannon"},{"level":35,"move":"play-rough"},{"level":39,"move":"fake-out"},{"level":43,"move":"flatter"},{"level":47,"move":"skitter-smack"},{"level":52,"move":"knock-off"}],
+  "958": [{"level":1,"move":"astonish"},{"level":1,"move":"fairy-wind"},{"level":5,"move":"baby-doll-eyes"},{"level":8,"move":"metal-claw"},{"level":11,"move":"covet"},{"level":14,"move":"rock-smash"},{"level":17,"move":"draining-kiss"},{"level":21,"move":"sweet-kiss"},{"level":24,"move":"brutal-swing"},{"level":27,"move":"slam"},{"level":31,"move":"flash-cannon"},{"level":35,"move":"play-rough"},{"level":39,"move":"fake-out"},{"level":43,"move":"flatter"},{"level":47,"move":"skitter-smack"},{"level":52,"move":"knock-off"}],
+  "959": [{"level":0,"move":"gigaton-hammer"},{"level":1,"move":"astonish"},{"level":1,"move":"fairy-wind"},{"level":5,"move":"baby-doll-eyes"},{"level":8,"move":"metal-claw"},{"level":11,"move":"covet"},{"level":14,"move":"rock-smash"},{"level":17,"move":"draining-kiss"},{"level":21,"move":"sweet-kiss"},{"level":24,"move":"brutal-swing"},{"level":27,"move":"slam"},{"level":31,"move":"flash-cannon"},{"level":35,"move":"play-rough"},{"level":39,"move":"fake-out"},{"level":43,"move":"flatter"},{"level":47,"move":"skitter-smack"},{"level":52,"move":"knock-off"}],
+  "960": [{"level":1,"move":"sand-attack"},{"level":1,"move":"water-gun"},{"level":4,"move":"mud-slap"},{"level":8,"move":"wrap"},{"level":12,"move":"aqua-jet"},{"level":20,"move":"slam"},{"level":20,"move":"water-pulse"},{"level":24,"move":"headbutt"},{"level":28,"move":"dig"},{"level":32,"move":"sucker-punch"},{"level":36,"move":"throat-chop"},{"level":40,"move":"liquidation"}],
+  "961": [{"level":1,"move":"mud-slap"},{"level":1,"move":"sand-attack"},{"level":1,"move":"water-gun"},{"level":1,"move":"wrap"},{"level":12,"move":"aqua-jet"},{"level":16,"move":"slam"},{"level":20,"move":"water-pulse"},{"level":24,"move":"headbutt"},{"level":30,"move":"triple-dive"},{"level":36,"move":"dig"},{"level":42,"move":"sucker-punch"},{"level":48,"move":"throat-chop"},{"level":54,"move":"liquidation"}],
+  "962": [{"level":1,"move":"hone-claws"},{"level":1,"move":"leer"},{"level":1,"move":"memento"},{"level":1,"move":"peck"},{"level":1,"move":"wing-attack"},{"level":7,"move":"thief"},{"level":11,"move":"rock-throw"},{"level":16,"move":"whirlwind"},{"level":20,"move":"pluck"},{"level":24,"move":"torment"},{"level":29,"move":"rock-tomb"},{"level":36,"move":"payback"},{"level":42,"move":"dual-wingbeat"},{"level":47,"move":"rock-slide"},{"level":53,"move":"knock-off"},{"level":60,"move":"parting-shot"}],
+  "963": [{"level":1,"move":"supersonic"},{"level":1,"move":"water-gun"},{"level":7,"move":"astonish"},{"level":10,"move":"focus-energy"},{"level":13,"move":"aqua-jet"},{"level":17,"move":"double-hit"},{"level":21,"move":"dive"},{"level":25,"move":"charm"},{"level":29,"move":"acrobatics"},{"level":34,"move":"encore"},{"level":39,"move":"aqua-tail"},{"level":44,"move":"mist"},{"level":50,"move":"hydro-pump"}],
+  "964": [{"level":0,"move":"flip-turn"},{"level":1,"move":"jet-punch"},{"level":1,"move":"supersonic"},{"level":1,"move":"water-gun"},{"level":7,"move":"astonish"},{"level":10,"move":"focus-energy"},{"level":13,"move":"aqua-jet"},{"level":17,"move":"double-hit"},{"level":21,"move":"dive"},{"level":25,"move":"charm"},{"level":29,"move":"acrobatics"},{"level":34,"move":"encore"},{"level":39,"move":"aqua-tail"},{"level":44,"move":"mist"},{"level":50,"move":"hydro-pump"},{"level":55,"move":"focus-punch"},{"level":61,"move":"wave-crash"}],
+  "965": [{"level":1,"move":"lick"},{"level":1,"move":"poison-gas"},{"level":4,"move":"smog"},{"level":7,"move":"taunt"},{"level":10,"move":"assurance"},{"level":13,"move":"sludge"},{"level":17,"move":"gyro-ball"},{"level":21,"move":"headbutt"},{"level":25,"move":"screech"},{"level":28,"move":"iron-head"},{"level":32,"move":"swagger"},{"level":36,"move":"poison-jab"},{"level":41,"move":"uproar"},{"level":46,"move":"spin-out"},{"level":50,"move":"gunk-shot"}],
+  "966": [{"level":0,"move":"shift-gear"},{"level":1,"move":"lick"},{"level":1,"move":"magnet-rise"},{"level":1,"move":"poison-gas"},{"level":4,"move":"smog"},{"level":7,"move":"taunt"},{"level":10,"move":"assurance"},{"level":13,"move":"sludge"},{"level":17,"move":"gyro-ball"},{"level":21,"move":"headbutt"},{"level":25,"move":"screech"},{"level":28,"move":"iron-head"},{"level":32,"move":"swagger"},{"level":36,"move":"poison-jab"},{"level":46,"move":"uproar"},{"level":52,"move":"spin-out"},{"level":58,"move":"gunk-shot"}],
+  "967": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":7,"move":"rapid-spin"},{"level":11,"move":"taunt"},{"level":14,"move":"breaking-swipe"},{"level":18,"move":"quick-attack"},{"level":23,"move":"bite"},{"level":27,"move":"u-turn"},{"level":31,"move":"shed-tail"},{"level":36,"move":"dragon-claw"},{"level":40,"move":"shift-gear"},{"level":45,"move":"dragon-pulse"},{"level":51,"move":"double-edge"},{"level":57,"move":"dragon-rush"}],
+  "968": [{"level":1,"move":"harden"},{"level":1,"move":"tackle"},{"level":1,"move":"wrap"},{"level":7,"move":"mud-slap"},{"level":12,"move":"smack-down"},{"level":16,"move":"bulldoze"},{"level":21,"move":"iron-head"},{"level":26,"move":"take-down"},{"level":30,"move":"dig"},{"level":34,"move":"sandstorm"},{"level":38,"move":"iron-defense"},{"level":43,"move":"iron-tail"},{"level":47,"move":"earthquake"},{"level":52,"move":"shed-tail"}],
+  "969": [{"level":1,"move":"harden"},{"level":1,"move":"rock-throw"},{"level":1,"move":"smack-down"},{"level":7,"move":"acid-spray"},{"level":11,"move":"ancient-power"},{"level":15,"move":"rock-polish"},{"level":18,"move":"stealth-rock"},{"level":22,"move":"venoshock"},{"level":26,"move":"sandstorm"},{"level":29,"move":"self-destruct"},{"level":33,"move":"rock-slide"},{"level":37,"move":"power-gem"},{"level":41,"move":"acid-armor"},{"level":46,"move":"sludge-wave"}],
+  "970": [{"level":0,"move":"mortal-spin"},{"level":1,"move":"harden"},{"level":1,"move":"rock-throw"},{"level":1,"move":"smack-down"},{"level":1,"move":"spiky-shield"},{"level":1,"move":"toxic-spikes"},{"level":7,"move":"acid-spray"},{"level":11,"move":"ancient-power"},{"level":15,"move":"rock-polish"},{"level":18,"move":"stealth-rock"},{"level":22,"move":"venoshock"},{"level":26,"move":"sandstorm"},{"level":29,"move":"self-destruct"},{"level":33,"move":"rock-slide"},{"level":39,"move":"power-gem"},{"level":44,"move":"acid-armor"},{"level":50,"move":"sludge-wave"}],
+  "971": [{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":3,"move":"lick"},{"level":6,"move":"bite"},{"level":6,"move":"tail-whip"},{"level":9,"move":"roar"},{"level":12,"move":"headbutt"},{"level":16,"move":"dig"},{"level":24,"move":"rest"},{"level":28,"move":"crunch"},{"level":32,"move":"play-rough"},{"level":37,"move":"helping-hand"},{"level":41,"move":"phantom-force"},{"level":46,"move":"charm"},{"level":52,"move":"double-edge"}],
+  "972": [{"level":0,"move":"last-respects"},{"level":1,"move":"growl"},{"level":1,"move":"tackle"},{"level":3,"move":"lick"},{"level":6,"move":"bite"},{"level":6,"move":"tail-whip"},{"level":9,"move":"roar"},{"level":12,"move":"headbutt"},{"level":16,"move":"dig"},{"level":24,"move":"rest"},{"level":28,"move":"crunch"},{"level":36,"move":"play-rough"},{"level":41,"move":"helping-hand"},{"level":46,"move":"phantom-force"},{"level":51,"move":"charm"},{"level":58,"move":"double-edge"}],
+  "973": [{"level":1,"move":"copycat"},{"level":1,"move":"peck"},{"level":5,"move":"double-kick"},{"level":9,"move":"detect"},{"level":12,"move":"wing-attack"},{"level":15,"move":"focus-energy"},{"level":18,"move":"low-kick"},{"level":21,"move":"feint"},{"level":27,"move":"payback"},{"level":31,"move":"roost"},{"level":35,"move":"air-slash"},{"level":39,"move":"mega-kick"},{"level":44,"move":"wide-guard"},{"level":48,"move":"throat-chop"},{"level":54,"move":"brave-bird"}],
+  "974": [{"level":1,"move":"powder-snow"},{"level":1,"move":"tackle"},{"level":6,"move":"growl"},{"level":9,"move":"echoed-voice"},{"level":12,"move":"ice-shard"},{"level":15,"move":"rest"},{"level":19,"move":"take-down"},{"level":25,"move":"flail"},{"level":27,"move":"avalanche"},{"level":31,"move":"bounce"},{"level":36,"move":"body-slam"},{"level":40,"move":"amnesia"},{"level":44,"move":"ice-spinner"},{"level":49,"move":"double-edge"},{"level":53,"move":"blizzard"}],
+  "975": [{"level":1,"move":"powder-snow"},{"level":1,"move":"tackle"},{"level":6,"move":"growl"},{"level":9,"move":"echoed-voice"},{"level":12,"move":"ice-shard"},{"level":15,"move":"rest"},{"level":19,"move":"take-down"},{"level":25,"move":"flail"},{"level":27,"move":"avalanche"},{"level":31,"move":"bounce"},{"level":36,"move":"body-slam"},{"level":40,"move":"amnesia"},{"level":44,"move":"ice-spinner"},{"level":49,"move":"double-edge"},{"level":53,"move":"blizzard"}],
+  "976": [{"level":1,"move":"aqua-jet"},{"level":1,"move":"tackle"},{"level":7,"move":"pluck"},{"level":11,"move":"water-pulse"},{"level":15,"move":"focus-energy"},{"level":20,"move":"slash"},{"level":25,"move":"aqua-cutter"},{"level":30,"move":"fillet-away"},{"level":35,"move":"night-slash"},{"level":40,"move":"psycho-cut"},{"level":45,"move":"liquidation"},{"level":50,"move":"crunch"},{"level":55,"move":"final-gambit"}],
+  "977": [{"level":1,"move":"supersonic"},{"level":1,"move":"tackle"},{"level":1,"move":"water-gun"},{"level":5,"move":"tickle"},{"level":10,"move":"flail"},{"level":15,"move":"rest"},{"level":15,"move":"sleep-talk"},{"level":20,"move":"dive"},{"level":25,"move":"noble-roar"},{"level":30,"move":"soak"},{"level":35,"move":"body-slam"},{"level":40,"move":"aqua-tail"},{"level":45,"move":"rain-dance"},{"level":50,"move":"order-up"},{"level":55,"move":"heavy-slam"},{"level":60,"move":"double-edge"},{"level":65,"move":"wave-crash"}],
+  "978": [{"level":1,"move":"splash"},{"level":1,"move":"water-gun"},{"level":6,"move":"harden"},{"level":12,"move":"helping-hand"},{"level":17,"move":"water-pulse"},{"level":23,"move":"soak"},{"level":28,"move":"taunt"},{"level":34,"move":"memento"},{"level":39,"move":"muddy-water"},{"level":43,"move":"nasty-plot"},{"level":47,"move":"mirror-coat"},{"level":52,"move":"dragon-pulse"}],
+  "979": [{"level":0,"move":"shadow-punch"},{"level":1,"move":"counter"},{"level":1,"move":"fling"},{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":1,"move":"scratch"},{"level":5,"move":"fury-swipes"},{"level":8,"move":"low-kick"},{"level":12,"move":"seismic-toss"},{"level":17,"move":"swagger"},{"level":22,"move":"cross-chop"},{"level":26,"move":"assurance"},{"level":30,"move":"thrash"},{"level":35,"move":"rage-fist"},{"level":39,"move":"close-combat"},{"level":44,"move":"screech"},{"level":48,"move":"stomping-tantrum"},{"level":53,"move":"outrage"},{"level":57,"move":"final-gambit"}],
+  "980": [{"level":0,"move":"amnesia"},{"level":1,"move":"poison-sting"},{"level":1,"move":"tail-whip"},{"level":4,"move":"toxic-spikes"},{"level":8,"move":"mud-shot"},{"level":12,"move":"poison-tail"},{"level":16,"move":"slam"},{"level":21,"move":"yawn"},{"level":24,"move":"poison-jab"},{"level":30,"move":"sludge-wave"},{"level":36,"move":"megahorn"},{"level":40,"move":"toxic"},{"level":48,"move":"earthquake"}],
+  "981": [{"level":1,"move":"astonish"},{"level":1,"move":"growl"},{"level":1,"move":"guard-swap"},{"level":1,"move":"power-swap"},{"level":1,"move":"tackle"},{"level":5,"move":"confusion"},{"level":10,"move":"assurance"},{"level":14,"move":"stomp"},{"level":19,"move":"psybeam"},{"level":23,"move":"agility"},{"level":28,"move":"double-hit"},{"level":32,"move":"twin-beam"},{"level":37,"move":"crunch"},{"level":41,"move":"baton-pass"},{"level":46,"move":"nasty-plot"},{"level":50,"move":"psychic"}],
+  "982": [{"level":1,"move":"defense-curl"},{"level":1,"move":"flail"},{"level":4,"move":"mud-slap"},{"level":8,"move":"rollout"},{"level":12,"move":"glare"},{"level":16,"move":"screech"},{"level":20,"move":"ancient-power"},{"level":24,"move":"drill-run"},{"level":28,"move":"yawn"},{"level":32,"move":"hyper-drill"},{"level":36,"move":"roost"},{"level":40,"move":"dragon-rush"},{"level":44,"move":"coil"},{"level":48,"move":"double-edge"},{"level":52,"move":"endeavor"},{"level":56,"move":"hurricane"},{"level":62,"move":"boomburst"}],
+  "983": [{"level":0,"move":"kowtow-cleave"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"leer"},{"level":1,"move":"metal-burst"},{"level":1,"move":"metal-claw"},{"level":1,"move":"scratch"},{"level":15,"move":"torment"},{"level":20,"move":"scary-face"},{"level":25,"move":"assurance"},{"level":30,"move":"metal-sound"},{"level":35,"move":"slash"},{"level":40,"move":"night-slash"},{"level":45,"move":"iron-defense"},{"level":50,"move":"retaliate"},{"level":57,"move":"iron-head"},{"level":64,"move":"swords-dance"},{"level":71,"move":"guillotine"}],
+  "984": [{"level":1,"move":"defense-curl"},{"level":1,"move":"horn-attack"},{"level":1,"move":"rollout"},{"level":1,"move":"sunny-day"},{"level":7,"move":"bulldoze"},{"level":14,"move":"taunt"},{"level":21,"move":"rapid-spin"},{"level":28,"move":"brick-break"},{"level":35,"move":"stomping-tantrum"},{"level":42,"move":"knock-off"},{"level":49,"move":"earthquake"},{"level":56,"move":"giga-impact"},{"level":63,"move":"close-combat"},{"level":70,"move":"endeavor"},{"level":77,"move":"megahorn"},{"level":84,"move":"head-smash"},{"level":91,"move":"headlong-rush"}],
+  "985": [{"level":1,"move":"disable"},{"level":1,"move":"pound"},{"level":1,"move":"sing"},{"level":7,"move":"howl"},{"level":14,"move":"noble-roar"},{"level":21,"move":"bite"},{"level":28,"move":"body-slam"},{"level":35,"move":"rest"},{"level":42,"move":"play-rough"},{"level":49,"move":"hyper-voice"},{"level":56,"move":"psychic-fangs"},{"level":63,"move":"crunch"},{"level":70,"move":"wish"},{"level":77,"move":"gyro-ball"},{"level":84,"move":"perish-song"},{"level":91,"move":"boomburst"}],
+  "986": [{"level":1,"move":"absorb"},{"level":1,"move":"astonish"},{"level":1,"move":"growth"},{"level":7,"move":"stun-spore"},{"level":14,"move":"mega-drain"},{"level":21,"move":"synthesis"},{"level":28,"move":"clear-smog"},{"level":35,"move":"payback"},{"level":42,"move":"thrash"},{"level":49,"move":"giga-drain"},{"level":56,"move":"sucker-punch"},{"level":63,"move":"spore"},{"level":70,"move":"ingrain"},{"level":77,"move":"rage-powder"},{"level":91,"move":"solar-beam"}],
+  "987": [{"level":1,"move":"astonish"},{"level":1,"move":"confuse-ray"},{"level":1,"move":"spite"},{"level":7,"move":"psybeam"},{"level":14,"move":"mean-look"},{"level":21,"move":"memento"},{"level":28,"move":"wish"},{"level":35,"move":"dazzling-gleam"},{"level":42,"move":"shadow-ball"},{"level":49,"move":"mystical-fire"},{"level":56,"move":"power-gem"},{"level":63,"move":"psyshock"},{"level":70,"move":"phantom-force"},{"level":77,"move":"pain-split"},{"level":84,"move":"moonblast"},{"level":91,"move":"perish-song"}],
+  "988": [{"level":1,"move":"bug-bite"},{"level":1,"move":"ember"},{"level":1,"move":"gust"},{"level":7,"move":"poison-powder"},{"level":7,"move":"stun-spore"},{"level":14,"move":"flame-charge"},{"level":21,"move":"stomp"},{"level":28,"move":"low-sweep"},{"level":35,"move":"morning-sun"},{"level":42,"move":"lunge"},{"level":49,"move":"superpower"},{"level":56,"move":"bulk-up"},{"level":63,"move":"dual-wingbeat"},{"level":70,"move":"first-impression"},{"level":77,"move":"whirlwind"},{"level":84,"move":"leech-life"},{"level":91,"move":"thrash"}],
+  "989": [{"level":1,"move":"electric-terrain"},{"level":1,"move":"supersonic"},{"level":1,"move":"thunder-shock"},{"level":1,"move":"thunder-wave"},{"level":7,"move":"spark"},{"level":14,"move":"bulldoze"},{"level":21,"move":"charge-beam"},{"level":28,"move":"tri-attack"},{"level":35,"move":"screech"},{"level":42,"move":"heavy-slam"},{"level":49,"move":"metal-sound"},{"level":56,"move":"discharge"},{"level":63,"move":"earth-power"},{"level":70,"move":"mirror-coat"},{"level":77,"move":"gravity"},{"level":84,"move":"zap-cannon"},{"level":91,"move":"magnetic-flux"}],
+  "990": [{"level":1,"move":"defense-curl"},{"level":1,"move":"electric-terrain"},{"level":1,"move":"horn-attack"},{"level":1,"move":"rollout"},{"level":7,"move":"bulldoze"},{"level":21,"move":"rapid-spin"},{"level":28,"move":"iron-head"},{"level":35,"move":"stomping-tantrum"},{"level":42,"move":"knock-off"},{"level":49,"move":"earthquake"},{"level":56,"move":"heavy-slam"},{"level":63,"move":"wild-charge"},{"level":70,"move":"endeavor"},{"level":77,"move":"megahorn"},{"level":84,"move":"giga-impact"},{"level":91,"move":"steel-roller"}],
+  "991": [{"level":1,"move":"present"},{"level":7,"move":"powder-snow"},{"level":14,"move":"whirlpool"},{"level":21,"move":"take-down"},{"level":28,"move":"drill-peck"},{"level":35,"move":"helping-hand"},{"level":42,"move":"freeze-dry"},{"level":49,"move":"flip-turn"},{"level":56,"move":"ice-beam"},{"level":63,"move":"agility"},{"level":70,"move":"snowscape"},{"level":77,"move":"hydro-pump"},{"level":84,"move":"aurora-veil"},{"level":91,"move":"blizzard"}],
+  "992": [{"level":1,"move":"arm-thrust"},{"level":1,"move":"focus-energy"},{"level":1,"move":"sand-attack"},{"level":1,"move":"tackle"},{"level":7,"move":"fake-out"},{"level":14,"move":"whirlwind"},{"level":21,"move":"thunder-punch"},{"level":28,"move":"slam"},{"level":35,"move":"force-palm"},{"level":42,"move":"seismic-toss"},{"level":49,"move":"charge"},{"level":56,"move":"wild-charge"},{"level":63,"move":"close-combat"},{"level":70,"move":"detect"},{"level":77,"move":"heavy-slam"},{"level":84,"move":"belly-drum"},{"level":91,"move":"focus-punch"}],
+  "993": [{"level":1,"move":"air-cutter"},{"level":1,"move":"electric-terrain"},{"level":1,"move":"focus-energy"},{"level":1,"move":"tri-attack"},{"level":1,"move":"work-up"},{"level":7,"move":"roar"},{"level":14,"move":"assurance"},{"level":21,"move":"dragon-breath"},{"level":28,"move":"snarl"},{"level":35,"move":"crunch"},{"level":42,"move":"hyper-voice"},{"level":56,"move":"air-slash"},{"level":63,"move":"knock-off"},{"level":70,"move":"dark-pulse"},{"level":77,"move":"outrage"},{"level":84,"move":"dragon-pulse"},{"level":91,"move":"hyper-beam"}],
+  "994": [{"level":1,"move":"acid-spray"},{"level":1,"move":"ember"},{"level":1,"move":"gust"},{"level":1,"move":"whirlwind"},{"level":7,"move":"struggle-bug"},{"level":14,"move":"fire-spin"},{"level":21,"move":"take-down"},{"level":28,"move":"lunge"},{"level":35,"move":"screech"},{"level":42,"move":"discharge"},{"level":49,"move":"sludge-wave"},{"level":56,"move":"fiery-dance"},{"level":63,"move":"metal-sound"},{"level":70,"move":"morning-sun"},{"level":77,"move":"hurricane"},{"level":84,"move":"bug-buzz"},{"level":91,"move":"overheat"}],
+  "995": [{"level":1,"move":"fire-fang"},{"level":1,"move":"ice-fang"},{"level":1,"move":"iron-defense"},{"level":1,"move":"rock-throw"},{"level":1,"move":"thunder-fang"},{"level":7,"move":"screech"},{"level":21,"move":"rock-tomb"},{"level":28,"move":"bite"},{"level":35,"move":"charge"},{"level":42,"move":"rock-slide"},{"level":49,"move":"sandstorm"},{"level":56,"move":"wild-charge"},{"level":63,"move":"pin-missile"},{"level":70,"move":"earthquake"},{"level":77,"move":"stealth-rock"},{"level":84,"move":"stone-edge"},{"level":91,"move":"giga-impact"}],
+  "996": [{"level":1,"move":"dragon-tail"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":6,"move":"icy-wind"},{"level":12,"move":"dragon-breath"},{"level":18,"move":"focus-energy"},{"level":24,"move":"bite"},{"level":29,"move":"ice-fang"},{"level":32,"move":"dragon-claw"},{"level":36,"move":"take-down"},{"level":40,"move":"ice-beam"},{"level":44,"move":"crunch"},{"level":48,"move":"icicle-crash"}],
+  "997": [{"level":1,"move":"dragon-tail"},{"level":1,"move":"leer"},{"level":1,"move":"tackle"},{"level":6,"move":"icy-wind"},{"level":12,"move":"dragon-breath"},{"level":18,"move":"focus-energy"},{"level":24,"move":"bite"},{"level":29,"move":"ice-fang"},{"level":40,"move":"take-down"},{"level":45,"move":"ice-beam"},{"level":50,"move":"crunch"},{"level":55,"move":"icicle-crash"}],
+  "998": [{"level":0,"move":"glaive-rush"},{"level":1,"move":"breaking-swipe"},{"level":1,"move":"dragon-tail"},{"level":1,"move":"ice-shard"},{"level":1,"move":"leer"},{"level":1,"move":"snowscape"},{"level":1,"move":"tackle"},{"level":6,"move":"icy-wind"},{"level":12,"move":"dragon-breath"},{"level":18,"move":"focus-energy"},{"level":24,"move":"bite"},{"level":29,"move":"ice-fang"},{"level":35,"move":"dragon-claw"},{"level":42,"move":"take-down"},{"level":48,"move":"ice-beam"},{"level":55,"move":"crunch"},{"level":62,"move":"icicle-crash"}],
+  "999": [{"level":1,"move":"astonish"},{"level":1,"move":"tackle"}],
+  "1000": [{"level":1,"move":"astonish"},{"level":1,"move":"tackle"},{"level":7,"move":"night-shade"},{"level":14,"move":"confuse-ray"},{"level":21,"move":"substitute"},{"level":28,"move":"metal-sound"},{"level":35,"move":"shadow-ball"},{"level":42,"move":"recover"},{"level":49,"move":"power-gem"},{"level":56,"move":"make-it-rain"},{"level":63,"move":"nasty-plot"},{"level":70,"move":"memento"}],
+  "1001": [{"level":1,"move":"absorb"},{"level":1,"move":"mean-look"},{"level":1,"move":"spite"},{"level":5,"move":"tickle"},{"level":10,"move":"payback"},{"level":15,"move":"poison-powder"},{"level":15,"move":"stun-spore"},{"level":20,"move":"mega-drain"},{"level":25,"move":"leech-seed"},{"level":30,"move":"growth"},{"level":35,"move":"ingrain"},{"level":40,"move":"dark-pulse"},{"level":45,"move":"giga-drain"},{"level":50,"move":"ruination"},{"level":55,"move":"foul-play"},{"level":60,"move":"power-whip"},{"level":65,"move":"grassy-terrain"},{"level":70,"move":"knock-off"},{"level":75,"move":"leaf-storm"}],
+  "1002": [{"level":1,"move":"mean-look"},{"level":1,"move":"powder-snow"},{"level":1,"move":"spite"},{"level":5,"move":"icy-wind"},{"level":10,"move":"payback"},{"level":15,"move":"haze"},{"level":15,"move":"mist"},{"level":20,"move":"ice-shard"},{"level":25,"move":"swords-dance"},{"level":30,"move":"snowscape"},{"level":35,"move":"night-slash"},{"level":40,"move":"dark-pulse"},{"level":45,"move":"icicle-crash"},{"level":50,"move":"ruination"},{"level":55,"move":"sucker-punch"},{"level":60,"move":"sacred-sword"},{"level":65,"move":"recover"},{"level":70,"move":"throat-chop"},{"level":75,"move":"sheer-cold"}],
+  "1003": [{"level":1,"move":"mean-look"},{"level":1,"move":"sand-tomb"},{"level":1,"move":"spite"},{"level":5,"move":"spikes"},{"level":10,"move":"payback"},{"level":15,"move":"stomp"},{"level":20,"move":"bulldoze"},{"level":25,"move":"whirlwind"},{"level":30,"move":"taunt"},{"level":35,"move":"thrash"},{"level":40,"move":"dark-pulse"},{"level":45,"move":"stomping-tantrum"},{"level":50,"move":"ruination"},{"level":55,"move":"throat-chop"},{"level":60,"move":"rock-slide"},{"level":65,"move":"memento"},{"level":70,"move":"earthquake"},{"level":75,"move":"fissure"}],
+  "1004": [{"level":1,"move":"ember"},{"level":1,"move":"mean-look"},{"level":1,"move":"spite"},{"level":5,"move":"flame-wheel"},{"level":10,"move":"payback"},{"level":15,"move":"will-o-wisp"},{"level":20,"move":"flame-charge"},{"level":25,"move":"incinerate"},{"level":30,"move":"confuse-ray"},{"level":35,"move":"nasty-plot"},{"level":40,"move":"dark-pulse"},{"level":45,"move":"lava-plume"},{"level":50,"move":"ruination"},{"level":55,"move":"bounce"},{"level":60,"move":"swagger"},{"level":65,"move":"inferno"},{"level":70,"move":"memento"},{"level":75,"move":"overheat"}],
+  "1005": [{"level":1,"move":"bite"},{"level":1,"move":"dragon-breath"},{"level":1,"move":"focus-energy"},{"level":1,"move":"leer"},{"level":7,"move":"incinerate"},{"level":14,"move":"headbutt"},{"level":21,"move":"scary-face"},{"level":28,"move":"dragon-claw"},{"level":35,"move":"zen-headbutt"},{"level":42,"move":"flamethrower"},{"level":49,"move":"night-slash"},{"level":56,"move":"dragon-dance"},{"level":63,"move":"dragon-rush"},{"level":70,"move":"fly"},{"level":77,"move":"throat-chop"},{"level":84,"move":"roost"},{"level":91,"move":"double-edge"}],
+  "1006": [{"level":1,"move":"disable"},{"level":1,"move":"double-team"},{"level":1,"move":"fury-cutter"},{"level":1,"move":"shadow-sneak"},{"level":7,"move":"hypnosis"},{"level":14,"move":"feint"},{"level":21,"move":"future-sight"},{"level":28,"move":"dazzling-gleam"},{"level":35,"move":"psycho-cut"},{"level":42,"move":"night-slash"},{"level":49,"move":"leaf-blade"},{"level":56,"move":"moonblast"},{"level":63,"move":"close-combat"},{"level":70,"move":"knock-off"},{"level":77,"move":"destiny-bond"},{"level":84,"move":"quick-guard"},{"level":84,"move":"wide-guard"},{"level":91,"move":"spirit-break"}],
+  "1007": [{"level":1,"move":"breaking-swipe"},{"level":1,"move":"sunny-day"},{"level":7,"move":"rock-smash"},{"level":14,"move":"ancient-power"},{"level":21,"move":"drain-punch"},{"level":28,"move":"brick-break"},{"level":35,"move":"agility"},{"level":42,"move":"dragon-claw"},{"level":49,"move":"flamethrower"},{"level":56,"move":"collision-course"},{"level":63,"move":"screech"},{"level":70,"move":"counter"},{"level":77,"move":"outrage"},{"level":84,"move":"close-combat"},{"level":91,"move":"flare-blitz"},{"level":98,"move":"giga-impact"}],
+  "1008": [{"level":1,"move":"dragon-breath"},{"level":1,"move":"electric-terrain"},{"level":1,"move":"thunder-shock"},{"level":7,"move":"shock-wave"},{"level":14,"move":"charge"},{"level":21,"move":"parabolic-charge"},{"level":28,"move":"discharge"},{"level":35,"move":"agility"},{"level":42,"move":"dragon-pulse"},{"level":56,"move":"electro-drift"},{"level":63,"move":"metal-sound"},{"level":70,"move":"mirror-coat"},{"level":77,"move":"outrage"},{"level":84,"move":"thunder"},{"level":91,"move":"overheat"},{"level":98,"move":"hyper-beam"}],
+  "1009": [{"level":0,"move":"aqua-jet"},{"level":0,"move":"leer"},{"level":0,"move":"roar"},{"level":0,"move":"twister"},{"level":7,"move":"bite"},{"level":14,"move":"water-pulse"},{"level":21,"move":"noble-roar"},{"level":28,"move":"dragon-breath"},{"level":35,"move":"breaking-swipe"},{"level":42,"move":"dragon-rush"},{"level":56,"move":"hydro-steam"},{"level":63,"move":"dragon-pulse"},{"level":70,"move":"outrage"},{"level":77,"move":"flamethrower"},{"level":84,"move":"hydro-pump"}],
+  "1010": [{"level":0,"move":"helping-hand"},{"level":0,"move":"leer"},{"level":0,"move":"quick-attack"},{"level":0,"move":"work-up"},{"level":7,"move":"magical-leaf"},{"level":14,"move":"retaliate"},{"level":21,"move":"quick-guard"},{"level":28,"move":"night-slash"},{"level":35,"move":"swords-dance"},{"level":42,"move":"sacred-sword"},{"level":49,"move":"leaf-blade"},{"level":56,"move":"psyblade"},{"level":63,"move":"close-combat"},{"level":70,"move":"imprison"},{"level":77,"move":"megahorn"},{"level":84,"move":"ally-switch"},{"level":91,"move":"solar-blade"}],
+  "1011": [{"level":0,"move":"double-hit"},{"level":1,"move":"astonish"},{"level":1,"move":"recycle"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"withdraw"},{"level":4,"move":"dragon-tail"},{"level":8,"move":"growth"},{"level":12,"move":"dragon-breath"},{"level":16,"move":"protect"},{"level":20,"move":"bullet-seed"},{"level":28,"move":"syrup-bomb"},{"level":32,"move":"dragon-pulse"},{"level":36,"move":"recover"},{"level":40,"move":"energy-ball"},{"level":44,"move":"substitute"}],
+  "1012": [{"level":1,"move":"astonish"},{"level":1,"move":"stun-spore"},{"level":1,"move":"withdraw"},{"level":6,"move":"absorb"},{"level":12,"move":"life-dew"},{"level":18,"move":"foul-play"},{"level":24,"move":"mega-drain"},{"level":30,"move":"hex"},{"level":36,"move":"rage-powder"},{"level":42,"move":"giga-drain"},{"level":48,"move":"shadow-ball"},{"level":54,"move":"memento"},{"level":60,"move":"leaf-storm"}],
+  "1013": [{"level":0,"move":"matcha-gotcha"},{"level":1,"move":"astonish"},{"level":1,"move":"stun-spore"},{"level":1,"move":"withdraw"},{"level":6,"move":"absorb"},{"level":12,"move":"life-dew"},{"level":18,"move":"foul-play"},{"level":24,"move":"mega-drain"},{"level":30,"move":"hex"},{"level":36,"move":"rage-powder"},{"level":42,"move":"strength-sap"},{"level":48,"move":"shadow-ball"},{"level":54,"move":"memento"},{"level":60,"move":"leaf-storm"}],
+  "1014": [{"level":1,"move":"bite"},{"level":1,"move":"bulk-up"},{"level":1,"move":"low-kick"},{"level":8,"move":"howl"},{"level":16,"move":"poison-fang"},{"level":24,"move":"force-palm"},{"level":32,"move":"counter"},{"level":40,"move":"poison-jab"},{"level":48,"move":"brutal-swing"},{"level":56,"move":"crunch"},{"level":64,"move":"superpower"},{"level":72,"move":"giga-impact"}],
+  "1015": [{"level":1,"move":"confusion"},{"level":1,"move":"fake-out"},{"level":1,"move":"flatter"},{"level":1,"move":"scratch"},{"level":8,"move":"helping-hand"},{"level":16,"move":"psybeam"},{"level":24,"move":"clear-smog"},{"level":32,"move":"poison-jab"},{"level":40,"move":"psychic"},{"level":48,"move":"sludge-wave"},{"level":56,"move":"nasty-plot"},{"level":64,"move":"future-sight"},{"level":72,"move":"parting-shot"}],
+  "1016": [{"level":1,"move":"disarming-voice"},{"level":1,"move":"double-kick"},{"level":1,"move":"peck"},{"level":1,"move":"poison-gas"},{"level":8,"move":"quick-attack"},{"level":16,"move":"attract"},{"level":24,"move":"wing-attack"},{"level":32,"move":"cross-poison"},{"level":40,"move":"tail-slap"},{"level":48,"move":"beat-up"},{"level":56,"move":"flatter"},{"level":56,"move":"swagger"},{"level":64,"move":"roost"},{"level":72,"move":"moonblast"}],
+  "1017": [{"level":1,"move":"follow-me"},{"level":1,"move":"leech-seed"},{"level":1,"move":"quick-attack"},{"level":1,"move":"vine-whip"},{"level":6,"move":"focus-energy"},{"level":12,"move":"growth"},{"level":18,"move":"slam"},{"level":24,"move":"low-sweep"},{"level":30,"move":"ivy-cudgel"},{"level":36,"move":"throat-chop"},{"level":42,"move":"synthesis"},{"level":48,"move":"spiky-shield"},{"level":54,"move":"power-whip"},{"level":60,"move":"superpower"},{"level":66,"move":"wood-hammer"}],
+  "1018": [{"level":0,"move":"electro-shot"},{"level":1,"move":"leer"},{"level":1,"move":"metal-claw"},{"level":6,"move":"rock-smash"},{"level":12,"move":"hone-claws"},{"level":18,"move":"metal-sound"},{"level":24,"move":"breaking-swipe"},{"level":30,"move":"dragon-tail"},{"level":36,"move":"iron-defense"},{"level":42,"move":"focus-energy"},{"level":48,"move":"dragon-claw"},{"level":54,"move":"flash-cannon"},{"level":60,"move":"metal-burst"},{"level":66,"move":"hyper-beam"}],
+  "1019": [{"level":0,"move":"fickle-beam"},{"level":1,"move":"astonish"},{"level":1,"move":"recycle"},{"level":1,"move":"sweet-scent"},{"level":1,"move":"withdraw"},{"level":4,"move":"dragon-tail"},{"level":8,"move":"growth"},{"level":12,"move":"dragon-breath"},{"level":16,"move":"protect"},{"level":20,"move":"bullet-seed"},{"level":28,"move":"syrup-bomb"},{"level":32,"move":"dragon-pulse"},{"level":36,"move":"recover"},{"level":40,"move":"energy-ball"},{"level":44,"move":"substitute"},{"level":54,"move":"power-whip"}],
+  "1020": [{"level":1,"move":"incinerate"},{"level":1,"move":"leer"},{"level":1,"move":"stomp"},{"level":1,"move":"sunny-day"},{"level":7,"move":"fire-fang"},{"level":14,"move":"howl"},{"level":21,"move":"bite"},{"level":28,"move":"dragon-claw"},{"level":35,"move":"crush-claw"},{"level":42,"move":"morning-sun"},{"level":49,"move":"burning-bulwark"},{"level":56,"move":"dragon-rush"},{"level":63,"move":"fire-blast"},{"level":70,"move":"lava-plume"},{"level":77,"move":"outrage"},{"level":84,"move":"flare-blitz"},{"level":91,"move":"raging-fury"}],
+  "1021": [{"level":1,"move":"shock-wave"},{"level":1,"move":"stomp"},{"level":1,"move":"sunny-day"},{"level":1,"move":"twister"},{"level":7,"move":"charge"},{"level":14,"move":"dragon-breath"},{"level":21,"move":"electric-terrain"},{"level":28,"move":"discharge"},{"level":35,"move":"dragon-tail"},{"level":42,"move":"calm-mind"},{"level":49,"move":"thunderclap"},{"level":56,"move":"dragon-hammer"},{"level":63,"move":"rising-voltage"},{"level":70,"move":"dragon-pulse"},{"level":77,"move":"zap-cannon"},{"level":84,"move":"body-press"},{"level":91,"move":"thunder"}],
+  "1022": [{"level":1,"move":"electric-terrain"},{"level":1,"move":"horn-attack"},{"level":1,"move":"leer"},{"level":1,"move":"rock-throw"},{"level":7,"move":"quick-attack"},{"level":14,"move":"slash"},{"level":21,"move":"agility"},{"level":28,"move":"psycho-cut"},{"level":35,"move":"counter"},{"level":42,"move":"rock-tomb"},{"level":49,"move":"sacred-sword"},{"level":56,"move":"mighty-cleave"},{"level":63,"move":"swords-dance"},{"level":70,"move":"megahorn"},{"level":77,"move":"quick-guard"},{"level":84,"move":"stone-edge"},{"level":91,"move":"giga-impact"}],
+  "1023": [{"level":1,"move":"confusion"},{"level":1,"move":"electric-terrain"},{"level":1,"move":"leer"},{"level":1,"move":"metal-claw"},{"level":7,"move":"smart-strike"},{"level":14,"move":"slash"},{"level":21,"move":"iron-defense"},{"level":28,"move":"psyshock"},{"level":35,"move":"psycho-cut"},{"level":42,"move":"flash-cannon"},{"level":49,"move":"sacred-sword"},{"level":56,"move":"tachyon-cutter"},{"level":63,"move":"future-sight"},{"level":70,"move":"volt-switch"},{"level":77,"move":"quick-guard"},{"level":84,"move":"metal-burst"},{"level":91,"move":"hyper-beam"}],
+  "1024": [{"level":1,"move":"rapid-spin"},{"level":1,"move":"tri-attack"},{"level":1,"move":"withdraw"},{"level":10,"move":"ancient-power"},{"level":20,"move":"headbutt"},{"level":30,"move":"protect"},{"level":40,"move":"earth-power"},{"level":50,"move":"heavy-slam"},{"level":60,"move":"tera-starstorm"},{"level":70,"move":"double-edge"},{"level":80,"move":"rock-polish"},{"level":90,"move":"gyro-ball"}],
+  "1025": [{"level":1,"move":"astonish"},{"level":1,"move":"memento"},{"level":1,"move":"poison-gas"},{"level":1,"move":"smog"},{"level":8,"move":"withdraw"},{"level":16,"move":"destiny-bond"},{"level":24,"move":"fake-tears"},{"level":32,"move":"parting-shot"},{"level":40,"move":"shadow-ball"},{"level":48,"move":"malignant-chain"},{"level":56,"move":"toxic"},{"level":64,"move":"nasty-plot"},{"level":72,"move":"recover"}]
 };
