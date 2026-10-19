@@ -25,6 +25,7 @@ import {
   LogOut,
   RotateCcw,
   AlertTriangle,
+  Lock,
 } from 'lucide-react';
 import { PmdPortrait } from './PmdSprite';
 import { PokedexModal } from './PokedexModal';
@@ -44,6 +45,7 @@ interface HubMenuProps {
   inventory: Item[];
   storage: Item[];
   missions: RescueMission[];
+  missionsUnlocked: boolean;
   playerName: string | null;
   playerUid: string | null;
   onSignOut?: () => void;
@@ -75,6 +77,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   inventory,
   storage,
   missions,
+  missionsUnlocked,
   playerName,
   playerUid,
   onSignOut,
@@ -597,28 +600,49 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             </div>
           </button>
 
-          {/* Card 9: Tablón de Misiones */}
+          {/* Card 9: Tablón de Misiones (unlocked after clearing a dungeon) */}
           <button
             onClick={() => {
+              if (!missionsUnlocked) {
+                soundManager.playHit();
+                return;
+              }
               soundManager.playSelect();
               setActiveModal('MISSIONS');
             }}
-            className="col-span-2 md:col-span-4 short:col-span-4 pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 short:p-1.5 border border-slate-800 hover:border-lime-400 transition-all text-left flex items-center gap-3 shadow-xl min-h-0"
+            aria-disabled={!missionsUnlocked}
+            className={`col-span-2 md:col-span-4 short:col-span-4 pmd-window pmd-window-btn group relative bg-slate-900/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 short:p-1.5 border transition-all text-left flex items-center gap-3 shadow-xl min-h-0 ${
+              missionsUnlocked ? 'border-slate-800 hover:bg-slate-850 hover:border-lime-400' : 'border-slate-800 opacity-70 cursor-not-allowed'
+            }`}
           >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 shrink-0 rounded-xl bg-lime-500/20 border border-lime-400/80 flex items-center justify-center text-lime-300 group-hover:scale-105 transition-transform">
-              <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5" />
+            <div
+              className={`w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 shrink-0 rounded-xl flex items-center justify-center transition-transform ${
+                missionsUnlocked
+                  ? 'bg-lime-500/20 border border-lime-400/80 text-lime-300 group-hover:scale-105'
+                  : 'bg-slate-800 border border-slate-600 text-slate-500'
+              }`}
+            >
+              {missionsUnlocked ? <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5" /> : <Lock className="w-4 h-4 sm:w-5 sm:h-5" />}
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-lime-300 transition-colors">
+              <h3
+                className={`text-xs sm:text-sm md:text-base font-bold transition-colors ${
+                  missionsUnlocked ? 'text-white group-hover:text-lime-300' : 'text-slate-400'
+                }`}
+              >
                 Tablón de Misiones
               </h3>
               <p className="text-[11px] text-slate-400 leading-tight truncate">
-                {activeMission
+                {!missionsUnlocked
+                  ? 'Bloqueado: completa cualquier mazmorra para que confíen en tu equipo de rescate.'
+                  : activeMission
                   ? `En curso: ${describeMission(activeMission).title} · ${activeMission.dungeonName}, piso ${activeMission.targetFloor}`
                   : `${missions.length} peticiones de ayuda esperan a un equipo de rescate.`}
               </p>
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-lime-400 transition-colors shrink-0" />
+            {missionsUnlocked && (
+              <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-lime-400 transition-colors shrink-0" />
+            )}
           </button>
         </div>
       </main>
@@ -783,7 +807,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       )}
 
       {/* MODAL: TABLÓN DE MISIONES */}
-      {activeModal === 'MISSIONS' && (
+      {activeModal === 'MISSIONS' && missionsUnlocked && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
           <div className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-full p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 short:gap-2 min-h-0">
             <div className="shrink-0 flex items-center justify-between border-b border-slate-800 pb-3 short:pb-2">

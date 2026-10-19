@@ -19,6 +19,8 @@ export interface SaveData {
   activeMissionId?: string | null;
   seenPokedex: number[];
   caughtPokedex: number[];
+  // Ids of dungeons completed at least once (the mission board unlocks with the first one)
+  clearedDungeons?: string[];
   // True while an expedition is in progress; reloading mid-dungeon counts as abandoning it
   inDungeon: boolean;
   // Milliseconds timestamp, used to pick the newest copy between this device and the cloud

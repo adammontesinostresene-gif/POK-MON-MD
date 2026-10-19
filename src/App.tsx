@@ -96,6 +96,13 @@ export default function App({ player, onSignOut }: AppProps) {
     missions.some((m) => m.id === initialSave?.activeMissionId) ? initialSave!.activeMissionId! : null
   );
   const [missionReport, setMissionReport] = useState<string | null>(null);
+  const [clearedDungeons, setClearedDungeons] = useState<string[]>(() => {
+    const saved = initialSave?.clearedDungeons;
+    if (Array.isArray(saved)) return saved.filter((id): id is string => typeof id === 'string');
+    // Saves from before this was tracked: players who already used missions keep access
+    return (initialSave?.rankPoints ?? 0) > 0 || initialSave?.activeMissionId ? ['legacy'] : [];
+  });
+  const missionsUnlocked = clearedDungeons.length > 0;
   // Set during an expedition; rewards are handed out on returning to the village
   const completedMissionRef = useRef<RescueMission | null>(null);
   const [seenPokedex, setSeenPokedex] = useState<number[]>(initialSave?.seenPokedex ?? []);
@@ -159,9 +166,10 @@ export default function App({ player, onSignOut }: AppProps) {
       activeMissionId,
       seenPokedex,
       caughtPokedex,
+      clearedDungeons,
       inDungeon: screen === 'DUNGEON_EXPLORE',
     }, player?.uid);
-  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, activeMissionId, seenPokedex, caughtPokedex]);
+  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, activeMissionId, seenPokedex, caughtPokedex, clearedDungeons]);
 
   // Publish the score to the online leaderboard
   const leaderPokedexId = activeTeam[0]?.pokedexId;
@@ -194,6 +202,7 @@ export default function App({ player, onSignOut }: AppProps) {
     completedMissionRef.current = null;
     setSeenPokedex([]);
     setCaughtPokedex([]);
+    setClearedDungeons([]);
     setStartupNotice(null);
     soundManager.startBgm('hub');
     setScreen('PERSONALITY_QUIZ');
@@ -220,6 +229,9 @@ export default function App({ player, onSignOut }: AppProps) {
     setReserves(updatedReserves.map(restorePokemon));
     setInventory(normalizeItems(updatedInventory));
     setGold(settleCompletedMission(finalGold));
+    if (currentDungeon) {
+      setClearedDungeons((prev) => (prev.includes(currentDungeon.id) ? prev : [...prev, currentDungeon.id]));
+    }
     setCompletedDungeonInfo({
       name: currentDungeon?.name || 'Mazmorra',
       goldEarned: currentDungeon?.rewards.gold || 400,
@@ -279,6 +291,7 @@ export default function App({ player, onSignOut }: AppProps) {
           inventory={inventory}
           storage={storage}
           missions={missions}
+          missionsUnlocked={missionsUnlocked}
           playerName={player?.name ?? null}
           playerUid={player?.uid ?? null}
           onSignOut={onSignOut}
