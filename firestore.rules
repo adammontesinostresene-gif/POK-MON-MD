@@ -18,5 +18,17 @@ service cloud.firestore {
         && request.resource.data.updatedAt == request.time;
       allow delete: if false;
     }
+
+    // Full game save: only its owner can read or write it
+    match /saves/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['data', 'savedAt', 'updatedAt'])
+        && request.resource.data.data is string
+        && request.resource.data.data.size() <= 900000
+        && request.resource.data.savedAt is int
+        && request.resource.data.updatedAt == request.time;
+    }
   }
 }
