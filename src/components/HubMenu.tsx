@@ -26,6 +26,7 @@ import {
   RotateCcw,
   AlertTriangle,
   Lock,
+  Pencil,
 } from 'lucide-react';
 import { PmdPortrait } from './PmdSprite';
 import { PokedexModal } from './PokedexModal';
@@ -49,6 +50,7 @@ interface HubMenuProps {
   playerName: string | null;
   playerUid: string | null;
   onSignOut?: () => void;
+  onRename?: (name: string) => Promise<void>;
   onNewGame: () => void;
   notice: string | null;
   onDismissNotice: () => void;
@@ -81,6 +83,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   playerName,
   playerUid,
   onSignOut,
+  onRename,
   onNewGame,
   notice,
   onDismissNotice,
@@ -108,6 +111,29 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   const [bankAmount, setBankAmount] = useState<string>('');
   const [bankFeedback, setBankFeedback] = useState<string | null>(null);
   const [confirmNewGame, setConfirmNewGame] = useState<boolean>(false);
+  const [renameValue, setRenameValue] = useState<string | null>(null);
+  const [renameError, setRenameError] = useState<string | null>(null);
+  const [renaming, setRenaming] = useState<boolean>(false);
+
+  const handleRename = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!onRename || renameValue === null || renaming) return;
+    const name = renameValue.trim();
+    if (name.length < 3 || name.length > 20) {
+      setRenameError('El nombre debe tener entre 3 y 20 caracteres.');
+      return;
+    }
+    setRenaming(true);
+    try {
+      await onRename(name);
+      soundManager.playDrop();
+      setRenameValue(null);
+    } catch {
+      setRenameError('No se ha podido cambiar el nombre. Comprueba tu conexión.');
+    } finally {
+      setRenaming(false);
+    }
+  };
 
   const transferItem = (item: Item, quantity: number, toStorage: boolean) => {
     const from = toStorage ? inventory : storage;
@@ -292,6 +318,19 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               <span className="hidden md:inline text-xs text-slate-300 max-w-[120px] truncate" title={playerName}>
                 {playerName}
               </span>
+              {onRename && (
+                <button
+                  onClick={() => {
+                    soundManager.playSelect();
+                    setRenameError(null);
+                    setRenameValue(playerName);
+                  }}
+                  title="Cambiar nombre de explorador"
+                  className="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 transition-colors shadow"
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+              )}
               {onSignOut && (
                 <button
                   onClick={() => {
@@ -749,6 +788,49 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
       {activeModal === 'RANKING' && (
         <LeaderboardModal currentUid={playerUid} onClose={() => setActiveModal(null)} />
+      )}
+
+      {/* MODAL: CAMBIAR NOMBRE */}
+      {renameValue !== null && (
+        <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <form
+            onSubmit={handleRename}
+            className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3"
+          >
+            <h3 className="font-bold text-base text-white flex items-center gap-2">
+              <Pencil className="w-4 h-4 text-amber-400" />
+              Nombre de explorador
+            </h3>
+            <p className="text-xs text-slate-400">Es el nombre que verán los demás jugadores en el ranking.</p>
+            <input
+              value={renameValue}
+              onChange={(e) => setRenameValue(e.target.value)}
+              maxLength={20}
+              autoFocus
+              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 focus:border-amber-400 rounded-lg text-sm text-white outline-none select-text"
+            />
+            {renameError && <p className="text-xs text-red-300">{renameError}</p>}
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  soundManager.playSelect();
+                  setRenameValue(null);
+                }}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold border border-slate-700"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={renaming}
+                className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 disabled:opacity-60 text-white rounded-lg text-xs font-bold shadow"
+              >
+                {renaming ? 'Guardando...' : 'Guardar'}
+              </button>
+            </div>
+          </form>
+        </div>
       )}
 
       {/* MODAL: CONFIRMAR NUEVA PARTIDA */}

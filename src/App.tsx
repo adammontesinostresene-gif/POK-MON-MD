@@ -55,10 +55,11 @@ const mergeDexIds = (prev: number[], ids: number[]): number[] => {
 interface AppProps {
   // Signed-in player (null when Firebase is not configured)
   player: { uid: string; name: string } | null;
+  onRename?: (name: string) => Promise<void>;
   onSignOut?: () => void;
 }
 
-export default function App({ player, onSignOut }: AppProps) {
+export default function App({ player, onRename, onSignOut }: AppProps) {
   // Screen state
   const [screen, setScreen] = useState<ViewScreen>('TITLE');
 
@@ -305,6 +306,7 @@ export default function App({ player, onSignOut }: AppProps) {
           playerName={player?.name ?? null}
           playerUid={player?.uid ?? null}
           onSignOut={onSignOut}
+          onRename={onRename}
           onNewGame={handleNewGame}
           notice={startupNotice}
           onDismissNotice={() => setStartupNotice(null)}

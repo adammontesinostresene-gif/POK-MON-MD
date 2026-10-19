@@ -25,13 +25,19 @@ const ERROR_MESSAGES: Record<string, string> = {
   'auth/popup-blocked': 'El navegador ha bloqueado la ventana de Google. Permite las ventanas emergentes e inténtalo de nuevo.',
   'auth/unauthorized-domain': 'Esta dirección no está autorizada para entrar con Google.',
   'auth/account-exists-with-different-credential': 'Ese correo ya tiene una cuenta con contraseña. Entra con correo y contraseña.',
+  'auth/operation-not-allowed':
+    'El acceso con correo y contraseña no está activado en Firebase (Authentication → Sign-in method).',
 };
 
 // Closing the Google window is not an error worth showing
 const SILENT_ERRORS = new Set(['auth/popup-closed-by-user', 'auth/cancelled-popup-request']);
 
-const toMessage = (error: unknown) =>
-  (error instanceof FirebaseError && ERROR_MESSAGES[error.code]) || 'Algo ha fallado. Inténtalo de nuevo.';
+const toMessage = (error: unknown) => {
+  if (error instanceof FirebaseError && ERROR_MESSAGES[error.code]) return ERROR_MESSAGES[error.code];
+  console.error('Error de autenticación', error);
+  const code = error instanceof FirebaseError ? ` (${error.code})` : '';
+  return `Algo ha fallado. Inténtalo de nuevo.${code}`;
+};
 
 interface AuthScreenProps {
   // The display name is not available in the auth state right after registering
