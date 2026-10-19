@@ -22,6 +22,7 @@ const STARTER_TRAITS: Record<number, [Trait, Trait]> = {
   4: ['valiente', 'amable'],
   7: ['travieso', 'valiente'],
   25: ['alegre', 'valiente'],
+  39: ['alegre', 'timido'],
   133: ['alegre', 'listo'],
   152: ['amable', 'alegre'],
   155: ['timido', 'valiente'],
@@ -32,6 +33,8 @@ const STARTER_TRAITS: Record<number, [Trait, Trait]> = {
   387: ['tranquilo', 'valiente'],
   390: ['travieso', 'listo'],
   393: ['independiente', 'valiente'],
+  446: ['tranquilo', 'travieso'],
+  447: ['valiente', 'independiente'],
   495: ['listo', 'independiente'],
   498: ['amable', 'travieso'],
   501: ['valiente', 'travieso'],
@@ -93,6 +96,24 @@ const QUESTIONS: { text: string; answers: { text: string; traits: [Trait, Trait]
       { text: 'El valor.', traits: ['valiente', 'independiente'] },
       { text: 'La estrategia.', traits: ['listo', 'independiente'] },
       { text: '¡Pasarlo bien!', traits: ['alegre', 'travieso'] },
+    ],
+  },
+  {
+    text: '¡Es la hora de comer! ¿Qué haces?',
+    answers: [
+      { text: 'Me lo como todo con calma... ¡y también lo de los demás!', traits: ['tranquilo', 'travieso'] },
+      { text: 'Ayudo a cocinar para todos.', traits: ['amable', 'listo'] },
+      { text: 'Me la salto para seguir entrenando.', traits: ['valiente', 'independiente'] },
+      { text: 'Organizo un picnic con mis amigos.', traits: ['alegre', 'amable'] },
+    ],
+  },
+  {
+    text: 'Alguien te reta a un combate. ¿Cómo reaccionas?',
+    answers: [
+      { text: '¡Acepto! Quiero hacerme más fuerte.', traits: ['valiente', 'independiente'] },
+      { text: 'Canto una canción para calmar los ánimos.', traits: ['alegre', 'timido'] },
+      { text: 'Bostezo y sigo a lo mío como si nada.', traits: ['tranquilo', 'travieso'] },
+      { text: 'Le propongo un trato ingenioso.', traits: ['listo', 'travieso'] },
     ],
   },
 ];
