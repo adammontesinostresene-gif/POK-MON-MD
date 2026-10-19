@@ -180,12 +180,13 @@ export default function App({ player, onSignOut }: AppProps) {
 
   // Publish the score to the online leaderboard
   const leaderPokedexId = activeTeam[0]?.pokedexId;
+  const leaderLevel = activeTeam[0]?.level;
   useEffect(() => {
-    if (!player || leaderPokedexId === undefined) return;
-    submitScore(player.uid, { name: player.name, rankPoints, leaderPokedexId }).catch((err) =>
+    if (!player || leaderPokedexId === undefined || leaderLevel === undefined) return;
+    submitScore(player.uid, { name: player.name, rankPoints, leaderPokedexId, leaderLevel }).catch((err) =>
       console.warn('No se pudo actualizar el ranking', err)
     );
-  }, [player?.uid, player?.name, rankPoints, leaderPokedexId]);
+  }, [player?.uid, player?.name, rankPoints, leaderPokedexId, leaderLevel]);
 
   // Handlers
   // No title screen: players with a save go straight to the village, new ones to the starter quiz

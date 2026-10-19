@@ -6,19 +6,22 @@ export interface LeaderboardEntry {
   name: string;
   rankPoints: number;
   leaderPokedexId: number;
+  // Missing in entries published before the level was tracked
+  leaderLevel: number | null;
 }
 
 const PLAYERS = 'players';
 
 export const submitScore = async (
   uid: string,
-  data: { name: string; rankPoints: number; leaderPokedexId: number }
+  data: { name: string; rankPoints: number; leaderPokedexId: number; leaderLevel: number }
 ): Promise<void> => {
   if (!db) return;
   await setDoc(doc(db, PLAYERS, uid), {
     name: data.name.slice(0, 20),
     rankPoints: Math.max(0, Math.floor(data.rankPoints)),
     leaderPokedexId: Math.floor(data.leaderPokedexId),
+    leaderLevel: Math.min(100, Math.max(1, Math.floor(data.leaderLevel))),
     updatedAt: serverTimestamp(),
   });
 };
@@ -33,6 +36,7 @@ export const fetchLeaderboard = async (max = 50): Promise<LeaderboardEntry[]> =>
       name: typeof data.name === 'string' ? data.name : 'Explorador',
       rankPoints: typeof data.rankPoints === 'number' ? data.rankPoints : 0,
       leaderPokedexId: typeof data.leaderPokedexId === 'number' ? data.leaderPokedexId : 25,
+      leaderLevel: typeof data.leaderLevel === 'number' ? data.leaderLevel : null,
     };
   });
 };

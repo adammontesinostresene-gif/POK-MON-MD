@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Trophy } from 'lucide-react';
 import { fetchLeaderboard, LeaderboardEntry } from '../utils/leaderboard';
 import { PmdPortrait } from './PmdSprite';
+import { SPECIES_DATA } from '../data/speciesData';
 
 interface LeaderboardModalProps {
   currentUid: string | null;
@@ -53,9 +54,15 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ currentUid, 
                   {MEDALS[i] ?? `${i + 1}º`}
                 </span>
                 <PmdPortrait pokedexId={entry.leaderPokedexId} size={32} showFrame={true} />
-                <span className="flex-1 min-w-0 font-bold text-sm text-white truncate">
-                  {entry.name}
-                  {isMe && <span className="ml-1.5 text-[10px] text-amber-300">(tú)</span>}
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold text-sm text-white truncate">
+                    {entry.name}
+                    {isMe && <span className="ml-1.5 text-[10px] text-amber-300">(Tú)</span>}
+                  </span>
+                  <span className="block text-[10px] text-slate-400 truncate">
+                    Líder: {SPECIES_DATA[entry.leaderPokedexId]?.name ?? '???'}
+                    {entry.leaderLevel !== null && <span className="text-sky-300 font-mono"> Nv. {entry.leaderLevel}</span>}
+                  </span>
                 </span>
                 <span className="font-mono font-bold text-amber-300 tabular-nums text-sm shrink-0">
                   {entry.rankPoints} pts
