@@ -335,7 +335,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                 Explorar Mazmorra
               </h3>
               <p className="hidden sm:block short:hidden text-[11px] text-slate-400 mt-0.5 line-clamp-1 md:line-clamp-2 leading-tight">
-                Elige tu destino: Bosquejo Tutorial o Arroyo Corriente.
+                Elige tu destino: Bosquejo Tutorial, Arroyo Corriente o Campo Natural.
               </p>
             </div>
           </button>

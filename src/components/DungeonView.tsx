@@ -43,6 +43,7 @@ interface DungeonViewProps {
   ) => void;
   onExitDungeon: (
     updatedTeam: Pokemon[],
+    updatedReserves: Pokemon[],
     updatedInventory: Item[],
     finalGold: number
   ) => void;
@@ -395,7 +396,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
     if (item.effectType === 'escape') {
       setIsBagOpen(false);
-      onExitDungeon(team, updatedInv, gold);
+      onExitDungeon(team, reserves, updatedInv, gold);
       return;
     }
 
@@ -451,9 +452,9 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
             inventory={inventory}
             bgImage={dungeon.bgImage}
             onVictory={handleCombatVictory}
-            onDefeat={() => onExitDungeon(team, [], 0)}
+            onDefeat={() => onExitDungeon(team, reserves, [], 0)}
             onEscapeDungeon={(combatTeam, remainingInventory) =>
-              onExitDungeon(combatTeam, remainingInventory, gold)
+              onExitDungeon(combatTeam, reserves, remainingInventory, gold)
             }
             canUseEscapeOrb={currentEvent.type !== 'boss'}
             onUpdateInventory={(updated) => setInventory(updated)}
@@ -972,7 +973,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                 onClick={() => {
                   soundManager.playSelect();
                   setIsExitConfirmOpen(false);
-                  onExitDungeon(team, [], 0);
+                  onExitDungeon(team, reserves, [], 0);
                 }}
                 className="flex items-center gap-1 px-3 py-1.5 bg-red-700 hover:bg-red-600 text-white rounded-lg text-xs font-bold transition-colors shadow cursor-pointer"
               >

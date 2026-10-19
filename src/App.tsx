@@ -21,6 +21,7 @@ import {
   createStarter,
   applyOfficialMoves,
   calculateStats,
+  getExpToNextLevel,
   normalizeItems,
   INITIAL_MISSIONS,
 } from './data/pokemonData';
@@ -32,8 +33,12 @@ import { Award, AlertTriangle, ArrowRight, RotateCcw } from 'lucide-react';
 const restorePokemon = (p: Pokemon): Pokemon => {
   // Recomputing from official bases also migrates saves made with the old hand-tuned stats
   const stats = calculateStats(p.pokedexId, p.level) ?? p.stats;
+  // Keeps old saves and template Pokémon on the current EXP curve
+  const nextExp = getExpToNextLevel(p.level);
   return withAbility({
     ...p,
+    nextExp,
+    exp: Math.min(p.exp, nextExp - 1),
     stats: { ...stats, hp: stats.maxHp },
     moves: p.moves.map((m) => ({ ...m, pp: m.maxPp })),
     status: 'none',
@@ -188,11 +193,12 @@ export default function App() {
 
   const handleDungeonExit = (
     updatedTeam: Pokemon[],
+    updatedReserves: Pokemon[],
     updatedInventory: Item[],
     finalGold: number
   ) => {
     setActiveTeam(updatedTeam.map(restorePokemon));
-    setReserves((prev) => prev.map(restorePokemon));
+    setReserves(updatedReserves.map(restorePokemon));
     setInventory(normalizeItems(updatedInventory));
     setGold(finalGold);
     soundManager.startBgm('hub');

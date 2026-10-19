@@ -192,7 +192,9 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
 };
 
 // EXP needed to go from `level` to `level + 1` (quadratic curve: ~4 fights per level at any stage)
-export const getExpToNextLevel = (level: number): number => 20 + 4 * level * level;
+// The cubic term makes each level noticeably slower than the previous one
+export const getExpToNextLevel = (level: number): number =>
+  20 + 5 * level * level + Math.floor((level * level * level) / 5);
 
 export const getTypeEffectiveness = (atkType: PokemonType, defTypes: PokemonType[]): number => {
   let mult = 1.0;
@@ -992,6 +994,28 @@ export const DUNGEONS: Dungeon[] = [
       items: ['Baya Aranja', 'Elixir', 'Semilla Revivir'],
     },
   },
+  {
+    id: 'campo_natural',
+    name: 'Campo Natural',
+    description: 'Praderas verdes y colinas suaves bajo el cielo abierto. Abundan los Pokémon tipo Normal, Volador y Bicho.',
+    floorsCount: 9,
+    difficulty: 'Fácil',
+    theme: 'forest',
+    bgImage: '/src/assets/images/471fb51c3a60df5d99bbf72222770946.png',
+    recommendedLevel: 5,
+    enemiesPool: ['pidgey', 'hoppip', 'zigzagoon', 'scatterbug', 'skwovet', 'wooloo', 'flabebe'],
+    // Flabébé is rare: ~4% of spawns
+    enemyWeights: { flabebe: 0.25 },
+    enemyLevelRange: [4, 7],
+    bossId: 'boss_combee',
+    bossLevel: 8,
+    bossCount: 4,
+    rewards: {
+      gold: 700,
+      exp: 400,
+      items: ['Baya Aranja', 'Elixir', 'Semilla Revivir'],
+    },
+  },
 ];
 
 // Official Move Types and Stats Database
@@ -1195,6 +1219,7 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
       spd: 16,
       spe: 24,
       moves: ['Tornado', 'Ataque Rápido'],
+      recruitRate: 0.2,
     },
     weedle: {
       pokedexId: 13,
@@ -1455,6 +1480,85 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
       moves: ['Salpicadura'],
       recruitRate: 0.1,
     },
+    // Campo Natural roster
+    hoppip: {
+      pokedexId: 187,
+      name: 'Hoppip',
+      types: ['Planta', 'Volador'],
+      hp: 30,
+      atk: 14,
+      def: 16,
+      spa: 14,
+      spd: 20,
+      spe: 20,
+      moves: ['Salpicadura', 'Absorber'],
+      recruitRate: 0.2,
+    },
+    zigzagoon: {
+      pokedexId: 263,
+      name: 'Zigzagoon',
+      types: ['Normal'],
+      hp: 30,
+      atk: 14,
+      def: 16,
+      spa: 12,
+      spd: 16,
+      spe: 26,
+      moves: ['Placaje', 'Gruñido'],
+      recruitRate: 0.2,
+    },
+    scatterbug: {
+      pokedexId: 664,
+      name: 'Scatterbug',
+      types: ['Bicho'],
+      hp: 30,
+      atk: 14,
+      def: 18,
+      spa: 10,
+      spd: 12,
+      spe: 14,
+      moves: ['Placaje', 'Disparo Demora'],
+      recruitRate: 0.2,
+    },
+    skwovet: {
+      pokedexId: 819,
+      name: 'Skwovet',
+      types: ['Normal'],
+      hp: 40,
+      atk: 18,
+      def: 18,
+      spa: 12,
+      spd: 12,
+      spe: 14,
+      moves: ['Placaje', 'Coletazo'],
+      recruitRate: 0.2,
+    },
+    wooloo: {
+      pokedexId: 831,
+      name: 'Wooloo',
+      types: ['Normal'],
+      hp: 34,
+      atk: 14,
+      def: 20,
+      spa: 12,
+      spd: 16,
+      spe: 14,
+      moves: ['Placaje', 'Gruñido'],
+      recruitRate: 0.2,
+    },
+    flabebe: {
+      pokedexId: 669,
+      name: 'Flabébé',
+      types: ['Hada'],
+      hp: 30,
+      atk: 12,
+      def: 14,
+      spa: 20,
+      spd: 26,
+      spe: 14,
+      moves: ['Placaje', 'Viento Feérico'],
+      recruitRate: 0.1,
+    },
     // Bosses
     boss_psyduck: {
       pokedexId: 54,
@@ -1467,6 +1571,19 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
       spd: 22,
       spe: 24,
       moves: ['Arañazo', 'Pistola Agua', 'Confusión', 'Látigo'],
+      recruitRate: 0.1,
+    },
+    boss_combee: {
+      pokedexId: 415,
+      name: 'Combee',
+      types: ['Bicho', 'Volador'],
+      hp: 30,
+      atk: 12,
+      def: 16,
+      spa: 12,
+      spd: 16,
+      spe: 16,
+      moves: ['Tornado', 'Picadura'],
       recruitRate: 0.1,
     },
     boss_butterfree: {

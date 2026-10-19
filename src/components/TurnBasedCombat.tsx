@@ -1280,7 +1280,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     // Reward scales with the number and levels of all defeated enemies!
     const expReward = defeatedEnemies.reduce(
-      (sum, e) => sum + Math.round(e.level * 10 + Math.random() * 5),
+      (sum, e) => sum + Math.round(e.level * 7 + Math.random() * 4),
       0
     );
     // Loot roll: 50% nothing, otherwise either gold or an item (never both)
@@ -1349,6 +1349,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       potentialRecruit = {
         ...recruitCandidate,
         id: `${recruitCandidate.name.toLowerCase()}_recruit_${Date.now()}`,
+        exp: 0,
+        nextExp: getExpToNextLevel(recruitCandidate.level),
         status: 'none',
         stats: {
           ...recruitCandidate.stats,
