@@ -4,7 +4,6 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { TitleScreen } from './components/TitleScreen';
 import { HubMenu } from './components/HubMenu';
 import { TeamManager } from './components/TeamManager';
 import { EvolutionMenu } from './components/EvolutionMenu';
@@ -65,8 +64,12 @@ export default function App({ player, onSignOut }: AppProps) {
 
   // Saved progress (localStorage), read once on startup
   const [initialSave] = useState(() => loadGame(player?.uid));
-  const [hasSave, setHasSave] = useState<boolean>(initialSave !== null);
   const abandonedExpedition = initialSave?.inDungeon ?? false;
+  const [startupNotice, setStartupNotice] = useState<string | null>(
+    abandonedExpedition
+      ? 'Abandonaste una expedición a medias: perdiste el dinero y los objetos que llevabas encima.'
+      : null
+  );
   const loadSaved = (p: Pokemon) =>
     restorePokemon(initialSave?.version === 1 ? applyOfficialMoves(p) : p);
 
@@ -140,7 +143,7 @@ export default function App({ player, onSignOut }: AppProps) {
     team: Pokemon[];
   } | null>(null);
 
-  // Auto-save whenever progress changes (not on the title screen, so a save is never overwritten before choosing)
+  // Auto-save whenever progress changes (the starter quiz has nothing to save yet)
   useEffect(() => {
     if (screen === 'TITLE' || screen === 'PERSONALITY_QUIZ') return;
     saveGame({
@@ -158,7 +161,6 @@ export default function App({ player, onSignOut }: AppProps) {
       caughtPokedex,
       inDungeon: screen === 'DUNGEON_EXPLORE',
     }, player?.uid);
-    setHasSave(true);
   }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, activeMissionId, seenPokedex, caughtPokedex]);
 
   // Publish the score to the online leaderboard
@@ -171,10 +173,11 @@ export default function App({ player, onSignOut }: AppProps) {
   }, [player?.uid, player?.name, rankPoints, leaderPokedexId]);
 
   // Handlers
-  const handleStartFromTitle = () => {
+  // No title screen: players with a save go straight to the village, new ones to the starter quiz
+  useEffect(() => {
     soundManager.startBgm('hub');
     setScreen(activeTeam.length > 0 ? 'HUB' : 'PERSONALITY_QUIZ');
-  };
+  }, []);
 
   const handleNewGame = () => {
     clearSave(player?.uid);
@@ -191,7 +194,7 @@ export default function App({ player, onSignOut }: AppProps) {
     completedMissionRef.current = null;
     setSeenPokedex([]);
     setCaughtPokedex([]);
-    setHasSave(false);
+    setStartupNotice(null);
     soundManager.startBgm('hub');
     setScreen('PERSONALITY_QUIZ');
   };
@@ -262,22 +265,7 @@ export default function App({ player, onSignOut }: AppProps) {
 
   return (
     <div className="w-full h-dvh overflow-hidden bg-slate-950 font-sans text-slate-100 flex flex-col">
-      {/* 1. Title Screen */}
-      {screen === 'TITLE' && (
-        <TitleScreen
-          hasSave={hasSave}
-          savedLeaderPokedexId={initialSave?.activeTeam[0]?.pokedexId}
-          notice={
-            abandonedExpedition
-              ? 'Abandonaste una expedición a medias: perdiste el dinero y los objetos que llevabas encima.'
-              : null
-          }
-          onStartGame={handleStartFromTitle}
-          onNewGame={handleNewGame}
-        />
-      )}
-
-      {/* 1b. Personality test that picks the starter */}
+      {/* 1. Personality test that picks the starter */}
       {screen === 'PERSONALITY_QUIZ' && <PersonalityQuiz onComplete={handleQuizComplete} />}
 
       {/* 2. Hub Menu */}
@@ -294,6 +282,9 @@ export default function App({ player, onSignOut }: AppProps) {
           playerName={player?.name ?? null}
           playerUid={player?.uid ?? null}
           onSignOut={onSignOut}
+          onNewGame={handleNewGame}
+          notice={startupNotice}
+          onDismissNotice={() => setStartupNotice(null)}
           activeMissionId={activeMissionId}
           missionReport={missionReport}
           onAcceptMission={(id) => setActiveMissionId(id)}

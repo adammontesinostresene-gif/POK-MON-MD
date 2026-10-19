@@ -23,6 +23,8 @@ import {
   BookOpen,
   Trophy,
   LogOut,
+  RotateCcw,
+  AlertTriangle,
 } from 'lucide-react';
 import { PmdPortrait } from './PmdSprite';
 import { PokedexModal } from './PokedexModal';
@@ -45,6 +47,9 @@ interface HubMenuProps {
   playerName: string | null;
   playerUid: string | null;
   onSignOut?: () => void;
+  onNewGame: () => void;
+  notice: string | null;
+  onDismissNotice: () => void;
   activeMissionId: string | null;
   missionReport: string | null;
   onAcceptMission: (missionId: string) => void;
@@ -73,6 +78,9 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   playerName,
   playerUid,
   onSignOut,
+  onNewGame,
+  notice,
+  onDismissNotice,
   activeMissionId,
   missionReport,
   onAcceptMission,
@@ -96,6 +104,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   const [shopFeedback, setShopFeedback] = useState<string | null>(null);
   const [bankAmount, setBankAmount] = useState<string>('');
   const [bankFeedback, setBankFeedback] = useState<string | null>(null);
+  const [confirmNewGame, setConfirmNewGame] = useState<boolean>(false);
 
   const transferItem = (item: Item, quantity: number, toStorage: boolean) => {
     const from = toStorage ? inventory : storage;
@@ -230,7 +239,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             className="w-7 h-7 sm:w-8 sm:h-8 object-contain filter drop-shadow shrink-0"
           />
           <span className="font-bold tracking-tight text-white font-pixel text-[9px] sm:text-sm truncate">
-            Pokémon Mundo Misterioso
+            Pokémon Mundo Misterioso: Exploradores del mundo
           </span>
         </div>
 
@@ -250,6 +259,18 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             className="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 transition-colors shadow"
           >
             {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+          </button>
+
+          <button
+            onClick={() => {
+              soundManager.playSelect();
+              setConfirmNewGame(true);
+            }}
+            title="Borrar la partida y empezar de nuevo"
+            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg bg-red-700 hover:bg-red-600 border border-red-400 text-white text-xs font-bold transition-colors shadow"
+          >
+            <RotateCcw className="w-4 h-4" />
+            <span className="hidden sm:inline">Nueva partida</span>
           </button>
 
           {playerName && (
@@ -604,7 +625,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
       {/* Footer hint bar */}
       <footer className="hidden md:block short:hidden shrink-0 relative z-10 px-4 py-2 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-sm text-center text-xs text-slate-500">
-        Juego inspirado en Pokémon Mundo Misterioso · Sistema de mazmorras por eventos y combates tácticos
+        Pokémon Mundo Misterioso · Exploradores del mundo
       </footer>
 
       {/* MODAL: DUNGEON SELECTOR */}
@@ -704,6 +725,61 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
       {activeModal === 'RANKING' && (
         <LeaderboardModal currentUid={playerUid} onClose={() => setActiveModal(null)} />
+      )}
+
+      {/* MODAL: CONFIRMAR NUEVA PARTIDA */}
+      {confirmNewGame && (
+        <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="pmd-window pmd-danger bg-slate-900 border border-red-500/60 rounded-2xl max-w-sm w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
+            <h3 className="font-bold text-base text-white flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-400" />
+              ¿Empezar una partida nueva?
+            </h3>
+            <p className="text-sm text-slate-300">
+              Se borrará <span className="font-bold text-red-400">todo tu progreso</span>: equipo, objetos, dinero, misiones, Pokédex y puntos de rango. No se puede deshacer.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setConfirmNewGame(false);
+                }}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold border border-slate-700"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setConfirmNewGame(false);
+                  onNewGame();
+                }}
+                className="px-3 py-1.5 bg-red-700 hover:bg-red-600 text-white rounded-lg text-xs font-bold shadow"
+              >
+                Borrar y empezar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* AVISO AL ENTRAR (p. ej. expedición abandonada) */}
+      {notice && (
+        <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="pmd-window bg-slate-900 border border-amber-500/60 rounded-2xl max-w-sm w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 text-center">
+            <AlertTriangle className="w-8 h-8 text-amber-400 mx-auto" />
+            <p className="text-sm text-slate-200">{notice}</p>
+            <button
+              onClick={() => {
+                soundManager.playSelect();
+                onDismissNotice();
+              }}
+              className="w-full py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-sm"
+            >
+              Entendido
+            </button>
+          </div>
+        </div>
       )}
 
       {/* MODAL: TABLÓN DE MISIONES */}
