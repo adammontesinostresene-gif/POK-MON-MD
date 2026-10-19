@@ -1,21 +1,34 @@
 import React, { useState } from 'react';
 import { Move, Pokemon, PokemonType } from '../types/game';
 import { TYPE_COLORS, getMovePool, rememberMoves } from '../data/pokemonData';
+import {
+  ABILITIES_WITH_EFFECT,
+  ABILITY_CAPSULE_NAME,
+  getAbilityDescription,
+  getAbilityId,
+  getAbilityName,
+  getSpeciesAbilities,
+  withAbility,
+} from '../data/abilities';
 import { soundManager } from '../utils/audio';
-import { Shield, Zap, Sparkles, Heart, Sword, ArrowLeft, ArrowUpDown, Info, Check, UserCheck } from 'lucide-react';
+import { Shield, Zap, Sparkles, Heart, Sword, ArrowLeft, ArrowUpDown, Info, Check, UserCheck, Lock } from 'lucide-react';
 import { PmdSprite, PmdPortrait } from './PmdSprite';
 
 interface TeamManagerProps {
   activeTeam: Pokemon[];
   reserves: Pokemon[];
+  abilityCapsules: number;
   onUpdateTeam: (active: Pokemon[], reserves: Pokemon[]) => void;
+  onConsumeItem: (itemName: string) => void;
   onBack: () => void;
 }
 
 export const TeamManager: React.FC<TeamManagerProps> = ({
   activeTeam,
   reserves,
+  abilityCapsules,
   onUpdateTeam,
+  onConsumeItem,
   onBack,
 }) => {
   // Selected pokemon for detailed view / inspection
@@ -37,16 +50,34 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
   const [moveDrag, setMoveDrag] = useState<{ from: 'pool' | 'slot'; name: string } | null>(null);
   const [selectedPoolMove, setSelectedPoolMove] = useState<string | null>(null);
 
-  const updateInspectedMoves = (moves: Move[]) => {
-    if (!inspectedPokemon) return;
-    const updated = rememberMoves({ ...inspectedPokemon, moves }, moves);
+  const updateInspected = (updated: Pokemon) => {
     onUpdateTeam(
       activeTeam.map((p) => (p.id === updated.id ? updated : p)),
       reserves.map((p) => (p.id === updated.id ? updated : p))
     );
     setInspectedPokemon(updated);
+  };
+
+  const updateInspectedMoves = (moves: Move[]) => {
+    if (!inspectedPokemon) return;
+    updateInspected(rememberMoves({ ...inspectedPokemon, moves }, moves));
     setSelectedPoolMove(null);
     soundManager.playDrop();
+  };
+
+  const selectAbility = (abilityId: string) => {
+    if (!inspectedPokemon || getAbilityId(inspectedPokemon) === abilityId) return;
+    updateInspected(withAbility(inspectedPokemon, abilityId));
+    soundManager.playDrop();
+    showNotification(`${inspectedPokemon.name} ahora tiene ${getAbilityName(abilityId)}`);
+  };
+
+  const unlockHiddenAbility = () => {
+    if (!inspectedPokemon || inspectedPokemon.hiddenAbilityUnlocked || abilityCapsules <= 0) return;
+    onConsumeItem(ABILITY_CAPSULE_NAME);
+    updateInspected({ ...inspectedPokemon, hiddenAbilityUnlocked: true });
+    soundManager.playLevelUp();
+    showNotification(`¡${inspectedPokemon.name} ha desbloqueado su habilidad oculta!`);
   };
 
   const equipMove = (name: string, slotIdx: number) => {
@@ -648,10 +679,82 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                     })}
                   </div>
                   <p className="text-[11px] text-slate-400 leading-tight">
-                    Habilidad: <span className="text-slate-200">{inspectedPokemon.ability}</span>
+                    Habilidad: <span className="text-slate-200">{getAbilityName(getAbilityId(inspectedPokemon))}</span>
                   </p>
                 </div>
               </div>
+
+              {/* Ability selector: regular abilities are free to swap, the hidden one needs a capsule */}
+              {(() => {
+                const options = getSpeciesAbilities(inspectedPokemon.pokedexId);
+                if (options.length === 0) return null;
+                const currentId = getAbilityId(inspectedPokemon);
+                const unlocked = !!inspectedPokemon.hiddenAbilityUnlocked;
+                return (
+                  <div className="short:col-span-2 flex flex-col gap-1.5">
+                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                      Habilidad
+                    </span>
+                    <div className="grid grid-cols-1 short:grid-cols-3 gap-1.5">
+                      {options.map((option) => {
+                        const locked = option.hidden && !unlocked;
+                        const isCurrent = option.id === currentId;
+                        return (
+                          <div
+                            key={option.id}
+                            role="button"
+                            tabIndex={locked ? -1 : 0}
+                            onClick={() => !locked && selectAbility(option.id)}
+                            className={`rounded p-2 border text-left transition-colors ${
+                              isCurrent
+                                ? 'border-amber-400 bg-amber-950/40'
+                                : locked
+                                ? 'border-slate-800 bg-slate-900/60 opacity-80'
+                                : 'border-slate-700 bg-slate-800/80 hover:border-slate-500 cursor-pointer'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-1 text-xs">
+                              <span className={`font-bold flex items-center gap-1 ${locked ? 'text-slate-400' : 'text-white'}`}>
+                                {locked && <Lock className="w-3 h-3 text-slate-500" />}
+                                {getAbilityName(option.id)}
+                              </span>
+                              <span className="flex items-center gap-1 shrink-0">
+                                {option.hidden && (
+                                  <span className="text-[9px] px-1 rounded bg-violet-900/80 text-violet-200 border border-violet-600/50">
+                                    Oculta
+                                  </span>
+                                )}
+                                {isCurrent && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-slate-400 leading-snug mt-0.5">
+                              {getAbilityDescription(option.id)}
+                              {!ABILITIES_WITH_EFFECT.has(option.id) && (
+                                <span className="italic text-slate-500"> (sin efecto en combate)</span>
+                              )}
+                            </p>
+                            {locked && (
+                              <button
+                                type="button"
+                                disabled={abilityCapsules <= 0}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  unlockHiddenAbility();
+                                }}
+                                className="mt-1.5 w-full py-1 rounded text-[10px] font-bold transition-colors bg-violet-600 hover:bg-violet-500 text-white disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed"
+                              >
+                                {abilityCapsules > 0
+                                  ? `Usar ${ABILITY_CAPSULE_NAME} (tienes ${abilityCapsules})`
+                                  : `Requiere ${ABILITY_CAPSULE_NAME}`}
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Stats Overview */}
               <div>

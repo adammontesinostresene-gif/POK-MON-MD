@@ -1,6 +1,7 @@
 import { Pokemon, PokemonType, PokemonStats, Dungeon, Item, RescueMission, Move } from '../types/game';
 import { LEARNSETS, LEARNSET_MOVES } from './learnsets';
 import { SPECIES_DATA } from './speciesData';
+import { getAbilityName, getEvolvedAbilityId, randomWildAbilityId, withAbility } from './abilities';
 
 // PMD Sprite Repository (SpriteCollab / PMDCollab)
 export const formatDex4Digits = (pokedexId: number): string => {
@@ -483,7 +484,7 @@ export const createStarter = (pokedexId: number): Pokemon => {
   const species = STARTERS.find((s) => s.pokedexId === pokedexId) ?? STARTERS[0];
   const level = 5;
   const stats = calculateStats(species.pokedexId, level)!;
-  return applyOfficialMoves({
+  return withAbility(applyOfficialMoves({
     id: `${species.name.toLowerCase()}_hero`,
     pokedexId: species.pokedexId,
     name: species.name,
@@ -500,7 +501,7 @@ export const createStarter = (pokedexId: number): Pokemon => {
     artworkUrl: getPokemonArtwork(species.pokedexId),
     iconUrl: getPokemonStaticSprite(species.pokedexId),
     description: species.description,
-  });
+  }));
 };
 
 // Starter Hero Pikachu
@@ -1519,6 +1520,8 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
     speed: legacy(c.spe, 0.08),
   };
 
+  const wildAbilityId = randomWildAbilityId(c.pokedexId);
+
   return {
     id: `enemy_${enemyType}_${Date.now()}_${Math.random()}`,
     pokedexId: c.pokedexId,
@@ -1528,7 +1531,8 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
     nextExp: 50,
     types: c.types,
     stats,
-    ability: 'Presión',
+    ability: wildAbilityId ? getAbilityName(wildAbilityId) : 'Presión',
+    abilityId: wildAbilityId,
     status: 'none',
     statusTurns: 0,
     spriteUrl: getPokemonSprite(c.pokedexId),
@@ -1558,16 +1562,36 @@ export const BAG_LIMIT = 10;
 export const bagCount = (inventory: Item[]): number => inventory.reduce((n, it) => n + it.count, 0);
 export const bagSpace = (inventory: Item[]): number => Math.max(0, BAG_LIMIT - bagCount(inventory));
 
+export const ORAN_BERRY: Omit<Item, 'id' | 'count'> = {
+  name: 'Baya Aranja',
+  category: 'healing',
+  description: 'Restaura 100 PS a un Pokémon del equipo.',
+  effectType: 'heal_hp',
+  effectValue: 100,
+  icon: '🍎',
+};
+
+// Items with a single official definition: old saves are migrated to it
+const CANONICAL_ITEMS: Record<string, Omit<Item, 'id' | 'count'>> = { [ORAN_BERRY.name]: ORAN_BERRY };
+
+/** Adds an item, stacking it onto an existing entry with the same name. */
+export const addItem = (items: Item[], item: Item): Item[] => {
+  const canonical = { ...item, ...CANONICAL_ITEMS[item.name] };
+  const existing = items.find((it) => it.name === item.name);
+  return existing
+    ? items.map((it) => (it === existing ? { ...it, count: it.count + item.count } : it))
+    : [...items, canonical];
+};
+
+/** Merges duplicate entries (same name) into one stack and applies canonical definitions. */
+export const normalizeItems = (items: Item[]): Item[] =>
+  items.filter((it) => it.count > 0).reduce<Item[]>((acc, it) => addItem(acc, it), []);
+
 export const DEFAULT_INVENTORY: Item[] = [
   {
+    ...ORAN_BERRY,
     id: 'item_oran_1',
-    name: 'Baya Aranja',
-    category: 'healing',
-    description: 'Restaura 50 PS a un Pokémon del equipo.',
     count: 3,
-    effectType: 'heal_hp',
-    effectValue: 50,
-    icon: '🍎',
   },
   {
     id: 'item_apple_1',
@@ -2746,13 +2770,15 @@ export const evolvePokemon = (
   const gains = getEvolutionStatGains(pokemon, chosenOption);
   const newMaxHp = pokemon.stats.maxHp + gains.hp;
   const newHp = Math.min(newMaxHp, pokemon.stats.hp + gains.hp);
+  const evolvedAbilityId = getEvolvedAbilityId(pokemon, chosenOption.targetPokedexId);
 
   return {
     ...rememberMoves(pokemon, pokemon.moves),
     pokedexId: chosenOption.targetPokedexId,
     name: chosenOption.targetName,
     types: chosenOption.types,
-    ability: chosenOption.ability,
+    ability: evolvedAbilityId ? getAbilityName(evolvedAbilityId) : chosenOption.ability,
+    abilityId: evolvedAbilityId,
     description: chosenOption.description,
     spriteUrl: getPmdPortraitUrl(chosenOption.targetPokedexId),
     artworkUrl: getPmdPortraitUrl(chosenOption.targetPokedexId),

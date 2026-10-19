@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pokemon, Dungeon, Item, RescueMission } from '../types/game';
-import { DUNGEONS, TYPE_COLORS, canPokemonEvolve, BAG_LIMIT, bagCount, bagSpace } from '../data/pokemonData';
+import { DUNGEONS, TYPE_COLORS, canPokemonEvolve, BAG_LIMIT, bagCount, bagSpace, ORAN_BERRY } from '../data/pokemonData';
 import { soundManager } from '../utils/audio';
 import {
   Compass,
@@ -25,6 +25,7 @@ import {
 import { PmdPortrait } from './PmdSprite';
 import { PokedexModal } from './PokedexModal';
 import { SPECIES_DATA } from '../data/speciesData';
+import { ABILITY_CAPSULE_TEMPLATE } from '../data/abilities';
 import rescueBadgeImg from '../assets/images/pmd_rescue_team_badge.png';
 
 interface HubMenuProps {
@@ -869,13 +870,13 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             <div className="grid grid-cols-1 short:grid-cols-2 gap-2 sm:gap-2.5">
               {[
                 {
-                  name: 'Baya Aranja',
+                  name: ORAN_BERRY.name,
                   price: 80,
-                  value: 50,
+                  value: ORAN_BERRY.effectValue,
                   effectType: 'heal_hp' as const,
-                  icon: '🍎',
+                  icon: ORAN_BERRY.icon,
                   cat: 'healing' as const,
-                  desc: 'Restaura 50 PS en momentos de apuro.',
+                  desc: ORAN_BERRY.description,
                 },
                 {
                   name: 'Manzana Grande',
@@ -912,6 +913,15 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   icon: '🧪',
                   cat: 'healing' as const,
                   desc: 'Restaura 10 PP de un movimiento.',
+                },
+                {
+                  name: ABILITY_CAPSULE_TEMPLATE.name,
+                  price: 2000,
+                  value: ABILITY_CAPSULE_TEMPLATE.effectValue,
+                  effectType: ABILITY_CAPSULE_TEMPLATE.effectType,
+                  icon: ABILITY_CAPSULE_TEMPLATE.icon,
+                  cat: ABILITY_CAPSULE_TEMPLATE.category,
+                  desc: ABILITY_CAPSULE_TEMPLATE.description,
                 },
               ].map((shopItem) => (
                 <div

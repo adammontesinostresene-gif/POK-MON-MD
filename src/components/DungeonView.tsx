@@ -7,7 +7,7 @@ import {
   getRandomRecruit,
   getWildEnemiesCount,
 } from '../data/eventData';
-import { BAG_LIMIT, bagCount, bagSpace } from '../data/pokemonData';
+import { BAG_LIMIT, ORAN_BERRY, addItem, bagCount, bagSpace } from '../data/pokemonData';
 import { TurnBasedCombat } from './TurnBasedCombat';
 import { PmdPortrait } from './PmdSprite';
 import { soundManager } from '../utils/audio';
@@ -130,7 +130,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       if (outcome === 0) {
         const item = generateRandomFloorItem();
         if (bagSpace(inventory) > 0) {
-          setInventory((prev) => [...prev, item]);
+          setInventory((prev) => addItem(prev, item));
           soundManager.playDrop();
           setResolutionMessage(`En el camino encontraste ${item.icon} ${item.name}.`);
         } else {
@@ -168,7 +168,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     }
 
     if (choice.actionKey === 'give_berry') {
-      const berryIdx = inventory.findIndex((it) => it.id.includes('oran') && it.count > 0);
+      const berryIdx = inventory.findIndex((it) => it.name === ORAN_BERRY.name && it.count > 0);
       if (berryIdx !== -1) {
         const updatedInv = [...inventory];
         updatedInv[berryIdx].count -= 1;
@@ -229,7 +229,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         effectValue: 100,
         icon: '🌰',
       };
-      setInventory((inv) => [...inv, reviverItem]);
+      setInventory((inv) => addItem(inv, reviverItem));
       soundManager.playLevelUp();
       setResolutionMessage(
         `¡Las runas brillaron con chispas de alto voltaje abriendo una cámara secreta! Encontraste ${bonusGold} Pokécuartos y una valiosa Semilla Revivir.`
@@ -247,16 +247,11 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         if (gold >= 80) {
           setGold((g) => g - 80);
           const oran: Item = {
+            ...ORAN_BERRY,
             id: `oran_shop_${Date.now()}`,
-            name: 'Baya Aranja',
-            category: 'healing',
-            description: 'Restaura 50 PS a un Pokémon.',
             count: 1,
-            effectType: 'heal_hp',
-            effectValue: 50,
-            icon: '🍎',
           };
-          setInventory((inv) => [...inv, oran]);
+          setInventory((inv) => addItem(inv, oran));
           soundManager.playDrop();
           setResolutionMessage(
             `Kecleon te estrechó la mano amablemente: "¡Gracias por tu compra de Baya Aranja!"`
@@ -277,7 +272,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
             effectValue: 100,
             icon: '🌰',
           };
-          setInventory((inv) => [...inv, reviver]);
+          setInventory((inv) => addItem(inv, reviver));
           soundManager.playDrop();
           setResolutionMessage(
             `Kecleon hizo una reverencia: "¡Una Semilla Revivir de la mejor cosecha para tu equipo!"`
@@ -316,7 +311,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     if (item) {
       if (bagSpace(inventory) === 0) return;
       soundManager.playDrop();
-      setInventory((inv) => [...inv, item]);
+      setInventory((inv) => addItem(inv, item));
       setResolutionMessage(`¡Guardaste ${item.icon} ${item.name} en la mochila!`);
     } else {
       setResolutionMessage('Decidiste no llevarte nada y seguiste adelante.');
@@ -359,7 +354,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     setTeam(finalTeam);
     setReserves(finalReserves);
     const finalGold = gold + goldGained;
-    const finalInventory = droppedItem && bagSpace(inventory) > 0 ? [...inventory, droppedItem] : inventory;
+    const finalInventory = droppedItem && bagSpace(inventory) > 0 ? addItem(inventory, droppedItem) : inventory;
     setGold(finalGold);
     setInventory(finalInventory);
 
@@ -906,6 +901,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                   inventory.map((item) => (
                     <button
                       key={item.id}
+                      disabled={item.effectType === 'unlock_ability'}
                       onClick={() => {
                         soundManager.playSelect();
                         if (item.effectType === 'restore_belly' || item.effectType === 'escape') {
@@ -914,7 +910,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                           setSelectedItemForUse(item);
                         }
                       }}
-                      className="p-3 bg-slate-800/80 hover:bg-slate-750 border border-slate-700 rounded-xl flex items-center justify-between text-left transition-colors"
+                      className="p-3 bg-slate-800/80 hover:bg-slate-750 border border-slate-700 rounded-xl flex items-center justify-between text-left transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="flex items-center gap-2.5">
                         <span className="text-xl">{item.icon}</span>

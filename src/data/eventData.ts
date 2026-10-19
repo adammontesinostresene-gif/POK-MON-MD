@@ -1,9 +1,9 @@
 import { FloorEvent, FloorEventType, Dungeon, Pokemon, Item } from '../types/game';
-import { createWildEnemy, EXTRA_RECRUITS, getPmdPortraitUrl } from './pokemonData';
+import { createWildEnemy, EXTRA_RECRUITS, getPmdPortraitUrl, ORAN_BERRY } from './pokemonData';
 
 // Items that can show up in the "choose one of three" floor event
 const FLOOR_ITEM_POOL: Omit<Item, 'id' | 'count'>[] = [
-  { name: 'Baya Aranja', category: 'healing', description: 'Restaura 50 PS a un Pokémon del equipo.', effectType: 'heal_hp', effectValue: 50, icon: '🍎' },
+  ORAN_BERRY,
   { name: 'Manzana Grande', category: 'food', description: 'Recupera 50 de Hambre/Tripa.', effectType: 'restore_belly', effectValue: 50, icon: '🍏' },
   { name: 'Semilla Revivir', category: 'seed', description: 'Revive inmediatamente a un Pokémon caído.', effectType: 'revive', effectValue: 100, icon: '🌰' },
   { name: 'Semilla Sueño', category: 'seed', description: 'Duerme al Pokémon rival durante varios turnos.', effectType: 'inflict_status', effectValue: 3, icon: '💤' },
@@ -184,7 +184,7 @@ export const generateFloorEvent = (
           {
             id: 'buy_oran',
             text: 'Comprar Baya Aranja (Cuesta 80 Pokécuartos)',
-            hint: 'Restaura 50 PS en momentos críticos',
+            hint: 'Restaura 100 PS en momentos críticos',
             actionKey: 'buy_item' as const,
           },
           {

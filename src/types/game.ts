@@ -72,6 +72,10 @@ export interface Pokemon {
   status: StatusAilment;
   statusTurns: number;
   ability: string;
+  // PokéAPI slug of the selected ability (see data/abilities.ts)
+  abilityId?: string;
+  // Unlocked with a Cápsula Habilidad; kept across evolutions
+  hiddenAbilityUnlocked?: boolean;
   spriteUrl: string;
   artworkUrl: string;
   iconUrl: string;
@@ -90,7 +94,7 @@ export interface Item {
   category: ItemCategory;
   description: string;
   count: number;
-  effectType: 'heal_hp' | 'restore_belly' | 'revive' | 'restore_pp' | 'boost_attack' | 'inflict_status' | 'escape';
+  effectType: 'heal_hp' | 'restore_belly' | 'revive' | 'restore_pp' | 'boost_attack' | 'inflict_status' | 'escape' | 'unlock_ability';
   effectValue: number;
   icon: string;
 }

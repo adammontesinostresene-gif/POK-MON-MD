@@ -21,22 +21,24 @@ import {
   createStarter,
   applyOfficialMoves,
   calculateStats,
+  normalizeItems,
   INITIAL_MISSIONS,
 } from './data/pokemonData';
 import { soundManager } from './utils/audio';
+import { ABILITY_CAPSULE_NAME, withAbility } from './data/abilities';
 import { clearSave, loadGame, saveGame } from './utils/saveGame';
 import { Award, AlertTriangle, ArrowRight, RotateCcw } from 'lucide-react';
 
 const restorePokemon = (p: Pokemon): Pokemon => {
   // Recomputing from official bases also migrates saves made with the old hand-tuned stats
   const stats = calculateStats(p.pokedexId, p.level) ?? p.stats;
-  return {
+  return withAbility({
     ...p,
     stats: { ...stats, hp: stats.maxHp },
     moves: p.moves.map((m) => ({ ...m, pp: m.maxPp })),
     status: 'none',
     statusTurns: 0,
-  };
+  });
 };
 
 const mergeDexIds = (prev: number[], ids: number[]): number[] => {
@@ -68,9 +70,9 @@ export default function App() {
   const [bankGold, setBankGold] = useState<number>(initialSave?.bankGold ?? 0);
   const [rankPoints, setRankPoints] = useState<number>(initialSave?.rankPoints ?? 0);
   const [inventory, setInventory] = useState<Item[]>(
-    initialSave && !abandonedExpedition ? initialSave.inventory : []
+    initialSave && !abandonedExpedition ? normalizeItems(initialSave.inventory) : []
   );
-  const [storage, setStorage] = useState<Item[]>(initialSave?.storage ?? []);
+  const [storage, setStorage] = useState<Item[]>(normalizeItems(initialSave?.storage ?? []));
   const [missions, setMissions] = useState<RescueMission[]>(initialSave?.missions ?? INITIAL_MISSIONS);
   const [seenPokedex, setSeenPokedex] = useState<number[]>(initialSave?.seenPokedex ?? []);
   const [caughtPokedex, setCaughtPokedex] = useState<number[]>(initialSave?.caughtPokedex ?? []);
@@ -153,7 +155,7 @@ export default function App() {
   ) => {
     setActiveTeam(updatedTeam.map(restorePokemon));
     setReserves(updatedReserves.map(restorePokemon));
-    setInventory(updatedInventory);
+    setInventory(normalizeItems(updatedInventory));
     setGold(finalGold);
     setCompletedDungeonInfo({
       name: currentDungeon?.name || 'Mazmorra',
@@ -163,6 +165,27 @@ export default function App() {
     setScreen('VICTORY');
   };
 
+  // Spend from the bag first, then from Kangaskhan's storage
+  const consumeItem = (itemName: string) => {
+    const consumeFrom = (items: Item[]) => {
+      const idx = items.findIndex((it) => it.name === itemName && it.count > 0);
+      if (idx === -1) return null;
+      return items
+        .map((it, i) => (i === idx ? { ...it, count: it.count - 1 } : it))
+        .filter((it) => it.count > 0);
+    };
+    const newInventory = consumeFrom(inventory);
+    if (newInventory) {
+      setInventory(newInventory);
+      return;
+    }
+    const newStorage = consumeFrom(storage);
+    if (newStorage) setStorage(newStorage);
+  };
+
+  const countItem = (itemName: string) =>
+    [...inventory, ...storage].filter((it) => it.name === itemName).reduce((n, it) => n + it.count, 0);
+
   const handleDungeonExit = (
     updatedTeam: Pokemon[],
     updatedInventory: Item[],
@@ -170,7 +193,7 @@ export default function App() {
   ) => {
     setActiveTeam(updatedTeam.map(restorePokemon));
     setReserves((prev) => prev.map(restorePokemon));
-    setInventory(updatedInventory);
+    setInventory(normalizeItems(updatedInventory));
     setGold(finalGold);
     soundManager.startBgm('hub');
     setScreen('HUB');
@@ -230,6 +253,8 @@ export default function App() {
         <TeamManager
           activeTeam={activeTeam}
           reserves={reserves}
+          abilityCapsules={countItem(ABILITY_CAPSULE_NAME)}
+          onConsumeItem={consumeItem}
           onUpdateTeam={(newActive, newReserves) => {
             setActiveTeam(newActive);
             setReserves(newReserves);
@@ -251,23 +276,7 @@ export default function App() {
             setActiveTeam(newActive);
             setReserves(newReserves);
           }}
-          onConsumeItem={(itemName) => {
-            // Spend from the bag first, then from Kangaskhan's storage
-            const consumeFrom = (items: Item[]) => {
-              const idx = items.findIndex((it) => it.name === itemName && it.count > 0);
-              if (idx === -1) return null;
-              return items
-                .map((it, i) => (i === idx ? { ...it, count: it.count - 1 } : it))
-                .filter((it) => it.count > 0);
-            };
-            const newInventory = consumeFrom(inventory);
-            if (newInventory) {
-              setInventory(newInventory);
-              return;
-            }
-            const newStorage = consumeFrom(storage);
-            if (newStorage) setStorage(newStorage);
-          }}
+          onConsumeItem={consumeItem}
           onBack={() => {
             soundManager.startBgm('hub');
             setScreen('HUB');

@@ -115,6 +115,20 @@ console.log(`${seedIds.size} seed species -> ${speciesIds.size} species with the
 const species = {};
 const learnsets = {};
 const moveSlugs = new Set();
+const abilityData = {};
+
+const describeAbility = async (url) => {
+  const ability = await getCached(url);
+  if (!abilityData[ability.name]) {
+    const flavor = [...ability.flavor_text_entries].reverse().find((f) => f.language.name === 'es');
+    const name = esName(ability, ability.name);
+    abilityData[ability.name] = {
+      name,
+      description: flavor ? flavor.flavor_text.replace(/\s+/g, ' ').trim() : name,
+    };
+  }
+  return ability.name;
+};
 
 await mapLimit([...speciesIds].sort((a, b) => a - b), 12, async (id) => {
   const [pokemon, speciesInfo] = await Promise.all([
@@ -128,11 +142,16 @@ await mapLimit([...speciesIds].sort((a, b) => a - b), 12, async (id) => {
   // Some recent species have no Spanish Pokédex entry yet: fall back to their category
   const genus = speciesInfo.genera.find((g) => g.language.name === 'es')?.genus;
   const types = pokemon.types.map((t) => TYPE_ES[t.type.name]);
+  const abilities = [];
+  for (const a of [...pokemon.abilities].sort((x, y) => x.slot - y.slot)) {
+    abilities.push({ id: await describeAbility(a.ability.url), hidden: a.is_hidden });
+  }
   species[id] = {
     name,
     types,
     baseStats: ['hp', 'attack', 'defense', 'special-attack', 'special-defense', 'speed'].map(stat),
     ability: mainAbility ? esName(await getCached(mainAbility.ability.url), mainAbility.ability.name) : '',
+    abilities,
     description: flavor
       ? flavor.flavor_text.replace(/\s+/g, ' ').trim()
       : genus
@@ -231,15 +250,27 @@ export interface SpeciesEvolution {
   requiredItem?: string;
 }
 
+export interface SpeciesAbility {
+  /** PokéAPI slug, key of ABILITY_DATA */
+  id: string;
+  hidden: boolean;
+}
+
 export interface SpeciesData {
   name: string;
   types: PokemonType[];
   /** [PS, Ataque, Defensa, At. Esp., Def. Esp., Velocidad] */
   baseStats: [number, number, number, number, number, number];
   ability: string;
+  abilities: SpeciesAbility[];
   description: string;
   evolutions: SpeciesEvolution[];
 }
+
+/** Official ability names and descriptions (Spanish) keyed by PokéAPI slug. */
+export const ABILITY_DATA: Record<string, { name: string; description: string }> = ${compactRecord(
+  Object.fromEntries(Object.keys(abilityData).sort().map((k) => [k, abilityData[k]]))
+)};
 
 /** Official data (Spanish) for every species in the National Dex. */
 export const SPECIES_DATA: Record<number, SpeciesData> = ${compactRecord(sortedSpecies)};

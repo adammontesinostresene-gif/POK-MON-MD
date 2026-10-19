@@ -1,7 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Pokemon, Move, Item, PokemonType, BattleStat, StatChange, StatusAilment } from '../types/game';
-import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel, applyOfficialStats, learnLevelUpMoves, replaceMove, bagSpace } from '../data/pokemonData';
+import { TYPE_COLORS, getTypeEffectiveness, getExpToNextLevel, applyOfficialStats, learnLevelUpMoves, replaceMove, bagSpace, ORAN_BERRY } from '../data/pokemonData';
 import { LEARNSET_MOVES } from '../data/learnsets';
+import {
+  ABSORB_ABILITIES,
+  CONTACT_AILMENTS,
+  CONTACT_RECOIL,
+  abilityAccuracyMultiplier,
+  abilityAlwaysHits,
+  abilityAttackMultiplier,
+  abilityBlocksAilment,
+  abilityBlocksNonSuperEffective,
+  abilityBlocksSecondary,
+  abilityBlocksStatDrop,
+  abilityConvertsMove,
+  abilityCritChance,
+  abilityCritMultiplier,
+  abilityDefenseMultiplier,
+  abilityIgnoresBurn,
+  abilityIgnoresGhostImmunity,
+  abilityIgnoresParalysisSlow,
+  abilityPriority,
+  abilitySecondaryChanceMultiplier,
+  abilitySpeedMultiplier,
+  abilityStab,
+  abilityStageFactor,
+  abilitySurvivesAtFullHp,
+  getAbilityId,
+  getAbilityName,
+} from '../data/abilities';
 import { soundManager } from '../utils/audio';
 import {
   Shield,
@@ -263,6 +290,40 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     setAilments(next);
   };
 
+  const abilityOf = (p: Pokemon) => getAbilityId(p);
+
+  // Intimidate lowers the rivals' Attack as the battle begins
+  const battleStartRef = useRef(false);
+  useEffect(() => {
+    if (battleStartRef.current) return;
+    battleStartRef.current = true;
+    const messages: string[] = [];
+    const sides = [
+      { side: playerTeam, foes: initialEnemies },
+      { side: initialEnemies, foes: playerTeam },
+    ];
+    for (const { side, foes } of sides) {
+      for (const p of side) {
+        if (p.stats.hp <= 0 || abilityOf(p) !== 'intimidate') continue;
+        messages.push(`¡${getAbilityName('intimidate')} de ${p.name} amedrenta a los rivales!`);
+        for (const foe of foes) {
+          if (foe.stats.hp <= 0) continue;
+          const foeAbility = abilityOf(foe);
+          if (abilityBlocksStatDrop(foeAbility, 'attack')) {
+            messages.push(`¡${getAbilityName(foeAbility)} de ${foe.name} evita que baje su Ataque!`);
+            continue;
+          }
+          const stage = Math.max(-6, Math.min(6, getStage(foe.id, 'attack') - abilityStageFactor(foeAbility)));
+          stagesRef.current = { ...stagesRef.current, [foe.id]: { ...stagesRef.current[foe.id], attack: stage } };
+        }
+      }
+    }
+    if (messages.length > 0) {
+      setStatStages(stagesRef.current);
+      setBattleLogs((prev) => [...prev, ...messages].slice(-8));
+    }
+  }, []);
+
   // Inventory synchronization ref for turn execution
   const currentInventoryRef = useRef<Item[]>(inventory);
   useEffect(() => {
@@ -346,18 +407,32 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
   const getStage = (id: string, stat: BattleStat) => stagesRef.current[id]?.[stat] ?? 0;
 
-  const effectiveStat = (p: Pokemon, stat: 'attack' | 'defense' | 'spAttack' | 'spDefense' | 'speed') =>
-    p.stats[stat] *
-    stageMultiplier(getStage(p.id, stat)) *
-    (stat === 'speed' && ailmentsRef.current[p.id]?.status === 'paralysis' ? 0.5 : 1);
+  const effectiveStat = (p: Pokemon, stat: 'attack' | 'defense' | 'spAttack' | 'spDefense' | 'speed') => {
+    const ailment = ailmentsRef.current[p.id]?.status;
+    const ability = abilityOf(p);
+    const speedMult =
+      stat === 'speed'
+        ? abilitySpeedMultiplier(ability, ailment) *
+          (ailment === 'paralysis' && !abilityIgnoresParalysisSlow(ability) ? 0.5 : 1)
+        : 1;
+    return p.stats[stat] * stageMultiplier(getStage(p.id, stat)) * speedMult;
+  };
+
+  const canReceiveAilment = (target: Pokemon, ailment: Ailment) =>
+    !ailmentsRef.current[target.id] &&
+    !isImmuneToAilment(target, ailment) &&
+    !abilityBlocksAilment(abilityOf(target), ailment);
 
   // Returns true when the target ends up with the new ailment
   const applyAilment = async (target: Pokemon, ailment: Ailment, announceFailure: boolean) => {
-    if (ailmentsRef.current[target.id] || isImmuneToAilment(target, ailment)) {
+    if (!canReceiveAilment(target, ailment)) {
       if (announceFailure) {
+        const targetAbility = abilityOf(target);
         addLog(
           ailmentsRef.current[target.id]
             ? `¡Pero no afectó a ${target.name}! Ya sufre un problema de estado.`
+            : abilityBlocksAilment(targetAbility, ailment)
+            ? `¡${getAbilityName(targetAbility)} de ${target.name} lo protege!`
             : `No afecta a ${target.name}...`
         );
         await wait(450);
@@ -409,16 +484,29 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   };
 
   const moveHits = (attacker: Pokemon, defender: Pokemon, move: Move) => {
+    if (abilityAlwaysHits(abilityOf(attacker), abilityOf(defender))) return true;
     const stage = Math.max(-6, Math.min(6, getStage(attacker.id, 'accuracy') - getStage(defender.id, 'evasion')));
-    return Math.random() * 100 < move.accuracy * accuracyMultiplier(stage);
+    return (
+      Math.random() * 100 <
+      move.accuracy * accuracyMultiplier(stage) * abilityAccuracyMultiplier(abilityOf(attacker), move)
+    );
   };
 
-  const applyStatChanges = async (target: Pokemon, changes: StatChange[]) => {
+  // byFoe: the change comes from a rival, so abilities like Cuerpo Puro can block drops
+  const applyStatChanges = async (target: Pokemon, changes: StatChange[], byFoe = false) => {
+    const ability = abilityOf(target);
+    const factor = abilityStageFactor(ability);
     for (const change of changes) {
       const label = STAT_LABELS[change.stat];
+      if (byFoe && change.stages < 0 && abilityBlocksStatDrop(ability, change.stat)) {
+        addLog(`¡${getAbilityName(ability)} de ${target.name} evita que baje su ${label.name}!`);
+        await wait(450);
+        continue;
+      }
+      const stages = change.stages * factor;
       const current = getStage(target.id, change.stat);
-      const next = Math.max(-6, Math.min(6, current + change.stages));
-      const rising = change.stages > 0;
+      const next = Math.max(-6, Math.min(6, current + stages));
+      const rising = stages > 0;
       if (next === current) {
         addLog(`¡${label.article} ${label.name} de ${target.name} no puede ${rising ? 'subir' : 'bajar'} más!`);
       } else {
@@ -476,13 +564,23 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     const isPhysical = move.category === 'physical';
     const atkStat = effectiveStat(attacker, isPhysical ? 'attack' : 'spAttack');
     const defStat = effectiveStat(defender, isPhysical ? 'defense' : 'spDefense');
+    const attackerAbility = abilityOf(attacker);
+    const defenderAbility = abilityOf(defender);
+    const attackerAilment = ailmentsRef.current[attacker.id]?.status;
 
-    const effectiveness = isTypeless(move) ? 1 : getTypeEffectiveness(move.type, defender.types);
-    const stab = !isTypeless(move) && attacker.types.includes(move.type) ? 1.5 : 1.0;
+    const defTypes = abilityIgnoresGhostImmunity(attackerAbility, move)
+      ? defender.types.filter((t) => t !== 'Fantasma')
+      : defender.types;
+    const effectiveness = isTypeless(move) ? 1 : getTypeEffectiveness(move.type, defTypes);
+    const stab = !isTypeless(move) && attacker.types.includes(move.type) ? abilityStab(attackerAbility) : 1.0;
     const variance = 0.85 + Math.random() * 0.15;
-    const isCrit = Math.random() < 0.08;
-    const critMult = isCrit ? 1.5 : 1.0;
-    const burnMult = isPhysical && ailmentsRef.current[attacker.id]?.status === 'burn' ? 0.5 : 1.0;
+    const isCrit = Math.random() < abilityCritChance(attackerAbility, defenderAbility);
+    const critMult = isCrit ? abilityCritMultiplier(attackerAbility) : 1.0;
+    const burnMult =
+      isPhysical && attackerAilment === 'burn' && !abilityIgnoresBurn(attackerAbility) ? 0.5 : 1.0;
+    const abilityMult =
+      abilityAttackMultiplier(attackerAbility, attacker, move, effectiveness, attackerAilment) *
+      abilityDefenseMultiplier(defenderAbility, defender, move, effectiveness, ailmentsRef.current[defender.id]?.status);
 
     const baseDmg =
       ((2 * attacker.level / 5 + 2) * move.power * (atkStat / Math.max(1, defStat)) / 50 + 2) *
@@ -490,6 +588,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       effectiveness *
       critMult *
       burnMult *
+      abilityMult *
       variance *
       DAMAGE_MULTIPLIER;
 
@@ -498,6 +597,70 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       effectiveness,
       isCrit,
     };
+  };
+
+  // Returns true when the target's ability negates the move (it may heal or get a boost instead)
+  const resolveAbsorb = async (target: Pokemon, move: Move): Promise<boolean> => {
+    const targetAbility = abilityOf(target);
+    const absorb = targetAbility ? ABSORB_ABILITIES[targetAbility] : undefined;
+    if (!absorb || isTypeless(move) || absorb.type !== move.type) return false;
+    addLog(`¡${getAbilityName(targetAbility)} de ${target.name} anula ${move.name}!`);
+    if (absorb.effect.kind === 'heal' && target.stats.hp < target.stats.maxHp) {
+      const heal = Math.max(1, Math.floor(target.stats.maxHp / 4));
+      target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + heal);
+      soundManager.playHeal();
+      setFloatingDamage({ targetId: target.id, text: `+${heal} PS`, type: 'heal' });
+      await wait(500);
+      setFloatingDamage(null);
+    } else if (absorb.effect.kind === 'boost') {
+      await applyStatChanges(target, [{ stat: absorb.effect.stat, stages: absorb.effect.stages }]);
+    } else {
+      await wait(450);
+    }
+    return true;
+  };
+
+  const applySturdy = (target: Pokemon, damage: number) =>
+    abilitySurvivesAtFullHp(abilityOf(target)) &&
+    target.stats.maxHp > 1 &&
+    target.stats.hp >= target.stats.maxHp &&
+    damage >= target.stats.hp
+      ? { damage: target.stats.hp - 1, endured: true }
+      : { damage, endured: false };
+
+  // Abilities triggered by physical hits (Elec. Estática, Piel Tosca, Toque Tóxico...); mutates HP in place
+  const applyContactAbilities = async (attacker: Pokemon, target: Pokemon, move: Move) => {
+    if (move.category !== 'physical') return;
+    const targetAbility = abilityOf(target);
+    const attackerAbility = abilityOf(attacker);
+    if (attacker.stats.hp > 0 && targetAbility) {
+      const ailments = CONTACT_AILMENTS[targetAbility];
+      const ailment = ailments?.[Math.floor(Math.random() * ailments.length)];
+      if (ailment && Math.random() < 0.3 && canReceiveAilment(attacker, ailment)) {
+        addLog(`¡${getAbilityName(targetAbility)} de ${target.name} se activa!`);
+        await applyAilment(attacker, ailment, false);
+      }
+      const recoil = CONTACT_RECOIL[targetAbility];
+      if (recoil && attackerAbility !== 'magic-guard') {
+        const dmg = Math.max(1, Math.floor(attacker.stats.maxHp * recoil));
+        attacker.stats.hp = Math.max(0, attacker.stats.hp - dmg);
+        addLog(`¡${attacker.name} se hiere con ${getAbilityName(targetAbility)} de ${target.name}!`);
+        setFloatingDamage({ targetId: attacker.id, text: `-${dmg}`, type: 'damage' });
+        soundManager.playHit();
+        await wait(500);
+        setFloatingDamage(null);
+      }
+    }
+    if (attackerAbility === 'poison-touch' && target.stats.hp > 0 && Math.random() < 0.3 && canReceiveAilment(target, 'poison')) {
+      addLog(`¡${getAbilityName(attackerAbility)} de ${attacker.name} se activa!`);
+      await applyAilment(target, 'poison', false);
+    }
+  };
+
+  const triggerMoxie = async (attacker: Pokemon) => {
+    if (attacker.stats.hp <= 0 || abilityOf(attacker) !== 'moxie') return;
+    addLog(`¡${getAbilityName('moxie')} de ${attacker.name} se activa!`);
+    await applyStatChanges(attacker, [{ stat: 'attack', stages: 1 }]);
   };
 
   // Handle a team member choosing their move in team order
@@ -593,7 +756,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           isPlayerTeam: true,
           memberIndex: i,
           speed: effectiveStat(member, 'speed'),
-          priority: move.name === 'Ataque Rápido' ? 1 : 0,
+          priority: (move.name === 'Ataque Rápido' ? 1 : 0) + abilityPriority(abilityOf(member), withEffects(move)),
           move,
           targetId: assignedTarget,
         });
@@ -623,7 +786,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           isPlayerTeam: false,
           memberIndex: j,
           speed: effectiveStat(enemyActor, 'speed'),
-          priority: randomEnemyMove.name === 'Ataque Rápido' ? 1 : 0,
+          priority:
+            (randomEnemyMove.name === 'Ataque Rápido' ? 1 : 0) +
+            abilityPriority(abilityOf(enemyActor), withEffects(randomEnemyMove)),
           move: randomEnemyMove,
           targetId: 'player_target',
         });
@@ -659,7 +824,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           continue;
         }
 
-        const move = withEffects(action.move);
+        const move = abilityConvertsMove(abilityOf(member), withEffects(action.move));
         const ailment = getMoveAilment(move);
         if (!(await checkCanAct(member))) continue;
 
@@ -726,7 +891,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               setFloatingDamage(null);
               continue;
             }
-            if (move.statChanges) await applyStatChanges(t, move.statChanges);
+            if (await resolveAbsorb(t, move)) {
+              const absorbedIdx = currentEnemies.findIndex((e) => e.id === t.id);
+              currentEnemies[absorbedIdx] = { ...t };
+              setEnemies([...currentEnemies]);
+              continue;
+            }
+            if (move.statChanges) await applyStatChanges(t, move.statChanges, true);
             if (ailment) {
               if (getTypeEffectiveness(move.type, t.types) === 0) {
                 addLog(`No afecta a ${t.name}...`);
@@ -753,8 +924,18 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             continue;
           }
 
+          if (await resolveAbsorb(t, move)) {
+            currentEnemies[tIdx] = { ...t };
+            setEnemies([...currentEnemies]);
+            continue;
+          }
           const { damage: rawDamage, effectiveness, isCrit } = calculateDamage(member, t, move);
-          const damage = Math.max(1, Math.round(rawDamage * spreadMult));
+          if (abilityBlocksNonSuperEffective(abilityOf(t), effectiveness)) {
+            addLog(`¡${getAbilityName(abilityOf(t))} de ${t.name} lo protege del ataque!`);
+            await wait(450);
+            continue;
+          }
+          const { damage, endured } = applySturdy(t, Math.max(1, Math.round(rawDamage * spreadMult)));
           setHitEnemyId(t.id);
           soundManager.playHit();
           setFloatingDamage({ targetId: t.id, text: `-${damage}`, type: 'damage' });
@@ -769,6 +950,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           if (isCrit) addLog(`¡Golpe crítico de ${member.name}!`);
           if (effectiveness > 1.0) addLog(`¡Ataque súper eficaz contra ${t.name}!`);
           if (effectiveness < 1.0 && effectiveness > 0) addLog(`No es muy eficaz contra ${t.name}...`);
+          if (endured) addLog(`¡${t.name} aguantó el golpe gracias a ${getAbilityName(abilityOf(t))}!`);
 
           if (t.stats.hp <= 0) {
             addLog(`¡${t.name} cayó debilitado!`);
@@ -779,16 +961,30 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           setFloatingDamage(null);
 
           // Secondary effects (e.g. Ácido may lower Sp. Def); a self-boost only triggers once per use
-          if (move.statChanges && Math.random() * 100 < (move.statChance ?? 100)) {
+          const secondaryMult = abilitySecondaryChanceMultiplier(abilityOf(member));
+          const shielded = abilityBlocksSecondary(abilityOf(t));
+          if (move.statChanges && Math.random() * 100 < (move.statChance ?? 100) * secondaryMult) {
             if (move.statTarget === 'self') {
               if (!selfBoostDone) await applyStatChanges(member, move.statChanges);
               selfBoostDone = true;
-            } else if (t.stats.hp > 0) {
-              await applyStatChanges(t, move.statChanges);
+            } else if (t.stats.hp > 0 && !shielded) {
+              await applyStatChanges(t, move.statChanges, true);
             }
           }
-          if (ailment && t.stats.hp > 0 && Math.random() * 100 < (move.statusChance ?? 30)) {
+          if (ailment && t.stats.hp > 0 && !shielded && Math.random() * 100 < (move.statusChance ?? 30) * secondaryMult) {
             await applyAilment(t, ailment, false);
+          }
+          if (t.stats.hp <= 0) await triggerMoxie(member);
+
+          await applyContactAbilities(member, t, move);
+          currentTeam[action.memberIndex!] = { ...member };
+          setTeam([...currentTeam]);
+          if (member.stats.hp <= 0) {
+            addLog(`¡${member.name} cayó debilitado!`);
+            soundManager.playDefeat();
+            await wait(350);
+            await tryTriggerReviverSeed(member, currentTeam, action.memberIndex!);
+            break;
           }
         }
 
@@ -808,7 +1004,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           continue;
         }
 
-        const move = withEffects(action.move);
+        const move = abilityConvertsMove(abilityOf(enemyActor), withEffects(action.move));
         const ailment = getMoveAilment(move);
         if (!(await checkCanAct(enemyActor))) continue;
 
@@ -867,7 +1063,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               setFloatingDamage(null);
               continue;
             }
-            if (move.statChanges) await applyStatChanges(t, move.statChanges);
+            if (await resolveAbsorb(t, move)) {
+              const absorbedIdx = currentTeam.findIndex((m) => m.id === t.id);
+              currentTeam[absorbedIdx] = { ...t };
+              setTeam([...currentTeam]);
+              continue;
+            }
+            if (move.statChanges) await applyStatChanges(t, move.statChanges, true);
             if (ailment) {
               if (getTypeEffectiveness(move.type, t.types) === 0) {
                 addLog(`No afecta a ${t.name}...`);
@@ -893,8 +1095,18 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             continue;
           }
 
+          if (await resolveAbsorb(t, move)) {
+            currentTeam[tIdx] = { ...t };
+            setTeam([...currentTeam]);
+            continue;
+          }
           const { damage: rawDamage, effectiveness, isCrit } = calculateDamage(enemyActor, t, move);
-          const damage = Math.max(1, Math.round(rawDamage * spreadMult));
+          if (abilityBlocksNonSuperEffective(abilityOf(t), effectiveness)) {
+            addLog(`¡${getAbilityName(abilityOf(t))} de ${t.name} lo protege del ataque!`);
+            await wait(450);
+            continue;
+          }
+          const { damage, endured } = applySturdy(t, Math.max(1, Math.round(rawDamage * spreadMult)));
 
           setHitMemberId(t.id);
           soundManager.playHit();
@@ -910,20 +1122,32 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           if (isCrit) addLog(`¡Golpe crítico de ${enemyActor.name}!`);
           if (effectiveness > 1.0) addLog(`¡Ataque súper eficaz contra ${t.name}!`);
           if (effectiveness < 1.0 && effectiveness > 0) addLog(`No es muy eficaz contra ${t.name}...`);
+          if (endured) addLog(`¡${t.name} aguantó el golpe gracias a ${getAbilityName(abilityOf(t))}!`);
 
           await wait(450);
           setFloatingDamage(null);
 
-          if (move.statChanges && Math.random() * 100 < (move.statChance ?? 100)) {
+          const secondaryMult = abilitySecondaryChanceMultiplier(abilityOf(enemyActor));
+          const shielded = abilityBlocksSecondary(abilityOf(t));
+          if (move.statChanges && Math.random() * 100 < (move.statChance ?? 100) * secondaryMult) {
             if (move.statTarget === 'self') {
               if (!selfBoostDone) await applyStatChanges(enemyActor, move.statChanges);
               selfBoostDone = true;
-            } else if (t.stats.hp > 0) {
-              await applyStatChanges(t, move.statChanges);
+            } else if (t.stats.hp > 0 && !shielded) {
+              await applyStatChanges(t, move.statChanges, true);
             }
           }
-          if (ailment && t.stats.hp > 0 && Math.random() * 100 < (move.statusChance ?? 30)) {
+          if (ailment && t.stats.hp > 0 && !shielded && Math.random() * 100 < (move.statusChance ?? 30) * secondaryMult) {
             await applyAilment(t, ailment, false);
+          }
+          if (t.stats.hp <= 0) await triggerMoxie(enemyActor);
+
+          await applyContactAbilities(enemyActor, t, move);
+          currentEnemies[action.memberIndex!] = { ...enemyActor };
+          setEnemies([...currentEnemies]);
+          if (enemyActor.stats.hp <= 0) {
+            addLog(`¡${enemyActor.name} cayó debilitado!`);
+            await wait(350);
           }
 
           if (t.stats.hp <= 0) {
@@ -937,6 +1161,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               t = currentTeam[tIdx];
             }
           }
+          if (enemyActor.stats.hp <= 0) break;
         }
 
         // Check if all team fainted
@@ -959,6 +1184,26 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     for (const { p, i, isPlayer } of residualTargets) {
       const status = ailmentsRef.current[p.id]?.status;
       if (p.stats.hp <= 0 || (status !== 'burn' && status !== 'poison')) continue;
+      const residualAbility = abilityOf(p);
+      if (residualAbility === 'magic-guard') continue;
+      if (status === 'poison' && residualAbility === 'poison-heal') {
+        if (p.stats.hp >= p.stats.maxHp) continue;
+        const heal = Math.max(1, Math.floor(p.stats.maxHp / 8));
+        const healed = { ...p, stats: { ...p.stats, hp: Math.min(p.stats.maxHp, p.stats.hp + heal) } };
+        if (isPlayer) {
+          currentTeam[i] = healed;
+          setTeam([...currentTeam]);
+        } else {
+          currentEnemies[i] = healed;
+          setEnemies([...currentEnemies]);
+        }
+        addLog(`💚 ${p.name} recupera PS gracias a ${getAbilityName(residualAbility)}.`);
+        setFloatingDamage({ targetId: p.id, text: `+${heal} PS`, type: 'heal' });
+        soundManager.playHeal();
+        await wait(550);
+        setFloatingDamage(null);
+        continue;
+      }
       const dmg = Math.max(1, Math.floor(p.stats.maxHp / (status === 'burn' ? 16 : 8)));
       const updated = { ...p, stats: { ...p.stats, hp: Math.max(0, p.stats.hp - dmg) } };
       if (isPlayer) {
@@ -1000,6 +1245,20 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       setIsProcessingTurn(false);
       onDefeat();
       return;
+    }
+
+    // End-of-round abilities
+    for (const p of [...currentTeam, ...currentEnemies]) {
+      if (p.stats.hp <= 0) continue;
+      const roundAbility = abilityOf(p);
+      if (roundAbility === 'speed-boost') {
+        addLog(`¡${getAbilityName(roundAbility)} de ${p.name} se activa!`);
+        await applyStatChanges(p, [{ stat: 'speed', stages: 1 }]);
+      } else if (roundAbility === 'shed-skin' && ailmentsRef.current[p.id] && Math.random() < 0.3) {
+        setAilment(p.id, null);
+        addLog(`¡${p.name} se curó de su problema de estado gracias a ${getAbilityName(roundAbility)}!`);
+        await wait(450);
+      }
     }
 
     // Reset chosen moves and restart selection for next round
@@ -1101,14 +1360,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     let droppedItem: Item | undefined = undefined;
     if (lootRoll >= 0.25 && lootRoll < 0.5 && bagSpace(inventory) > 0) {
       droppedItem = {
+        ...ORAN_BERRY,
         id: `drop_oran_${Date.now()}`,
-        name: 'Baya Aranja',
-        description: 'Restaura 40 PS a un compañero.',
-        category: 'healing',
-        effectType: 'heal_hp',
-        effectValue: 40,
         count: 1,
-        icon: '🫐',
       };
     }
 
@@ -1619,6 +1873,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     <span>
                       Nv. <strong className="text-amber-300">{currentMember.level}</strong>
                     </span>
+                    <span className="hidden sm:inline">·</span>
+                    <span className="hidden sm:inline truncate text-violet-300">
+                      {getAbilityName(abilityOf(currentMember))}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1938,7 +2196,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 {inventory.map((item) => (
                   <button
                     key={item.id}
-                    disabled={isProcessingTurn || item.count <= 0}
+                    disabled={isProcessingTurn || item.count <= 0 || item.effectType === 'unlock_ability'}
                     onClick={() => {
                       soundManager.playSelect();
                       if (item.effectType === 'inflict_status' && aliveEnemies.length > 1) {
@@ -1953,7 +2211,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       setSelectedBagItem(item);
                       setCombatMenu('BAG_TARGET');
                     }}
-                    className="p-2 sm:p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 flex items-center justify-between text-left transition-colors cursor-pointer"
+                    className="p-2 sm:p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 flex items-center justify-between text-left transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="text-lg">{item.icon}</span>
