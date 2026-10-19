@@ -8,6 +8,8 @@
 
 /* Landscape phones and short windows */
 @custom-variant short (@media (max-height: 560px));
+/* Small phones in portrait (e.g. 320x568) */
+@custom-variant compact (@media (max-height: 640px) and (orientation: portrait));
 @custom-variant tall (@media (min-height: 760px));
 
 @layer base {

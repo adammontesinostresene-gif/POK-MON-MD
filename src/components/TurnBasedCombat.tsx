@@ -1473,7 +1473,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         <div className="flex items-center gap-1.5 min-w-0 text-[10px] sm:text-xs font-bold text-amber-300">
           <Swords className="w-3.5 h-3.5 shrink-0" />
           <span className="truncate">
-            {isProcessingTurn ? '¡Turno en curso!' : 'Elige las acciones del equipo'}
+            {isProcessingTurn ? '¡Turno en curso!' : (
+              <>
+                <span className="sm:hidden">Elige</span>
+                <span className="hidden sm:inline">Elige las acciones del equipo</span>
+              </>
+            )}
           </span>
         </div>
 
@@ -1566,9 +1571,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       </div>
 
       {/* CENTER ARENA: PLAYER TEAM ON THE LEFT VS ENEMY ON THE RIGHT */}
-      <div className="relative z-10 flex-1 min-h-0 flex flex-row items-center justify-around px-2 sm:px-6 py-1 gap-2 overflow-hidden">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col-reverse sm:flex-row short:flex-row items-center justify-around px-2 sm:px-6 py-1 gap-1 sm:gap-2 overflow-hidden">
         {/* PLAYER TEAM FORMATION: All 1 to 4 members side-by-side */}
-        <div className="flex items-end justify-center gap-1.5 sm:gap-3 flex-wrap max-w-sm sm:max-w-md">
+        <div className="flex items-end justify-center gap-1 sm:gap-3 flex-wrap short:flex-nowrap w-full sm:w-auto short:w-auto max-w-sm sm:max-w-md">
           {team.map((member, idx) => {
             const isAlive = member.stats.hp > 0;
             const isAttacking = attackingMemberId === member.id;
@@ -1612,15 +1617,15 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
                 {/* HP Badge above sprite */}
                 <div
-                  className={`mb-0.5 rounded px-1.5 py-0.5 text-center shadow backdrop-blur-sm min-w-[65px] sm:min-w-[80px] border transition-all ${
+                  className={`mb-0.5 rounded px-1 sm:px-1.5 py-0.5 text-center shadow backdrop-blur-sm w-[68px] min-[370px]:w-20 sm:w-auto sm:min-w-[80px] short:w-auto short:min-w-[65px] border transition-all ${
                     isCurrentSelecting
                       ? 'bg-amber-950/90 border-amber-400 ring-2 ring-amber-400/50'
                       : 'bg-slate-900/90 border-slate-700'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-1 text-[8px] sm:text-[9px] font-mono font-bold text-white">
-                    <span className="truncate max-w-[42px]">{member.name}</span>
-                    <span className="text-amber-400">Nv.{member.level}</span>
+                    <span className="truncate min-w-0 max-w-[56px]">{member.name}</span>
+                    <span className="text-amber-400 shrink-0">Nv.{member.level}</span>
                   </div>
                   <div className="flex items-center gap-1 mt-0.5">
                     <div className="flex-1 bg-slate-800 h-1 rounded-full overflow-hidden">
@@ -1639,7 +1644,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       {member.stats.hp}/{member.stats.maxHp}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 mt-0.5" title={`EXP ${member.exp}/${member.nextExp}`}>
+                  <div className="flex items-center gap-1 mt-0.5 compact:hidden" title={`EXP ${member.exp}/${member.nextExp}`}>
                     <div className="flex-1 bg-slate-800 h-0.5 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-sky-400 transition-all"
@@ -1653,7 +1658,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
                 {/* Portrait from PMD Sprite Repository */}
                 <div
-                  className={`w-12 h-12 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center relative transition-transform duration-200 ${
+                  className={`w-14 h-14 compact:w-11 compact:h-11 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center relative transition-transform duration-200 ${
                     isAttacking ? 'translate-x-3 scale-105' : ''
                   } ${isHit ? 'animate-bounce brightness-150' : ''}`}
                 >
@@ -1706,7 +1711,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         </div>
 
         {/* ENEMY SQUAD FORMATION: 1 to 4 enemies side-by-side */}
-        <div className="flex items-end justify-center gap-1 sm:gap-2.5 flex-wrap max-w-[48%]">
+        <div className="flex items-end justify-center gap-1 sm:gap-2.5 flex-wrap short:flex-nowrap w-full sm:w-auto short:w-auto sm:max-w-[48%] short:max-w-[48%]">
           {enemies.map((enemyMember) => {
             const isAlive = enemyMember.stats.hp > 0;
             const isAttacking = attackingEnemyId === enemyMember.id;
@@ -1762,9 +1767,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 )}
 
                 {/* Mini HP & Level Pill */}
-                <div className="flex flex-col items-center w-13 sm:w-16 mb-0.5">
+                <div className="flex flex-col items-center w-16 min-[400px]:w-[72px] sm:w-20 short:w-[68px] mb-0.5">
                   <div className="flex items-center justify-between w-full text-[8px] sm:text-[9px] font-mono text-slate-300">
-                    <span className="font-bold text-red-300 truncate max-w-[42px] sm:max-w-[48px]">{enemyMember.name}</span>
+                    <span className="font-bold text-red-300 truncate max-w-[48px] sm:max-w-[56px]">{enemyMember.name}</span>
                     <span className="text-amber-400 font-bold">Nv.{enemyMember.level}</span>
                   </div>
                   <div className="w-full bg-slate-800 h-1 sm:h-1.5 rounded-full overflow-hidden border border-slate-700">
@@ -1787,7 +1792,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
                 {/* Enemy Field Portrait (PMD Repository) */}
                 <div
-                  className={`w-13 h-13 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center rounded-xl p-0.5 border-2 transition-all ${
+                  className={`w-14 h-14 compact:w-11 compact:h-11 sm:w-16 sm:h-16 short:w-10 short:h-10 flex items-center justify-center rounded-xl p-0.5 border-2 transition-all ${
                     isSelectingTarget && isAlive
                       ? 'border-red-400 ring-2 ring-red-400/90 bg-red-950/60 shadow-lg'
                       : 'border-slate-700 bg-slate-900/60'
@@ -1850,7 +1855,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         {combatMenu === 'MOVES_SELECT' && currentMember && (
           <div className="flex flex-col gap-1.5 short:gap-1 w-full">
             {/* Header: Team Stepper & Active Member Details */}
-            <div className="bg-slate-950/80 rounded-lg p-1.5 short:p-1 border border-slate-800 flex items-center justify-between gap-1.5 shrink-0">
+            <div className="bg-slate-950/80 rounded-lg p-1.5 short:p-1 border border-slate-800 flex flex-col sm:flex-row short:flex-row sm:items-center short:items-center justify-between gap-1 sm:gap-1.5 shrink-0">
               {/* Stepper info */}
               <div className="flex items-center gap-2 min-w-0">
                 <PmdPortrait pokedexId={currentMember.pokedexId} size={24} showFrame={true} />
@@ -1883,8 +1888,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 </div>
               </div>
 
-              {/* Quick Member Switcher Pills */}
-              <div className="flex items-center gap-1 overflow-x-auto py-0.5 shrink-0">
+              {/* Quick Member Switcher Pills (own row on narrow screens) */}
+              <div className="flex items-center gap-1 overflow-x-auto py-0.5 sm:shrink-0 short:shrink-0 min-w-0">
                 {aliveMembers.map((m, idx) => {
                   const isSelected = idx === selectingMemberIndex;
                   const chosen = chosenMoves[m.id] || itemUsers[m.id];
@@ -1933,7 +1938,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 <div className="flex items-center justify-between bg-slate-950/90 rounded-lg px-2.5 py-1.5 border border-red-500/50 shadow-md shrink-0">
                   <div className="flex items-center gap-2 min-w-0">
                     <Crosshair className="w-4 h-4 text-red-400 shrink-0 animate-pulse" />
-                    <span className="text-[11px] sm:text-xs text-white font-bold truncate">
+                    <span className="text-[11px] sm:text-xs text-white font-bold line-clamp-2 sm:truncate leading-tight">
                       ¿A qué rival ataca <strong className="text-amber-300">{pendingMoveChoice.member.name}</strong> con <strong className="text-sky-300">{pendingMoveChoice.move.name}</strong> ({isTypeless(pendingMoveChoice.move) ? 'Sin tipo' : pendingMoveChoice.move.type})?
                     </span>
                   </div>
@@ -1974,12 +1979,12 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                             enemy.id
                           )
                         }
-                        className="p-1.5 sm:p-2 rounded-lg border border-red-500/60 bg-slate-800/90 hover:bg-red-950/70 hover:border-red-400 transition-all text-left flex items-center justify-between gap-1.5 cursor-pointer shadow-md group active:scale-98"
+                        className="p-1.5 sm:p-2 rounded-lg border border-red-500/60 bg-slate-800/90 hover:bg-red-950/70 hover:border-red-400 transition-all text-center sm:text-left short:text-left flex flex-col sm:flex-row short:flex-row items-center sm:justify-between short:justify-between gap-1 sm:gap-1.5 cursor-pointer shadow-md group active:scale-98 min-w-0"
                       >
-                        <div className="flex items-center gap-2 min-w-0">
+                        <div className="flex flex-col sm:flex-row short:flex-row items-center gap-1 sm:gap-2 min-w-0 max-w-full">
                           <PmdPortrait pokedexId={enemy.pokedexId} size={28} showFrame={true} />
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-1">
+                          <div className="min-w-0 max-w-full">
+                            <div className="flex items-center justify-center sm:justify-start short:justify-start gap-1 min-w-0">
                               <span className="font-bold text-xs text-white truncate group-hover:text-red-300">
                                 {enemy.name}
                               </span>
@@ -1991,7 +1996,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                           </div>
                         </div>
 
-                        <div className="shrink-0 text-right">
+                        <div className="shrink-0 text-center sm:text-right short:text-right">
                           {effectiveness > 1 ? (
                             <span className="text-[8px] sm:text-[9px] font-bold text-amber-300 bg-amber-950/80 px-1 py-0.5 rounded border border-amber-500/50 block">
                               ¡Súper eficaz!
@@ -2040,8 +2045,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                       {/* Top Row: Type Badge + Move Name + PP */}
                       <div className="flex items-center justify-between w-full gap-1">
                         <div className="flex items-center gap-1 min-w-0">
+                          <span className={`sm:hidden w-2 h-2 rounded-full shrink-0 ${col.bg}`} title={move.type} />
                           <span
-                            className={`text-[8px] px-1 py-0.2 rounded font-bold uppercase tracking-wider shrink-0 ${col.bg} ${col.text}`}
+                            className={`hidden sm:inline text-[8px] px-1 py-0.2 rounded font-bold uppercase tracking-wider shrink-0 ${col.bg} ${col.text}`}
                           >
                             {move.type}
                           </span>
@@ -2054,16 +2060,19 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                             isOutOfPp ? 'text-red-400 font-bold' : 'text-slate-300'
                           }`}
                         >
-                          PP {move.pp}/{move.maxPp}
+                          <span className="hidden sm:inline">PP </span>{move.pp}/{move.maxPp}
                         </span>
                       </div>
 
                       {/* Bottom Row: Power / Category / Priority Tag */}
-                      <div className="short:hidden flex items-center justify-between text-[9px] text-slate-400 mt-0.5">
-                        <div className="flex items-center gap-1">
+                      <div className="short:hidden flex items-center justify-between gap-1 text-[9px] text-slate-400 mt-0.5 min-w-0">
+                        <div className="flex items-center gap-1 whitespace-nowrap">
                           <span>Pot: {move.power > 0 ? move.power : '—'}</span>
                           <span>·</span>
-                          <span>Prec: {move.accuracy}%</span>
+                          <span>
+                            <span className="hidden sm:inline">Prec: </span>
+                            {move.accuracy}%
+                          </span>
                         </div>
 
                         {move.name === 'Ataque Rápido' ? (
@@ -2075,7 +2084,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                             Área
                           </span>
                         ) : (
-                          <span className="text-[8px] capitalize text-slate-400">{move.category}</span>
+                          <span className="hidden sm:inline text-[8px] capitalize text-slate-400">{move.category}</span>
                         )}
                       </div>
                     </button>
