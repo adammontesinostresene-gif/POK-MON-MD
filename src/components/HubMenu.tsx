@@ -21,12 +21,17 @@ import {
   Landmark,
   Warehouse,
   BookOpen,
+  Trophy,
+  LogOut,
 } from 'lucide-react';
 import { PmdPortrait } from './PmdSprite';
 import { PokedexModal } from './PokedexModal';
+import { LeaderboardModal } from './LeaderboardModal';
 import { SPECIES_DATA } from '../data/speciesData';
 import { ABILITY_CAPSULE_TEMPLATE } from '../data/abilities';
+import { MISSION_RANKS, describeMission, describeReward } from '../data/missionData';
 import rescueBadgeImg from '../assets/images/pmd_rescue_team_badge.png';
+import hubVillageImg from '../assets/images/pmd_hub_village_1792068606557.jpg';
 
 interface HubMenuProps {
   team: Pokemon[];
@@ -37,6 +42,14 @@ interface HubMenuProps {
   inventory: Item[];
   storage: Item[];
   missions: RescueMission[];
+  playerName: string | null;
+  playerUid: string | null;
+  onSignOut?: () => void;
+  activeMissionId: string | null;
+  missionReport: string | null;
+  onAcceptMission: (missionId: string) => void;
+  onCancelMission: () => void;
+  onDismissMissionReport: () => void;
   seenPokedex: number[];
   caughtPokedex: number[];
   onSelectDungeon: (dungeon: Dungeon) => void;
@@ -57,6 +70,14 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   inventory,
   storage,
   missions,
+  playerName,
+  playerUid,
+  onSignOut,
+  activeMissionId,
+  missionReport,
+  onAcceptMission,
+  onCancelMission,
+  onDismissMissionReport,
   seenPokedex,
   caughtPokedex,
   onSelectDungeon,
@@ -68,7 +89,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   onUpdateStorage,
 }) => {
   const [activeModal, setActiveModal] = useState<
-    'DUNGEONS' | 'BAG' | 'MISSIONS' | 'SHOP' | 'BANK' | 'STORAGE' | 'POKEDEX' | null
+    'DUNGEONS' | 'BAG' | 'MISSIONS' | 'SHOP' | 'BANK' | 'STORAGE' | 'POKEDEX' | 'RANKING' | null
   >(null);
   const [selectedDungeon, setSelectedDungeon] = useState<Dungeon>(DUNGEONS[0]);
   const [isMuted, setIsMuted] = useState<boolean>(soundManager.getMuted());
@@ -183,6 +204,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   };
 
   const leader = team[0] || reserves[0];
+  const activeMission = missions.find((m) => m.id === activeMissionId) ?? null;
   const readyToEvolveCount = [...team, ...reserves].filter(
     (p) => canPokemonEvolve(p, [...inventory, ...storage].map((it) => it.name)).canEvolve
   ).length;
@@ -193,7 +215,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-700"
         style={{
-          backgroundImage: `url('/src/assets/images/pmd_hub_village_1792068606557.jpg')`,
+          backgroundImage: `url('${hubVillageImg}')`,
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/60" />
@@ -229,6 +251,37 @@ export const HubMenu: React.FC<HubMenuProps> = ({
           >
             {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
           </button>
+
+          {playerName && (
+            <>
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setActiveModal('RANKING');
+                }}
+                title="Ranking de exploradores"
+                className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-amber-500/50 text-amber-300 text-xs font-bold transition-colors shadow"
+              >
+                <Trophy className="w-4 h-4" />
+                <span className="hidden sm:inline">Ranking</span>
+              </button>
+              <span className="hidden md:inline text-xs text-slate-300 max-w-[120px] truncate" title={playerName}>
+                {playerName}
+              </span>
+              {onSignOut && (
+                <button
+                  onClick={() => {
+                    soundManager.playSelect();
+                    onSignOut();
+                  }}
+                  title="Cerrar sesión"
+                  className="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-red-900/70 border border-slate-700 text-slate-300 transition-colors shadow"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              )}
+            </>
+          )}
 
         </div>
       </header>
@@ -522,6 +575,30 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               </p>
             </div>
           </button>
+
+          {/* Card 9: Tablón de Misiones */}
+          <button
+            onClick={() => {
+              soundManager.playSelect();
+              setActiveModal('MISSIONS');
+            }}
+            className="col-span-2 md:col-span-4 short:col-span-4 pmd-window pmd-window-btn group relative bg-slate-900/90 hover:bg-slate-850 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 short:p-1.5 border border-slate-800 hover:border-lime-400 transition-all text-left flex items-center gap-3 shadow-xl min-h-0"
+          >
+            <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 shrink-0 rounded-xl bg-lime-500/20 border border-lime-400/80 flex items-center justify-center text-lime-300 group-hover:scale-105 transition-transform">
+              <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-lime-300 transition-colors">
+                Tablón de Misiones
+              </h3>
+              <p className="text-[11px] text-slate-400 leading-tight truncate">
+                {activeMission
+                  ? `En curso: ${describeMission(activeMission).title} · ${activeMission.dungeonName}, piso ${activeMission.targetFloor}`
+                  : `${missions.length} peticiones de ayuda esperan a un equipo de rescate.`}
+              </p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-lime-400 transition-colors shrink-0" />
+          </button>
         </div>
       </main>
 
@@ -573,6 +650,11 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                         {dungeon.difficulty} · Nv. {dungeon.recommendedLevel}+
                       </span>
                       <h4 className="font-bold text-sm text-white">{dungeon.name}</h4>
+                      {activeMission?.dungeonId === dungeon.id && (
+                        <span className="inline-block mt-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-lime-900/70 text-lime-300 border border-lime-600/50">
+                          Misión en el piso {activeMission.targetFloor}
+                        </span>
+                      )}
                       <p className="hidden sm:block short:hidden text-xs text-slate-400 mt-1 line-clamp-2">
                         {dungeon.description}
                       </p>
@@ -618,6 +700,121 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
       {activeModal === 'POKEDEX' && (
         <PokedexModal seenIds={seenPokedex} caughtIds={caughtPokedex} onClose={() => setActiveModal(null)} />
+      )}
+
+      {activeModal === 'RANKING' && (
+        <LeaderboardModal currentUid={playerUid} onClose={() => setActiveModal(null)} />
+      )}
+
+      {/* MODAL: TABLÓN DE MISIONES */}
+      {activeModal === 'MISSIONS' && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="pmd-window bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-full p-4 sm:p-6 short:p-3 shadow-2xl flex flex-col gap-3 short:gap-2 min-h-0">
+            <div className="shrink-0 flex items-center justify-between border-b border-slate-800 pb-3 short:pb-2">
+              <div>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <ClipboardList className="w-5 h-5 text-lime-400" />
+                  Tablón de Misiones
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Solo puedes aceptar una misión a la vez. Se cumple al llegar al piso indicado de la mazmorra.
+                </p>
+              </div>
+              <button onClick={() => setActiveModal(null)} className="text-slate-400 hover:text-white">
+                ✕
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2 min-h-0 overflow-y-auto pr-1">
+              {missions.length === 0 && (
+                <p className="text-xs text-slate-500 text-center py-4">No hay peticiones por ahora.</p>
+              )}
+              {missions.map((mission) => {
+                const { title, request } = describeMission(mission);
+                const isActive = mission.id === activeMissionId;
+                return (
+                  <div
+                    key={mission.id}
+                    className={`p-2.5 sm:p-3 rounded-xl border flex gap-3 ${
+                      isActive ? 'border-lime-400 bg-lime-950/30' : 'border-slate-700 bg-slate-800/70'
+                    }`}
+                  >
+                    <PmdPortrait pokedexId={mission.clientPokedexId} size={44} showFrame={true} />
+                    <div className="min-w-0 flex-1 flex flex-col gap-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <h4 className="font-bold text-sm text-white leading-tight">{title}</h4>
+                          <span className="text-[10px] text-slate-400">
+                            Cliente: <strong className="text-slate-200">{mission.clientName}</strong> · {mission.dungeonName}, piso {mission.targetFloor}
+                          </span>
+                        </div>
+                        <span className="shrink-0 text-[10px] font-pixel px-1.5 py-0.5 rounded bg-slate-950 border border-amber-500/50 text-amber-300">
+                          Rango {MISSION_RANKS[mission.stars - 1]} {'★'.repeat(mission.stars)}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-300 italic leading-snug">{request}</p>
+                      {mission.kind !== 'retrieve' && (
+                        <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+                          <PmdPortrait pokedexId={mission.targetPokedexId} size={20} />
+                          <span>
+                            {mission.kind === 'rescue'
+                              ? `${mission.targetName} perdido`
+                              : `${mission.targetCount}× ${mission.targetName} villano${mission.targetCount > 1 ? 's' : ''} · Nv. ${mission.targetLevel}`}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-700/60">
+                        <span className="text-[11px] font-semibold text-emerald-300">🎁 {describeReward(mission)}</span>
+                        {isActive ? (
+                          <button
+                            onClick={() => {
+                              soundManager.playSelect();
+                              onCancelMission();
+                            }}
+                            className="px-3 py-1 rounded-lg text-[11px] font-bold bg-slate-800 hover:bg-red-900/70 text-red-300 border border-red-800/70 transition-colors"
+                          >
+                            Cancelar misión
+                          </button>
+                        ) : (
+                          <button
+                            disabled={!!activeMission}
+                            onClick={() => {
+                              soundManager.playDrop();
+                              onAcceptMission(mission.id);
+                            }}
+                            title={activeMission ? 'Ya tienes una misión en curso' : undefined}
+                            className="px-3 py-1 rounded-lg text-[11px] font-bold bg-lime-600 hover:bg-lime-500 text-white transition-colors disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed"
+                          >
+                            Aceptar
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: MISIÓN CUMPLIDA */}
+      {missionReport && (
+        <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="pmd-window pmd-gold bg-slate-900 border-2 border-amber-400 rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl flex flex-col gap-3 text-center">
+            <Award className="w-10 h-10 text-amber-300 mx-auto" />
+            <p className="text-sm text-slate-200 leading-relaxed">{missionReport}</p>
+            <button
+              onClick={() => {
+                soundManager.playSelect();
+                onDismissMissionReport();
+              }}
+              className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-950 font-bold rounded-xl text-sm shadow-lg"
+            >
+              ¡Genial!
+            </button>
+          </div>
+        </div>
       )}
 
       {/* MODAL: ALMACÉN KANGASKHAN */}

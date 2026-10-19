@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dungeon, Pokemon, Item, FloorEvent, DecisionChoice } from '../types/game';
+import { Dungeon, Pokemon, Item, FloorEvent, DecisionChoice, RescueMission } from '../types/game';
 import {
   generateEnemySquad,
   generateFloorEvent,
@@ -8,6 +8,7 @@ import {
   getWildEnemiesCount,
 } from '../data/eventData';
 import { BAG_LIMIT, ORAN_BERRY, addItem, bagCount, bagSpace } from '../data/pokemonData';
+import { createMissionEvent } from '../data/missionData';
 import { TurnBasedCombat } from './TurnBasedCombat';
 import { PmdPortrait } from './PmdSprite';
 import { soundManager } from '../utils/audio';
@@ -33,6 +34,9 @@ interface DungeonViewProps {
   reserves: Pokemon[];
   inventory: Item[];
   gold: number;
+  // Active mission, only when it takes place in this dungeon
+  mission: RescueMission | null;
+  onMissionComplete: (mission: RescueMission) => void;
   onSeePokemon: (pokedexIds: number[]) => void;
   onRecruitPokemon: (pokedexIds: number[]) => void;
   onCompleteDungeon: (
@@ -55,6 +59,8 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   reserves: initialReserves,
   inventory: initialInventory,
   gold: initialGold,
+  mission,
+  onMissionComplete,
   onSeePokemon,
   onRecruitPokemon,
   onCompleteDungeon,
@@ -79,6 +85,13 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   const [isExitConfirmOpen, setIsExitConfirmOpen] = useState<boolean>(false);
   const [selectedItemForUse, setSelectedItemForUse] = useState<Item | null>(null);
   const [elixirTargetIdx, setElixirTargetIdx] = useState<number | null>(null);
+  const [missionDone, setMissionDone] = useState<boolean>(false);
+
+  const completeMission = () => {
+    if (!mission || missionDone) return;
+    setMissionDone(true);
+    onMissionComplete(mission);
+  };
 
   // Initialize first floor
   useEffect(() => {
@@ -101,7 +114,10 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
 
   const loadFloor = (floorNum: number) => {
     soundManager.startBgm('dungeon');
-    const event = generateFloorEvent(dungeon, floorNum);
+    const event =
+      mission && !missionDone && floorNum === mission.targetFloor && floorNum < dungeon.floorsCount
+        ? createMissionEvent(mission, floorNum)
+        : generateFloorEvent(dungeon, floorNum);
     setCurrentEvent(event);
     setEventResolved(false);
     setResolutionMessage(null);
@@ -343,6 +359,8 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     let finalTeam = [...updatedTeam];
     let finalReserves = [...reserves];
 
+    if (currentEvent?.missionId) completeMission();
+
     if (recruitedPokemon) {
       if (addToActiveTeam && finalTeam.length < 4) {
         finalTeam.push(recruitedPokemon);
@@ -358,6 +376,17 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
     const finalInventory = droppedItem && bagSpace(inventory) > 0 ? addItem(inventory, droppedItem) : inventory;
     setGold(finalGold);
     setInventory(finalInventory);
+
+    // A mission fight stays on the floor so the player can choose to return to the village
+    if (currentEvent?.missionId && mission) {
+      soundManager.startBgm('dungeon');
+      setInCombat(false);
+      setEventResolved(true);
+      setResolutionMessage(
+        `¡Has derrotado a ${mission.targetCount > 1 ? `la banda de ${mission.targetName}` : `${mission.targetName}`}! ${mission.clientName} te dará la recompensa al volver a la aldea.`
+      );
+      return;
+    }
 
     // Winning a fight takes the team straight to the stairs
     if (currentFloor >= dungeon.floorsCount) {
@@ -486,6 +515,8 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
               <p className="text-[10px] text-slate-400 hidden sm:block">
                 {currentFloor >= dungeon.floorsCount
                   ? '¡GUARIDA DEL JEFE FINAL!'
+                  : mission && !missionDone
+                  ? `Misión: piso ${mission.targetFloor} · Salida: piso ${dungeon.floorsCount}`
                   : `Objetivo: Alcanzar las escaleras del piso ${dungeon.floorsCount}`}
               </p>
             </div>
@@ -733,6 +764,26 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                     </div>
                   )}
 
+                  {/* Mission: rescue a Pokémon or pick up a lost belonging */}
+                  {currentEvent.type === 'mission' && mission && (
+                    <button
+                      onClick={() => {
+                        soundManager.playLevelUp();
+                        completeMission();
+                        setResolutionMessage(
+                          mission.kind === 'rescue'
+                            ? `¡Has rescatado a ${mission.targetName}! La insignia de rescate le ha enviado sano y salvo con ${mission.clientName}. Recibirás la recompensa al volver a la aldea.`
+                            : `¡Has recuperado el ${mission.itemName}! Se lo devolverás a ${mission.clientName} al volver a la aldea.`
+                        );
+                        setEventResolved(true);
+                      }}
+                      className="w-full max-w-md mx-auto py-2.5 px-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl text-xs sm:text-sm shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <Award className="w-4 h-4" />
+                      {mission.kind === 'rescue' ? `Rescatar a ${mission.targetName}` : `Recoger el ${mission.itemName}`}
+                    </button>
+                  )}
+
                   {/* Chest Event Action */}
                   {currentEvent.type === 'chest' && (
                     <button
@@ -770,18 +821,32 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
             )}
           </div>
 
-          <button
-            disabled={!eventResolved}
-            onClick={handleNextFloor}
-            className="py-1.5 sm:py-2 px-3 sm:px-4 bg-sky-600 hover:bg-sky-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-lg text-xs sm:text-sm shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
-          >
-            <span>
-              {currentFloor >= dungeon.floorsCount
-                ? '¡Completar Mazmorra!'
-                : `Subir al Piso ${currentFloor + 1}`}
-            </span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {missionDone && eventResolved && currentFloor < dungeon.floorsCount && (
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  onExitDungeon(team, reserves, inventory, gold);
+                }}
+                className="py-1.5 sm:py-2 px-3 sm:px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs sm:text-sm shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Volver a la Aldea</span>
+              </button>
+            )}
+            <button
+              disabled={!eventResolved}
+              onClick={handleNextFloor}
+              className="py-1.5 sm:py-2 px-3 sm:px-4 bg-sky-600 hover:bg-sky-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-lg text-xs sm:text-sm shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <span>
+                {currentFloor >= dungeon.floorsCount
+                  ? '¡Completar Mazmorra!'
+                  : `Subir al Piso ${currentFloor + 1}`}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
 

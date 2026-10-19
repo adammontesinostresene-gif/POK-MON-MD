@@ -2,7 +2,7 @@ import { FloorEvent, FloorEventType, Dungeon, Pokemon, Item } from '../types/gam
 import { createWildEnemy, EXTRA_RECRUITS, getPmdPortraitUrl, ORAN_BERRY } from './pokemonData';
 
 // Items that can show up in the "choose one of three" floor event
-const FLOOR_ITEM_POOL: Omit<Item, 'id' | 'count'>[] = [
+export const FLOOR_ITEM_POOL: Omit<Item, 'id' | 'count'>[] = [
   ORAN_BERRY,
   { name: 'Manzana Grande', category: 'food', description: 'Recupera 50 de Hambre/Tripa.', effectType: 'restore_belly', effectValue: 50, icon: '🍏' },
   { name: 'Semilla Revivir', category: 'seed', description: 'Revive inmediatamente a un Pokémon caído.', effectType: 'revive', effectValue: 100, icon: '🌰' },

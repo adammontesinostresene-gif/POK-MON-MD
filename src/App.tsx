@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TitleScreen } from './components/TitleScreen';
 import { HubMenu } from './components/HubMenu';
 import { TeamManager } from './components/TeamManager';
@@ -23,11 +23,13 @@ import {
   calculateStats,
   getExpToNextLevel,
   normalizeItems,
-  INITIAL_MISSIONS,
+  addItem,
 } from './data/pokemonData';
+import { createRewardItem, describeMission, describeReward, isValidMission, topUpMissions } from './data/missionData';
 import { soundManager } from './utils/audio';
 import { ABILITY_CAPSULE_NAME, withAbility } from './data/abilities';
 import { clearSave, loadGame, saveGame } from './utils/saveGame';
+import { submitScore } from './utils/leaderboard';
 import { Award, AlertTriangle, ArrowRight, RotateCcw } from 'lucide-react';
 
 const restorePokemon = (p: Pokemon): Pokemon => {
@@ -51,12 +53,18 @@ const mergeDexIds = (prev: number[], ids: number[]): number[] => {
   return missing.length > 0 ? [...prev, ...missing] : prev;
 };
 
-export default function App() {
+interface AppProps {
+  // Signed-in player (null when Firebase is not configured)
+  player: { uid: string; name: string } | null;
+  onSignOut?: () => void;
+}
+
+export default function App({ player, onSignOut }: AppProps) {
   // Screen state
   const [screen, setScreen] = useState<ViewScreen>('TITLE');
 
   // Saved progress (localStorage), read once on startup
-  const [initialSave] = useState(() => loadGame());
+  const [initialSave] = useState(() => loadGame(player?.uid));
   const [hasSave, setHasSave] = useState<boolean>(initialSave !== null);
   const abandonedExpedition = initialSave?.inDungeon ?? false;
   const loadSaved = (p: Pokemon) =>
@@ -78,7 +86,15 @@ export default function App() {
     initialSave && !abandonedExpedition ? normalizeItems(initialSave.inventory) : []
   );
   const [storage, setStorage] = useState<Item[]>(normalizeItems(initialSave?.storage ?? []));
-  const [missions, setMissions] = useState<RescueMission[]>(initialSave?.missions ?? INITIAL_MISSIONS);
+  const [missions, setMissions] = useState<RescueMission[]>(() =>
+    (initialSave?.missions ?? []).filter(isValidMission)
+  );
+  const [activeMissionId, setActiveMissionId] = useState<string | null>(() =>
+    missions.some((m) => m.id === initialSave?.activeMissionId) ? initialSave!.activeMissionId! : null
+  );
+  const [missionReport, setMissionReport] = useState<string | null>(null);
+  // Set during an expedition; rewards are handed out on returning to the village
+  const completedMissionRef = useRef<RescueMission | null>(null);
   const [seenPokedex, setSeenPokedex] = useState<number[]>(initialSave?.seenPokedex ?? []);
   const [caughtPokedex, setCaughtPokedex] = useState<number[]>(initialSave?.caughtPokedex ?? []);
 
@@ -89,6 +105,32 @@ export default function App() {
   useEffect(() => {
     registerCaught([...activeTeam, ...reserves].map((p) => p.pokedexId));
   }, [activeTeam, reserves]);
+
+  // The board always offers 3 missions from Pokémon the player has seen
+  useEffect(() => {
+    const seenIds = [...new Set([...seenPokedex, ...caughtPokedex])];
+    if (missions.length >= 3 || seenIds.length === 0) return;
+    setMissions((prev) => topUpMissions(prev, seenIds));
+  }, [missions, seenPokedex, caughtPokedex]);
+
+  const activeMission = missions.find((m) => m.id === activeMissionId) ?? null;
+
+  // Applies the reward of a mission completed in the last expedition; returns the gold to carry
+  const settleCompletedMission = (carriedGold: number): number => {
+    const mission = completedMissionRef.current;
+    if (!mission) return carriedGold;
+    completedMissionRef.current = null;
+    setRankPoints((r) => r + mission.reward.rankPoints);
+    const rewardItem = mission.reward.itemName ? createRewardItem(mission.reward.itemName) : null;
+    if (rewardItem) setStorage((s) => addItem(s, rewardItem));
+    setMissions((prev) => prev.filter((m) => m.id !== mission.id));
+    setActiveMissionId(null);
+    setMissionReport(
+      `¡Misión cumplida: ${describeMission(mission).title}! ${mission.clientName} te entrega ${describeReward(mission)}.` +
+        (rewardItem ? ' El objeto se ha guardado en el Almacén Kangaskhan.' : '')
+    );
+    return carriedGold + (mission.reward.gold ?? 0);
+  };
 
   // Active expedition
   const [currentDungeon, setCurrentDungeon] = useState<Dungeon | null>(null);
@@ -111,12 +153,22 @@ export default function App() {
       inventory,
       storage,
       missions,
+      activeMissionId,
       seenPokedex,
       caughtPokedex,
       inDungeon: screen === 'DUNGEON_EXPLORE',
-    });
+    }, player?.uid);
     setHasSave(true);
-  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, seenPokedex, caughtPokedex]);
+  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, activeMissionId, seenPokedex, caughtPokedex]);
+
+  // Publish the score to the online leaderboard
+  const leaderPokedexId = activeTeam[0]?.pokedexId;
+  useEffect(() => {
+    if (!player || leaderPokedexId === undefined) return;
+    submitScore(player.uid, { name: player.name, rankPoints, leaderPokedexId }).catch((err) =>
+      console.warn('No se pudo actualizar el ranking', err)
+    );
+  }, [player?.uid, player?.name, rankPoints, leaderPokedexId]);
 
   // Handlers
   const handleStartFromTitle = () => {
@@ -125,7 +177,7 @@ export default function App() {
   };
 
   const handleNewGame = () => {
-    clearSave();
+    clearSave(player?.uid);
     setActiveTeam([]);
     setReserves([]);
     setGold(0);
@@ -133,7 +185,10 @@ export default function App() {
     setRankPoints(0);
     setInventory([]);
     setStorage([]);
-    setMissions(INITIAL_MISSIONS);
+    setMissions([]);
+    setActiveMissionId(null);
+    setMissionReport(null);
+    completedMissionRef.current = null;
     setSeenPokedex([]);
     setCaughtPokedex([]);
     setHasSave(false);
@@ -161,7 +216,7 @@ export default function App() {
     setActiveTeam(updatedTeam.map(restorePokemon));
     setReserves(updatedReserves.map(restorePokemon));
     setInventory(normalizeItems(updatedInventory));
-    setGold(finalGold);
+    setGold(settleCompletedMission(finalGold));
     setCompletedDungeonInfo({
       name: currentDungeon?.name || 'Mazmorra',
       goldEarned: currentDungeon?.rewards.gold || 400,
@@ -200,7 +255,7 @@ export default function App() {
     setActiveTeam(updatedTeam.map(restorePokemon));
     setReserves(updatedReserves.map(restorePokemon));
     setInventory(normalizeItems(updatedInventory));
-    setGold(finalGold);
+    setGold(settleCompletedMission(finalGold));
     soundManager.startBgm('hub');
     setScreen('HUB');
   };
@@ -236,6 +291,14 @@ export default function App() {
           inventory={inventory}
           storage={storage}
           missions={missions}
+          playerName={player?.name ?? null}
+          playerUid={player?.uid ?? null}
+          onSignOut={onSignOut}
+          activeMissionId={activeMissionId}
+          missionReport={missionReport}
+          onAcceptMission={(id) => setActiveMissionId(id)}
+          onCancelMission={() => setActiveMissionId(null)}
+          onDismissMissionReport={() => setMissionReport(null)}
           seenPokedex={seenPokedex}
           caughtPokedex={caughtPokedex}
           onSelectDungeon={handleSelectDungeon}
@@ -298,6 +361,10 @@ export default function App() {
           reserves={reserves}
           inventory={inventory}
           gold={gold}
+          mission={activeMission?.dungeonId === currentDungeon.id ? activeMission : null}
+          onMissionComplete={(mission) => {
+            completedMissionRef.current = mission;
+          }}
           onSeePokemon={registerSeen}
           onRecruitPokemon={registerCaught}
           onCompleteDungeon={handleDungeonComplete}

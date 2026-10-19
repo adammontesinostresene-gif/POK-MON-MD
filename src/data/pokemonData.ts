@@ -2,6 +2,9 @@ import { Pokemon, PokemonType, PokemonStats, Dungeon, Item, RescueMission, Move 
 import { LEARNSETS, LEARNSET_MOVES } from './learnsets';
 import { SPECIES_DATA } from './speciesData';
 import { getAbilityName, getEvolvedAbilityId, randomWildAbilityId, withAbility } from './abilities';
+import forestDungeonImg from '../assets/images/pmd_dungeon_forest_1792068605705.jpg';
+import streamDungeonImg from '../assets/images/fe575cb3f1ded6d8c94a1275c2e6e044.jpg';
+import meadowDungeonImg from '../assets/images/471fb51c3a60df5d99bbf72222770946.png';
 
 // PMD Sprite Repository (SpriteCollab / PMDCollab)
 export const formatDex4Digits = (pokedexId: number): string => {
@@ -961,7 +964,7 @@ export const DUNGEONS: Dungeon[] = [
     floorsCount: 5,
     difficulty: 'Fácil',
     theme: 'forest',
-    bgImage: '/src/assets/images/pmd_dungeon_forest_1792068605705.jpg',
+    bgImage: forestDungeonImg,
     recommendedLevel: 2,
     enemiesPool: ['rattata', 'caterpie', 'ledyba', 'kricketot', 'patrat', 'sunkern'],
     squadSizeOdds: [0.7, 0.3],
@@ -980,7 +983,7 @@ export const DUNGEONS: Dungeon[] = [
     floorsCount: 7,
     difficulty: 'Fácil',
     theme: 'forest',
-    bgImage: '/src/assets/images/fe575cb3f1ded6d8c94a1275c2e6e044.jpg',
+    bgImage: streamDungeonImg,
     recommendedLevel: 3,
     enemiesPool: ['lotad', 'wooper', 'sentret', 'tarountula', 'surskit', 'magikarp'],
     // Magikarp is rare: ~5% of spawns
@@ -1001,7 +1004,7 @@ export const DUNGEONS: Dungeon[] = [
     floorsCount: 9,
     difficulty: 'Fácil',
     theme: 'forest',
-    bgImage: '/src/assets/images/471fb51c3a60df5d99bbf72222770946.png',
+    bgImage: meadowDungeonImg,
     recommendedLevel: 5,
     enemiesPool: ['pidgey', 'hoppip', 'zigzagoon', 'scatterbug', 'skwovet', 'wooloo', 'flabebe'],
     // Flabébé is rare: ~4% of spawns
@@ -1674,6 +1677,41 @@ export const createWildEnemy = (enemyType: string, level: number): Pokemon => {
   };
 };
 
+/** Wild enemy of any species, built from the official data (used by missions). Never asks to join. */
+export const createSpeciesEnemy = (pokedexId: number, level: number): Pokemon => {
+  const species = SPECIES_DATA[pokedexId];
+  const abilityId = randomWildAbilityId(pokedexId);
+  const stats = calculateStats(pokedexId, level) ?? {
+    hp: 30 + level * 3,
+    maxHp: 30 + level * 3,
+    attack: 10 + level * 2,
+    defense: 10 + level * 2,
+    spAttack: 10 + level * 2,
+    spDefense: 10 + level * 2,
+    speed: 10 + level * 2,
+  };
+  return {
+    id: `enemy_${pokedexId}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    pokedexId,
+    name: species?.name ?? `Pokémon ${pokedexId}`,
+    level,
+    exp: 0,
+    nextExp: 50,
+    types: species?.types ?? ['Normal'],
+    stats,
+    ability: abilityId ? getAbilityName(abilityId) : species?.ability ?? '',
+    abilityId,
+    status: 'none',
+    statusTurns: 0,
+    spriteUrl: getPokemonSprite(pokedexId),
+    artworkUrl: getPokemonArtwork(pokedexId),
+    iconUrl: getPokemonStaticSprite(pokedexId),
+    description: species?.description ?? '',
+    recruitRate: 0,
+    moves: getMovesForLevel(pokedexId, level) ?? [],
+  };
+};
+
 // Default Backpack Inventory
 export const BAG_LIMIT = 10;
 export const bagCount = (inventory: Item[]): number => inventory.reduce((n, it) => n + it.count, 0);
@@ -1749,49 +1787,6 @@ export const DEFAULT_INVENTORY: Item[] = [
     effectType: 'escape',
     effectValue: 1,
     icon: '🔮',
-  },
-];
-
-// Bulletin Board Rescue Missions
-export const INITIAL_MISSIONS: RescueMission[] = [
-  {
-    id: 'mission_1',
-    title: '¡Ayuda! Mi hermano Caterpie se perdió',
-    clientPokemonName: 'Butterfree',
-    clientPokedexId: 12,
-    targetPokemonName: 'Caterpie',
-    dungeonId: 'bosquejo_tutorial',
-    targetFloor: 3,
-    rewardGold: 350,
-    rewardItem: 'Baya Aranja x2',
-    difficulty: 'Fácil (★☆☆☆☆)',
-    completed: false,
-  },
-  {
-    id: 'mission_2',
-    title: 'Perdí mi tesoro en la Cueva Resonante',
-    clientPokemonName: 'Magnemite',
-    clientPokedexId: 81,
-    targetPokemonName: 'Tesoro de Cristal',
-    dungeonId: 'cueva_estruendo',
-    targetFloor: 5,
-    rewardGold: 700,
-    rewardItem: 'Semilla Fuerza',
-    difficulty: 'Media (★★★☆☆)',
-    completed: false,
-  },
-  {
-    id: 'mission_3',
-    title: '¡Desafío supremo en el Pico Tempestad!',
-    clientPokemonName: 'Dragonite',
-    clientPokedexId: 149,
-    targetPokemonName: 'Zapdos',
-    dungeonId: 'pico_tempestad',
-    targetFloor: 10,
-    rewardGold: 2000,
-    rewardItem: 'Cinta Heroica',
-    difficulty: 'Extrema (★★★★★)',
-    completed: false,
   },
 ];
 

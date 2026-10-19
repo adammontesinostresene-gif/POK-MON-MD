@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { soundManager } from '../utils/audio';
 import { Zap, Play, AlertTriangle } from 'lucide-react';
 import { PmdPortrait } from './PmdSprite';
+import hubVillageImg from '../assets/images/pmd_hub_village_1792068606557.jpg';
 
 interface TitleScreenProps {
   hasSave: boolean;
@@ -39,7 +40,7 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-1000 scale-105 animate-pulse"
         style={{
-          backgroundImage: `url('/src/assets/images/pmd_hub_village_1792068606557.jpg')`,
+          backgroundImage: `url('${hubVillageImg}')`,
           animationDuration: '6s',
         }}
       />

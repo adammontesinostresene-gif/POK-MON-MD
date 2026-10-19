@@ -130,6 +130,7 @@ export type FloorEventType =
   | 'monster_house'
   | 'kecleon'
   | 'item_choice'
+  | 'mission'
   | 'boss';
 
 export interface DecisionChoice {
@@ -155,6 +156,8 @@ export interface FloorEvent {
   enemy?: Pokemon;
   enemies?: Pokemon[];
   itemChoices?: Item[];
+  // Set when this floor event belongs to the active mission
+  missionId?: string;
   reward?: {
     gold?: number;
     items?: Item[];
@@ -162,18 +165,29 @@ export interface FloorEvent {
   };
 }
 
+export type MissionKind = 'rescue' | 'defeat' | 'retrieve';
+
 export interface RescueMission {
   id: string;
-  title: string;
-  clientPokemonName: string;
+  kind: MissionKind;
   clientPokedexId: number;
-  targetPokemonName: string;
+  clientName: string;
+  // Pokémon to rescue or villain species to defeat (unused for 'retrieve')
+  targetPokedexId: number;
+  targetName: string;
+  targetCount: number;
+  targetLevel: number;
+  itemName?: string;
   dungeonId: string;
+  dungeonName: string;
   targetFloor: number;
-  rewardGold: number;
-  rewardItem: string;
-  difficulty: string;
-  completed: boolean;
+  // Difficulty from 1 (E) to 5 (A)
+  stars: number;
+  reward: {
+    rankPoints: number;
+    gold?: number;
+    itemName?: string;
+  };
 }
 
 export type ViewScreen =
