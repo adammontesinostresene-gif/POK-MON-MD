@@ -9,6 +9,8 @@ import {
 } from '../data/eventData';
 import { BAG_LIMIT, ORAN_BERRY, addItem, bagCount, bagSpace } from '../data/pokemonData';
 import { createMissionEvent } from '../data/missionData';
+
+const BATTLE_ONLY_EFFECTS = new Set<Item['effectType']>(['cure_status', 'confuse_all', 'speed_up_allies']);
 import { TurnBasedCombat } from './TurnBasedCombat';
 import { PmdPortrait } from './PmdSprite';
 import { soundManager } from '../utils/audio';
@@ -967,7 +969,14 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
                   inventory.map((item) => (
                     <button
                       key={item.id}
-                      disabled={item.effectType === 'unlock_ability'}
+                      disabled={item.effectType === 'unlock_ability' || item.effectType === 'evolution' || BATTLE_ONLY_EFFECTS.has(item.effectType)}
+                      title={
+                        BATTLE_ONLY_EFFECTS.has(item.effectType)
+                          ? 'Solo se puede usar en combate'
+                          : item.effectType === 'evolution'
+                          ? 'Se usa en el Manantial de la Evolución'
+                          : undefined
+                      }
                       onClick={() => {
                         soundManager.playSelect();
                         if (item.effectType === 'restore_belly' || item.effectType === 'escape') {

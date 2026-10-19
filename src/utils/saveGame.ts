@@ -21,6 +21,8 @@ export interface SaveData {
   caughtPokedex: number[];
   // Ids of dungeons completed at least once (the mission board unlocks with the first one)
   clearedDungeons?: string[];
+  // Item names Kecleon sells until the next return to the village
+  shopStock?: string[];
   // True while an expedition is in progress; reloading mid-dungeon counts as abandoning it
   inDungeon: boolean;
   // Milliseconds timestamp, used to pick the newest copy between this device and the cloud

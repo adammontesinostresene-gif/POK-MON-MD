@@ -94,8 +94,10 @@ export interface Item {
   category: ItemCategory;
   description: string;
   count: number;
-  effectType: 'heal_hp' | 'restore_belly' | 'revive' | 'restore_pp' | 'boost_attack' | 'inflict_status' | 'escape' | 'unlock_ability';
+  effectType: 'heal_hp' | 'restore_belly' | 'revive' | 'restore_pp' | 'boost_attack' | 'inflict_status' | 'escape' | 'unlock_ability' | 'cure_status' | 'confuse_all' | 'speed_up_allies' | 'evolution';
   effectValue: number;
+  // Ailment removed by a 'cure_status' item
+  cures?: Exclude<StatusAilment, 'none'>;
   icon: string;
 }
 

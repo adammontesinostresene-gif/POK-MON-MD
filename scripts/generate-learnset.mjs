@@ -87,7 +87,8 @@ const evolutionCondition = async (details, targetId) => {
   const byLevel = details.find((d) => d.trigger.name === 'level-up' && d.min_level);
   if (byLevel) return { minLevel: byLevel.min_level };
   if (LEVEL_OVERRIDES[targetId]) return { minLevel: LEVEL_OVERRIDES[targetId] };
-  if (details.some((d) => d.trigger.name === 'trade')) return { minLevel: 36 };
+  // Trading is replaced by the in-game "Cable Link" item
+  if (details.some((d) => d.trigger.name === 'trade')) return { minLevel: 1, requiredItem: 'Cable Link' };
   if (details.some((d) => d.min_happiness || d.min_affection)) return { minLevel: 25 };
   return { minLevel: 30 };
 };

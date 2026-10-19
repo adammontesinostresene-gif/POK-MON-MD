@@ -1,7 +1,7 @@
 import { FloorEvent, Item, MissionKind, RescueMission } from '../types/game';
 import { ABILITY_CAPSULE_TEMPLATE } from './abilities';
 import { FLOOR_ITEM_POOL } from './eventData';
-import { DUNGEONS, ORAN_BERRY, createSpeciesEnemy, getPmdPortraitUrl } from './pokemonData';
+import { DUNGEONS, EVOLUTION_ITEMS, ORAN_BERRY, createSpeciesEnemy, getPmdPortraitUrl } from './pokemonData';
 import { SPECIES_DATA } from './speciesData';
 
 export const MISSION_BOARD_SIZE = 3;
@@ -24,14 +24,14 @@ const LOST_BELONGINGS = [
 
 // Item rewards per difficulty (index = stars - 1)
 const ITEM_REWARDS_BY_STARS: string[][] = [
-  ['Baya Aranja', 'Manzana Grande'],
-  ['Elixir', 'Semilla Sueño', 'Baya Aranja'],
-  ['Semilla Revivir', 'Elixir'],
-  ['Semilla Revivir', 'Fugaesfera'],
+  ['Baya Aranja', 'Manzana Grande', 'Baya Meloc', 'Baya Zreza', 'Baya Caquic', 'Baya Safre', 'Baya Perasi'],
+  ['Elixir', 'Semilla Sueño', 'Baya Aranja', 'Baya Caquic', 'Baya Zreza', 'Baya Zidra'],
+  ['Semilla Revivir', 'Elixir', 'Ofuscosfera', 'Rapidosfera', 'Baya Zidra'],
+  ['Semilla Revivir', 'Fugaesfera', 'Ofuscosfera', 'Rapidosfera'],
   [ABILITY_CAPSULE_TEMPLATE.name, 'Semilla Revivir'],
 ];
 
-const REWARD_ITEM_TEMPLATES: Omit<Item, 'id' | 'count'>[] = [ORAN_BERRY, ...FLOOR_ITEM_POOL, ABILITY_CAPSULE_TEMPLATE];
+const REWARD_ITEM_TEMPLATES: Omit<Item, 'id' | 'count'>[] = [ORAN_BERRY, ...FLOOR_ITEM_POOL, ABILITY_CAPSULE_TEMPLATE, ...EVOLUTION_ITEMS];
 
 export const createRewardItem = (name: string): Item | null => {
   const template = REWARD_ITEM_TEMPLATES.find((t) => t.name === name);
@@ -63,10 +63,15 @@ export const generateMission = (seenIds: number[]): RescueMission | null => {
   const stars = Math.max(1, Math.min(5, Math.ceil(score / 2)));
 
   const rankPoints = stars * 10 + (kind === 'defeat' ? 5 : 0);
+  // From rank C upwards, item rewards may be an evolution item
+  const rewardItemName =
+    stars >= 3 && Math.random() < 0.4
+      ? pick(EVOLUTION_ITEMS).name
+      : pick(ITEM_REWARDS_BY_STARS[stars - 1]);
   const reward: RescueMission['reward'] =
     Math.random() < 0.5
       ? { rankPoints, gold: stars * 120 + randInt(0, 5) * 10 }
-      : { rankPoints, itemName: pick(ITEM_REWARDS_BY_STARS[stars - 1]) };
+      : { rankPoints, itemName: rewardItemName };
 
   return {
     id: `mission_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,

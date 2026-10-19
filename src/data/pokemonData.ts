@@ -1729,8 +1729,75 @@ export const ORAN_BERRY: Omit<Item, 'id' | 'count'> = {
   icon: '🍎',
 };
 
+// Battle-only berries that cure one status problem
+export const STATUS_BERRIES: Omit<Item, 'id' | 'count'>[] = [
+  { name: 'Baya Meloc', category: 'healing', description: 'Cura el envenenamiento de un Pokémon. Solo en combate.', effectType: 'cure_status', effectValue: 0, cures: 'poison', icon: '🍑' },
+  { name: 'Baya Zreza', category: 'healing', description: 'Cura la parálisis de un Pokémon. Solo en combate.', effectType: 'cure_status', effectValue: 0, cures: 'paralysis', icon: '🍒' },
+  { name: 'Baya Caquic', category: 'healing', description: 'Despierta a un Pokémon dormido. Solo en combate.', effectType: 'cure_status', effectValue: 0, cures: 'sleep', icon: '🫐' },
+  { name: 'Baya Safre', category: 'healing', description: 'Cura las quemaduras de un Pokémon. Solo en combate.', effectType: 'cure_status', effectValue: 0, cures: 'burn', icon: '🍓' },
+  { name: 'Baya Perasi', category: 'healing', description: 'Descongela a un Pokémon congelado. Solo en combate.', effectType: 'cure_status', effectValue: 0, cures: 'freeze', icon: '🍐' },
+];
+
+// Battle orbs: affect a whole side and don't work against dungeon bosses
+export const BATTLE_ORBS: Omit<Item, 'id' | 'count'>[] = [
+  { name: 'Ofuscosfera', category: 'orb', description: 'Confunde a todos los enemigos. No funciona contra jefes.', effectType: 'confuse_all', effectValue: 0, icon: '🔮' },
+  { name: 'Rapidosfera', category: 'orb', description: 'Sube la Velocidad de todo tu equipo durante el combate. No funciona contra jefes.', effectType: 'speed_up_allies', effectValue: 1, icon: '🔮' },
+];
+
+// effectValue larger than any max HP: always restores the whole bar
+export const SITRUS_BERRY: Omit<Item, 'id' | 'count'> = {
+  name: 'Baya Zidra',
+  category: 'healing',
+  description: 'Restaura todos los PS de un Pokémon.',
+  effectType: 'heal_hp',
+  effectValue: 9999,
+  icon: '🍋',
+};
+
 // Items with a single official definition: old saves are migrated to it
-const CANONICAL_ITEMS: Record<string, Omit<Item, 'id' | 'count'>> = { [ORAN_BERRY.name]: ORAN_BERRY };
+const CANONICAL_ITEMS: Record<string, Omit<Item, 'id' | 'count'>> = Object.fromEntries(
+  [ORAN_BERRY, SITRUS_BERRY, ...STATUS_BERRIES, ...BATTLE_ORBS].map((t) => [t.name, t])
+);
+
+export const LINK_CABLE_NAME = 'Cable Link';
+
+const EVOLUTION_ITEM_ICONS: Record<string, string> = {
+  [LINK_CABLE_NAME]: '🔗',
+  'Piedra Fuego': '🔥',
+  'Piedra Agua': '💧',
+  'Piedra Trueno': '⚡',
+  'Piedra Hoja': '🍃',
+  'Piedra Lunar': '🌙',
+  'Piedra Solar': '☀️',
+  'Piedra Hielo': '❄️',
+  'Piedra Día': '💠',
+  'Piedra Noche': '🌑',
+  'Piedra Alba': '✨',
+};
+
+/** Every item some species needs to evolve (stones, Cable Link for trade evolutions...). Never sold by Kecleon. */
+export const EVOLUTION_ITEMS: Omit<Item, 'id' | 'count'>[] = [
+  ...new Set(
+    Object.values(SPECIES_DATA).flatMap((s) => s.evolutions.flatMap((e) => (e.requiredItem ? [e.requiredItem] : [])))
+  ),
+]
+  .sort((a, b) => (a === LINK_CABLE_NAME ? -1 : b === LINK_CABLE_NAME ? 1 : a.localeCompare(b)))
+  .map((name) => ({
+    name,
+    category: 'special' as const,
+    description:
+      name === LINK_CABLE_NAME
+        ? 'Hace evolucionar a los Pokémon que evolucionan por intercambio. Se usa en el Manantial de la Evolución.'
+        : 'Objeto evolutivo. Se usa en el Manantial de la Evolución.',
+    effectType: 'evolution' as const,
+    effectValue: 0,
+    icon: EVOLUTION_ITEM_ICONS[name] ?? '💎',
+  }));
+
+export const randomEvolutionItem = (): Item => {
+  const template = EVOLUTION_ITEMS[Math.floor(Math.random() * EVOLUTION_ITEMS.length)];
+  return { ...template, id: `evo_item_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`, count: 1 };
+};
 
 /** Adds an item, stacking it onto an existing entry with the same name. */
 export const addItem = (items: Item[], item: Item): Item[] => {
@@ -2249,7 +2316,8 @@ const MANUAL_EVOLUTIONS: Record<number, EvolutionOption[]> = {
     {
       targetPokedexId: 68,
       targetName: 'Machamp',
-      minLevel: 36,
+      minLevel: 1,
+      requiredItem: LINK_CABLE_NAME,
       statGains: { hp: 26, attack: 28, defense: 18, spAttack: 12, spDefense: 16, speed: 14 },
       types: ['Lucha'],
       ability: 'Indefenso',
@@ -2331,7 +2399,8 @@ const MANUAL_EVOLUTIONS: Record<number, EvolutionOption[]> = {
     {
       targetPokedexId: 76,
       targetName: 'Golem',
-      minLevel: 36,
+      minLevel: 1,
+      requiredItem: LINK_CABLE_NAME,
       statGains: { hp: 24, attack: 24, defense: 28, spAttack: 12, spDefense: 14, speed: 10 },
       types: ['Roca', 'Tierra'],
       ability: 'Robustez',
@@ -2377,7 +2446,8 @@ const MANUAL_EVOLUTIONS: Record<number, EvolutionOption[]> = {
     {
       targetPokedexId: 94,
       targetName: 'Gengar',
-      minLevel: 36,
+      minLevel: 1,
+      requiredItem: LINK_CABLE_NAME,
       statGains: { hp: 20, attack: 14, defense: 16, spAttack: 28, spDefense: 18, speed: 22 },
       types: ['Fantasma', 'Veneno'],
       ability: 'Cuerpo Maldito',

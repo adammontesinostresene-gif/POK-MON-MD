@@ -25,6 +25,7 @@ import {
   addItem,
 } from './data/pokemonData';
 import { createRewardItem, describeMission, describeReward, isValidMission, topUpMissions } from './data/missionData';
+import { isValidShopStock, rollShopStock } from './data/itemData';
 import { soundManager } from './utils/audio';
 import { ABILITY_CAPSULE_NAME, withAbility } from './data/abilities';
 import { clearSave, loadGame, saveGame } from './utils/saveGame';
@@ -104,6 +105,9 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
     return (initialSave?.rankPoints ?? 0) > 0 || initialSave?.activeMissionId ? ['legacy'] : [];
   });
   const missionsUnlocked = clearedDungeons.length > 0;
+  const [shopStock, setShopStock] = useState<string[]>(() =>
+    isValidShopStock(initialSave?.shopStock) ? initialSave!.shopStock! : rollShopStock()
+  );
   // Set during an expedition; rewards are handed out on returning to the village
   const completedMissionRef = useRef<RescueMission | null>(null);
   const [seenPokedex, setSeenPokedex] = useState<number[]>(initialSave?.seenPokedex ?? []);
@@ -143,11 +147,12 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
     return carriedGold + (mission.reward.gold ?? 0);
   };
 
-  // Back in the village the board gets fresh requests; only an accepted, unfinished mission stays
+  // Back in the village the board gets fresh requests (only an accepted, unfinished mission stays) and Kecleon restocks
   const refreshMissionBoard = () => {
     const completedId = completedMissionRef.current?.id;
     const keepId = activeMissionId && activeMissionId !== completedId ? activeMissionId : null;
     setMissions((prev) => prev.filter((m) => m.id === keepId));
+    setShopStock(rollShopStock());
   };
 
   // Active expedition
@@ -175,9 +180,10 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
       seenPokedex,
       caughtPokedex,
       clearedDungeons,
+      shopStock,
       inDungeon: screen === 'DUNGEON_EXPLORE',
     }, player?.uid);
-  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, activeMissionId, seenPokedex, caughtPokedex, clearedDungeons]);
+  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, activeMissionId, seenPokedex, caughtPokedex, clearedDungeons, shopStock]);
 
   // Publish the score to the online leaderboard
   const leaderPokedexId = activeTeam[0]?.pokedexId;
@@ -212,6 +218,7 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
     setSeenPokedex([]);
     setCaughtPokedex([]);
     setClearedDungeons([]);
+    setShopStock(rollShopStock());
     setStartupNotice(null);
     soundManager.startBgm('hub');
     setScreen('PERSONALITY_QUIZ');
@@ -302,6 +309,7 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
           inventory={inventory}
           storage={storage}
           missions={missions}
+          shopStock={shopStock}
           missionsUnlocked={missionsUnlocked}
           playerName={player?.name ?? null}
           playerUid={player?.uid ?? null}

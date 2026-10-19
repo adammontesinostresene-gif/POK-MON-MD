@@ -1,9 +1,12 @@
 import { FloorEvent, FloorEventType, Dungeon, Pokemon, Item } from '../types/game';
-import { createWildEnemy, EXTRA_RECRUITS, getPmdPortraitUrl, ORAN_BERRY } from './pokemonData';
+import { BATTLE_ORBS, createWildEnemy, EXTRA_RECRUITS, getPmdPortraitUrl, ORAN_BERRY, randomEvolutionItem, SITRUS_BERRY, STATUS_BERRIES } from './pokemonData';
 
 // Items that can show up in the "choose one of three" floor event
 export const FLOOR_ITEM_POOL: Omit<Item, 'id' | 'count'>[] = [
   ORAN_BERRY,
+  SITRUS_BERRY,
+  ...STATUS_BERRIES,
+  ...BATTLE_ORBS,
   { name: 'Manzana Grande', category: 'food', description: 'Recupera 50 de Hambre/Tripa.', effectType: 'restore_belly', effectValue: 50, icon: '🍏' },
   { name: 'Semilla Revivir', category: 'seed', description: 'Revive inmediatamente a un Pokémon caído.', effectType: 'revive', effectValue: 100, icon: '🌰' },
   { name: 'Semilla Sueño', category: 'seed', description: 'Duerme al Pokémon rival durante varios turnos.', effectType: 'inflict_status', effectValue: 3, icon: '💤' },
@@ -223,6 +226,8 @@ export const generateFloorEvent = (
       id: `floor_item_${i}_${Date.now()}`,
       count: 1,
     }));
+    // Evolution items are rare finds (never sold in the shop)
+    if (Math.random() < 0.2) itemChoices[2] = randomEvolutionItem();
     return {
       floorNumber,
       type: 'item_choice',

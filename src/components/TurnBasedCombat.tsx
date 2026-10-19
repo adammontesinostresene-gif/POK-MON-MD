@@ -281,6 +281,17 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   const [statStages, setStatStages] = useState<StageMap>({});
   const ailmentsRef = useRef<AilmentMap>({});
   const [ailments, setAilments] = useState<AilmentMap>({});
+  // Remaining confused turns per Pokémon id
+  const confusionRef = useRef<Record<string, number>>({});
+  const [confusion, setConfusionState] = useState<Record<string, number>>({});
+
+  const setConfusion = (id: string, turns: number | null) => {
+    const next = { ...confusionRef.current };
+    if (turns) next[id] = turns;
+    else delete next[id];
+    confusionRef.current = next;
+    setConfusionState(next);
+  };
 
   const setAilment = (id: string, value: AilmentMap[string] | null) => {
     const next = { ...ailmentsRef.current };
@@ -449,7 +460,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   };
 
   // Sleep, freeze and paralysis can stop the actor before using its move
-  const checkCanAct = async (actor: Pokemon) => {
+  const checkAilmentCanAct = async (actor: Pokemon) => {
     const current = ailmentsRef.current[actor.id];
     if (!current) return true;
     if (current.status === 'sleep') {
@@ -482,6 +493,35 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     }
     return true;
   };
+
+  // Confusion (from Ofuscosfera) can coexist with an ailment; a confused Pokémon may hurt itself
+  const checkConfusion = async (actor: Pokemon, onSelfHit: () => void) => {
+    const turns = confusionRef.current[actor.id];
+    if (!turns) return true;
+    if (turns <= 1) {
+      setConfusion(actor.id, null);
+      addLog(`¡${actor.name} ya no está confuso!`);
+      await wait(400);
+      return true;
+    }
+    setConfusion(actor.id, turns - 1);
+    addLog(`💫 ${actor.name} está confuso...`);
+    await wait(350);
+    if (Math.random() >= 1 / 3) return true;
+    // Self-hits never knock out, so fainting stays handled in one place
+    const dmg = Math.min(actor.stats.hp - 1, Math.max(1, Math.floor(actor.stats.maxHp / 8)));
+    if (dmg > 0) actor.stats.hp -= dmg;
+    onSelfHit();
+    addLog(`¡Está tan confuso que se hirió a sí mismo!`);
+    setFloatingDamage({ targetId: actor.id, text: `-${Math.max(0, dmg)}`, type: 'damage' });
+    soundManager.playHit();
+    await wait(550);
+    setFloatingDamage(null);
+    return false;
+  };
+
+  const checkCanAct = async (actor: Pokemon, onSelfHit: () => void) =>
+    (await checkAilmentCanAct(actor)) && (await checkConfusion(actor, onSelfHit));
 
   const moveHits = (attacker: Pokemon, defender: Pokemon, move: Move) => {
     if (abilityAlwaysHits(abilityOf(attacker), abilityOf(defender))) return true;
@@ -530,9 +570,15 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   const renderStages = (id: string) => {
     const stages = Object.entries(statStages[id] ?? {}).filter(([, v]) => v);
     const ailment = ailments[id]?.status;
-    if (stages.length === 0 && !ailment) return null;
+    const isConfused = !!confusion[id];
+    if (stages.length === 0 && !ailment && !isConfused) return null;
     return (
       <div className="flex flex-wrap justify-center gap-0.5 mt-0.5">
+        {isConfused && (
+          <span className="text-[7px] sm:text-[8px] font-mono font-bold px-0.5 rounded leading-tight bg-fuchsia-600 text-white">
+            CNF
+          </span>
+        )}
         {ailment && (
           <span
             className={`text-[7px] sm:text-[8px] font-mono font-bold px-0.5 rounded leading-tight ${AILMENT_LABELS[ailment].className}`}
@@ -826,7 +872,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
         const move = abilityConvertsMove(abilityOf(member), withEffects(action.move));
         const ailment = getMoveAilment(move);
-        if (!(await checkCanAct(member))) continue;
+        if (
+          !(await checkCanAct(member, () => {
+            currentTeam[action.memberIndex!] = { ...member };
+            setTeam([...currentTeam]);
+          }))
+        )
+          continue;
 
         // Self-targeted move: healing and/or own stat changes
         if (move.target === 'self' || move.healPercent) {
@@ -1006,7 +1058,13 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
         const move = abilityConvertsMove(abilityOf(enemyActor), withEffects(action.move));
         const ailment = getMoveAilment(move);
-        if (!(await checkCanAct(enemyActor))) continue;
+        if (
+          !(await checkCanAct(enemyActor, () => {
+            currentEnemies[action.memberIndex!] = { ...enemyActor };
+            setEnemies([...currentEnemies]);
+          }))
+        )
+          continue;
 
         if (move.target === 'self' || move.healPercent) {
           addLog(`✨ ¡${enemyActor.name} usa ${move.name}!`);
@@ -1396,11 +1454,33 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     if (!canUseEscapeOrb && item.category === 'orb') {
       soundManager.playHit();
       addLog(`🚫 ${user.name} usó ${item.name}... ¡pero no tuvo efecto contra el jefe!`);
-    } else if (item.effectType === 'heal_hp') {
-      const healAmount = item.effectValue || 40;
-      targetMember.stats.hp = Math.min(targetMember.stats.maxHp, targetMember.stats.hp + healAmount);
+    } else if (item.effectType === 'confuse_all') {
+      const foes = enemies.filter((e) => e.stats.hp > 0 && !confusionRef.current[e.id]);
+      foes.forEach((e) => setConfusion(e.id, 2 + Math.floor(Math.random() * 4)));
+      soundManager.playSelect();
+      addLog(
+        foes.length > 0
+          ? `🌀 ¡${user.name} usó ${item.name}! ${foes.map((f) => f.name).join(', ')} ${foes.length > 1 ? 'están confusos' : 'está confuso'}.`
+          : `🌀 ${user.name} usó ${item.name}... ¡pero no tuvo efecto!`
+      );
+    } else if (item.effectType === 'speed_up_allies') {
+      const allies = team.filter((m) => m.stats.hp > 0);
+      for (const ally of allies) {
+        const next = Math.max(-6, Math.min(6, getStage(ally.id, 'speed') + (item.effectValue || 1) * abilityStageFactor(abilityOf(ally))));
+        stagesRef.current = { ...stagesRef.current, [ally.id]: { ...stagesRef.current[ally.id], speed: next } };
+      }
+      setStatStages(stagesRef.current);
       soundManager.playHeal();
-      addLog(`✨ ¡${user.name} usó ${item.name} en ${targetMember.name}! Recuperó ${healAmount} PS.`);
+      addLog(`💨 ¡${user.name} usó ${item.name}! ¡La Velocidad de todo el equipo subió!`);
+    } else if (item.effectType === 'heal_hp') {
+      const before = targetMember.stats.hp;
+      targetMember.stats.hp = Math.min(targetMember.stats.maxHp, before + (item.effectValue || 40));
+      soundManager.playHeal();
+      addLog(
+        targetMember.stats.hp >= targetMember.stats.maxHp
+          ? `✨ ¡${user.name} usó ${item.name} en ${targetMember.name}! Recuperó todos sus PS (+${targetMember.stats.hp - before}).`
+          : `✨ ¡${user.name} usó ${item.name} en ${targetMember.name}! Recuperó ${targetMember.stats.hp - before} PS.`
+      );
     } else if (item.effectType === 'revive') {
       targetMember.stats.hp = targetMember.stats.maxHp;
       targetMember.status = 'none';
@@ -1431,6 +1511,16 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         addLog(`💤 ¡${user.name} lanzó ${item.name} a ${foe.name}! ¡${foe.name} se ha dormido!`);
       } else {
         addLog(`🎒 ${user.name} usó ${item.name}... ¡pero no tuvo efecto!`);
+      }
+    } else if (item.effectType === 'cure_status') {
+      const current = ailmentsRef.current[targetMember.id]?.status;
+      if (current && current === item.cures) {
+        setAilment(targetMember.id, null);
+        soundManager.playHeal();
+        const cured = { poison: 'del envenenamiento', paralysis: 'de la parálisis', sleep: 'del sueño', burn: 'de las quemaduras', freeze: 'del congelamiento' }[current];
+        addLog(`🍓 ¡${user.name} usó ${item.name} en ${targetMember.name}! Se recuperó ${cured}.`);
+      } else {
+        addLog(`🎒 ${user.name} usó ${item.name} en ${targetMember.name}... ¡pero no tuvo efecto!`);
       }
     } else {
       addLog(`🎒 ${user.name} usó ${item.name}.`);
@@ -2207,7 +2297,14 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 {inventory.map((item) => (
                   <button
                     key={item.id}
-                    disabled={isProcessingTurn || item.count <= 0 || item.effectType === 'unlock_ability'}
+                    disabled={
+                      isProcessingTurn ||
+                      item.count <= 0 ||
+                      item.effectType === 'unlock_ability' ||
+                      item.effectType === 'evolution' ||
+                      (!canUseEscapeOrb && item.category === 'orb')
+                    }
+                    title={!canUseEscapeOrb && item.category === 'orb' ? 'Las esferas no funcionan contra jefes' : undefined}
                     onClick={() => {
                       soundManager.playSelect();
                       if (item.effectType === 'inflict_status' && aliveEnemies.length > 1) {

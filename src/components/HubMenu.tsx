@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Pokemon, Dungeon, Item, RescueMission } from '../types/game';
-import { DUNGEONS, TYPE_COLORS, canPokemonEvolve, BAG_LIMIT, bagCount, bagSpace, ORAN_BERRY } from '../data/pokemonData';
+import { DUNGEONS, TYPE_COLORS, canPokemonEvolve, BAG_LIMIT, bagCount, bagSpace, addItem } from '../data/pokemonData';
+import { SHOP_CATALOG } from '../data/itemData';
 import { soundManager } from '../utils/audio';
 import {
   Compass,
@@ -31,6 +32,7 @@ import {
 import { PmdPortrait } from './PmdSprite';
 import { PokedexModal } from './PokedexModal';
 import { LeaderboardModal } from './LeaderboardModal';
+import { GuildModal } from './GuildModal';
 import { SPECIES_DATA } from '../data/speciesData';
 import { ABILITY_CAPSULE_TEMPLATE } from '../data/abilities';
 import { MISSION_RANKS, describeMission, describeReward } from '../data/missionData';
@@ -46,6 +48,7 @@ interface HubMenuProps {
   inventory: Item[];
   storage: Item[];
   missions: RescueMission[];
+  shopStock: string[];
   missionsUnlocked: boolean;
   playerName: string | null;
   playerUid: string | null;
@@ -79,6 +82,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   inventory,
   storage,
   missions,
+  shopStock,
   missionsUnlocked,
   playerName,
   playerUid,
@@ -103,7 +107,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   onUpdateStorage,
 }) => {
   const [activeModal, setActiveModal] = useState<
-    'DUNGEONS' | 'BAG' | 'MISSIONS' | 'SHOP' | 'BANK' | 'STORAGE' | 'POKEDEX' | 'RANKING' | null
+    'DUNGEONS' | 'BAG' | 'MISSIONS' | 'SHOP' | 'BANK' | 'STORAGE' | 'POKEDEX' | 'RANKING' | 'GUILD' | null
   >(null);
   const [selectedDungeon, setSelectedDungeon] = useState<Dungeon>(DUNGEONS[0]);
   const [isMuted, setIsMuted] = useState<boolean>(soundManager.getMuted());
@@ -201,8 +205,8 @@ export const HubMenu: React.FC<HubMenuProps> = ({
     }
   };
 
-  const handleBuyShopItem = (itemTemplate: { name: string; price: number; effectType: Item['effectType']; value: number; icon: string; desc: string; cat: Item['category'] }) => {
-    if (gold < itemTemplate.price) {
+  const handleBuyShopItem = (entry: (typeof SHOP_CATALOG)[number]) => {
+    if (gold < entry.price) {
       soundManager.playHit();
       setShopFeedback('¡No tienes suficientes Pokécuartos!');
       setTimeout(() => setShopFeedback(null), 2000);
@@ -215,29 +219,11 @@ export const HubMenu: React.FC<HubMenuProps> = ({
       return;
     }
 
-    onUpdateGold(gold - itemTemplate.price);
+    onUpdateGold(gold - entry.price);
     soundManager.playDrop();
+    onUpdateInventory(addItem(inventory, { ...entry.item, id: `shop_${Date.now()}`, count: 1 }));
 
-    const existingIdx = inventory.findIndex((it) => it.name === itemTemplate.name);
-    if (existingIdx !== -1) {
-      const updated = [...inventory];
-      updated[existingIdx].count += 1;
-      onUpdateInventory(updated);
-    } else {
-      const newItem: Item = {
-        id: `shop_${Date.now()}`,
-        name: itemTemplate.name,
-        category: itemTemplate.cat,
-        description: itemTemplate.desc,
-        count: 1,
-        effectType: itemTemplate.effectType,
-        effectValue: itemTemplate.value,
-        icon: itemTemplate.icon,
-      };
-      onUpdateInventory([...inventory, newItem]);
-    }
-
-    setShopFeedback(`¡Compraste ${itemTemplate.name}!`);
+    setShopFeedback(`¡Compraste ${entry.item.name}!`);
     setTimeout(() => setShopFeedback(null), 2000);
   };
 
@@ -650,7 +636,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               setActiveModal('MISSIONS');
             }}
             aria-disabled={!missionsUnlocked}
-            className={`col-span-2 md:col-span-4 short:col-span-4 pmd-window pmd-window-btn group relative bg-slate-900/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 short:p-1.5 border transition-all text-left flex items-center gap-3 shadow-xl min-h-0 ${
+            className={`col-span-2 md:col-span-2 short:col-span-2 pmd-window pmd-window-btn group relative bg-slate-900/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 short:p-1.5 border transition-all text-left flex items-center gap-3 shadow-xl min-h-0 ${
               missionsUnlocked ? 'border-slate-800 hover:bg-slate-850 hover:border-lime-400' : 'border-slate-800 opacity-70 cursor-not-allowed'
             }`}
           >
@@ -682,6 +668,37 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             {missionsUnlocked && (
               <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-lime-400 transition-colors shrink-0" />
             )}
+          </button>
+
+          {/* Card 10: Gremio (online, needs an account) */}
+          <button
+            onClick={() => {
+              if (!playerUid) {
+                soundManager.playHit();
+                return;
+              }
+              soundManager.playSelect();
+              setActiveModal('GUILD');
+            }}
+            aria-disabled={!playerUid}
+            className={`col-span-2 md:col-span-2 short:col-span-2 pmd-window pmd-window-btn group relative bg-slate-900/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 short:p-1.5 border transition-all text-left flex items-center gap-3 shadow-xl min-h-0 ${
+              playerUid ? 'border-slate-800 hover:bg-slate-850 hover:border-indigo-400' : 'border-slate-800 opacity-70 cursor-not-allowed'
+            }`}
+          >
+            <div className="w-8 h-8 sm:w-10 sm:h-10 short:w-7 short:h-7 shrink-0 rounded-xl bg-indigo-500/20 border border-indigo-400/80 flex items-center justify-center text-indigo-300 group-hover:scale-105 transition-transform">
+              <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-indigo-300 transition-colors">
+                Gremio
+              </h3>
+              <p className="text-[11px] text-slate-400 leading-tight truncate">
+                {playerUid
+                  ? 'Únete a otros exploradores o funda tu propio gremio.'
+                  : 'Necesitas iniciar sesión para usar los gremios.'}
+              </p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-400 transition-colors shrink-0" />
           </button>
         </div>
       </main>
@@ -784,6 +801,16 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
       {activeModal === 'POKEDEX' && (
         <PokedexModal seenIds={seenPokedex} caughtIds={caughtPokedex} onClose={() => setActiveModal(null)} />
+      )}
+
+      {activeModal === 'GUILD' && playerUid && (
+        <GuildModal
+          uid={playerUid}
+          playerName={playerName ?? 'Explorador'}
+          gold={gold}
+          onSpendGold={(amount) => onUpdateGold(gold - amount)}
+          onClose={() => setActiveModal(null)}
+        />
       )}
 
       {activeModal === 'RANKING' && (
@@ -1229,7 +1256,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   Bazar de Kecleon
                 </h3>
                 <p className="text-xs text-slate-400">
-                  "¡Bienvenido, explorador! Aquí tienes lo mejor para tus viajes."
+                  "¡Bienvenido, explorador! Hoy tengo esto para ti. Vuelve tras tu próxima expedición: ¡siempre traigo cosas nuevas!"
                 </p>
               </div>
               <button
@@ -1247,83 +1274,31 @@ export const HubMenu: React.FC<HubMenuProps> = ({
             )}
 
             <div className="grid grid-cols-1 short:grid-cols-2 gap-2 sm:gap-2.5">
-              {[
-                {
-                  name: ORAN_BERRY.name,
-                  price: 80,
-                  value: ORAN_BERRY.effectValue,
-                  effectType: 'heal_hp' as const,
-                  icon: ORAN_BERRY.icon,
-                  cat: 'healing' as const,
-                  desc: ORAN_BERRY.description,
-                },
-                {
-                  name: 'Manzana Grande',
-                  price: 60,
-                  value: 50,
-                  effectType: 'restore_belly' as const,
-                  icon: '🍏',
-                  cat: 'food' as const,
-                  desc: 'Recupera 50 de Hambre/Tripa.',
-                },
-                {
-                  name: 'Semilla Revivir',
-                  price: 250,
-                  value: 100,
-                  effectType: 'revive' as const,
-                  icon: '🌰',
-                  cat: 'seed' as const,
-                  desc: 'Revive inmediatamente al líder o compañero caído.',
-                },
-                {
-                  name: 'Semilla Sueño',
-                  price: 120,
-                  value: 3,
-                  effectType: 'inflict_status' as const,
-                  icon: '💤',
-                  cat: 'seed' as const,
-                  desc: 'Duerme al Pokémon rival durante el combate.',
-                },
-                {
-                  name: 'Elixir',
-                  price: 150,
-                  value: 10,
-                  effectType: 'restore_pp' as const,
-                  icon: '🧪',
-                  cat: 'healing' as const,
-                  desc: 'Restaura 10 PP de un movimiento.',
-                },
-                {
-                  name: ABILITY_CAPSULE_TEMPLATE.name,
-                  price: 2000,
-                  value: ABILITY_CAPSULE_TEMPLATE.effectValue,
-                  effectType: ABILITY_CAPSULE_TEMPLATE.effectType,
-                  icon: ABILITY_CAPSULE_TEMPLATE.icon,
-                  cat: ABILITY_CAPSULE_TEMPLATE.category,
-                  desc: ABILITY_CAPSULE_TEMPLATE.description,
-                },
-              ].map((shopItem) => (
+              {shopStock
+                .map((name) => SHOP_CATALOG.find((e) => e.item.name === name))
+                .filter((e): e is (typeof SHOP_CATALOG)[number] => !!e)
+                .map((entry) => (
                 <div
-                  key={shopItem.name}
+                  key={entry.item.name}
                   className="p-2 sm:p-3 short:p-1.5 bg-slate-800/80 border border-slate-700 rounded-xl flex items-center justify-between gap-2"
                 >
                   <div className="flex items-center gap-3 short:gap-2 min-w-0">
-                    <span className="text-2xl short:text-xl">{shopItem.icon}</span>
+                    <span className="text-2xl short:text-xl">{entry.item.icon}</span>
                     <div className="min-w-0">
                       <span className="font-bold text-sm text-white block">
-                        {shopItem.name}
+                        {entry.item.name}
                       </span>
                       <span className="text-xs text-slate-400 line-clamp-2 short:line-clamp-1">
-                        {shopItem.desc}
+                        {entry.item.description}
                       </span>
                     </div>
                   </div>
 
                   <button
-                    onClick={() => handleBuyShopItem(shopItem)}
+                    onClick={() => handleBuyShopItem(entry)}
                     className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition-colors shadow flex items-center gap-1 shrink-0"
                   >
-                    <span>{shopItem.price} 🪙</span>
+                    <span>{entry.price} 🪙</span>
                   </button>
                 </div>
               ))}
