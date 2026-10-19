@@ -634,7 +634,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               </h3>
               <p className="text-[11px] text-slate-400 leading-tight truncate">
                 {!missionsUnlocked
-                  ? 'Bloqueado: completa cualquier mazmorra para que confíen en tu equipo de rescate.'
+                  ? 'Bloqueado: Completa cualquier mazmorra para que confíen en tu equipo de rescate.'
                   : activeMission
                   ? `En curso: ${describeMission(activeMission).title} · ${activeMission.dungeonName}, piso ${activeMission.targetFloor}`
                   : `${missions.length} peticiones de ayuda esperan a un equipo de rescate.`}

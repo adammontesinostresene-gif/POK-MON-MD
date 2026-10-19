@@ -142,6 +142,13 @@ export default function App({ player, onSignOut }: AppProps) {
     return carriedGold + (mission.reward.gold ?? 0);
   };
 
+  // Back in the village the board gets fresh requests; only an accepted, unfinished mission stays
+  const refreshMissionBoard = () => {
+    const completedId = completedMissionRef.current?.id;
+    const keepId = activeMissionId && activeMissionId !== completedId ? activeMissionId : null;
+    setMissions((prev) => prev.filter((m) => m.id === keepId));
+  };
+
   // Active expedition
   const [currentDungeon, setCurrentDungeon] = useState<Dungeon | null>(null);
   const [completedDungeonInfo, setCompletedDungeonInfo] = useState<{
@@ -228,6 +235,7 @@ export default function App({ player, onSignOut }: AppProps) {
     setActiveTeam(updatedTeam.map(restorePokemon));
     setReserves(updatedReserves.map(restorePokemon));
     setInventory(normalizeItems(updatedInventory));
+    refreshMissionBoard();
     setGold(settleCompletedMission(finalGold));
     if (currentDungeon) {
       setClearedDungeons((prev) => (prev.includes(currentDungeon.id) ? prev : [...prev, currentDungeon.id]));
@@ -270,6 +278,7 @@ export default function App({ player, onSignOut }: AppProps) {
     setActiveTeam(updatedTeam.map(restorePokemon));
     setReserves(updatedReserves.map(restorePokemon));
     setInventory(normalizeItems(updatedInventory));
+    refreshMissionBoard();
     setGold(settleCompletedMission(finalGold));
     soundManager.startBgm('hub');
     setScreen('HUB');
