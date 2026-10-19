@@ -70,6 +70,28 @@ service cloud.firestore {
             && request.resource.data.memberUids.toSet() == resource.data.memberUids.toSet().difference([request.auth.uid].toSet())
             && !(request.auth.uid in request.resource.data.members))
         );
+
+      // Guild chat: only current members can read and write; the founder can clear it when disbanding
+      match /messages/{messageId} {
+        function guild() {
+          return get(/databases/$(database)/documents/guilds/$(guildId)).data;
+        }
+
+        allow read: if request.auth != null && request.auth.uid in guild().memberUids;
+
+        allow create: if request.auth != null
+          && request.auth.uid in guild().memberUids
+          && request.resource.data.keys().hasOnly(['uid', 'name', 'text', 'createdAt'])
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.name is string
+          && request.resource.data.name.size() <= 20
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 300
+          && request.resource.data.createdAt == request.time;
+
+        allow delete: if request.auth != null && guild().ownerUid == request.auth.uid;
+      }
     }
   }
 }

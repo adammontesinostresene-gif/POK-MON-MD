@@ -48,6 +48,8 @@ const restorePokemon = (p: Pokemon): Pokemon => {
   });
 };
 
+const DEFAULT_TEAM_NAME = 'Equipo Rescate';
+
 const mergeDexIds = (prev: number[], ids: number[]): number[] => {
   const missing = [...new Set(ids)].filter((id) => !prev.includes(id));
   return missing.length > 0 ? [...prev, ...missing] : prev;
@@ -107,6 +109,9 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
   const missionsUnlocked = clearedDungeons.length > 0;
   const [shopStock, setShopStock] = useState<string[]>(() =>
     isValidShopStock(initialSave?.shopStock) ? initialSave!.shopStock! : rollShopStock()
+  );
+  const [teamName, setTeamName] = useState<string>(() =>
+    typeof initialSave?.teamName === 'string' && initialSave.teamName.trim() ? initialSave.teamName.slice(0, 24) : DEFAULT_TEAM_NAME
   );
   // Set during an expedition; rewards are handed out on returning to the village
   const completedMissionRef = useRef<RescueMission | null>(null);
@@ -181,9 +186,10 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
       caughtPokedex,
       clearedDungeons,
       shopStock,
+      teamName,
       inDungeon: screen === 'DUNGEON_EXPLORE',
     }, player?.uid);
-  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, activeMissionId, seenPokedex, caughtPokedex, clearedDungeons, shopStock]);
+  }, [screen, activeTeam, reserves, gold, bankGold, rankPoints, inventory, storage, missions, activeMissionId, seenPokedex, caughtPokedex, clearedDungeons, shopStock, teamName]);
 
   // Publish the score to the online leaderboard
   const leaderPokedexId = activeTeam[0]?.pokedexId;
@@ -219,6 +225,7 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
     setCaughtPokedex([]);
     setClearedDungeons([]);
     setShopStock(rollShopStock());
+    setTeamName(DEFAULT_TEAM_NAME);
     setStartupNotice(null);
     soundManager.startBgm('hub');
     setScreen('PERSONALITY_QUIZ');
@@ -315,6 +322,8 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
           playerUid={player?.uid ?? null}
           onSignOut={onSignOut}
           onRename={onRename}
+          teamName={teamName}
+          onRenameTeam={setTeamName}
           onNewGame={handleNewGame}
           notice={startupNotice}
           onDismissNotice={() => setStartupNotice(null)}

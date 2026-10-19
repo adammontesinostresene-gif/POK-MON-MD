@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Crown, Shield, Users } from 'lucide-react';
+import { Crown, MessageCircle, Shield, Users } from 'lucide-react';
 import {
   GUILD_MAX_MEMBERS,
   GUILD_PRICE,
@@ -15,6 +15,7 @@ import {
 import { LeaderboardEntry } from '../utils/leaderboard';
 import { soundManager } from '../utils/audio';
 import { PmdPortrait } from './PmdSprite';
+import { GuildChat } from './GuildChat';
 import { SPECIES_DATA } from '../data/speciesData';
 
 interface GuildModalProps {
@@ -34,6 +35,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({ uid, playerName, gold, o
   const [newName, setNewName] = useState('');
   const [busy, setBusy] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
+  const [guildTab, setGuildTab] = useState<'members' | 'chat'>('members');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -134,7 +136,31 @@ export const GuildModal: React.FC<GuildModalProps> = ({ uid, playerName, gold, o
               </div>
             </div>
 
-            <div className="flex flex-col gap-1.5 min-h-0 overflow-y-auto pr-1">
+            <div className="shrink-0 grid grid-cols-2 gap-1 p-1 bg-slate-950 rounded-lg border border-slate-800 text-xs font-bold">
+              {(['members', 'chat'] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setGuildTab(t)}
+                  className={`py-1.5 rounded transition-colors flex items-center justify-center gap-1.5 ${
+                    guildTab === t ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {t === 'members' ? <Users className="w-3.5 h-3.5" /> : <MessageCircle className="w-3.5 h-3.5" />}
+                  {t === 'members' ? 'Miembros' : 'Chat'}
+                </button>
+              ))}
+            </div>
+
+            {guildTab === 'chat' && (
+              <GuildChat
+                guildId={myGuild.id}
+                uid={uid}
+                playerName={playerName}
+                leaders={Object.fromEntries(members.map((m) => [m.uid, m.leaderPokedexId]))}
+              />
+            )}
+
+            <div className={`${guildTab === 'members' ? 'flex' : 'hidden'} flex-col gap-1.5 min-h-0 overflow-y-auto pr-1`}>
               {members.map((m, i) => (
                 <div
                   key={m.uid}
@@ -160,7 +186,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({ uid, playerName, gold, o
               ))}
             </div>
 
-            <div className="shrink-0 flex justify-end gap-2 pt-1">
+            <div className={`${guildTab === 'members' ? 'flex' : 'hidden'} shrink-0 justify-end gap-2 pt-1`}>
               {confirmExit ? (
                 <>
                   <span className="text-xs text-slate-300 self-center mr-auto">

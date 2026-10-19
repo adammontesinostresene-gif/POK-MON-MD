@@ -1345,7 +1345,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     const lootRoll = Math.random();
     const goldReward =
       lootRoll < 0.25
-        ? defeatedEnemies.reduce((sum, e) => sum + Math.round(e.level * 18 + Math.random() * 20), 0)
+        ? defeatedEnemies.reduce((sum, e) => sum + Math.round(e.level * 9 + Math.random() * 10), 0)
         : 0;
 
     // Level-up checks for surviving team members: strictly ONE notification message per Pokémon

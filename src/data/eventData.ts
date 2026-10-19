@@ -256,8 +256,8 @@ export const generateFloorEvent = (
       title: `Piso ${floorNumber}: Cofre del tesoro`,
       description: `En un pedestal antiguo encuentras un cofre sellado intacto abandonado por un equipo de rescate anterior.`,
       reward: {
-        gold: 150 + floorNumber * 40,
-        message: `¡Dentro encontraste ${150 + floorNumber * 40} Pokécuartos y provisiones frescas!`,
+        gold: 75 + floorNumber * 20,
+        message: `¡Dentro encontraste ${75 + floorNumber * 20} Pokécuartos y provisiones frescas!`,
       },
     };
   }

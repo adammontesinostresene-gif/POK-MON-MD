@@ -23,6 +23,8 @@ export interface SaveData {
   clearedDungeons?: string[];
   // Item names Kecleon sells until the next return to the village
   shopStock?: string[];
+  // Custom rescue team name shown in the village
+  teamName?: string;
   // True while an expedition is in progress; reloading mid-dungeon counts as abandoning it
   inDungeon: boolean;
   // Milliseconds timestamp, used to pick the newest copy between this device and the cloud

@@ -54,6 +54,8 @@ interface HubMenuProps {
   playerUid: string | null;
   onSignOut?: () => void;
   onRename?: (name: string) => Promise<void>;
+  teamName: string;
+  onRenameTeam: (name: string) => void;
   onNewGame: () => void;
   notice: string | null;
   onDismissNotice: () => void;
@@ -88,6 +90,8 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   playerUid,
   onSignOut,
   onRename,
+  teamName,
+  onRenameTeam,
   onNewGame,
   notice,
   onDismissNotice,
@@ -116,17 +120,26 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   const [bankFeedback, setBankFeedback] = useState<string | null>(null);
   const [confirmNewGame, setConfirmNewGame] = useState<boolean>(false);
   const [renameValue, setRenameValue] = useState<string | null>(null);
+  const [renameTarget, setRenameTarget] = useState<'player' | 'team'>('player');
   const [renameError, setRenameError] = useState<string | null>(null);
   const [renaming, setRenaming] = useState<boolean>(false);
 
   const handleRename = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!onRename || renameValue === null || renaming) return;
+    if (renameValue === null || renaming) return;
     const name = renameValue.trim();
-    if (name.length < 3 || name.length > 20) {
-      setRenameError('El nombre debe tener entre 3 y 20 caracteres.');
+    const maxLength = renameTarget === 'team' ? 24 : 20;
+    if (name.length < 3 || name.length > maxLength) {
+      setRenameError(`El nombre debe tener entre 3 y ${maxLength} caracteres.`);
       return;
     }
+    if (renameTarget === 'team') {
+      onRenameTeam(name);
+      soundManager.playDrop();
+      setRenameValue(null);
+      return;
+    }
+    if (!onRename) return;
     setRenaming(true);
     try {
       await onRename(name);
@@ -309,6 +322,7 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   onClick={() => {
                     soundManager.playSelect();
                     setRenameError(null);
+                    setRenameTarget('player');
                     setRenameValue(playerName);
                   }}
                   title="Cambiar nombre de explorador"
@@ -373,9 +387,21 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                   alt="Insignia de Equipo de Rescate"
                   className="hidden sm:block w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0 filter drop-shadow-[0_2px_8px_rgba(245,158,11,0.5)]"
                 />
-                <h2 className="text-base sm:text-2xl short:text-base font-extrabold text-white tracking-tight">
-                  Equipo Rescate
+                <h2 className="text-base sm:text-2xl short:text-base font-extrabold text-white tracking-tight truncate">
+                  {teamName}
                 </h2>
+                <button
+                  onClick={() => {
+                    soundManager.playSelect();
+                    setRenameError(null);
+                    setRenameTarget('team');
+                    setRenameValue(teamName);
+                  }}
+                  title="Cambiar nombre del equipo"
+                  className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-amber-300 transition-colors shrink-0"
+                >
+                  <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </button>
               </div>
               <p className="text-[11px] sm:text-xs md:text-sm text-slate-300 mt-0.5">
                 Líder: <strong className="text-white">{leader?.name}</strong> (Nv. {leader?.level})
@@ -826,13 +852,17 @@ export const HubMenu: React.FC<HubMenuProps> = ({
           >
             <h3 className="font-bold text-base text-white flex items-center gap-2">
               <Pencil className="w-4 h-4 text-amber-400" />
-              Nombre de explorador
+              {renameTarget === 'team' ? 'Nombre del equipo' : 'Nombre de explorador'}
             </h3>
-            <p className="text-xs text-slate-400">Es el nombre que verán los demás jugadores en el ranking.</p>
+            <p className="text-xs text-slate-400">
+              {renameTarget === 'team'
+                ? 'El nombre de tu equipo de rescate en la aldea.'
+                : 'Es el nombre que verán los demás jugadores en el ranking.'}
+            </p>
             <input
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
-              maxLength={20}
+              maxLength={renameTarget === 'team' ? 24 : 20}
               autoFocus
               className="w-full px-3 py-2 bg-slate-950 border border-slate-700 focus:border-amber-400 rounded-lg text-sm text-white outline-none select-text"
             />

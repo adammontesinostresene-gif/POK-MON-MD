@@ -157,7 +157,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
         }
         setEventResolved(true);
       } else if (outcome === 1) {
-        const reward = 100 + currentFloor * 25;
+        const reward = 50 + currentFloor * 12;
         setGold((prev) => prev + reward);
         soundManager.playDrop();
         setResolutionMessage(`Encontraste ${reward} Pokécuartos en el camino.`);
@@ -207,7 +207,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       }
     } else if (choice.actionKey === 'explore_tunnel') {
       if (Math.random() < 0.65) {
-        const loot = 120 + currentFloor * 30;
+        const loot = 60 + currentFloor * 15;
         setGold((g) => g + loot);
         soundManager.playDrop();
         setResolutionMessage(
@@ -228,7 +228,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
       }
     } else if (choice.actionKey === 'force_lock') {
       // Elemental resonance reward
-      const bonusGold = 180 + currentFloor * 25;
+      const bonusGold = 90 + currentFloor * 12;
       setGold((g) => g + bonusGold);
       if (bagSpace(inventory) === 0) {
         soundManager.playLevelUp();
@@ -341,7 +341,7 @@ export const DungeonView: React.FC<DungeonViewProps> = ({
   // Open Chest trigger
   const handleOpenChest = () => {
     soundManager.playVictory();
-    const bounty = 160 + currentFloor * 45;
+    const bounty = currentEvent?.reward?.gold ?? 75 + currentFloor * 20;
     setGold((g) => g + bounty);
     setResolutionMessage(
       `¡Abriste el cofre y contenía ${bounty} Pokécuartos y provisiones de exploración!`
