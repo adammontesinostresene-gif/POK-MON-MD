@@ -2,6 +2,65 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Co-op expeditions: the host runs the game; other members only touch their own entry and inputs
+    match /coopParties/{partyId} {
+      function changedOnly(keys) {
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+      }
+      function ownEntryOnly(field) {
+        return request.resource.data[field].diff(resource.data[field]).affectedKeys().hasOnly([request.auth.uid]);
+      }
+
+      allow read: if request.auth != null;
+
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['hostUid', 'hostName', 'status', 'dungeonId', 'mission', 'memberUids', 'members', 'inputs', 'game', 'createdAt'])
+        && request.resource.data.hostUid == request.auth.uid
+        && request.resource.data.hostName is string
+        && request.resource.data.hostName.size() <= 20
+        && request.resource.data.status == 'lobby'
+        && request.resource.data.memberUids == [request.auth.uid]
+        && request.resource.data.members.keys().hasOnly([request.auth.uid])
+        && request.resource.data.inputs == {}
+        && request.resource.data.createdAt == request.time;
+
+      allow delete: if request.auth != null && resource.data.hostUid == request.auth.uid;
+
+      allow update: if request.auth != null && (
+        // Host: drives the lobby and the expedition
+        (resource.data.hostUid == request.auth.uid
+          && request.resource.data.hostUid == resource.data.hostUid
+          && request.resource.data.memberUids.size() <= 4
+          && (!('game' in request.resource.data) || request.resource.data.game == null || request.resource.data.game.size() <= 900000))
+        ||
+        // Join an open lobby while there is room
+        (resource.data.status == 'lobby'
+          && !(request.auth.uid in resource.data.memberUids)
+          && changedOnly(['memberUids', 'members'])
+          && ownEntryOnly('members')
+          && request.resource.data.memberUids.toSet() == resource.data.memberUids.toSet().union([request.auth.uid].toSet())
+          && request.resource.data.memberUids.size() <= 4)
+        ||
+        // Leave the party
+        (request.auth.uid in resource.data.memberUids
+          && changedOnly(['memberUids', 'members', 'inputs'])
+          && ownEntryOnly('members')
+          && ownEntryOnly('inputs')
+          && request.resource.data.memberUids.toSet() == resource.data.memberUids.toSet().difference([request.auth.uid].toSet()))
+        ||
+        // Own contribution and ready flag in the lobby
+        (resource.data.status == 'lobby'
+          && request.auth.uid in resource.data.memberUids
+          && changedOnly(['members'])
+          && ownEntryOnly('members'))
+        ||
+        // Own votes and actions during the expedition
+        (request.auth.uid in resource.data.memberUids
+          && changedOnly(['inputs'])
+          && ownEntryOnly('inputs'))
+      );
+    }
+
     // Leaderboard: any signed-in player can read it; each player only writes their own entry
     match /players/{uid} {
       allow read: if request.auth != null;

@@ -66,7 +66,10 @@ interface HubMenuProps {
   onDismissMissionReport: () => void;
   seenPokedex: number[];
   caughtPokedex: number[];
+  unlockedDungeonIds: string[];
   onSelectDungeon: (dungeon: Dungeon) => void;
+  // Undefined when playing offline (multiplayer needs an account)
+  onOpenCoop?: () => void;
   onOpenTeamManager: () => void;
   onOpenEvolution: () => void;
   onUpdateInventory: (items: Item[]) => void;
@@ -102,7 +105,9 @@ export const HubMenu: React.FC<HubMenuProps> = ({
   onDismissMissionReport,
   seenPokedex,
   caughtPokedex,
+  unlockedDungeonIds,
   onSelectDungeon,
+  onOpenCoop,
   onOpenTeamManager,
   onOpenEvolution,
   onUpdateInventory,
@@ -756,18 +761,48 @@ export const HubMenu: React.FC<HubMenuProps> = ({
               </button>
             </div>
 
+            {/* Individual / Multiplayer switch */}
+            <div className="grid grid-cols-2 gap-1.5 bg-slate-950/70 p-1 rounded-xl border border-slate-800">
+              <span className="py-1.5 rounded-lg bg-amber-500 text-amber-950 text-xs font-bold text-center flex items-center justify-center gap-1.5">
+                <Compass className="w-3.5 h-3.5" />
+                Individual
+              </span>
+              <button
+                disabled={!onOpenCoop}
+                title={onOpenCoop ? undefined : 'Necesitas iniciar sesión para jugar en grupo'}
+                onClick={() => {
+                  if (!onOpenCoop) return;
+                  soundManager.playSelect();
+                  setActiveModal(null);
+                  onOpenCoop();
+                }}
+                className="py-1.5 rounded-lg text-xs font-bold text-indigo-200 hover:bg-indigo-900/60 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Users className="w-3.5 h-3.5" />
+                Multijugador
+              </button>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-3 short:grid-cols-3 gap-2 sm:gap-3">
-              {DUNGEONS.map((dungeon) => {
+              {DUNGEONS.map((dungeon, index) => {
                 const isSelected = selectedDungeon.id === dungeon.id;
+                const isLocked = !unlockedDungeonIds.includes(dungeon.id);
                 return (
                   <button
                     key={dungeon.id}
                     onClick={() => {
+                      if (isLocked) {
+                        soundManager.playHit();
+                        return;
+                      }
                       soundManager.playSelect();
                       setSelectedDungeon(dungeon);
                     }}
+                    aria-disabled={isLocked}
                     className={`p-2.5 sm:p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all ${
-                      isSelected
+                      isLocked
+                        ? 'border-slate-800 bg-slate-900/60 opacity-60 cursor-not-allowed'
+                        : isSelected
                         ? 'border-amber-400 bg-amber-950/30 ring-2 ring-amber-400/50'
                         : 'border-slate-800 bg-slate-800/60 hover:border-slate-600 hover:bg-slate-800'
                     }`}
@@ -776,7 +811,15 @@ export const HubMenu: React.FC<HubMenuProps> = ({
                       <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">
                         {dungeon.difficulty} · Nv. {dungeon.recommendedLevel}+
                       </span>
-                      <h4 className="font-bold text-sm text-white">{dungeon.name}</h4>
+                      <h4 className="font-bold text-sm text-white flex items-center gap-1.5">
+                        {isLocked && <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />}
+                        {dungeon.name}
+                      </h4>
+                      {isLocked && index > 0 && (
+                        <p className="text-[11px] text-slate-400 mt-1">
+                          Completa {DUNGEONS[index - 1].name} para desbloquearla.
+                        </p>
+                      )}
                       {activeMission?.dungeonId === dungeon.id && (
                         <span className="inline-block mt-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-lime-900/70 text-lime-300 border border-lime-600/50">
                           Misión en el piso {activeMission.targetFloor}
@@ -811,6 +854,10 @@ export const HubMenu: React.FC<HubMenuProps> = ({
 
               <button
                 onClick={() => {
+                  if (!unlockedDungeonIds.includes(selectedDungeon.id)) {
+                    soundManager.playHit();
+                    return;
+                  }
                   soundManager.playSelect();
                   setActiveModal(null);
                   onSelectDungeon(selectedDungeon);

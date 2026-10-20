@@ -9,6 +9,9 @@ import { TeamManager } from './components/TeamManager';
 import { EvolutionMenu } from './components/EvolutionMenu';
 import { DungeonView } from './components/DungeonView';
 import { PersonalityQuiz } from './components/PersonalityQuiz';
+import { CoopLobby } from './components/CoopLobby';
+import { CoopDungeonView, CoopOutcome } from './components/CoopDungeonView';
+import { CoopParty } from './utils/coop';
 import {
   Pokemon,
   Dungeon,
@@ -23,6 +26,8 @@ import {
   getExpToNextLevel,
   normalizeItems,
   addItem,
+  bagSpace,
+  DUNGEONS,
 } from './data/pokemonData';
 import { createRewardItem, describeMission, describeReward, isValidMission, topUpMissions } from './data/missionData';
 import { isValidShopStock, rollShopStock } from './data/itemData';
@@ -93,13 +98,6 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
     initialSave && !abandonedExpedition ? normalizeItems(initialSave.inventory) : []
   );
   const [storage, setStorage] = useState<Item[]>(normalizeItems(initialSave?.storage ?? []));
-  const [missions, setMissions] = useState<RescueMission[]>(() =>
-    (initialSave?.missions ?? []).filter(isValidMission)
-  );
-  const [activeMissionId, setActiveMissionId] = useState<string | null>(() =>
-    missions.some((m) => m.id === initialSave?.activeMissionId) ? initialSave!.activeMissionId! : null
-  );
-  const [missionReport, setMissionReport] = useState<string | null>(null);
   const [clearedDungeons, setClearedDungeons] = useState<string[]>(() => {
     const saved = initialSave?.clearedDungeons;
     if (Array.isArray(saved)) return saved.filter((id): id is string => typeof id === 'string');
@@ -107,6 +105,16 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
     return (initialSave?.rankPoints ?? 0) > 0 || initialSave?.activeMissionId ? ['legacy'] : [];
   });
   const missionsUnlocked = clearedDungeons.length > 0;
+  const unlockedDungeons = DUNGEONS.filter((_, i) => i === 0 || clearedDungeons.includes(DUNGEONS[i - 1].id));
+  const [missions, setMissions] = useState<RescueMission[]>(() =>
+    (initialSave?.missions ?? []).filter(
+      (m) => isValidMission(m) && unlockedDungeons.some((d) => d.id === m.dungeonId)
+    )
+  );
+  const [activeMissionId, setActiveMissionId] = useState<string | null>(() =>
+    missions.some((m) => m.id === initialSave?.activeMissionId) ? initialSave!.activeMissionId! : null
+  );
+  const [missionReport, setMissionReport] = useState<string | null>(null);
   const [shopStock, setShopStock] = useState<string[]>(() =>
     isValidShopStock(initialSave?.shopStock) ? initialSave!.shopStock! : rollShopStock()
   );
@@ -130,7 +138,7 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
   useEffect(() => {
     const seenIds = [...new Set([...seenPokedex, ...caughtPokedex])];
     if (missions.length >= 3 || seenIds.length === 0) return;
-    setMissions((prev) => topUpMissions(prev, seenIds));
+    setMissions((prev) => topUpMissions(prev, seenIds, unlockedDungeons));
   }, [missions, seenPokedex, caughtPokedex]);
 
   const activeMission = missions.find((m) => m.id === activeMissionId) ?? null;
@@ -300,6 +308,71 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
     setScreen('HUB');
   };
 
+  // Multiplayer expedition in progress (snapshot of the party when it started)
+  const [coopParty, setCoopParty] = useState<CoopParty | null>(null);
+
+  // Contributions to the shared bag leave this player's bag and wallet as the expedition starts
+  const handleCoopStart = (party: CoopParty) => {
+    if (!player || screen !== 'COOP_LOBBY') return;
+    const me = party.members[player.uid];
+    if (me) {
+      let bag = inventory;
+      for (const item of me.items) {
+        bag = bag
+          .map((it) => (it.name === item.name ? { ...it, count: Math.max(0, it.count - item.count) } : it))
+          .filter((it) => it.count > 0);
+      }
+      setInventory(bag);
+      setGold((g) => Math.max(0, g - me.gold));
+    }
+    setCoopParty(party);
+    setScreen('COOP_DUNGEON');
+  };
+
+  const handleCoopFinish = (outcome: CoopOutcome) => {
+    if (outcome.leader) {
+      const returned = outcome.leader;
+      setActiveTeam((prev) => (prev.length > 0 ? [restorePokemon({ ...returned, id: prev[0].id }), ...prev.slice(1)] : prev));
+    }
+    if (outcome.recruits.length > 0) {
+      setReserves((prev) => [...prev, ...outcome.recruits.map(restorePokemon)]);
+    }
+
+    // Loot goes to the bag while there is room, the rest to Kangaskhan's storage
+    let bag = inventory;
+    let store = storage;
+    for (const item of outcome.items) {
+      for (let k = 0; k < item.count; k++) {
+        const unit = { ...item, id: `${item.id}_coop_${k}`, count: 1 };
+        if (bagSpace(bag) > 0) bag = addItem(bag, unit);
+        else store = addItem(store, unit);
+      }
+    }
+    setInventory(bag);
+    setStorage(store);
+
+    let finalGold = gold + outcome.gold;
+    const mission = outcome.missionCompleted ? outcome.mission : null;
+    if (mission && outcome.isHost && activeMissionId === mission.id) {
+      completedMissionRef.current = missions.find((m) => m.id === mission.id) ?? mission;
+    } else if (mission) {
+      setRankPoints((r) => r + mission.reward.rankPoints);
+      setMissionReport(
+        `¡Misión del grupo cumplida: ${describeMission(mission).title}! Ganas ${mission.reward.rankPoints} pts. de rango.`
+      );
+    }
+    if (outcome.result === 'cleared') {
+      setClearedDungeons((prev) => (prev.includes(outcome.dungeonId) ? prev : [...prev, outcome.dungeonId]));
+    }
+    refreshMissionBoard();
+    finalGold = settleCompletedMission(finalGold);
+    setGold(finalGold);
+
+    setCoopParty(null);
+    soundManager.startBgm('hub');
+    setScreen('HUB');
+  };
+
   return (
     <div className="w-full h-dvh overflow-hidden bg-slate-950 font-sans text-slate-100 flex flex-col">
       {/* 1. Personality test that picks the starter */}
@@ -318,6 +391,7 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
           missions={missions}
           shopStock={shopStock}
           missionsUnlocked={missionsUnlocked}
+          unlockedDungeonIds={unlockedDungeons.map((d) => d.id)}
           playerName={player?.name ?? null}
           playerUid={player?.uid ?? null}
           onSignOut={onSignOut}
@@ -335,6 +409,7 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
           seenPokedex={seenPokedex}
           caughtPokedex={caughtPokedex}
           onSelectDungeon={handleSelectDungeon}
+          onOpenCoop={player && activeTeam.length > 0 ? () => setScreen('COOP_LOBBY') : undefined}
           onOpenTeamManager={() => setScreen('TEAM_MANAGEMENT')}
           onOpenEvolution={() => setScreen('EVOLUTION')}
           onUpdateInventory={(updated) => setInventory(updated)}
@@ -402,6 +477,29 @@ export default function App({ player, onRename, onSignOut }: AppProps) {
           onRecruitPokemon={registerCaught}
           onCompleteDungeon={handleDungeonComplete}
           onExitDungeon={handleDungeonExit}
+        />
+      )}
+
+      {/* 4b. Multiplayer lobby and expedition */}
+      {screen === 'COOP_LOBBY' && player && activeTeam[0] && (
+        <CoopLobby
+          player={player}
+          leader={activeTeam[0]}
+          inventory={inventory}
+          gold={gold}
+          unlockedDungeons={unlockedDungeons}
+          activeMission={activeMission}
+          onBack={() => setScreen('HUB')}
+          onExpeditionStart={handleCoopStart}
+        />
+      )}
+
+      {screen === 'COOP_DUNGEON' && player && coopParty && (
+        <CoopDungeonView
+          initialParty={coopParty}
+          localUid={player.uid}
+          onSeePokemon={registerSeen}
+          onFinish={handleCoopFinish}
         />
       )}
 

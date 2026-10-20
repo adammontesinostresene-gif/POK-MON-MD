@@ -49,6 +49,7 @@ import {
   Crosshair
 } from 'lucide-react';
 import { PmdSprite, PmdPortrait } from './PmdSprite';
+import { CoopCombatAction, CoopInput, seededRandom } from '../utils/coop';
 
 // Global damage tuning for all attacks (player and enemies)
 const DAMAGE_MULTIPLIER = 1.35;
@@ -142,6 +143,25 @@ interface PendingLearn {
   move: Move;
 }
 
+/** Multiplayer link: every client replays the rounds committed by the host with the same seed. */
+export interface CoopCombatLink {
+  combatId: string;
+  seed: string;
+  localUid: string;
+  isHost: boolean;
+  // Owner uid of every slot of `playerTeam`
+  owners: string[];
+  activeUids: string[];
+  names: Record<string, string>;
+  rounds: CoopCombatAction[][];
+  decisions: Record<string, string | null>;
+  actionInputs: Record<string, CoopInput | undefined>;
+  decisionInputs: Record<string, CoopInput | undefined>;
+  submit: (channel: 'combat' | 'decision', key: string, data: unknown) => void;
+  commitRound: (round: number, actions: CoopCombatAction[]) => void;
+  commitDecision: (key: string, value: string | null) => void;
+}
+
 interface TurnBasedCombatProps {
   playerTeam: Pokemon[];
   enemy?: Pokemon;
@@ -154,12 +174,14 @@ interface TurnBasedCombatProps {
     goldGained: number,
     droppedItem?: Item,
     recruitedPokemon?: Pokemon,
-    addToActiveTeam?: boolean
+    addToActiveTeam?: boolean,
+    recruiterUid?: string
   ) => void;
   onDefeat: () => void;
   onEscapeDungeon: (team: Pokemon[], inventory: Item[]) => void;
   canUseEscapeOrb?: boolean;
   onUpdateInventory: (items: Item[]) => void;
+  coop?: CoopCombatLink;
 }
 
 interface QueuedAction {
@@ -184,7 +206,20 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   onEscapeDungeon,
   canUseEscapeOrb = true,
   onUpdateInventory,
+  coop,
 }) => {
+  // Every random roll goes through here so co-op clients stay in sync
+  const rngRef = useRef<() => number>(Math.random);
+  const rand = () => rngRef.current();
+  const ownerOf = (memberId: string) => coop?.owners[playerTeam.findIndex((p) => p.id === memberId)] ?? '';
+  const playerName = (uid: string) => coop?.names[uid] ?? 'Explorador';
+  const roundKey = (round: number) => `${coop?.combatId}:${round}`;
+  // Rounds of the host's list already replayed on this client
+  const executedRoundsRef = useRef(0);
+  const [executedRounds, setExecutedRounds] = useState(0);
+  // Lets a co-op player change an action already sent
+  const [editingAction, setEditingAction] = useState(false);
+  const [learnsResolved, setLearnsResolved] = useState(0);
   // Normalize initial enemies: accept array of 1 to 4 enemies, or single enemy
   const initialEnemies: Pokemon[] =
     initialEnemiesProp && initialEnemiesProp.length > 0
@@ -266,6 +301,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     recruitedPokemon?: Pokemon;
     leveledUpPokemon?: { name: string; oldLevel: number; newLevel: number; learned: string[] }[];
     pendingLearns: PendingLearn[];
+    recruiterUid?: string;
   } | null>(null);
 
   // Play battle music on mount
@@ -408,8 +444,10 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     return true;
   };
 
-  // Safe reference to the current selecting member
-  const currentMember = aliveMembers[selectingMemberIndex] || aliveMembers[0];
+  // Safe reference to the current selecting member (in co-op, always this player's own leader)
+  const currentMember: Pokemon | undefined = coop
+    ? aliveMembers.find((m) => ownerOf(m.id) === coop.localUid)
+    : aliveMembers[selectingMemberIndex] || aliveMembers[0];
 
   const addLog = (msg: string) => {
     setBattleLogs((prev) => [...prev.slice(-7), msg]);
@@ -450,7 +488,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       }
       return false;
     }
-    setAilment(target.id, { status: ailment, turns: ailment === 'sleep' ? 1 + Math.floor(Math.random() * 3) : 0 });
+    setAilment(target.id, { status: ailment, turns: ailment === 'sleep' ? 1 + Math.floor(rand() * 3) : 0 });
     addLog(`¡${target.name} ${AILMENT_LABELS[ailment].inflicted}`);
     setFloatingDamage({ targetId: target.id, text: AILMENT_LABELS[ailment].short, type: 'status' });
     soundManager.playHit();
@@ -476,7 +514,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       return true;
     }
     if (current.status === 'freeze') {
-      if (Math.random() < 0.2) {
+      if (rand() < 0.2) {
         setAilment(actor.id, null);
         addLog(`¡${actor.name} se ha descongelado!`);
         await wait(400);
@@ -486,7 +524,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       await wait(550);
       return false;
     }
-    if (current.status === 'paralysis' && Math.random() < 0.25) {
+    if (current.status === 'paralysis' && rand() < 0.25) {
       addLog(`⚡ ¡${actor.name} está paralizado! No se puede mover.`);
       await wait(550);
       return false;
@@ -507,7 +545,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     setConfusion(actor.id, turns - 1);
     addLog(`💫 ${actor.name} está confuso...`);
     await wait(350);
-    if (Math.random() >= 1 / 3) return true;
+    if (rand() >= 1 / 3) return true;
     // Self-hits never knock out, so fainting stays handled in one place
     const dmg = Math.min(actor.stats.hp - 1, Math.max(1, Math.floor(actor.stats.maxHp / 8)));
     if (dmg > 0) actor.stats.hp -= dmg;
@@ -527,7 +565,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     if (abilityAlwaysHits(abilityOf(attacker), abilityOf(defender))) return true;
     const stage = Math.max(-6, Math.min(6, getStage(attacker.id, 'accuracy') - getStage(defender.id, 'evasion')));
     return (
-      Math.random() * 100 <
+      rand() * 100 <
       move.accuracy * accuracyMultiplier(stage) * abilityAccuracyMultiplier(abilityOf(attacker), move)
     );
   };
@@ -619,8 +657,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       : defender.types;
     const effectiveness = isTypeless(move) ? 1 : getTypeEffectiveness(move.type, defTypes);
     const stab = !isTypeless(move) && attacker.types.includes(move.type) ? abilityStab(attackerAbility) : 1.0;
-    const variance = 0.85 + Math.random() * 0.15;
-    const isCrit = Math.random() < abilityCritChance(attackerAbility, defenderAbility);
+    const variance = 0.85 + rand() * 0.15;
+    const isCrit = rand() < abilityCritChance(attackerAbility, defenderAbility);
     const critMult = isCrit ? abilityCritMultiplier(attackerAbility) : 1.0;
     const burnMult =
       isPhysical && attackerAilment === 'burn' && !abilityIgnoresBurn(attackerAbility) ? 0.5 : 1.0;
@@ -681,8 +719,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     const attackerAbility = abilityOf(attacker);
     if (attacker.stats.hp > 0 && targetAbility) {
       const ailments = CONTACT_AILMENTS[targetAbility];
-      const ailment = ailments?.[Math.floor(Math.random() * ailments.length)];
-      if (ailment && Math.random() < 0.3 && canReceiveAilment(attacker, ailment)) {
+      const ailment = ailments?.[Math.floor(rand() * ailments.length)];
+      if (ailment && rand() < 0.3 && canReceiveAilment(attacker, ailment)) {
         addLog(`¡${getAbilityName(targetAbility)} de ${target.name} se activa!`);
         await applyAilment(attacker, ailment, false);
       }
@@ -697,7 +735,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         setFloatingDamage(null);
       }
     }
-    if (attackerAbility === 'poison-touch' && target.stats.hp > 0 && Math.random() < 0.3 && canReceiveAilment(target, 'poison')) {
+    if (attackerAbility === 'poison-touch' && target.stats.hp > 0 && rand() < 0.3 && canReceiveAilment(target, 'poison')) {
       addLog(`¡${getAbilityName(attackerAbility)} de ${attacker.name} se activa!`);
       await applyAilment(target, 'poison', false);
     }
@@ -739,6 +777,15 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
   const handleConfirmMemberAction = (member: Pokemon, move: Move, targetEnemyId: string) => {
     soundManager.playSelect();
     setPendingMoveChoice(null);
+
+    if (coop) {
+      const action: CoopCombatAction = { kind: 'move', memberId: member.id, moveId: move.id, targetId: targetEnemyId };
+      coop.submit('combat', roundKey(executedRoundsRef.current), action);
+      setChosenMoves({ [member.id]: move });
+      setMemberTargetMap({ [member.id]: targetEnemyId });
+      setEditingAction(false);
+      return;
+    }
 
     const updatedChosenMoves = {
       ...chosenMoves,
@@ -814,7 +861,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       const enemyActor = currentEnemies[j];
       if (enemyActor.stats.hp > 0) {
         const randomEnemyMove =
-          enemyActor.moves[Math.floor(Math.random() * enemyActor.moves.length)] || {
+          enemyActor.moves[Math.floor(rand() * enemyActor.moves.length)] || {
             id: 'enemy_tackle',
             name: 'Placaje Feroz',
             type: 'Normal' as PokemonType,
@@ -1015,7 +1062,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           // Secondary effects (e.g. Ácido may lower Sp. Def); a self-boost only triggers once per use
           const secondaryMult = abilitySecondaryChanceMultiplier(abilityOf(member));
           const shielded = abilityBlocksSecondary(abilityOf(t));
-          if (move.statChanges && Math.random() * 100 < (move.statChance ?? 100) * secondaryMult) {
+          if (move.statChanges && rand() * 100 < (move.statChance ?? 100) * secondaryMult) {
             if (move.statTarget === 'self') {
               if (!selfBoostDone) await applyStatChanges(member, move.statChanges);
               selfBoostDone = true;
@@ -1023,7 +1070,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               await applyStatChanges(t, move.statChanges, true);
             }
           }
-          if (ailment && t.stats.hp > 0 && !shielded && Math.random() * 100 < (move.statusChance ?? 30) * secondaryMult) {
+          if (ailment && t.stats.hp > 0 && !shielded && rand() * 100 < (move.statusChance ?? 30) * secondaryMult) {
             await applyAilment(t, ailment, false);
           }
           if (t.stats.hp <= 0) await triggerMoxie(member);
@@ -1089,7 +1136,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
         const currentAlive = currentTeam.filter((m) => m.stats.hp > 0);
         if (currentAlive.length === 0) break;
 
-        const targetMember = currentAlive[Math.floor(Math.random() * currentAlive.length)];
+        const targetMember = currentAlive[Math.floor(rand() * currentAlive.length)];
         const targetIdx = currentTeam.findIndex((m) => m.id === targetMember.id);
         const isAreaMove = move.target === 'all_enemies';
         const isFieldStatus = move.power === 0 && isAreaMove;
@@ -1187,7 +1234,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
           const secondaryMult = abilitySecondaryChanceMultiplier(abilityOf(enemyActor));
           const shielded = abilityBlocksSecondary(abilityOf(t));
-          if (move.statChanges && Math.random() * 100 < (move.statChance ?? 100) * secondaryMult) {
+          if (move.statChanges && rand() * 100 < (move.statChance ?? 100) * secondaryMult) {
             if (move.statTarget === 'self') {
               if (!selfBoostDone) await applyStatChanges(enemyActor, move.statChanges);
               selfBoostDone = true;
@@ -1195,7 +1242,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               await applyStatChanges(t, move.statChanges, true);
             }
           }
-          if (ailment && t.stats.hp > 0 && !shielded && Math.random() * 100 < (move.statusChance ?? 30) * secondaryMult) {
+          if (ailment && t.stats.hp > 0 && !shielded && rand() * 100 < (move.statusChance ?? 30) * secondaryMult) {
             await applyAilment(t, ailment, false);
           }
           if (t.stats.hp <= 0) await triggerMoxie(enemyActor);
@@ -1312,7 +1359,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       if (roundAbility === 'speed-boost') {
         addLog(`¡${getAbilityName(roundAbility)} de ${p.name} se activa!`);
         await applyStatChanges(p, [{ stat: 'speed', stages: 1 }]);
-      } else if (roundAbility === 'shed-skin' && ailmentsRef.current[p.id] && Math.random() < 0.3) {
+      } else if (roundAbility === 'shed-skin' && ailmentsRef.current[p.id] && rand() < 0.3) {
         setAilment(p.id, null);
         addLog(`¡${p.name} se curó de su problema de estado gracias a ${getAbilityName(roundAbility)}!`);
         await wait(450);
@@ -1338,14 +1385,14 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
 
     // Reward scales with the number and levels of all defeated enemies!
     const expReward = defeatedEnemies.reduce(
-      (sum, e) => sum + Math.round(e.level * 7 + Math.random() * 4),
+      (sum, e) => sum + Math.round(e.level * 7 + rand() * 4),
       0
     );
     // Loot roll: 50% nothing, otherwise either gold or an item (never both)
-    const lootRoll = Math.random();
+    const lootRoll = rand();
     const goldReward =
       lootRoll < 0.25
-        ? defeatedEnemies.reduce((sum, e) => sum + Math.round(e.level * 9 + Math.random() * 10), 0)
+        ? defeatedEnemies.reduce((sum, e) => sum + Math.round(e.level * 9 + rand() * 10), 0)
         : 0;
 
     // Level-up checks for surviving team members: strictly ONE notification message per Pokémon
@@ -1401,9 +1448,9 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     let potentialRecruit: Pokemon | undefined = undefined;
     const recruitCandidate =
       defeatedEnemies.length > 0
-        ? defeatedEnemies[Math.floor(Math.random() * defeatedEnemies.length)]
+        ? defeatedEnemies[Math.floor(rand() * defeatedEnemies.length)]
         : undefined;
-    if (recruitCandidate && Math.random() < (recruitCandidate.recruitRate ?? 0.65)) {
+    if (recruitCandidate && rand() < (recruitCandidate.recruitRate ?? 0.65)) {
       potentialRecruit = {
         ...recruitCandidate,
         id: `${recruitCandidate.name.toLowerCase()}_recruit_${Date.now()}`,
@@ -1418,13 +1465,17 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
     }
 
     let droppedItem: Item | undefined = undefined;
-    if (lootRoll >= 0.25 && lootRoll < 0.5 && bagSpace(inventory) > 0) {
+    if (lootRoll >= 0.25 && lootRoll < 0.5 && bagSpace(currentInventoryRef.current) > 0) {
       droppedItem = {
         ...ORAN_BERRY,
         id: `drop_oran_${Date.now()}`,
         count: 1,
       };
     }
+
+    // In co-op, one random member gets the chance to recruit it
+    const recruiterUid =
+      coop && potentialRecruit ? coop.owners[Math.floor(rand() * coop.owners.length)] : undefined;
 
     setVictoryState({
       isOpen: true,
@@ -1434,29 +1485,40 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       recruitedPokemon: potentialRecruit,
       leveledUpPokemon: leveledList,
       pendingLearns,
+      recruiterUid,
     });
   };
 
-  // Handle using an item from the bag on a team member
-  const handleUseItemOnTarget = (item: Item, targetIdx: number, moveIdx?: number, enemyId?: string) => {
-    const targetForHealing = team[targetIdx];
-    if (item.effectType === 'heal_hp' && (!targetForHealing || targetForHealing.stats.hp <= 0)) return;
+  // Applies an item's effect; returns the updated team, or null when an escape orb ends the expedition
+  const applyItemEffect = (
+    item: Item,
+    user: Pokemon,
+    teamArr: Pokemon[],
+    targetIdx: number,
+    moveIdx?: number,
+    enemyId?: string
+  ): Pokemon[] | null => {
+    const bagItem = currentInventoryRef.current.find((it) => it.id === item.id && it.count > 0);
+    const target = teamArr[targetIdx];
+    if (!bagItem || !target || (item.effectType === 'heal_hp' && target.stats.hp <= 0)) {
+      addLog(`🎒 ${user.name} buscó ${item.name} en la mochila... ¡pero no pudo usarlo!`);
+      return teamArr;
+    }
 
-    soundManager.playSelect();
-    const user = currentMember;
-    const updatedInv = inventory
+    const updatedInv = currentInventoryRef.current
       .map((it) => (it.id === item.id ? { ...it, count: it.count - 1 } : it))
       .filter((it) => it.count > 0);
+    currentInventoryRef.current = updatedInv;
     onUpdateInventory(updatedInv);
 
-    const targetMember = { ...team[targetIdx], stats: { ...team[targetIdx].stats } };
+    const targetMember = { ...target, stats: { ...target.stats } };
 
     if (!canUseEscapeOrb && item.category === 'orb') {
       soundManager.playHit();
       addLog(`🚫 ${user.name} usó ${item.name}... ¡pero no tuvo efecto contra el jefe!`);
     } else if (item.effectType === 'confuse_all') {
       const foes = enemies.filter((e) => e.stats.hp > 0 && !confusionRef.current[e.id]);
-      foes.forEach((e) => setConfusion(e.id, 2 + Math.floor(Math.random() * 4)));
+      foes.forEach((e) => setConfusion(e.id, 2 + Math.floor(rand() * 4)));
       soundManager.playSelect();
       addLog(
         foes.length > 0
@@ -1464,7 +1526,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           : `🌀 ${user.name} usó ${item.name}... ¡pero no tuvo efecto!`
       );
     } else if (item.effectType === 'speed_up_allies') {
-      const allies = team.filter((m) => m.stats.hp > 0);
+      const allies = teamArr.filter((m) => m.stats.hp > 0);
       for (const ally of allies) {
         const next = Math.max(-6, Math.min(6, getStage(ally.id, 'speed') + (item.effectValue || 1) * abilityStageFactor(abilityOf(ally))));
         stagesRef.current = { ...stagesRef.current, [ally.id]: { ...stagesRef.current[ally.id], speed: next } };
@@ -1488,7 +1550,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       setAilment(targetMember.id, null);
       soundManager.playLevelUp();
       addLog(`⭐ ¡${user.name} revivió a ${targetMember.name} con ${item.name}! ¡Recuperó el 100% de sus PS!`);
-    } else if (item.effectType === 'restore_pp' && moveIdx !== undefined) {
+    } else if (item.effectType === 'restore_pp' && moveIdx !== undefined && targetMember.moves[moveIdx]) {
       const mv = targetMember.moves[moveIdx];
       const restored = Math.min(mv.maxPp, mv.pp + (item.effectValue || 10)) - mv.pp;
       targetMember.moves = targetMember.moves.map((m, i) => (i === moveIdx ? { ...m, pp: m.pp + restored } : m));
@@ -1500,8 +1562,8 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       setIsProcessingTurn(true);
       setCombatMenu('MOVES_SELECT');
       setSelectedBagItem(null);
-      setTimeout(() => onEscapeDungeon(team, updatedInv), 900);
-      return;
+      setTimeout(() => onEscapeDungeon(teamArr, updatedInv), 900);
+      return null;
     } else if (item.effectType === 'inflict_status') {
       const foe =
         enemies.find((e) => e.id === enemyId && e.stats.hp > 0) ?? enemies.find((e) => e.stats.hp > 0);
@@ -1526,8 +1588,36 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       addLog(`🎒 ${user.name} usó ${item.name}.`);
     }
 
-    const updatedTeam = [...team];
+    const updatedTeam = [...teamArr];
     updatedTeam[targetIdx] = targetMember;
+    return updatedTeam;
+  };
+
+  // Handle using an item from the bag on a team member
+  const handleUseItemOnTarget = (item: Item, targetIdx: number, moveIdx?: number, enemyId?: string) => {
+    const targetForHealing = team[targetIdx];
+    if (item.effectType === 'heal_hp' && (!targetForHealing || targetForHealing.stats.hp <= 0)) return;
+    const user = currentMember;
+    if (!user) return;
+
+    soundManager.playSelect();
+
+    if (coop) {
+      // The item is used when the host closes the round
+      const action: CoopCombatAction = { kind: 'item', memberId: user.id, itemId: item.id, targetIdx, moveIdx, enemyId };
+      coop.submit('combat', roundKey(executedRoundsRef.current), action);
+      setChosenMoves({});
+      setItemUsers({ [user.id]: item.name });
+      setEditingAction(false);
+      setCombatMenu('MOVES_SELECT');
+      setSelectedBagItem(null);
+      setElixirTargetIdx(null);
+      setPendingMoveChoice(null);
+      return;
+    }
+
+    const updatedTeam = applyItemEffect(item, user, [...team], targetIdx, moveIdx, enemyId);
+    if (!updatedTeam) return;
     setTeam(updatedTeam);
 
     setCombatMenu('MOVES_SELECT');
@@ -1548,6 +1638,153 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
       executeSimultaneousRound(remainingMoves, memberTargetMap, updatedTeam);
     }
   };
+
+  const resolveLearnChoice = (forget: string | null) => {
+    const learn = victoryState?.pendingLearns[0];
+    if (!learn) return;
+    soundManager.playSelect();
+    if (forget) {
+      setTeam((prev) => prev.map((m) => (m.id === learn.memberId ? replaceMove(m, forget, learn.move) : m)));
+    }
+    setVictoryState((prev) => (prev ? { ...prev, pendingLearns: prev.pendingLearns.slice(1) } : prev));
+  };
+
+  // Co-op: replay every round committed by the host, in order and with the shared seed
+  useEffect(() => {
+    if (!coop || isProcessingTurn || victoryState) return;
+    const r = executedRoundsRef.current;
+    const actions = coop.rounds[r];
+    if (!actions) return;
+    executedRoundsRef.current = r + 1;
+    setExecutedRounds(r + 1);
+    setEditingAction(false);
+    rngRef.current = seededRandom(`${coop.seed}:${coop.combatId}:${r}`);
+
+    let teamArr = [...team];
+    const moves: Record<string, Move> = {};
+    const targets: Record<string, string> = {};
+    for (const member of team) {
+      const action = actions.find((a) => a.memberId === member.id);
+      const current = teamArr.find((m) => m.id === member.id);
+      if (!action || !current || current.stats.hp <= 0) continue;
+      if (action.kind === 'item') {
+        const item = currentInventoryRef.current.find((it) => it.id === action.itemId);
+        if (!item) {
+          addLog(`🎒 ${current.name} buscó un objeto en la mochila... ¡pero ya no quedaba!`);
+          continue;
+        }
+        const next = applyItemEffect(item, current, teamArr, action.targetIdx, action.moveIdx, action.enemyId);
+        if (!next) return;
+        teamArr = next;
+      } else {
+        moves[member.id] =
+          action.moveId === BASIC_ATTACK.id
+            ? BASIC_ATTACK
+            : current.moves.find((m) => m.id === action.moveId) ?? BASIC_ATTACK;
+        targets[member.id] = action.targetId;
+      }
+    }
+    setTeam(teamArr);
+    executeSimultaneousRound(moves, targets, teamArr);
+  }, [coop?.rounds.length, isProcessingTurn, victoryState]);
+
+  // Co-op host: closes the round once every present player has chosen (absent players just attack)
+  useEffect(() => {
+    if (!coop?.isHost || isProcessingTurn || victoryState) return;
+    const r = coop.rounds.length;
+    if (executedRounds !== r || aliveEnemies.length === 0 || aliveMembers.length === 0) return;
+    const actions: CoopCombatAction[] = [];
+    for (const member of aliveMembers) {
+      const owner = ownerOf(member.id);
+      if (!coop.activeUids.includes(owner)) {
+        actions.push({ kind: 'move', memberId: member.id, moveId: BASIC_ATTACK.id, targetId: aliveEnemies[0].id });
+        continue;
+      }
+      const input = coop.actionInputs[owner];
+      if (!input || input.key !== roundKey(r)) return;
+      try {
+        actions.push({ ...(JSON.parse(input.data) as CoopCombatAction), memberId: member.id });
+      } catch {
+        return;
+      }
+    }
+    coop.commitRound(r, actions);
+  }, [coop?.actionInputs, coop?.activeUids, coop?.rounds.length, executedRounds, isProcessingTurn, victoryState, team, enemies]);
+
+  // Co-op victory: learn-move choices belong to each leader's owner, recruitment to one random member
+  const coopDecisionKey = !coop || !victoryState
+    ? null
+    : victoryState.pendingLearns.length > 0
+    ? `learn${learnsResolved}`
+    : victoryState.recruitedPokemon
+    ? 'recruit'
+    : null;
+  const coopDecisionOwner = !victoryState
+    ? undefined
+    : victoryState.pendingLearns.length > 0
+    ? ownerOf(victoryState.pendingLearns[0].memberId)
+    : victoryState.recruiterUid;
+  const victoryReportedRef = useRef(false);
+
+  const reportCoopVictory = (recruit: Pokemon | undefined) => {
+    if (!victoryState || victoryReportedRef.current) return;
+    victoryReportedRef.current = true;
+    onVictory(
+      team,
+      victoryState.expGained,
+      victoryState.goldGained,
+      victoryState.droppedItem,
+      recruit,
+      false,
+      recruit ? victoryState.recruiterUid : undefined
+    );
+  };
+
+  useEffect(() => {
+    if (!coop?.isHost || !coopDecisionKey || !coopDecisionOwner) return;
+    if (coop.decisions[coopDecisionKey] !== undefined) return;
+    if (!coop.activeUids.includes(coopDecisionOwner)) {
+      coop.commitDecision(coopDecisionKey, null);
+      return;
+    }
+    const input = coop.decisionInputs[coopDecisionOwner];
+    if (input?.key !== `${coop.combatId}:${coopDecisionKey}`) return;
+    try {
+      const value = JSON.parse(input.data);
+      coop.commitDecision(coopDecisionKey, typeof value === 'string' ? value : null);
+    } catch {
+      coop.commitDecision(coopDecisionKey, null);
+    }
+  }, [coop?.decisionInputs, coop?.decisions, coop?.activeUids, coopDecisionKey, coopDecisionOwner]);
+
+  const appliedDecisionsRef = useRef(new Set<string>());
+  useEffect(() => {
+    if (!coop || !victoryState || !coopDecisionKey) return;
+    const value = coop.decisions[coopDecisionKey];
+    if (value === undefined || appliedDecisionsRef.current.has(coopDecisionKey)) return;
+    appliedDecisionsRef.current.add(coopDecisionKey);
+    if (coopDecisionKey.startsWith('learn')) {
+      resolveLearnChoice(value);
+      setLearnsResolved((n) => n + 1);
+    } else if (coop.isHost) {
+      reportCoopVictory(value === 'accept' ? victoryState.recruitedPokemon : undefined);
+    }
+  }, [coop?.decisions, coopDecisionKey]);
+
+  const sendCoopDecision = (value: string | null) => {
+    if (!coop || !coopDecisionKey) return;
+    soundManager.playSelect();
+    coop.submit('decision', `${coop.combatId}:${coopDecisionKey}`, value);
+  };
+
+  // Co-op: has this player already sent an action for the round being chosen?
+  const myInput = coop?.actionInputs[coop.localUid];
+  const coopActionSent = Boolean(coop && !editingAction && myInput?.key === roundKey(executedRounds));
+  const coopWaitingFor = coop
+    ? aliveMembers
+        .map((m) => ownerOf(m.id))
+        .filter((uid) => coop.activeUids.includes(uid) && coop.actionInputs[uid]?.key !== roundKey(executedRounds))
+    : [];
 
   return (
     <div className="relative w-full h-full max-h-full flex flex-col justify-between rounded-xl sm:rounded-2xl border-2 border-slate-700/80 shadow-2xl bg-slate-950 overflow-hidden min-h-0 box-border">
@@ -1670,7 +1907,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
             const isHit = hitMemberId === member.id;
             const isCurrentSelecting =
               combatMenu === 'MOVES_SELECT' &&
-              aliveMembers[selectingMemberIndex]?.id === member.id;
+              (coop ? currentMember?.id === member.id : aliveMembers[selectingMemberIndex]?.id === member.id);
             const hasChosen = Boolean(chosenMoves[member.id] || itemUsers[member.id]);
 
             return (
@@ -1774,7 +2011,11 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                     </span>
                   )}
 
-                  {idx === 0 && (
+                  {coop ? (
+                    <span className="absolute -bottom-1 text-[7px] font-bold px-1 rounded bg-sky-500 text-sky-950 font-pixel z-10 max-w-[64px] truncate">
+                      {playerName(ownerOf(member.id))}
+                    </span>
+                  ) : idx === 0 && (
                     <span className="absolute -bottom-1 text-[7px] font-bold px-1 rounded bg-amber-500 text-amber-950 font-pixel z-10">
                       LÍDER
                     </span>
@@ -1941,8 +2182,36 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
           </p>
         </div>
 
+        {/* Co-op: waiting for the rest of the party */}
+        {coop && combatMenu === 'MOVES_SELECT' && !isProcessingTurn && !victoryState && (!currentMember || coopActionSent) && (
+          <div className="bg-slate-950/80 rounded-lg p-2.5 border border-sky-700/60 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="text-xs text-slate-200 text-center sm:text-left">
+              {!currentMember ? 'Tu Pokémon está debilitado. ' : '¡Acción enviada! '}
+              {coopWaitingFor.length > 0 ? (
+                <>
+                  Esperando a{' '}
+                  <strong className="text-amber-300">{coopWaitingFor.map(playerName).join(', ')}</strong>...
+                </>
+              ) : (
+                'Resolviendo el turno...'
+              )}
+            </p>
+            {currentMember && (
+              <button
+                onClick={() => {
+                  soundManager.playSelect();
+                  setEditingAction(true);
+                }}
+                className="py-1.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold border border-slate-700 cursor-pointer shrink-0"
+              >
+                Cambiar acción
+              </button>
+            )}
+          </div>
+        )}
+
         {/* 1. PER-MEMBER MOVE SELECTION (DEFAULT ACTIVE FLOW) */}
-        {combatMenu === 'MOVES_SELECT' && currentMember && (
+        {combatMenu === 'MOVES_SELECT' && currentMember && !coopActionSent && (
           <div className="flex flex-col gap-1.5 short:gap-1 w-full">
             {/* Header: Team Stepper & Active Member Details */}
             <div className="bg-slate-950/80 rounded-lg p-1.5 short:p-1 border border-slate-800 flex flex-col sm:flex-row short:flex-row sm:items-center short:items-center justify-between gap-1 sm:gap-1.5 shrink-0">
@@ -1952,7 +2221,7 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[9px] font-bold uppercase tracking-wider text-amber-400 font-pixel">
-                      Paso {selectingMemberIndex + 1}/{aliveMembers.length}
+                      {coop ? 'Tu turno' : `Paso ${selectingMemberIndex + 1}/${aliveMembers.length}`}
                     </span>
                     <span className="text-xs text-slate-400">·</span>
                     <span className="font-bold text-xs text-white truncate">
@@ -1981,12 +2250,14 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               {/* Quick Member Switcher Pills (own row on narrow screens) */}
               <div className="flex items-center gap-1 overflow-x-auto py-0.5 sm:shrink-0 short:shrink-0 min-w-0">
                 {aliveMembers.map((m, idx) => {
-                  const isSelected = idx === selectingMemberIndex;
-                  const chosen = chosenMoves[m.id] || itemUsers[m.id];
+                  const isSelected = coop ? m.id === currentMember.id : idx === selectingMemberIndex;
+                  const chosen = coop
+                    ? coop.actionInputs[ownerOf(m.id)]?.key === roundKey(executedRounds)
+                    : chosenMoves[m.id] || itemUsers[m.id];
                   return (
                     <button
                       key={m.id}
-                      disabled={Boolean(itemUsers[m.id])}
+                      disabled={Boolean(coop) || Boolean(itemUsers[m.id])}
                       onClick={() => {
                         soundManager.playSelect();
                         setSelectingMemberIndex(idx);
@@ -2536,17 +2807,15 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
               (() => {
                 const learn = victoryState.pendingLearns[0];
                 const learner = team.find((m) => m.id === learn.memberId);
-                const resolveLearn = (forget: string | null) => {
-                  soundManager.playSelect();
-                  if (forget) {
-                    setTeam((prev) =>
-                      prev.map((m) => (m.id === learn.memberId ? replaceMove(m, forget, learn.move) : m))
-                    );
-                  }
-                  setVictoryState((prev) =>
-                    prev ? { ...prev, pendingLearns: prev.pendingLearns.slice(1) } : prev
+                const resolveLearn = coop ? sendCoopDecision : resolveLearnChoice;
+                if (coop && coopDecisionOwner !== coop.localUid) {
+                  return (
+                    <p className="bg-sky-950/70 border border-sky-500/60 rounded-xl p-3 text-sky-100 text-xs">
+                      <strong>{playerName(coopDecisionOwner ?? '')}</strong> está decidiendo si {learn.memberName} aprende{' '}
+                      <strong className="text-amber-300">{learn.move.name}</strong>...
+                    </p>
                   );
-                };
+                }
                 return (
                   <div className="bg-sky-950/70 border-2 border-sky-400 rounded-xl p-3 text-sky-100 text-xs flex flex-col gap-2 text-left">
                     <p>
@@ -2581,6 +2850,61 @@ export const TurnBasedCombat: React.FC<TurnBasedCombatProps> = ({
                   </div>
                 );
               })()
+            ) : coop && victoryState.recruitedPokemon ? (
+              <div className="bg-emerald-950/70 border-2 border-emerald-400 rounded-xl p-3.5 text-emerald-100 text-xs flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-14 h-14 bg-slate-900 rounded-xl p-1 border border-emerald-500/50 flex items-center justify-center shrink-0">
+                    <PmdPortrait pokedexId={victoryState.recruitedPokemon.pokedexId} emotion="Happy" size={44} />
+                  </div>
+                  <div className="text-left flex-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block font-pixel">
+                      ¡Oportunidad de Reclutamiento!
+                    </span>
+                    <p className="font-extrabold text-sm text-white">
+                      ¡{victoryState.recruitedPokemon.name} quiere unirse al campamento de{' '}
+                      {victoryState.recruiterUid === coop.localUid ? 'ti' : playerName(victoryState.recruiterUid ?? '')}!
+                    </p>
+                    <p className="text-[11px] text-emerald-300/90 mt-0.5">
+                      Nv. {victoryState.recruitedPokemon.level} · PS: {victoryState.recruitedPokemon.stats.maxHp}
+                    </p>
+                  </div>
+                </div>
+                {victoryState.recruiterUid === coop.localUid ? (
+                  <div className="flex flex-col gap-2 pt-1 border-t border-emerald-800/80">
+                    <button
+                      onClick={() => sendCoopDecision('accept')}
+                      className="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs shadow-md flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      <span>Enviar a mi Campamento de Reserva</span>
+                    </button>
+                    <button
+                      onClick={() => sendCoopDecision(null)}
+                      className="w-full py-2 px-3 bg-transparent hover:bg-red-950/60 text-red-300 font-semibold rounded-lg text-xs border border-red-800/70 flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                    >
+                      <span>Rechazar (no se une)</span>
+                    </button>
+                  </div>
+                ) : (
+                  <p className="pt-2 border-t border-emerald-800/80 text-emerald-200">
+                    Esperando a que {playerName(victoryState.recruiterUid ?? '')} decida...
+                  </p>
+                )}
+              </div>
+            ) : coop ? (
+              coop.isHost ? (
+                <button
+                  onClick={() => {
+                    soundManager.playSelect();
+                    reportCoopVictory(undefined);
+                  }}
+                  className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-950 font-bold rounded-xl text-xs sm:text-sm shadow-lg transition-transform active:scale-95 cursor-pointer"
+                >
+                  Continuar Exploración
+                </button>
+              ) : (
+                <p className="text-xs text-slate-300">Esperando a que el líder del grupo continúe la exploración...</p>
+              )
             ) : victoryState.recruitedPokemon ? (
               <div className="bg-emerald-950/70 border-2 border-emerald-400 rounded-xl p-3.5 text-emerald-100 text-xs flex flex-col gap-3">
                 <div className="flex items-center gap-3">

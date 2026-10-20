@@ -1,4 +1,4 @@
-import { FloorEvent, Item, MissionKind, RescueMission } from '../types/game';
+import { Dungeon, FloorEvent, Item, MissionKind, RescueMission } from '../types/game';
 import { ABILITY_CAPSULE_TEMPLATE } from './abilities';
 import { FLOOR_ITEM_POOL } from './eventData';
 import { DUNGEONS, EVOLUTION_ITEMS, ORAN_BERRY, createSpeciesEnemy, getPmdPortraitUrl } from './pokemonData';
@@ -43,11 +43,11 @@ const pick = <T,>(list: T[]): T => list[Math.floor(Math.random() * list.length)]
 const randInt = (min: number, max: number) => min + Math.floor(Math.random() * (max - min + 1));
 
 /** Builds a random mission. Clients and targets are always Pokémon the player has seen. */
-export const generateMission = (seenIds: number[]): RescueMission | null => {
+export const generateMission = (seenIds: number[], dungeons: Dungeon[] = DUNGEONS): RescueMission | null => {
   const pool = seenIds.filter((id) => SPECIES_DATA[id]);
-  if (pool.length === 0) return null;
+  if (pool.length === 0 || dungeons.length === 0) return null;
 
-  const dungeon = pick(DUNGEONS);
+  const dungeon = pick(dungeons);
   // The last floor belongs to the boss, so missions happen before it
   const targetFloor = randInt(1, Math.max(1, dungeon.floorsCount - 1));
   const kind = pick<MissionKind>(['rescue', 'defeat', 'retrieve']);
@@ -92,10 +92,14 @@ export const generateMission = (seenIds: number[]): RescueMission | null => {
 };
 
 /** Fills the board up to MISSION_BOARD_SIZE missions. */
-export const topUpMissions = (missions: RescueMission[], seenIds: number[]): RescueMission[] => {
+export const topUpMissions = (
+  missions: RescueMission[],
+  seenIds: number[],
+  dungeons: Dungeon[] = DUNGEONS
+): RescueMission[] => {
   const next = [...missions];
   while (next.length < MISSION_BOARD_SIZE) {
-    const mission = generateMission(seenIds);
+    const mission = generateMission(seenIds, dungeons);
     if (!mission) break;
     next.push(mission);
   }

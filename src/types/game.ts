@@ -204,4 +204,6 @@ export type ViewScreen =
   | 'BAG'
   | 'MISSIONS'
   | 'VICTORY'
-  | 'GAME_OVER';
+  | 'GAME_OVER'
+  | 'COOP_LOBBY'
+  | 'COOP_DUNGEON';
